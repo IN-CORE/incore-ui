@@ -1,9 +1,0 @@
-{
-  "userPrivileges": {
-    "tester": "ADMIN"
-  },
-  "groupPrivileges": {
-    "incore_user": "READ"
-  }
-
-}
