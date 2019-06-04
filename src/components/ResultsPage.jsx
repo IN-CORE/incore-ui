@@ -26,7 +26,7 @@ class ResultsPage extends Component {
 			<div className="main">
 				{/*<h2 className="center">{this.props.analysis.name} Results </h2>*/}
 				Execution Id: {this.props.executionId}
-				<GridList cols={12} cellHeight="auto">
+				<GridList cols={12}>
 					<GridTile cols={6}>
 						{file_contents}
 					</GridTile>

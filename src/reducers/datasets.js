@@ -1,9 +1,9 @@
 import {RECEIVE_DATASETS} from "../actions";
-import {DatasetState, Dataset} from "../utils/flowtype";
+import {DatasetState, Datasets} from "../utils/flowtype";
 
 type DatasetAction = {
 	type: RECEIVE_DATASETS,
-	datasets: Dataset[]
+	datasets: Datasets
 }
 const defaultState = {datasets: []};
 

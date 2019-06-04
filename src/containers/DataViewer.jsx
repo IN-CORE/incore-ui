@@ -1,5 +1,5 @@
 import {connect} from "react-redux";
-import DataViewerComponent from "../components/DataViewer";
+import DataViewerComponent from "../components/DataExplorerPage";
 import {fetchDatasets, fetchSpaces, searchDatasets} from "../actions";
 
 

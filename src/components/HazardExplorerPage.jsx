@@ -18,7 +18,6 @@ import Map from "./Map";
 import Notification from "./Notification";
 import NestedInfoTable from "./NestedInfoTable";
 import config from "../app.config";
-
 import FontAwesomeIcon from "@fortawesome/react-fontawesome";
 import {faChevronLeft, faChevronRight,} from "@fortawesome/fontawesome-free-solid";
 
@@ -416,7 +415,7 @@ class HazardExplorerPage extends Component {
 
 							{/*pagination*/}
 							<div>
-								<GridTile cols={6} style={{paddingTop: "5x", textAlign: "center"}} cellHeight="auto">
+								<GridTile cols={6} style={{paddingTop: "5x", textAlign: "center"}}>
 									<button disabled={this.state.pageNumber === 1} onClick={this.previous}>
 										<FontAwesomeIcon icon={faChevronLeft} transform="grow-4"/> Prev
 									</button>

@@ -16,11 +16,8 @@ import {
 	TextField
 } from "material-ui";
 import ActionSearch from "material-ui/svg-icons/action/search";
-// utils
 import chartSampler from "../utils/chartSampler";
-// config
 import chartConfig from "../components/config/ChartConfig";
-// application configuration
 import config from "../app.config";
 import DistributionTable from "./DistributionTable";
 import CustomExpressionTable from "./CustomExpressionTable";
@@ -38,29 +35,26 @@ class FragilityExplorerPage extends React.Component {
 			selectedInventory: "All",
 			selectedHazard: "All",
 			selectedSpace: "All",
+			selectedFragility: "",
 			searchText: "",
 			registeredSearchText: "",
 			searching: false,
-			fragility: null,
-			data: [],
 			chartConfig: chartConfig.FragilityConfig,
 			plotData3d: {},
 			authError: false,
 			authLocationFrom: sessionStorage.getItem("locationFrom"),
 			spaces: [],
+
 			offset: 0,
 			pageNumber: 1,
 			dataPerPage: 50
 		};
 
-		this.clickFragility = this.clickFragility.bind(this);
+		this.onClickFragility = this.onClickFragility.bind(this);
 		this.handleInventorySelection = this.handleInventorySelection.bind(this);
 		this.handleHazardSelection = this.handleHazardSelection.bind(this);
 		this.handleSearch = this.handleSearch.bind(this);
-
 		this.handleKeyPressed = this.handleKeyPressed.bind(this);
-		this.searchFragilities = this.searchFragilities.bind(this);
-		this.queryFragilities = this.queryFragilities.bind(this);
 
 		this.exportJson = this.exportJson.bind(this);
 		this.previous = this.previous.bind(this);
@@ -83,9 +77,12 @@ class FragilityExplorerPage extends React.Component {
 
 			this.setState({
 				authError: false
+			}, function () {
+				this.props.getAllSpaces();
+				this.props.getAllFragilities(this.state.selectedSpace, this.state.selectedInventory,
+					this.state.selectedHazard, this.state.dataPerPage, this.state.offset);
 			});
 		}
-
 		// not logged in
 		else {
 			this.setState({
@@ -95,9 +92,11 @@ class FragilityExplorerPage extends React.Component {
 		}
 	}
 
-	async componentDidMount() {
-		await this.fetchSpaces();
-		await this.queryFragilities();
+	componentWillReceiveProps(nextProps) {
+		this.setState({
+			authError: nextProps.authError,
+			authLocationFrom: nextProps.locationFrom
+		});
 	}
 
 	handleInventorySelection(event, index, value) {
@@ -105,12 +104,13 @@ class FragilityExplorerPage extends React.Component {
 			searching: false,
 			searchText: "",
 			registeredSearchText: "",
+			selectedFragility:"",
 			selectedInventory: value,
 			pageNumber: 1,
 			offset: 0
-		},
-		async function () {
-			await this.queryFragilities();
+		},function () {
+			this.props.getAllFragilities(this.state.selectedSpace, this.state.selectedInventory,
+				this.state.selectedHazard, this.state.dataPerPage, this.state.offset);
 		});
 	}
 
@@ -120,11 +120,12 @@ class FragilityExplorerPage extends React.Component {
 			searching: false,
 			searchText: "",
 			registeredSearchText: "",
+			selectedFragility:"",
 			pageNumber: 1,
 			offset: 0
-		},
-		async function () {
-			await this.queryFragilities();
+		}, function () {
+			this.props.getAllFragilities(this.state.selectedSpace, this.state.selectedInventory,
+				this.state.selectedHazard, this.state.dataPerPage, this.state.offset);
 		});
 	}
 
@@ -133,12 +134,13 @@ class FragilityExplorerPage extends React.Component {
 			searching: false,
 			searchText: "",
 			registeredSearchText: "",
+			selectedFragility:"",
 			selectedHazard: value,
 			pageNumber: 1,
 			offset: 0
-		},
-		async function () {
-			await this.queryFragilities();
+		}, function () {
+			this.props.getAllFragilities(this.state.selectedSpace, this.state.selectedInventory,
+				this.state.selectedHazard, this.state.dataPerPage, this.state.offset);
 		});
 	}
 
@@ -157,176 +159,59 @@ class FragilityExplorerPage extends React.Component {
 			offset: 0,
 			selectedInventory: "All",
 			selectedHazard: "All",
-			selectedSpace: "All"
-		},
-		async function () {
-			await this.queryFragilities();
+			selectedSpace: "All",
+			selectedFragility:"",
+		}, function () {
+			this.props.searchAllFragilities(this.state.registeredSearchText, this.state.dataPerPage, this.state.offset);
 		});
 	}
 
-	async searchFragilities() {
-		let host = config.fragilityService;
-		let url = `${host}/search?text=${this.state.registeredSearchText}&limit=${this.state.dataPerPage}&skip=${this.state.offset}`;
-		let response = await fetch(url, {method: "GET", mode: "cors", headers: getHeader()});
-
-		if (response.ok) {
-			let fragilities = await response.json();
-
-			if (fragilities.length > 0) {
-
-				let fragilitiesWithInfo = [];
-
-				await fragilities.map((fragility) => {
-					let is3dPlot = this.is3dFragility(fragility);
-					fragility["is3dPlot"] = is3dPlot;
-					fragilitiesWithInfo.push(fragility);
-				});
-
-				await this.setState(prevState => ({
-					data: fragilitiesWithInfo,
-					pageNumber: prevState.searching ? this.state.pageNumber : 1
-				}));
-
-				// By default select the first returned in the list of fragilities
-				if (fragilitiesWithInfo.length > 0) {
-					await this.clickFragility(fragilitiesWithInfo[0]);
-				} else {
-					await this.clickFragility(fragilitiesWithInfo);
-				}
-			} else {
-				this.setState({
-					data: [],
-					fragility: null
-				});
-			}
-		} else if (response.status === 403) {
-			// if get 403 forbidden error, means token missing or expired
-			this.setState({
-				fragility: null,
-				data: [],
-				authError: true,
-			});
-		}
-		else {
-			this.setState({
-				fragility: null,
-				data: []
-			});
-		}
-	}
-
-	async queryFragilities() {
-		if (this.state.registeredSearchText && this.state.searching) {
-			await this.searchFragilities();
-			return;
+	onClickFragility(fragility) {
+		let is3dPlot = this.is3dFragility(fragility);
+		let plotData3d = [];
+		let plotConfig2d = {};
+		if (is3dPlot) {
+			plotData3d = this.generate3dPlotData(fragility);
+		} else {
+			plotConfig2d = this.generate2dPlotData(fragility);
 		}
 
-		this.setState({searching: false});
-		let url = `${config.fragilityService}?limit=${this.state.dataPerPage}&skip=${this.state.offset}`;
-
-		if (this.state.selectedInventory !== null && this.state.selectedInventory !== "All") {
-			url = `${url}&inventory=${this.state.selectedInventory}`;
-		}
-
-		if (this.state.selectedHazard !== null && this.state.selectedHazard !== "All") {
-			url = `${url}&hazard=${this.state.selectedHazard}`;
-		}
-
-		if (this.state.selectedSpace !== null && this.state.selectedSpace !== "All") {
-			url = `${url}&space=${this.state.selectedSpace}`;
-		}
-
-		let response = await fetch(url, {method: "GET", mode: "cors", headers: getHeader()});
-		if (response.ok) {
-			let fragilities = await response.json();
-
-			if (fragilities.length > 0) {
-
-				let fragilitiesWithInfo = [];
-
-				await fragilities.map((fragility) => {
-					let is3dPlot = this.is3dFragility(fragility);
-					fragility["is3dPlot"] = is3dPlot;
-					fragilitiesWithInfo.push(fragility);
-				});
-
-				await this.setState({
-					data: fragilitiesWithInfo
-				});
-
-				// By default select the first returned in the list of fragilities
-				if (fragilitiesWithInfo.length > 1) {
-					await this.clickFragility(fragilitiesWithInfo[0]);
-				} else {
-					await this.clickFragility(fragilitiesWithInfo);
-				}
-			}
-
-			else {
-				this.setState({
-					data: [],
-					fragility: null
-				});
-			}
-		}
-		else if (response.status === 403) {
-			// if get 403 forbidden error, means token missing or expired
-			this.setState({
-				fragility: null,
-				data: [],
-				authError: true,
-			});
-		}
-		else {
-			this.setState({
-				data: [],
-				fragility: null
-			});
-		}
-	}
-
-	async fetchSpaces() {
-		const endpoint = config.spaceService;
-		let response = await fetch(endpoint, {method: "GET", mode: "cors", headers: getHeader()});
-		if (response.ok) {
-			let spaces = await response.json();
-			this.setState({spaces: spaces});
-		}
-		else if (response.status === 403) {
-			// if get 403 forbidden error, means token missing or expired
-			this.setState({
-				fragility: null,
-				data: [],
-				spaces: [],
-				authError: true,
-			});
-		}
-		else {
-			this.setState({
-				fragility: null,
-				data: [],
-				spaces: [],
-			});
-		}
+		this.setState({
+			chartConfig: plotConfig2d,
+			plotData3d: plotData3d,
+			selectedFragility: fragility
+		});
 	}
 
 	previous() {
 		this.setState({
 			offset: (this.state.pageNumber - 2) * this.state.dataPerPage,
-			pageNumber: this.state.pageNumber - 1
-		},
-		async function () {
-			await this.queryFragilities();
+			pageNumber: this.state.pageNumber - 1,
+			selectedFragility: ""
+		}, function () {
+			if (this.state.registeredSearchText !== "" && this.state.searching) {
+				this.props.searchAllFragilities(this.state.registeredSearchText, this.state.dataPerPage, this.state.offset);
+			}
+			else {
+				this.props.getAllFragilities(this.state.selectedSpace, this.state.selectedInventory,
+					this.state.selectedHazard, this.state.dataPerPage, this.state.offset);
+			}
 		});
 	}
 
 	next() {
 		this.setState({
 			offset: (this.state.pageNumber) * this.state.dataPerPage,
-			pageNumber: this.state.pageNumber + 1
-		},
-		async function () {
-			await this.queryFragilities();
+			pageNumber: this.state.pageNumber + 1,
+			selectedFragility: ""
+		}, function () {
+			if (this.state.registeredSearchText !== "" && this.state.searching) {
+				this.props.searchAllFragilities(this.state.registeredSearchText, this.state.dataPerPage, this.state.offset);
+			}
+			else {
+				this.props.getAllFragilities(this.state.selectedSpace, this.state.selectedInventory,
+					this.state.selectedHazard, this.state.dataPerPage, this.state.offset);
+			}
 		});
 
 	}
@@ -335,15 +220,40 @@ class FragilityExplorerPage extends React.Component {
 		this.setState({
 			pageNumber: 1,
 			offset: 0,
-			dataPerPage: value
-		},
-		async function () {
-			await this.queryFragilities();
+			dataPerPage: value,
+			selectedFragility: ""
+		}, function () {
+			this.props.getAllFragilities(this.state.selectedSpace, this.state.selectedInventory,
+				this.state.selectedHazard, this.state.dataPerPage, this.state.offset);
 		});
 	}
 
 
 	render() {
+		let fragility_list = this.props.fragilities;
+		let fragilitiesWithInfo = [];
+		if (fragility_list.length > 0){
+			fragility_list.map((fragility) => {
+				fragility["is3dPlot"] = this.is3dFragility(fragility);
+				fragilitiesWithInfo.push(fragility);
+			});
+		}
+
+		let space_types = "";
+		if (this.props.spaces.length > 0){
+			const space_menu_items = this.props.spaces.map((space, index) =>
+				<MenuItem value={space.metadata.name} primaryText={space.metadata.name}/>
+			);
+			space_types = (<SelectField floatingLabelText="Spaces"
+										hintText="Spaces"
+										value={this.state.selectedSpace}
+										onChange={this.handleSpaceSelection}
+										style={{maxWidth:"200px"}}>
+				<MenuItem value="All" primaryText="All"/>
+				{space_menu_items}
+			</SelectField>);
+		}
+
 		if (this.state.authError) {
 			if (this.state.authLocationFrom !== undefined
 				&& this.state.authLocationFrom !== null
@@ -366,29 +276,13 @@ class FragilityExplorerPage extends React.Component {
 				<MenuItem primaryText="100" value={100}/>
 			</SelectField>);
 
-			let space_types = "";
-			if (this.state.spaces.length > 0) {
-				const space_menu_items = this.state.spaces.map((space, index) =>
-					<MenuItem value={space.metadata.name} primaryText={space.metadata.name}/>
-				);
-				space_types = (<SelectField fullWidth={true}
-											floatingLabelText="Spaces"
-											hintText="Spaces"
-											value={this.state.selectedSpace}
-											onChange={this.handleSpaceSelection}
-											style={{maxWidth: "200px"}}>
-					<MenuItem value="All" primaryText="All"/>
-					{space_menu_items}
-				</SelectField>);
-			}
-
 			return (
 				<div style={{padding: "20px", height: "100%"}}>
 					<div style={{display: "flex"}}>
 						<h2>Fragility Function Viewer</h2>
 					</div>
 
-					<GridList cols={12} cellHeight="auto">
+					<GridList cellHeight="auto" cols={12}>
 						{/* Hazard Type */}
 						<GridTile cols={2}>
 							<SelectField floatingLabelText="Hazard Type"
@@ -446,22 +340,22 @@ class FragilityExplorerPage extends React.Component {
 
 					</GridList>
 
-					<GridList cols={12} style={{paddingTop: "12px"}} cellHeight="auto">
+					<GridList cols={12} cellHeight="auto" style={{paddingTop: "12px"}}>
 						<GridTile cols={5}>
 							<h2>Fragilities</h2>
 							<div style={{overflow: "auto", height: "45vh", margin: "0 20px"}}>
 								<GroupList id="fragility-list"
-										   onClick={this.clickFragility}
-										   data={this.state.data} displayField="author"
-										   selectedFragility={this.state.fragility}/>
+										   onClick={this.onClickFragility}
+										   data={fragilitiesWithInfo} displayField="author"
+										   selectedFragility={this.state.selectedFragility}/>
 							</div>
 							<div>
-								<GridTile cols={6} style={{paddingTop: "5x", textAlign: "center"}} cellHeight="auto">
+								<GridTile cols={6} style={{paddingTop: "5x", textAlign: "center"}}>
 									<button disabled={this.state.pageNumber === 1} onClick={this.previous}>
 										<FontAwesomeIcon icon={faChevronLeft} transform="grow-4"/> Prev
 									</button>
 									<button disabled={true}>{this.state.pageNumber}</button>
-									<button disabled={this.state.data.length < this.state.dataPerPage}
+									<button disabled={fragilitiesWithInfo.length < this.state.dataPerPage}
 											onClick={this.next}>
 										Next <FontAwesomeIcon icon={faChevronRight} transform="grow-4"/></button>
 								</GridTile>
@@ -469,7 +363,7 @@ class FragilityExplorerPage extends React.Component {
 						</GridTile>
 
 						{/* Charts */}
-						{this.state.fragility ?
+						{this.state.selectedFragility ?
 							<GridTile cols={7}>
 								<h2>Preview</h2>
 								<div style={{overflow: "auto", height: "45vh", margin: "0 20px 20px"}}>
@@ -479,23 +373,23 @@ class FragilityExplorerPage extends React.Component {
 													  onClick={this.exportJson}/>
 									</div>
 									<Card>
-										{this.state.fragility.is3dPlot ?
+										{this.state.selectedFragility.is3dPlot ?
 											<div>
 												<h3 style={{textAlign: "center"}}>{this.state.plotData3d.title}</h3>
 												<ThreeDimensionalPlot plotId="3dplot" data={this.state.plotData3d.data}
-																	  xLabel={this.state.fragility.demandType}
+																	  xLabel={this.state.selectedFragility.demandType}
 																	  yLabel="Y"
-																	  zLabel={this.state.fragility.fragilityCurves[0].description}
+																	  zLabel={this.state.selectedFragility.fragilityCurves[0].description}
 																	  width="100%" height="350px" style="surface"/>
 											</div>
 											:
 											<LineChart chartId="chart" configuration={this.state.chartConfig}/>}
 									</Card>
 
-									{this.state.fragility.fragilityCurves[0].className.includes("CustomExpressionFragilityCurve") ?
-										<CustomExpressionTable fragility={this.state.fragility}/>
+									{this.state.selectedFragility.fragilityCurves[0].className.includes("CustomExpressionFragilityCurve") ?
+										<CustomExpressionTable fragility={this.state.selectedFragility}/>
 										:
-										<DistributionTable fragility={this.state.fragility}/>}
+										<DistributionTable fragility={this.state.selectedFragility}/>}
 								</div>
 							</GridTile>
 							:
@@ -506,25 +400,6 @@ class FragilityExplorerPage extends React.Component {
 				</div>
 			);
 		}
-	}
-
-	async clickFragility(fragility) {
-		let is3dPlot = this.is3dFragility(fragility);
-
-		let plotData3d = [];
-		let plotConfig2d = {};
-
-		if (is3dPlot) {
-			plotData3d = await this.generate3dPlotData(fragility);
-		} else {
-			plotConfig2d = this.generate2dPlotData(fragility);
-		}
-
-		this.setState({
-			chartConfig: plotConfig2d,
-			plotData3d: plotData3d,
-			fragility: fragility
-		});
 	}
 
 	generate2dPlotData(fragility) {
@@ -604,10 +479,10 @@ class FragilityExplorerPage extends React.Component {
 	}
 
 	exportJson() {
-		let fragilityJSON = JSON.stringify(this.state.fragility, null, 4);
+		let fragilityJSON = JSON.stringify(this.state.selectedFragility, null, 4);
 		let blob = new Blob([fragilityJSON], {type: "application/json"});
 
-		const filename = `${this.state.fragility.id}.json`;
+		const filename = `${this.state.selectedFragility.id}.json`;
 
 		if (window.navigator.msSaveOrOpenBlob) {
 			window.navigator.msSaveBlob(blob, filename);

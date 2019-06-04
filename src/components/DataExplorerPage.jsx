@@ -35,7 +35,7 @@ String.prototype.capitalize = function () {
 	return this.charAt(0).toUpperCase() + this.slice(1);
 };
 
-class DataViewer extends Component {
+class HazardExplorerPage extends Component {
 
 	constructor(props) {
 		super(props);
@@ -573,7 +573,7 @@ class DataViewer extends Component {
 							<h2> Datasets </h2>
 							{filtered_datasets}
 							<div>
-								<GridTile cols={6} style={{paddingTop: "5x", textAlign: "center"}} cellHeight="auto">
+								<GridTile cols={6} style={{paddingTop: "5x", textAlign: "center"}}>
 									<button disabled={this.state.pageNumber === 1} onClick={this.previous}>
 										<FontAwesomeIcon icon={faChevronLeft} transform="grow-4"/> Prev
 									</button>
@@ -597,4 +597,4 @@ class DataViewer extends Component {
 
 }
 
-export default DataViewer;
+export default HazardExplorerPage;

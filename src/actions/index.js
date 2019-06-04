@@ -1,8 +1,7 @@
 // @flow
 
-import type {AnalysesMetadata, Analysis, Dataset, Dispatch} from "../utils.flowtype";
+import type {AnalysesMetadata, Analysis, Datasets, Fragilities, Hazards, Dispatch} from "../utils/flowtype";
 import config from "../app.config";
-import type {Hazards} from "../utils/flowtype";
 
 export const GET_ANALYSES = "GET_ANALYSES";
 
@@ -32,7 +31,7 @@ export function receiveAnalysis(api: string, json: Analysis) {
 
 export const RECEIVE_DATASETS = "RECEIVE_DATASETS";
 
-export function receiveDatasets(type: string, json: Dataset) {
+export function receiveDatasets(type: string, json: Datasets) {
 	return (dispatch: Dispatch) => {
 		dispatch({
 			type: type,
@@ -49,6 +48,18 @@ export function receiveHazards(type: string, json: Hazards) {
 		dispatch({
 			type: type,
 			hazards: json,
+			recievedAt: Date.now(),
+		});
+	};
+}
+
+export const RECEIVE_FRAGILITIES = "RECEIVE_FRAGILITIES";
+
+export function receiveFragilities(type: string, json: Fragilities){
+	return (dispatch: Dispatch) =>{
+		dispatch({
+			type: type,
+			fragilities: json,
 			recievedAt: Date.now(),
 		});
 	};
@@ -159,6 +170,55 @@ export function fetchSpaces() {
 					dispatch(receiveSpaces(RECEIVE_SPACES, []));
 				}
 			});
+	};
+}
+
+export function searchFragilities(keyword, limit, offset){
+	let endpoint = `${config.fragilityService}/search?limit=${limit}&skip=${offset}&text=${keyword}`;
+	return (dispatch: Dispatch) => {
+		return fetch(endpoint, {mode: "cors", headers: getHeader()})
+		.then(response =>{
+			if (response.status === 200){
+				response.json().then(json =>{
+					dispatch(receiveFragilities(RECEIVE_FRAGILITIES, json));
+				});
+			}
+			else if (response.status === 403){
+				dispatch(receiveFragilities(LOGIN_ERROR, []));
+			}
+			else{
+				dispatch(receiveFragilities(RECEIVE_FRAGILITIES, []));
+			}
+		});
+	};
+}
+
+export function fetchFragilities(space: string, inventory: string, hazard: string, limit, offset){
+	let endpoint = `${config.fragilityService}?limit=${limit}&skip=${offset}`;
+	if (space !== null && space !== "All"){
+		endpoint = `${endpoint}&space=${space}`;
+	}
+	if (inventory !== null && inventory !== "All"){
+		endpoint = `${endpoint}&inventory=${inventory}`;
+	}
+	if (hazard !== null && hazard !== "All"){
+		endpoint = `${endpoint}&hazard=${hazard}`;
+	}
+	return (dispatch:Dispatch) => {
+		return fetch(endpoint, {mode: "cors", headers: getHeader()})
+		.then(response => {
+			if (response.status === 200){
+				response.json().then(json =>{
+					dispatch(receiveFragilities(RECEIVE_FRAGILITIES, json));
+				});
+			}
+			else if (response.status === 403){
+				dispatch(receiveFragilities(LOGIN_ERROR, []));
+			}
+			else{
+				dispatch(receiveFragilities(RECEIVE_FRAGILITIES, []));
+			}
+		});
 	};
 }
 

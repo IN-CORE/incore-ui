@@ -2,7 +2,7 @@ import {connect} from "react-redux";
 import ResultsPageComponent from "../components/ResultsPage";
 import {getOutputDataset} from "../actions";
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
 	return {
 		analysis: state.analyses.selectedAnalysis,
 		executionId: state.execution.executionId,
@@ -11,7 +11,7 @@ const mapStateToProps = (state, ownProps) => {
 	};
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => {
+const mapDispatchToProps = (dispatch) => {
 	return {
 		getOutputFile: (executionId) => {
 			dispatch(getOutputDataset(executionId));
