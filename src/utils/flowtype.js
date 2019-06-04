@@ -216,6 +216,49 @@ export type HazardState = {
 
 export type Datasets = Dataset[];
 
+/* Fragility */
+export type FragilityCurve2D = {
+	className: string,
+	description: name,
+	median: number,
+	beta: number,
+	curveType: string,
+	periodParam2: number,
+	periodParam1: number,
+	periodParam0: number,
+	periodEqnType: number
+}
+
+export type FragilityCurve3D = {
+	className: string,
+	description: name,
+	expression: string,
+}
+
+export type Fragility = {
+	id: string,
+	legacyId: string,
+	description: string,
+	authors: string[],
+	paperReference: string,
+	resultUnit: string,
+	resultType: string,
+	demandType: string,
+	demandUnits: string,
+	hazardType: string,
+	inventoryType: string,
+	fragilityCurves: FragilityCurve2D[] | FragilityCurve3D[],
+	privileges: Privileges,
+	creator: string
+}
+
+export type Fragilities = Fragility[];
+
+export type FragilityState = {
+	fragilities: Fragilities
+}
+
+/* Dataset */
 export type DatasetState = {
 	datasets: Dataset[]
 }

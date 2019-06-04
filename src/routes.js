@@ -6,7 +6,7 @@ import HomePage from "./containers/HomePage";
 import ExecuteAnalysis from "./containers/ExecuteAnalysis";
 import ResultsPage from "./containers/ResultsPage";
 import DataViewer from "./containers/DataViewer";
-import FragilityExplorerPage from "./components/FragilityExplorerPage";
+import FragilityExplorerPage from "./containers/FragilityViewer";
 import HazardViewer from "./containers/HazardViewer";
 import config from "./app.config";
 

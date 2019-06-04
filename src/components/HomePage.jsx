@@ -75,7 +75,7 @@ class HomePage extends Component {
 				<Paper zDepth={3} style={{padding: 20}}>
 					<h2>IN-CORE v2 Login</h2>
 					<Divider/>
-					<GridList cellHeight="auto" cols={1}>
+					<GridList cols={1} cellHeight="auto">
 						<GridTile>
 							<p style={{color: "red"}}>{loginError} </p>
 						</GridTile>

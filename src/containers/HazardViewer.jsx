@@ -2,7 +2,7 @@ import {connect} from "react-redux";
 import HazardExplorer from "../components/HazardExplorerPage";
 import {fetchHazards, fetchSpaces, searchHazards} from "../actions";
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
 	return {
 		hazards: state.hazard.hazards,
 		spaces: state.space.spaces,
@@ -11,7 +11,7 @@ const mapStateToProps = (state, ownProps) => {
 	};
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => {
+const mapDispatchToProps = (dispatch) => {
 	return {
 		getAllSpaces: () =>{
 			dispatch(fetchSpaces());
