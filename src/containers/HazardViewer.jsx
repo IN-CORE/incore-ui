@@ -1,5 +1,5 @@
 import {connect} from "react-redux";
-import HazardExplorer from "../components/HazardExplorerPage";
+import HazardViewerComponent from "../components/HazardViewer";
 import {fetchHazards, fetchSpaces, searchHazards} from "../actions";
 
 const mapStateToProps = (state) => {
@@ -25,6 +25,6 @@ const mapDispatchToProps = (dispatch) => {
 	};
 };
 
-const HazardViewer = connect(mapStateToProps, mapDispatchToProps)(HazardExplorer);
+const HazardViewer = connect(mapStateToProps, mapDispatchToProps)(HazardViewerComponent);
 
 export default HazardViewer;

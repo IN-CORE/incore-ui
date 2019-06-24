@@ -1,7 +1,7 @@
 import React, {Component} from "react";
-import Table from "./Table";
-import Map from "./Map";
-import Notification from "../components/Notification";
+import Table from "./children/Table";
+import Map from "./children/Map";
+import AuthNotification from "./children/AuthNotification";
 import {
 	Divider,
 	GridList,
@@ -17,8 +17,6 @@ import {
 import FontAwesomeIcon from "@fortawesome/react-fontawesome";
 import {
 	faChartArea,
-	faChevronLeft,
-	faChevronRight,
 	faExchangeAlt,
 	faFileAlt,
 	faMap,
@@ -27,9 +25,13 @@ import {
 	faTable,
 } from "@fortawesome/fontawesome-free-solid";
 import ActionSearch from "material-ui/svg-icons/action/search";
-import config, { uniqueDataType } from "../app.config";
+import config, {uniqueDataType} from "../app.config";
 import {getHeader} from "../actions";
 import {browserHistory} from "react-router";
+import Pagination from "./children/Pagination";
+import DataPerPage from "./children/DataPerPage";
+import Space from "./children/Space";
+
 
 String.prototype.capitalize = function () {
 	return this.charAt(0).toUpperCase() + this.slice(1);
@@ -41,13 +43,13 @@ class HazardExplorerPage extends Component {
 		super(props);
 		this.state = {
 			selectedDataType: "All",
-			selectedSpace:"All",
+			selectedSpace: "All",
 			selectedDataset: "",
 			selectedDatasetFormat: "",
 			fileData: "",
 			fileExtension: "",
 			searchText: "",
-			registeredSearchText:"",
+			registeredSearchText: "",
 			searching: false,
 			authError: false,
 			authLocationFrom: null,
@@ -121,7 +123,7 @@ class HazardExplorerPage extends Component {
 		});
 	}
 
-	handleSpaceSelection(event, index, value){
+	handleSpaceSelection(event, index, value) {
 		this.setState({
 			selectedSpace: value,
 			pageNumber: 1,
@@ -264,11 +266,11 @@ class HazardExplorerPage extends Component {
 			fileData: "",
 			fileExtension: "",
 		}, function () {
-			if (this.state.registeredSearchText !== "" && this.state.searching){
+			if (this.state.registeredSearchText !== "" && this.state.searching) {
 				// change page on searchAllDatasets
 				this.props.searchAllDatasets(this.state.registeredSearchText, this.state.dataPerPage, this.state.offset);
 			}
-			else{
+			else {
 				// change page on getAllDatasets
 				this.props.getAllDatasets(this.state.selectedDataType, this.state.selectedSpace, this.state.dataPerPage, this.state.offset);
 			}
@@ -284,11 +286,11 @@ class HazardExplorerPage extends Component {
 			fileData: "",
 			fileExtension: "",
 		}, function () {
-			if (this.state.registeredSearchText !== "" && this.state.searching){
+			if (this.state.registeredSearchText !== "" && this.state.searching) {
 				// change page on searchAllDatasets
 				this.props.searchAllDatasets(this.state.registeredSearchText, this.state.dataPerPage, this.state.offset);
 			}
-			else{
+			else {
 				// change page on getAllDatasets
 				this.props.getAllDatasets(this.state.selectedDataType, this.state.selectedSpace, this.state.dataPerPage, this.state.offset);
 			}
@@ -305,11 +307,11 @@ class HazardExplorerPage extends Component {
 			fileData: "",
 			fileExtension: "",
 		}, function () {
-			if (this.state.registeredSearchText !== "" && this.state.searching){
+			if (this.state.registeredSearchText !== "" && this.state.searching) {
 				// change page on searchAllDatasets
 				this.props.searchAllDatasets(this.state.registeredSearchText, this.state.dataPerPage, this.state.offset);
 			}
-			else{
+			else {
 				// change page on getAllDatasets
 				this.props.getAllDatasets(this.state.selectedDataType, this.state.selectedSpace, this.state.dataPerPage, this.state.offset);
 			}
@@ -327,22 +329,6 @@ class HazardExplorerPage extends Component {
 			style={{maxWidth: "300px"}}>
 			{type_menu_items}
 		</SelectField>);
-
-		let space_types = "";
-		if (this.props.spaces.length > 0){
-			const space_menu_items = this.props.spaces.map((space, index) =>
-				<MenuItem value={space.metadata.name} primaryText={space.metadata.name}/>
-			);
-			space_types = (<SelectField fullWidth={true}
-										floatingLabelText="Spaces"
-										hintText="Spaces"
-										value={this.state.selectedSpace}
-										onChange={this.handleSpaceSelection}
-										style={{maxWidth: "200px"}}>
-				<MenuItem value="All" primaryText="All"/>
-				{space_menu_items}
-			</SelectField>);
-		}
 
 		// list items
 		let list_items = "";
@@ -510,7 +496,7 @@ class HazardExplorerPage extends Component {
 			if (this.state.authLocationFrom !== undefined
 				&& this.state.authLocationFrom !== null
 				&& this.state.authLocationFrom.length > 0) {
-				return (<Notification/>);
+				return (<AuthNotification/>);
 			}
 			else {
 				browserHistory.push(`${config.baseUrl}`);
@@ -518,18 +504,6 @@ class HazardExplorerPage extends Component {
 			}
 		}
 		else {
-			const data_per_page = (<SelectField floatingLabelText="Results per page"
-												value={this.state.dataPerPage}
-												onChange={this.changeDataPerPage}
-												style={{maxWidth: "200px"}}
-			>
-				<MenuItem primaryText="15" value={15}/>
-				<MenuItem primaryText="30" value={30}/>
-				<MenuItem primaryText="50" value={50}/>
-				<MenuItem primaryText="75" value={75}/>
-				<MenuItem primaryText="100" value={100}/>
-			</SelectField>);
-
 			return (
 				<div style={{padding: "20px"}}>
 					<div style={{display: "flex"}}>
@@ -543,12 +517,14 @@ class HazardExplorerPage extends Component {
 
 						{/*space types*/}
 						<GridTile cols={2}>
-							{space_types}
+							<Space selectedSpace={this.state.selectedSpace}
+							   spaces={this.props.spaces}
+							   handleSpaceSelection={this.handleSpaceSelection}/>
 						</GridTile>
 
 						{/*per page*/}
-						<GridTile cols={2} style={{float: "left"}}>
-							{data_per_page}
+						<GridTile cols={2}>
+							<DataPerPage dataPerPage={this.state.dataPerPage} changeDataPerPage={this.changeDataPerPage}/>
 						</GridTile>
 
 						{/*search box*/}
@@ -572,18 +548,11 @@ class HazardExplorerPage extends Component {
 						<GridTile cols={5}>
 							<h2> Datasets </h2>
 							{filtered_datasets}
-							<div>
-								<GridTile cols={6} style={{paddingTop: "5x", textAlign: "center"}}>
-									<button disabled={this.state.pageNumber === 1} onClick={this.previous}>
-										<FontAwesomeIcon icon={faChevronLeft} transform="grow-4"/> Prev
-									</button>
-									<button disabled={true}>{this.state.pageNumber}</button>
-									<button disabled={this.props.datasets.length < this.state.dataPerPage}
-											onClick={this.next}>
-										Next <FontAwesomeIcon icon={faChevronRight} transform="grow-4"/></button>
-								</GridTile>
-							</div>
-
+							<Pagination pageNumber={this.state.pageNumber}
+										data={list_items}
+										dataPerPage={this.state.dataPerPage}
+										previous={this.previous}
+										next={this.next}/>
 						</GridTile>
 						<GridTile cols={7}>
 							{right_column}

@@ -1,8 +1,8 @@
 import React from "react";
-import GroupList from "../components/GroupList";
-import LineChart from "../components/LineChart";
-import Notification from "../components/Notification";
-import ThreeDimensionalPlot from "../components/ThreeDimensionalPlot";
+import GroupList from "./children/GroupList";
+import LineChart from "./children/LineChart";
+import AuthNotification from "./children/AuthNotification";
+import ThreeDimensionalPlot from "./children/ThreeDimensionalPlot";
 import "whatwg-fetch";
 import {
 	Card,
@@ -17,16 +17,16 @@ import {
 } from "material-ui";
 import ActionSearch from "material-ui/svg-icons/action/search";
 import chartSampler from "../utils/chartSampler";
-import chartConfig from "../components/config/ChartConfig";
+import chartConfig from "./config/ChartConfig";
 import config from "../app.config";
-import DistributionTable from "./DistributionTable";
-import CustomExpressionTable from "./CustomExpressionTable";
-import {getHeader} from "../actions";
+import DistributionTable from "./children/DistributionTable";
+import CustomExpressionTable from "./children/CustomExpressionTable";
 import {browserHistory} from "react-router";
-import FontAwesomeIcon from "@fortawesome/react-fontawesome";
-import {faChevronLeft, faChevronRight} from "@fortawesome/fontawesome-free-solid";
+import Pagination from "./children/Pagination";
+import DataPerPage from "./children/DataPerPage";
+import Space from "./children/Space";
 
-class FragilityExplorerPage extends React.Component {
+class FragilityViewer extends React.Component {
 
 	constructor(props) {
 		super(props);
@@ -258,7 +258,7 @@ class FragilityExplorerPage extends React.Component {
 			if (this.state.authLocationFrom !== undefined
 				&& this.state.authLocationFrom !== null
 				&& this.state.authLocationFrom.length > 0) {
-				return (<Notification/>);
+				return (<AuthNotification/>);
 			}
 			else {
 				browserHistory.push(`${config.baseUrl}`);
@@ -266,16 +266,6 @@ class FragilityExplorerPage extends React.Component {
 			}
 		}
 		else {
-			const data_per_page = (<SelectField floatingLabelText="Results per page"
-												value={this.state.dataPerPage}
-												onChange={this.changeDataPerPage} style={{maxWidth: "200px"}}>
-				<MenuItem primaryText="15" value={15}/>
-				<MenuItem primaryText="30" value={30}/>
-				<MenuItem primaryText="50" value={50}/>
-				<MenuItem primaryText="75" value={75}/>
-				<MenuItem primaryText="100" value={100}/>
-			</SelectField>);
-
 			return (
 				<div style={{padding: "20px", height: "100%"}}>
 					<div style={{display: "flex"}}>
@@ -316,12 +306,14 @@ class FragilityExplorerPage extends React.Component {
 
 						{/*spaces*/}
 						<GridTile cols={2}>
-							{space_types}
+							<Space selectedSpace={this.state.selectedSpace}
+												   spaces={this.props.spaces}
+												   handleSpaceSelection={this.handleSpaceSelection}/>
 						</GridTile>
 
 						{/*Data per page */}
 						<GridTile cols={2} style={{float: "left"}}>
-							{data_per_page}
+							<DataPerPage dataPerPage={this.state.dataPerPage} changeDataPerPage={this.changeDataPerPage}/>
 						</GridTile>
 
 						{/* Search Box */}
@@ -349,17 +341,11 @@ class FragilityExplorerPage extends React.Component {
 										   data={fragilitiesWithInfo} displayField="author"
 										   selectedFragility={this.state.selectedFragility}/>
 							</div>
-							<div>
-								<GridTile cols={6} style={{paddingTop: "5x", textAlign: "center"}}>
-									<button disabled={this.state.pageNumber === 1} onClick={this.previous}>
-										<FontAwesomeIcon icon={faChevronLeft} transform="grow-4"/> Prev
-									</button>
-									<button disabled={true}>{this.state.pageNumber}</button>
-									<button disabled={fragilitiesWithInfo.length < this.state.dataPerPage}
-											onClick={this.next}>
-										Next <FontAwesomeIcon icon={faChevronRight} transform="grow-4"/></button>
-								</GridTile>
-							</div>
+							<Pagination pageNumber={this.state.pageNumber}
+										data={fragilitiesWithInfo}
+										dataPerPage={this.state.dataPerPage}
+										previous={this.previous}
+										next={this.next}/>
 						</GridTile>
 
 						{/* Charts */}
@@ -497,6 +483,6 @@ class FragilityExplorerPage extends React.Component {
 	}
 }
 
-FragilityExplorerPage.propTypes = {};
+FragilityViewer.propTypes = {};
 
-export default FragilityExplorerPage;
+export default FragilityViewer;

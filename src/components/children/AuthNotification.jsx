@@ -1,8 +1,7 @@
 import React, {Component} from "react";
 import {Dialog} from "material-ui";
-import config from "../app.config";
 
-class Notification extends Component {
+class AuthNotification extends Component {
 
 	constructor(props) {
 		super(props);
@@ -26,4 +25,4 @@ class Notification extends Component {
 	}
 }
 
-export default Notification;
+export default AuthNotification;
