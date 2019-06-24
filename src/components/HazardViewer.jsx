@@ -14,27 +14,28 @@ import {
 	TextField
 } from "material-ui";
 import ActionSearch from "material-ui/svg-icons/action/search";
-import Map from "./Map";
-import Notification from "./Notification";
-import NestedInfoTable from "./NestedInfoTable";
+import Map from "./children/Map";
+import AuthNotification from "./children/AuthNotification";
+import NestedInfoTable from "./children/NestedInfoTable";
 import config from "../app.config";
-import FontAwesomeIcon from "@fortawesome/react-fontawesome";
-import {faChevronLeft, faChevronRight,} from "@fortawesome/fontawesome-free-solid";
+import Pagination from "./children/Pagination";
+import DataPerPage from "./children/DataPerPage";
+import Space from "./children/Space";
 
 const redundant_prop = ["description", "privileges"];
 
-class HazardExplorerPage extends Component {
+class HazardViewer extends Component {
 
 	constructor(props) {
 		super(props);
 		this.state = {
 			selectedHazardType: "earthquakes",
-			selectedSpace:"All",
+			selectedSpace: "All",
 			selectedHazard: "",
 			selectedHazardDatasetId: "",
 			boundingBox: [],
 			searchText: "",
-			registeredSearchText:"",
+			registeredSearchText: "",
 			searching: false,
 			authError: false,
 			authLocationFrom: null,
@@ -105,7 +106,7 @@ class HazardExplorerPage extends Component {
 
 	}
 
-	handleSpaceSelection(event, index, value){
+	handleSpaceSelection(event, index, value) {
 		this.setState({
 			pageNumber: 1,
 			offset: 0,
@@ -115,7 +116,7 @@ class HazardExplorerPage extends Component {
 			registeredSearchText: "",
 			searching: false,
 			selectedSpace: value
-		}, function() {
+		}, function () {
 			this.props.getAllHazards(this.state.selectedHazardType, this.state.selectedSpace, this.state.dataPerPage, this.state.offset);
 		});
 	}
@@ -177,7 +178,7 @@ class HazardExplorerPage extends Component {
 			boundingBox: [],
 			pageNumber: 1,
 			offset: 0
-		}, function(){
+		}, function () {
 			this.props.searchAllHazards(this.state.selectedHazardType, this.state.registeredSearchText,
 				this.state.dataPerPage, this.state.offset);
 		});
@@ -325,26 +326,11 @@ class HazardExplorerPage extends Component {
 			}
 		}
 
-		let space_types = "";
-		if (this.props.spaces.length > 0){
-			const space_menu_items = this.props.spaces.map((space, index) =>
-				<MenuItem value={space.metadata.name} primaryText={space.metadata.name}/>
-			);
-			space_types = (<SelectField floatingLabelText="Spaces"
-										hintText="Spaces"
-										value={this.state.selectedSpace}
-										onChange={this.handleSpaceSelection}
-										style={{maxWidth:"200px"}}>
-				<MenuItem value="All" primaryText="All"/>
-				{space_menu_items}
-			</SelectField>);
-		}
-
 		if (this.state.authError) {
 			if (this.state.authLocationFrom !== undefined
 				&& this.state.authLocationFrom !== null
 				&& this.state.authLocationFrom.length > 0) {
-				return (<Notification/>);
+				return (<AuthNotification/>);
 			}
 			else {
 				browserHistory.push(`${config.baseUrl}`);
@@ -352,16 +338,6 @@ class HazardExplorerPage extends Component {
 			}
 		}
 		else {
-			const data_per_page = (<SelectField floatingLabelText="Results per page"
-												value={this.state.dataPerPage}
-												onChange={this.changeDataPerPage}
-												style={{maxWidth:"200px"}}>
-				<MenuItem primaryText="15" value={15}/>
-				<MenuItem primaryText="30" value={30}/>
-				<MenuItem primaryText="50" value={50}/>
-				<MenuItem primaryText="75" value={75}/>
-				<MenuItem primaryText="100" value={100}/>
-			</SelectField>);
 			return (
 				<div style={{padding: "20px"}}>
 					<div style={{display: "flex"}}>
@@ -374,7 +350,7 @@ class HazardExplorerPage extends Component {
 							<SelectField floatingLabelText="Hazard Type"
 										 value={this.state.selectedHazardType}
 										 onChange={this.changeHazardType}
-										 style={{maxWidth:"200px"}}>
+										 style={{maxWidth: "200px"}}>
 								<MenuItem value="earthquakes" primaryText="Earthquake" key="earthquakes"/>
 								<MenuItem value="tornadoes" primaryText="Tornado" key="tornadoes"/>
 								<MenuItem value="hurricaneWindfields" primaryText="Hurricane"
@@ -385,12 +361,14 @@ class HazardExplorerPage extends Component {
 
 						{/*spaces*/}
 						<GridTile cols={2}>
-							{space_types}
+							<Space selectedSpace={this.state.selectedSpace}
+							   spaces={this.props.spaces}
+							   handleSpaceSelection={this.handleSpaceSelection}/>
 						</GridTile>
 
 						{/* set data per page to be shown */}
-						<GridTile cols={2} style={{float: "left"}}>
-							{data_per_page}
+						<GridTile cols={2}>
+							<DataPerPage dataPerPage={this.state.dataPerPage} changeDataPerPage={this.changeDataPerPage}/>
 						</GridTile>
 
 						{/* search hazard based on name or description */}
@@ -398,7 +376,9 @@ class HazardExplorerPage extends Component {
 							<TextField ref="searchBox" hintText="Search Hazard"
 									   onKeyPress={this.handleKeyPressed}
 									   value={this.state.searchText}
-									   onChange={e=>{this.setState({searchText:e.target.value});}}/>
+									   onChange={e => {
+										   this.setState({searchText: e.target.value});
+									   }}/>
 							<IconButton iconStyle={{position: "absolute", left: 0, bottom: 5, width: 30, height: 30}}
 										onClick={this.searchHazards}>
 								<ActionSearch/>
@@ -412,20 +392,11 @@ class HazardExplorerPage extends Component {
 							<div style={{overflow: "auto", height: "200px", margin: "0 20px"}}>
 								{hazards_list_display}
 							</div>
-
-							{/*pagination*/}
-							<div>
-								<GridTile cols={6} style={{paddingTop: "5x", textAlign: "center"}}>
-									<button disabled={this.state.pageNumber === 1} onClick={this.previous}>
-										<FontAwesomeIcon icon={faChevronLeft} transform="grow-4"/> Prev
-									</button>
-									<button disabled={true}>{this.state.pageNumber}</button>
-									<button disabled={this.props.hazards.length < this.state.dataPerPage}
-											onClick={this.next}>
-										Next <FontAwesomeIcon icon={faChevronRight} transform="grow-4"/></button>
-								</GridTile>
-							</div>
-
+							<Pagination pageNumber={this.state.pageNumber}
+										data={hazards_list_display}
+										dataPerPage={this.state.dataPerPage}
+										previous={this.previous}
+										next={this.next}/>
 							<h2>Details</h2>
 							<div>
 								{right_column}
@@ -442,4 +413,4 @@ class HazardExplorerPage extends Component {
 	}
 }
 
-export default HazardExplorerPage;
+export default HazardViewer;

@@ -1,5 +1,5 @@
 import {connect} from "react-redux";
-import FragilityExplorer from "../components/FragilityExplorerPage";
+import FragilityViewerComponent from "../components/FragilityViewer";
 import {fetchFragilities, fetchSpaces, searchFragilities} from "../actions";
 
 const mapStateToProps = (state) => {
@@ -25,6 +25,6 @@ const mapDispatchToProps = (dispatch) => {
 	};
 };
 
-const FragilityViewer = connect(mapStateToProps, mapDispatchToProps)(FragilityExplorer);
+const FragilityViewer = connect(mapStateToProps, mapDispatchToProps)(FragilityViewerComponent);
 
 export default FragilityViewer;

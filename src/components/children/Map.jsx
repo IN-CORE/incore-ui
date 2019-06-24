@@ -1,6 +1,6 @@
 import React, {Component} from "react";
-import config from "../app.config";
-import {getHeader} from "../actions";
+import config from "../../app.config";
+import {getHeader} from "../../actions/index";
 
 let ol = require("openlayers");
 require("openlayers/css/ol.css");

@@ -10,7 +10,7 @@ type Props = {
 	name: string
 }
 
-class HomePage extends Component {
+class Login extends Component {
 	constructor(props) {
 		super(props);
 
@@ -110,4 +110,4 @@ class HomePage extends Component {
 	}
 }
 
-export default HomePage;
+export default Login;

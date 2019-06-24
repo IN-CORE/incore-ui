@@ -1,5 +1,5 @@
 import {connect} from "react-redux";
-import HomePageComponent from "../components/HomePage";
+import LoginComponent from "../components/Login";
 import {login} from "../actions";
 
 const mapStateToProps = (state) => {
@@ -16,6 +16,6 @@ const mapDispatchToProps = (dispatch) => {
 	};
 };
 
-const HomePage = connect(mapStateToProps, mapDispatchToProps)(HomePageComponent);
+const Login = connect(mapStateToProps, mapDispatchToProps)(LoginComponent);
 
-export default HomePage;
+export default Login;
