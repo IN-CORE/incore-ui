@@ -3,7 +3,7 @@ import reduxImmutableStateInvariant from "redux-immutable-state-invariant";
 import thunk from "redux-thunk";
 import rootReducer from "../reducers";
 
-function configureStoreProd(initialState) {
+function configureStoreProd() {
 	const middlewares = [
 		// Add other middleware on this line...
 
@@ -12,13 +12,13 @@ function configureStoreProd(initialState) {
 		thunk,
 	];
 
-	return createStore(rootReducer, initialState, compose(
+	return createStore(rootReducer, compose(
 		applyMiddleware(...middlewares)
 		)
 	);
 }
 
-function configureStoreDev(initialState) {
+function configureStoreDev() {
 	const middlewares = [
 		// Add other middleware on this line...
 
@@ -32,10 +32,10 @@ function configureStoreDev(initialState) {
 
 	// adds support for Redux dev tools
 	const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-	const store = createStore(rootReducer, initialState, composeEnhancers(
+	const store = createStore(rootReducer, composeEnhancers(
 		applyMiddleware(...middlewares)
 		),
-		window.devToolsExtension ? window.devToolsExtension() : f => f
+		// window.devToolsExtension ? window.devToolsExtension() : f => f
 	);
 
 	if (module.hot) {

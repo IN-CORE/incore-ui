@@ -1,43 +1,115 @@
 import React, {Component} from "react";
-import Table from "./children/Table";
+import FileContentTable from "./children/Table";
+import NestedInfoTable from "./children/NestedInfoTable";
 import Map from "./children/Map";
 import AuthNotification from "./children/AuthNotification";
 import {
-	Divider,
-	GridList,
-	GridTile,
+	Button,
+	Card,
+	CardContent,
+	Dialog,
+	DialogContent,
+	Grid,
 	IconButton,
+	InputAdornment,
+	InputLabel,
 	List,
 	ListItem,
+	ListItemIcon,
+	ListItemText,
 	MenuItem,
-	RaisedButton,
-	SelectField,
+	Paper,
+	Select,
 	TextField,
-} from "material-ui";
-import FontAwesomeIcon from "@fortawesome/react-fontawesome";
-import {
-	faChartArea,
-	faExchangeAlt,
-	faFileAlt,
-	faMap,
-	faQuestionCircle,
-	faShareAlt,
-	faTable,
-} from "@fortawesome/fontawesome-free-solid";
-import ActionSearch from "material-ui/svg-icons/action/search";
+	Typography
+} from "@material-ui/core";
+import SearchIcon from "@material-ui/icons/Search";
+import TableIcon from "@material-ui/icons/TableChart";
+import TextIcon from "@material-ui/icons/Description";
+import MapIcon from "@material-ui/icons/Map";
+import MappingIcon from "@material-ui/icons/CompareArrows";
+import ChartIcon from "@material-ui/icons/ShowChart";
+import NetworkIcon from "@material-ui/icons/DeviceHub";
+import UnknownIcon from "@material-ui/icons/ContactSupport";
+import CloseIcon from "@material-ui/icons/Close";
 import config, {uniqueDataType} from "../app.config";
 import {getHeader} from "../actions";
 import {browserHistory} from "react-router";
 import Pagination from "./children/Pagination";
 import DataPerPage from "./children/DataPerPage";
 import Space from "./children/Space";
+import {CopyToClipboard} from "react-copy-to-clipboard";
+import {createMuiTheme, withStyles} from "@material-ui/core/styles/index";
+
+
+const redundant_prop = ["deleted", "privileges", "spaces"];
+const theme = createMuiTheme();
+const styles = {
+	root: {
+		padding: theme.spacing(4)
+	},
+	filter: {
+		padding: theme.spacing(4),
+		overflow: "auto",
+		display:"flex"
+	},
+	main: {
+		padding: theme.spacing(4),
+		overflow: "auto",
+		height: "60vh"
+	},
+	selectDiv: {
+		margin: "auto",
+		display: "inline-block",
+		width: "25%"
+	},
+	select: {
+		width: "80%",
+		fontSize: "12px"
+	},
+	denseStyle: {
+		minHeight: "10px",
+		lineHeight: "30px",
+		fontSize: "12px",
+	},
+	metadata: {
+		margin: theme.spacing(2),
+		overflow: "auto"
+	},
+	inlineButtons:{
+		display: "inline-block",
+		margin: "auto 5px"
+	},
+	hide: {
+		display: "none",
+	},
+	paperFooter: {
+		padding: theme.spacing(2),
+		borderTop: "1px solid #eeeeee",
+		borderBottomLeftRadius: "2px",
+		borderBottomRightRadius: "2px"
+	},
+	paperHeader: {
+		padding: theme.spacing(2),
+		borderBottom: "1px solid #eeeeee",
+		borderTopLeftRadius: "2px",
+		borderTopRightRadius: "2px"
+	},
+	preview:{
+		padding: "50px"
+	},
+	previewClose:{
+		display: "inline",
+		float: "right"
+	}
+};
 
 
 String.prototype.capitalize = function () {
 	return this.charAt(0).toUpperCase() + this.slice(1);
 };
 
-class HazardExplorerPage extends Component {
+class DataViewer extends Component {
 
 	constructor(props) {
 		super(props);
@@ -53,14 +125,16 @@ class HazardExplorerPage extends Component {
 			searching: false,
 			authError: false,
 			authLocationFrom: null,
+			preview: false,
 			offset: 0,
 			pageNumber: 1,
 			dataPerPage: 50,
 		};
 		this.changeDatasetType = this.changeDatasetType.bind(this);
 		this.onClickDataset = this.onClickDataset.bind(this);
-		this.searchDatasets = this.searchDatasets.bind(this);
+		this.setSearchState = this.setSearchState.bind(this);
 		this.handleKeyPressed = this.handleKeyPressed.bind(this);
+		this.clickSearch = this.clickSearch.bind(this);
 		this.onClickFileDescriptor = this.onClickFileDescriptor.bind(this);
 		this.exportJson = this.exportJson.bind(this);
 		this.downloadDataset = this.downloadDataset.bind(this);
@@ -68,7 +142,11 @@ class HazardExplorerPage extends Component {
 		this.previous = this.previous.bind(this);
 		this.next = this.next.bind(this);
 		this.changeDataPerPage = this.changeDataPerPage.bind(this);
+		this.preview = this.preview.bind(this);
+		this.handlePreviewerClose = this.handlePreviewerClose.bind(this);
 	}
+
+	//TODO auto select the first item in the list
 
 	componentWillMount() {
 
@@ -106,9 +184,9 @@ class HazardExplorerPage extends Component {
 		});
 	}
 
-	changeDatasetType(event, index, value) {
+	changeDatasetType(event) {
 		this.setState({
-			selectedDataType: value,
+			selectedDataType: event.target.value,
 			pageNumber: 1,
 			offset: 0,
 			selectedDataset: "",
@@ -123,9 +201,9 @@ class HazardExplorerPage extends Component {
 		});
 	}
 
-	handleSpaceSelection(event, index, value) {
+	handleSpaceSelection(event) {
 		this.setState({
-			selectedSpace: value,
+			selectedSpace: event.target.value,
 			pageNumber: 1,
 			offset: 0,
 			selectedDataset: "",
@@ -143,17 +221,16 @@ class HazardExplorerPage extends Component {
 	onClickDataset(datasetId) {
 		const dataset = this.props.datasets.find(dataset => dataset.id === datasetId);
 		this.setState({
-			selectedDataset: datasetId,
+			selectedDataset: dataset,
 			selectedDatasetFormat: dataset.format,
 			fileData: "",
 			fileExtension: ""
 		});
-
 	}
 
-	async searchDatasets() {
+	async setSearchState() {
 		this.setState({
-			registeredSearchText: this.refs.searchBox.getValue(),
+			registeredSearchText: this.state.searchText,
 			searching: true,
 			selectedDataset: "",
 			fileData: "",
@@ -163,16 +240,20 @@ class HazardExplorerPage extends Component {
 			offset: 0,
 			selectedDataType: "All",
 			selectedSpace: "All"
-		}, function () {
-			this.props.searchAllDatasets(this.state.registeredSearchText, this.state.dataPerPage, this.state.offset);
 		});
 	}
 
 	async handleKeyPressed(event) {
 		if (event.charCode === 13) { // enter
 			event.preventDefault();
-			await this.searchDatasets();
+			await this.setSearchState();
+			this.props.searchAllDatasets(this.state.registeredSearchText, this.state.dataPerPage, this.state.offset);
 		}
+	}
+
+	async clickSearch() {
+		await this.setSearchState();
+		this.props.searchAllDatasets(this.state.registeredSearchText, this.state.dataPerPage, this.state.offset);
 	}
 
 	async onClickFileDescriptor(selected_dataset_id, file_descriptor_id, file_name) {
@@ -206,7 +287,7 @@ class HazardExplorerPage extends Component {
 	}
 
 	async downloadDataset() {
-		let datasetId = this.state.selectedDataset;
+		let datasetId = this.state.selectedDataset.id;
 		let filename = `${datasetId}.zip`;
 		let url = `${config.dataService}/${datasetId}/blob`;
 
@@ -239,11 +320,10 @@ class HazardExplorerPage extends Component {
 	}
 
 	async exportJson() {
-		const selected_dataset = this.props.datasets.find(dataset => dataset.id === this.state.selectedDataset);
-		let datasetJSON = JSON.stringify(selected_dataset, null, 4);
+		let datasetJSON = JSON.stringify(this.state.selectedDataset, null, 4);
 		let blob = new Blob([datasetJSON], {type: "application/json"});
 
-		const filename = `${selected_dataset.id}.json`;
+		const filename = `${this.state.selectedDataset.id}.json`;
 
 		if (window.navigator.msSaveOrOpenBlob) {
 			window.navigator.msSaveBlob(blob, filename);
@@ -297,11 +377,11 @@ class HazardExplorerPage extends Component {
 		});
 	}
 
-	changeDataPerPage(event, index, value) {
+	changeDataPerPage(event) {
 		this.setState({
 			pageNumber: 1,
 			offset: 0,
-			dataPerPage: value,
+			dataPerPage: event.target.value,
 			selectedDataset: "",
 			selectedDatasetFormat: "",
 			fileData: "",
@@ -318,177 +398,155 @@ class HazardExplorerPage extends Component {
 		});
 	}
 
+	preview() {
+		this.setState({
+			preview: true
+		});
+	}
+
+	handlePreviewerClose() {
+		this.setState({
+			preview: false
+		});
+	}
+
 	render() {
-		const type_menu_items = uniqueDataType.map((type) =>
-			<MenuItem value={type} primaryText={type} key={type}/>
-		);
-		let dataset_types = (<SelectField
-			floatingLabelText="Dataset Type"
-			value={this.state.selectedDataType}
-			onChange={this.changeDatasetType}
-			style={{maxWidth: "300px"}}>
-			{type_menu_items}
-		</SelectField>);
+		const {classes} = this.props;
+		const type_menu_items = uniqueDataType.map((type) => <MenuItem value={type} key={type}
+																	   className={classes.denseStyle}>{type}</MenuItem>);
+		let dataset_types = (<Select value={this.state.selectedDataType}
+									 onChange={this.changeDatasetType}
+									 className={classes.select}>{type_menu_items}</Select>);
 
 		// list items
 		let list_items = "";
 		if (this.props.datasets.length > 0) {
 			list_items = this.props.datasets.map((dataset) => {
 				if (dataset.format === "table") {
-					return (<div key={dataset.id}>
-						<ListItem onClick={() => this.onClickDataset(dataset.id)}
-								  disabled={dataset.id === this.state.selectedDataset}>
-							<FontAwesomeIcon icon={faTable} style={{"display": "inline", marginRight: "5px"}}/>
-							{`${dataset.title  } - ${  dataset.creator.capitalize()}`}
-						</ListItem>
-						<Divider/>
-					</div>);
+					return (
+						<ListItem button
+								  onClick={() => this.onClickDataset(dataset.id)}
+								  selected={dataset.id === this.state.selectedDataset.id}>
+							<ListItemIcon><TableIcon fontSize="small"/></ListItemIcon>
+							<ListItemText primary={`${dataset.title  } - ${  dataset.creator.capitalize()}`}/>
+						</ListItem>);
 				}
 				else if (dataset.format === "textFiles") {
-					return (<div key={dataset.id}>
-						<ListItem onClick={() => this.onClickDataset(dataset.id)}
-								  disabled={dataset.id === this.state.selectedDataset}>
-							<FontAwesomeIcon icon={faFileAlt}
-											 style={{"display": "inline", marginRight: "5px"}}/>
-							{`${dataset.title  } - ${  dataset.creator.capitalize()}`}
-						</ListItem>
-						<Divider/>
-					</div>);
+					return (<ListItem button
+									  onClick={() => this.onClickDataset(dataset.id)}
+									  selected={dataset.id === this.state.selectedDataset.id}>
+						<ListItemIcon><TextIcon fontSize="small"/></ListItemIcon>
+						<ListItemText primary={`${dataset.title  } - ${  dataset.creator.capitalize()}`}/>
+					</ListItem>);
 				}
 				else if (dataset.format === "shapefile") {
-					return (<div key={dataset.id}>
-						<ListItem onClick={() => this.onClickDataset(dataset.id)}
-								  disabled={dataset.id === this.state.selectedDataset}>
-							<FontAwesomeIcon icon={faMap}
-											 style={{"display": "inline", marginRight: "5px"}}/>
-							{`${dataset.title  } - ${  dataset.creator.capitalize()}`}
-						</ListItem>
-						<Divider/>
-					</div>);
+					return (<ListItem button
+									  onClick={() => this.onClickDataset(dataset.id)}
+									  selected={dataset.id === this.state.selectedDataset.id}>
+						<ListItemIcon><MapIcon fontSize="small"/></ListItemIcon>
+						<ListItemText primary={`${dataset.title  } - ${  dataset.creator.capitalize()}`}/>
+					</ListItem>);
 				}
 				else if (dataset.format === "mapping") {
-					return (<div key={dataset.id}>
-						<ListItem onClick={() => this.onClickDataset(dataset.id)}
-								  disabled={dataset.id === this.state.selectedDataset}>
-							<FontAwesomeIcon icon={faExchangeAlt}
-											 style={{"display": "inline", marginRight: "5px"}}/>
-							{`${dataset.title  } - ${  dataset.creator.capitalize()}`}
-						</ListItem>
-						<Divider/>
-					</div>);
+					return (<ListItem button
+									  onClick={() => this.onClickDataset(dataset.id)}
+									  selected={dataset.id === this.state.selectedDataset.id}>
+						<ListItemIcon><MappingIcon fontSize="small"/></ListItemIcon>
+						<ListItemText primary={`${dataset.title  } - ${  dataset.creator.capitalize()}`}/>
+					</ListItem>);
 				}
 				else if (dataset.format === "fragility") {
-					return (<div key={dataset.id}>
-						<ListItem onClick={() => this.onClickDataset(dataset.id)}
-								  disabled={dataset.id === this.state.selectedDataset}>
-							<FontAwesomeIcon icon={faChartArea}
-											 style={{"display": "inline", marginRight: "5px"}}/>
-							{`${dataset.title  } - ${  dataset.creator.capitalize()}`}
-						</ListItem>
-						<Divider/>
-					</div>);
+					return (<ListItem button
+									  onClick={() => this.onClickDataset(dataset.id)}
+									  selected={dataset.id === this.state.selectedDataset.id}>
+						<ListItemIcon><ChartIcon fontSize="small"/></ListItemIcon>
+						<ListItemText primary={`${dataset.title  } - ${  dataset.creator.capitalize()}`}/>
+					</ListItem>);
 				}
 				else if (dataset.format === "Network") {
-					return (<div key={dataset.id}>
-						<ListItem onClick={() => this.onClickDataset(dataset.id)}
-								  disabled={dataset.id === this.state.selectedDataset}>
-							<FontAwesomeIcon icon={faShareAlt} style={{
-								"display": "inline",
-								marginRight: "5px"
-							}}/>
-							{`${dataset.title  } - ${  dataset.creator.capitalize()}`}
-						</ListItem>
-						<Divider/>
-					</div>);
+					return (<ListItem button
+									  onClick={() => this.onClickDataset(dataset.id)}
+									  selected={dataset.id === this.state.selectedDataset.id}>
+						<ListItemIcon><NetworkIcon fontSize="small"/></ListItemIcon>
+						<ListItemText primary={`${dataset.title  } - ${  dataset.creator.capitalize()}`}/>
+					</ListItem>);
 				}
 				else {
-					return (<div key={dataset.id}>
-						<ListItem onClick={() => this.onClickDataset(dataset.id)}>
-							<FontAwesomeIcon icon={faQuestionCircle} style={{
-								"display": "inline",
-								marginRight: "5px"
-							}}/>
-							{`${dataset.title  } - ${  dataset.creator.capitalize()}`}
-						</ListItem>
-						<Divider/>
-					</div>);
+					return (<ListItem button
+									  onClick={() => this.onClickDataset(dataset.id)}
+									  selected={dataset.id === this.state.selectedDataset.id}>
+						<ListItemIcon><UnknownIcon fontSize="small"/></ListItemIcon>
+						<ListItemText primary={`${dataset.title  } - ${  dataset.creator.capitalize()}`}/>
+					</ListItem>);
 				}
 			});
 		}
-		const filtered_datasets = (<div style={{overflow: "auto", height: "45vh", margin: "0 20px"}}>
-			<List style={{"overflowY": "auto"}}>
-				{list_items}
-			</List>
-		</div>);
+
+		// selected dataset
+		let selected_dataset_detail = {};
+		if (this.state.selectedDataset) {
+			for (let item in this.state.selectedDataset) {
+				if (redundant_prop.indexOf(item) === -1) {
+					selected_dataset_detail[item] = this.state.selectedDataset[item];
+				}
+			}
+		}
 
 		// after selected an item
-		let file_descriptors = "";
+		let file_list = "";
 		let file_contents = "";
 		let right_column = "";
 		if (this.state.selectedDataset) {
-			const selected_dataset = this.props.datasets.find(dataset => dataset.id === this.state.selectedDataset);
-
-			// file description
-			file_descriptors =
-				selected_dataset.fileDescriptors.map(file_descriptor =>
-					<div key={file_descriptor.id}>
-						<ListItem onClick={() => this.onClickFileDescriptor(selected_dataset.id, file_descriptor.id,
-							file_descriptor.filename)} primaryText={file_descriptor.filename} key={file_descriptor.id}/>
-						<Divider/>
-					</div>
+			// file list
+			file_list =
+				this.state.selectedDataset.fileDescriptors.map(file_descriptor =>
+					<ListItem button
+							  onClick={() => this.onClickFileDescriptor(this.state.selectedDataset.id, file_descriptor.id,
+								  file_descriptor.filename)}
+							  key={file_descriptor.id}>
+						<ListItemText>{file_descriptor.filename}</ListItemText>
+					</ListItem>
 				);
-
 			// file contents
 			if (this.state.fileExtension && this.state.fileData && this.state.fileExtension === "csv") {
 				let data = this.state.fileData.map((data) => data.split(","));
 				file_contents = (
-					<div style={{overflow: "auto", height: "300px"}}>
-						<h2>File Content Preview</h2>
-						<Table container="data_container" data={data.slice(2, 8)} colHeaders={data[0]}
-							   rowHeaders={false}/>;
+					<div>
+						<Typography variant="h6">File Content Preview</Typography>
+						<FileContentTable container="data_container" data={data.slice(2, 8)} colHeaders={data[0]}
+										  rowHeaders={false}/>;
 					</div>
 				);
 			}
 			else if (this.state.fileExtension === "xml" || this.state.fileExtension === "txt") {
 				file_contents = (
-					<div style={{overflow: "auto", height: "300px"}}>
-						<h2>File Content Preview</h2>
-						<p>{this.state.fileData}</p>
+					<div>
+						<Typography variant="h6">File Content Preview</Typography>
+						<Card>
+							<CardContent>
+								<Typography variant="body2" noWrap>
+									{this.state.fileData}
+								</Typography>
+							</CardContent>
+						</Card>
 					</div>
 				);
 			}
-
-			// button groups
-			let downloads = (
-				<div style={{marginLeft: "auto", marginBottom: "10px"}}>
-					<RaisedButton primary={true} style={{display: "inline-block"}}
-								  label="Download Metadata" labelPosition="before" onClick={this.exportJson}
-								  style={{marginRight: "10px"}}/>
-					<RaisedButton primary={true} style={{display: "inline-block"}} label="Download Dataset"
-								  labelPosition="before" onClick={this.downloadDataset}/>
-				</div>
-			);
-
 			// right column
 			if (this.state.selectedDatasetFormat === "shapefile") {
 				right_column =
 					(<div>
-						<h2>Preview</h2>
-						{downloads}
+						<Typography variant="h6">Map</Typography>
 						<Map datasetId={this.state.selectedDataset}
-							 boundingBox={selected_dataset.boundingBox}/>
+							 boundingBox={this.state.selectedDataset.boundingBox}/>
 					</div>);
-			} else if (file_descriptors.length > 0) {
-				right_column = (
-					<div>
-						<h2>File Descriptors</h2>
-						{downloads}
-						{/*list of files*/}
-						<List style={{"overflowY": "auto", height: "100px"}}>
-							{file_descriptors}
-						</List>
-					</div>
-				);
+			}
+			else if (file_list.length > 0) {
+				right_column =
+					(<div>
+						<Typography variant="h6">Files</Typography>
+						<List component="nav">{file_list}</List>
+					</div>);
 			}
 		}
 
@@ -499,66 +557,133 @@ class HazardExplorerPage extends Component {
 				return (<AuthNotification/>);
 			}
 			else {
-				browserHistory.push(`${config.baseUrl}`);
+				browserHistory.push(`${config.urlPrefix}/login`);
 				return null;
 			}
 		}
 		else {
 			return (
-				<div style={{padding: "20px"}}>
-					<div style={{display: "flex"}}>
-						<h2>Data Viewer</h2>
+				<div>
+					<div className={classes.root}>
+						<Grid container spacing={4}>
+							{/*filters*/}
+							<Grid item lg={12} sm={12} xl={12} xs={12}>
+								<Paper variant="outlined" className={classes.filter}>
+									<div className={classes.selectDiv}>
+										<InputLabel>Dataset Type</InputLabel>
+										{dataset_types}
+									</div>
+									<div className={classes.selectDiv}>
+										<Space selectedSpace={this.state.selectedSpace}
+											   spaces={this.props.spaces}
+											   handleSpaceSelection={this.handleSpaceSelection}/>
+									</div>
+									<div className={classes.selectDiv}>
+										<DataPerPage dataPerPage={this.state.dataPerPage}
+													 changeDataPerPage={this.changeDataPerPage}/>
+									</div>
+									<div className={classes.selectDiv}>
+										<TextField variant="outlined" label="Search"
+												   onKeyPress={this.handleKeyPressed}
+												   value={this.state.searchText}
+												   onChange={e => {
+													   this.setState({searchText: e.target.value});
+												   }}
+												   InputProps={{
+													   endAdornment: (<InputAdornment position="end">
+														   <IconButton
+															   onClick={this.clickSearch}><SearchIcon fontSize="small"/></IconButton>
+													   </InputAdornment>),
+													   style: {fontSize:"12px"}
+												   }}
+												   className={classes.select}
+												   margin="dense"
+										/>
+									</div>
+								</Paper>
+							</Grid>
+
+							{/*lists*/}
+							<Grid item lg={this.state.selectedDataset ? 4 : 12} md={this.state.selectedDataset ? 4 : 12}
+								  xl={this.state.selectedDataset ? 4 : 12} xs={12}>
+								<Paper variant="outlined" className={classes.main}>
+									<div className={classes.paperHeader}>
+										<Typography variant="subtitle1">Dataset</Typography>
+									</div>
+									<List component="nav">
+										{list_items}
+									</List>
+									<div className={classes.paperFooter}>
+										<Pagination pageNumber={this.state.pageNumber}
+													data={list_items}
+													dataPerPage={this.state.dataPerPage}
+													previous={this.previous}
+													next={this.next}/>
+									</div>
+								</Paper>
+							</Grid>
+
+							{/*metadata*/}
+							<Grid item lg={8} md={8} xl={8} xs={12}
+								  className={this.state.selectedDataset ? null : classes.hide}>
+								<Paper variant="outlined" className={classes.main}>
+									{Object.keys(selected_dataset_detail).length > 0 ?
+										<div>
+											<div className={classes.paperHeader}>
+												<Typography variant="subtitle1">Metadata</Typography>
+											</div>
+											<div className={classes.metadata}>
+												<Button color="primary"
+														variant="contained"
+														className={classes.inlineButtons}
+														size="small"
+														onClick={this.exportJson}>Download Metadata</Button>
+												<Button color="primary"
+														variant="contained"
+														className={classes.inlineButtons}
+														size="small"
+														onClick={this.downloadDataset}>Download Dataset</Button>
+												<Button color="primary"
+														variant="contained"
+														className={classes.inlineButtons}
+														size="small"
+														onClick={this.preview}>Preview</Button>
+												<CopyToClipboard text={this.state.selectedDataset.id}>
+													<Button color="secondary" variant="contained"
+															className={classes.inlineButtons}
+															size="small">Copy ID</Button>
+												</CopyToClipboard>
+											</div>
+											<div className={classes.metadata}>
+												<NestedInfoTable data={selected_dataset_detail}/>
+											</div>
+										</div>
+										:
+										<div></div>
+									}
+								</Paper>
+							</Grid>
+						</Grid>
 					</div>
-					<GridList cols={12} cellHeight="auto">
-						{/*dataset types*/}
-						<GridTile cols={3}>
-							{dataset_types}
-						</GridTile>
 
-						{/*space types*/}
-						<GridTile cols={2}>
-							<Space selectedSpace={this.state.selectedSpace}
-							   spaces={this.props.spaces}
-							   handleSpaceSelection={this.handleSpaceSelection}/>
-						</GridTile>
-
-						{/*per page*/}
-						<GridTile cols={2}>
-							<DataPerPage dataPerPage={this.state.dataPerPage} changeDataPerPage={this.changeDataPerPage}/>
-						</GridTile>
-
-						{/*search box*/}
-						<GridTile cols={5} style={{float: "right"}}>
-							<TextField ref="searchBox"
-									   hintText="Search All Datasets"
-									   onKeyPress={this.handleKeyPressed}
-									   value={this.state.searchText}
-									   onChange={e => {
-										   this.setState({searchText: e.target.value});
-									   }}
-							/>
-							<IconButton iconStyle={{position: "absolute", left: 0, bottom: 5, width: 30, height: 30}}
-										onClick={this.searchDatasets}>
-								<ActionSearch/>
-							</IconButton>
-						</GridTile>
-
-					</GridList>
-					<GridList cols={12} style={{paddingTop: "10px"}} cellHeight="auto">
-						<GridTile cols={5}>
-							<h2> Datasets </h2>
-							{filtered_datasets}
-							<Pagination pageNumber={this.state.pageNumber}
-										data={list_items}
-										dataPerPage={this.state.dataPerPage}
-										previous={this.previous}
-										next={this.next}/>
-						</GridTile>
-						<GridTile cols={7}>
-							{right_column}
-							{file_contents}
-						</GridTile>
-					</GridList>
+					{/* Preview */}
+					{this.state.selectedDataset ?
+						<Dialog open={this.state.preview} onClose={this.handlePreviewerClose} maxWidth="lg" fullWidth
+								scroll="paper">
+							<DialogContent className={classes.preview}>
+								<IconButton aria-label="Close" onClick={this.handlePreviewerClose}
+											className={classes.previewClose}>
+									<CloseIcon fontSize="small"/>
+								</IconButton>
+								<div>
+									{right_column}
+									{file_contents}
+								</div>
+							</DialogContent>
+						</Dialog>
+						:
+						<div></div>
+					}
 				</div>
 			);
 		}
@@ -566,4 +691,4 @@ class HazardExplorerPage extends Component {
 
 }
 
-export default HazardExplorerPage;
+export default withStyles(styles)(DataViewer);

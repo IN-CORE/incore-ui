@@ -1,7 +1,14 @@
 import React from "react";
-import { Table, TableBody, TableRow, TableRowColumn, List, ListItem, Divider } from "material-ui";
-import FontAwesomeIcon from "@fortawesome/react-fontawesome";
-import {faEye} from "@fortawesome/fontawesome-free-solid/index";
+import {Button, Divider, List, ListItem, Table, TableBody, TableCell, TableRow} from "@material-ui/core";
+import {withStyles} from "@material-ui/core/styles/index";
+
+
+const styles = {
+	inlineButtons: {
+		display: "inline-block",
+		margin: "auto 5px"
+	},
+};
 
 class NestedInfoTable extends React.Component {
 	constructor(props) {
@@ -12,107 +19,109 @@ class NestedInfoTable extends React.Component {
 	}
 
 	render() {
-		return (<Table bodyStyle={{overflow:"auto"}}>
-			<TableBody displayRowCheckbox={false}>
+
+		const {classes} = this.props;
+
+		return (<Table size="small">
+			<TableBody>
 				{
 					Object.keys(this.props.data).map((key) => {
-						if (key === "hazardDatasets"){
+						// multiple datasets
+						if (key === "hazardDatasets" && this.props.data[key].length > 0) {
 							return (
-								<TableRow style={{height:"12px"}}>
-									<TableRowColumn style={{height:"12px", width:"30%", fontWeight:"bold", backgroundColor:"#eee"}}>
+								<TableRow>
+									<TableCell style={{width: "30%", fontWeight: "bold", backgroundColor: "#eee"}}>
 										{key}
-									</TableRowColumn>
-									<TableRowColumn style={{height:"12px"}}>
-										<List style={{"overflowY": "auto"}}>
+									</TableCell>
+									<TableCell>
+										<List>
 											{
 												this.props.data[key].map((hazardDataset) => {
-													if (hazardDataset.datasetId){
+													if (hazardDataset.datasetId) {
 														return (<div key={hazardDataset.datasetId}>
-															<ListItem key={hazardDataset.datasetId}
-																	  onClick={() => this.props.onClick(hazardDataset.datasetId)}
-																	  style={{fontSize:"13px"}}>
-																<FontAwesomeIcon icon={faEye}
-																				 style={{display: "inline", float:"right", marginRight: "5px"}}/>
+															<ListItem key={hazardDataset.datasetId}>
+																<Button color="primary" variant="contained"
+																		size="small" className={classes.inlineButtons}
+																		onClick={() => this.props.onClick(hazardDataset.datasetId)}>Preview</Button>
 																{hazardDataset.datasetId}
 															</ListItem>
-
-															{/*details of the dataset*/}
-															{(hazardDataset.datasetId === this.props.selectedHazardDataset && this.props.expanded )?
-																<NestedInfoTable data={hazardDataset}/> : null }
 															<Divider/>
 														</div>);
 													}
 												})
 											}
 										</List>
-									</TableRowColumn>
+									</TableCell>
 								</TableRow>
 							);
 						}
-						else if (key === "tornadoDatasetId" && this.props.data[key]){
+						// tornado only has single dataset
+						else if (key === "datasetId" && this.props.data[key]) {
 							return (
-								<TableRow style={{height:"12px"}}>
-									<TableRowColumn style={{height:"12px", width:"30%", fontWeight:"bold", backgroundColor:"#eee"}}>
+								<TableRow>
+									<TableCell style={{width: "30%", fontWeight: "bold", backgroundColor: "#eee"}}>
 										{key}
-									</TableRowColumn>
-									<TableRowColumn style={{height:"12px"}}>
-										<List style={{"overflowY": "auto"}}>
-											<ListItem onClick={() => this.props.onClick(this.props.data.tornadoDatasetId)}
-													  key={this.props.data.tornadoDatasetId}
-													  style={{fontSize:"13px"}}
-													  disabled={this.props.data.tornadoDatasetId === this.props.selectedHazardDataset}>
-												<FontAwesomeIcon icon={faEye} style={{display: "inline", float:"right", marginRight: "5px"}}/>
-												{this.props.data.tornadoDatasetId}
+									</TableCell>
+									<TableCell>
+										<List>
+											<ListItem key={this.props.data.datasetId}>
+												<Button color="primary" variant="contained" size="small"
+														className={classes.inlineButtons}
+														onClick={() => this.props.onClick(this.props.data.datasetId)}>Preview</Button>
+												{this.props.data.datasetId}
 											</ListItem>
 											<Divider/>
 										</List>
-									</TableRowColumn>
+									</TableCell>
 								</TableRow>
 							);
 						}
-						else{
+						else if (this.props.data[key]) {
 							return (
-								// first level
-								<TableRow style={{height:"12px"}}>
-									<TableRowColumn style={{height:"12px", width:"30%", fontWeight:"bold", backgroundColor:"#eee"}}>
+								<TableRow>
+									<TableCell style={{width: "30%", fontWeight: "bold", backgroundColor: "#eee"}}>
 										{key}
-									</TableRowColumn>
+									</TableCell>
 
-									{	(typeof this.props.data[key] === "object" && this.props.data[key]) ?
-										Object.keys(this.props.data[key]).map((key2) =>{
+									{(typeof this.props.data[key] === "object" && this.props.data[key]) ?
+										Object.keys(this.props.data[key]).map((key2) => {
 											return (
-
 												// second level
-												<TableRow style={{height:"12px"}}>
-													<TableRowColumn style={{height:"12px", fontWeight:"bold"}}>
+												<TableRow>
+													<TableCell style={{width: "30%", fontWeight: "bold"}}>
 														{key2}
-													</TableRowColumn>
+													</TableCell>
 
 													{
-														(typeof this.props.data[key][key2] === "object"  && this.props.data[key]) ?
+														(typeof this.props.data[key][key2] === "object" && this.props.data[key][key2]) ?
 															Object.keys(this.props.data[key][key2]).map((key3) => {
 																return (
 
 																	// third level
-																	<TableRow style={{height: "12px"}}>
-																		<TableRowColumn style={{ height: "12px", fontWeight: "bold"}}>
+																	<TableRow>
+																		<TableCell
+																			style={{width: "30%", fontWeight: "bold"}}>
 																			{key3}
-																		</TableRowColumn>
-																		<TableRowColumn style={{ height: "12px",}}>
+																		</TableCell>
+																		<TableCell>
 																			{JSON.stringify(this.props.data[key][key2][key3])}
-																		</TableRowColumn>
+																		</TableCell>
 																	</TableRow>
 
 																);
-															}) : (<TableRowColumn style={{height: "12px"}}>{JSON.stringify(this.props.data[key][key2])}</TableRowColumn>)
+															}) : (
+																<TableCell>{JSON.stringify(this.props.data[key][key2])}</TableCell>)
 													}
 												</TableRow>
 											);
 										})
 										:
-										(<TableRowColumn style={{height:"12px"}}>{this.props.data[key]}</TableRowColumn>)
+										(<TableCell>{this.props.data[key]}</TableCell>)
 									}
-								</TableRow> );
+								</TableRow>);
+						}
+						else {
+							return null;
 						}
 					})
 				}
@@ -121,4 +130,4 @@ class NestedInfoTable extends React.Component {
 	}
 }
 
-export default NestedInfoTable;
+export default withStyles(styles)(NestedInfoTable);

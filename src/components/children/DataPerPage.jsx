@@ -1,5 +1,20 @@
 import * as React from "react";
-import {MenuItem, SelectField} from "material-ui";
+import {InputLabel, MenuItem, Select} from "@material-ui/core";
+import {withStyles} from "@material-ui/core/styles/index";
+
+
+const styles = {
+	denseStyle: {
+		minHeight: "10px",
+		lineHeight: "30px",
+		fontSize: "12px",
+	},
+	select: {
+		width: "80%",
+		fontSize: "12px"
+	}
+};
+
 
 class DataPerPage extends React.Component {
 	constructor(props) {
@@ -7,20 +22,23 @@ class DataPerPage extends React.Component {
 	}
 
 	render() {
+		const {classes} = this.props;
+
 		return (
-			<SelectField floatingLabelText="Results per page"
-						 value={this.props.dataPerPage}
-						 onChange={this.props.changeDataPerPage}
-						 style={{maxWidth: "200px"}}
-			>
-				<MenuItem primaryText="15" value={15}/>
-				<MenuItem primaryText="30" value={30}/>
-				<MenuItem primaryText="50" value={50}/>
-				<MenuItem primaryText="75" value={75}/>
-				<MenuItem primaryText="100" value={100}/>
-			</SelectField>);
+			<div>
+				<InputLabel>Results per page</InputLabel>
+				<Select value={this.props.dataPerPage}
+						onChange={this.props.changeDataPerPage}
+						className={classes.select}>
+					<MenuItem value={15} className={classes.denseStyle}>15</MenuItem>
+					<MenuItem value={30} className={classes.denseStyle}>30</MenuItem>
+					<MenuItem value={50} className={classes.denseStyle}>50</MenuItem>
+					<MenuItem value={75} className={classes.denseStyle}>75</MenuItem>
+					<MenuItem value={100} className={classes.denseStyle}>100</MenuItem>
+				</Select>
+			</div>);
 	}
 }
 
-export default DataPerPage;
+export default withStyles(styles)(DataPerPage);
 
