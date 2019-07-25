@@ -2,20 +2,26 @@ import React from "react";
 import GroupList from "./children/GroupList";
 import LineChart from "./children/LineChart";
 import AuthNotification from "./children/AuthNotification";
+import NestedInfoTable from "./children/NestedInfoTable";
 import ThreeDimensionalPlot from "./children/ThreeDimensionalPlot";
 import "whatwg-fetch";
 import {
-	Card,
+	Button,
+	Dialog,
+	DialogContent,
 	Divider,
-	GridList,
-	GridTile,
+	Grid,
 	IconButton,
+	InputAdornment,
+	InputLabel,
 	MenuItem,
-	RaisedButton,
-	SelectField,
-	TextField
-} from "material-ui";
-import ActionSearch from "material-ui/svg-icons/action/search";
+	Paper,
+	Select,
+	TextField,
+	Typography
+} from "@material-ui/core";
+import SearchIcon from "@material-ui/icons/Search";
+import CloseIcon from "@material-ui/icons/Close";
 import chartSampler from "../utils/chartSampler";
 import chartConfig from "./config/ChartConfig";
 import config from "../app.config";
@@ -25,6 +31,72 @@ import {browserHistory} from "react-router";
 import Pagination from "./children/Pagination";
 import DataPerPage from "./children/DataPerPage";
 import Space from "./children/Space";
+import {CopyToClipboard} from "react-copy-to-clipboard";
+import {createMuiTheme, withStyles} from "@material-ui/core/styles/index";
+
+
+const redundant_prop = ["legacyId", "privileges", "creator", "is3dPlot"];
+
+const theme = createMuiTheme();
+const styles = {
+	root: {
+		padding: theme.spacing(4)
+	},
+	filter: {
+		padding: theme.spacing(4),
+		overflow: "auto",
+		display:"flex"
+	},
+	main: {
+		padding: theme.spacing(4),
+		overflow: "auto",
+		height: "60vh"
+	},
+	selectDiv: {
+		margin: "auto",
+		display: "inline-block",
+		width: "20%"
+	},
+	select: {
+		width: "80%",
+		fontSize: "12px"
+	},
+	denseStyle: {
+		minHeight: "10px",
+		lineHeight: "30px",
+		fontSize: "12px",
+	},
+	metadata: {
+		margin: theme.spacing(2),
+		overflow: "auto"
+	},
+	inlineButtons:{
+		display: "inline-block",
+		margin: "auto 5px"
+	},
+	hide: {
+		display: "none",
+	},
+	paperFooter: {
+		padding: theme.spacing(2),
+		borderTop: "1px solid #eeeeee",
+		borderBottomLeftRadius: "2px",
+		borderBottomRightRadius: "2px"
+	},
+	paperHeader: {
+		padding: theme.spacing(2),
+		borderBottom: "1px solid #eeeeee",
+		borderTopLeftRadius: "2px",
+		borderTopRightRadius: "2px"
+	},
+	preview:{
+		padding: "50px"
+	},
+	previewClose:{
+		display: "inline",
+		float: "right"
+	}
+};
 
 class FragilityViewer extends React.Component {
 
@@ -44,25 +116,25 @@ class FragilityViewer extends React.Component {
 			authError: false,
 			authLocationFrom: sessionStorage.getItem("locationFrom"),
 			spaces: [],
-
+			preview: false,
 			offset: 0,
 			pageNumber: 1,
-			dataPerPage: 50
+			dataPerPage: 50,
 		};
 
 		this.onClickFragility = this.onClickFragility.bind(this);
 		this.handleInventorySelection = this.handleInventorySelection.bind(this);
 		this.handleHazardSelection = this.handleHazardSelection.bind(this);
-		this.handleSearch = this.handleSearch.bind(this);
+		this.setSearchState = this.setSearchState.bind(this);
 		this.handleKeyPressed = this.handleKeyPressed.bind(this);
-
+		this.clickSearch = this.clickSearch.bind(this);
+		this.preview = this.preview.bind(this);
 		this.exportJson = this.exportJson.bind(this);
 		this.previous = this.previous.bind(this);
 		this.next = this.next.bind(this);
-
+		this.handlePreviewerClose = this.handlePreviewerClose.bind(this);
 		this.changeDataPerPage = this.changeDataPerPage.bind(this);
 		this.handleSpaceSelection = this.handleSpaceSelection.bind(this);
-
 	}
 
 	async componentWillMount() {
@@ -99,28 +171,13 @@ class FragilityViewer extends React.Component {
 		});
 	}
 
-	handleInventorySelection(event, index, value) {
+	handleInventorySelection(event) {
 		this.setState({
 			searching: false,
 			searchText: "",
 			registeredSearchText: "",
-			selectedFragility:"",
-			selectedInventory: value,
-			pageNumber: 1,
-			offset: 0
-		},function () {
-			this.props.getAllFragilities(this.state.selectedSpace, this.state.selectedInventory,
-				this.state.selectedHazard, this.state.dataPerPage, this.state.offset);
-		});
-	}
-
-	handleSpaceSelection(event, index, value) {
-		this.setState({
-			selectedSpace: value,
-			searching: false,
-			searchText: "",
-			registeredSearchText: "",
-			selectedFragility:"",
+			selectedFragility: "",
+			selectedInventory: event.target.value,
 			pageNumber: 1,
 			offset: 0
 		}, function () {
@@ -129,13 +186,13 @@ class FragilityViewer extends React.Component {
 		});
 	}
 
-	handleHazardSelection(event, index, value) {
+	handleSpaceSelection(event) {
 		this.setState({
+			selectedSpace: event.target.value,
 			searching: false,
 			searchText: "",
 			registeredSearchText: "",
-			selectedFragility:"",
-			selectedHazard: value,
+			selectedFragility: "",
 			pageNumber: 1,
 			offset: 0
 		}, function () {
@@ -144,34 +201,53 @@ class FragilityViewer extends React.Component {
 		});
 	}
 
-	handleKeyPressed(event) {
-		if (event.charCode === 13) { // enter
-			event.preventDefault();
-			this.handleSearch();
-		}
+	handleHazardSelection(event) {
+		this.setState({
+			searching: false,
+			searchText: "",
+			registeredSearchText: "",
+			selectedFragility: "",
+			selectedHazard: event.target.value,
+			pageNumber: 1,
+			offset: 0
+		}, function () {
+			this.props.getAllFragilities(this.state.selectedSpace, this.state.selectedInventory,
+				this.state.selectedHazard, this.state.dataPerPage, this.state.offset);
+		});
 	}
 
-	handleSearch() {
+	async setSearchState() {
 		this.setState({
-			registeredSearchText: this.refs.searchBox.getValue(),
+			registeredSearchText: this.state.searchText,
 			searching: true,
 			pageNumber: 1,
 			offset: 0,
 			selectedInventory: "All",
 			selectedHazard: "All",
 			selectedSpace: "All",
-			selectedFragility:"",
-		}, function () {
-			this.props.searchAllFragilities(this.state.registeredSearchText, this.state.dataPerPage, this.state.offset);
+			selectedFragility: "",
 		});
 	}
 
-	onClickFragility(fragility) {
+	async handleKeyPressed(event) {
+		if (event.charCode === 13) { // enter
+			event.preventDefault();
+			await this.setSearchState();
+			this.props.searchAllFragilities(this.state.registeredSearchText, this.state.dataPerPage, this.state.offset);
+		}
+	}
+
+	async clickSearch() {
+		await this.setSearchState();
+		this.props.searchAllFragilities(this.state.registeredSearchText, this.state.dataPerPage, this.state.offset);
+	}
+
+	async onClickFragility(fragility) {
 		let is3dPlot = this.is3dFragility(fragility);
-		let plotData3d = [];
+		let plotData3d = {};
 		let plotConfig2d = {};
 		if (is3dPlot) {
-			plotData3d = this.generate3dPlotData(fragility);
+			plotData3d = await this.generate3dPlotData(fragility);
 		} else {
 			plotConfig2d = this.generate2dPlotData(fragility);
 		}
@@ -216,176 +292,16 @@ class FragilityViewer extends React.Component {
 
 	}
 
-	changeDataPerPage(event, index, value) {
+	changeDataPerPage(event) {
 		this.setState({
 			pageNumber: 1,
 			offset: 0,
-			dataPerPage: value,
+			dataPerPage: event.target.value,
 			selectedFragility: ""
 		}, function () {
 			this.props.getAllFragilities(this.state.selectedSpace, this.state.selectedInventory,
 				this.state.selectedHazard, this.state.dataPerPage, this.state.offset);
 		});
-	}
-
-
-	render() {
-		let fragility_list = this.props.fragilities;
-		let fragilitiesWithInfo = [];
-		if (fragility_list.length > 0){
-			fragility_list.map((fragility) => {
-				fragility["is3dPlot"] = this.is3dFragility(fragility);
-				fragilitiesWithInfo.push(fragility);
-			});
-		}
-
-		let space_types = "";
-		if (this.props.spaces.length > 0){
-			const space_menu_items = this.props.spaces.map((space, index) =>
-				<MenuItem value={space.metadata.name} primaryText={space.metadata.name}/>
-			);
-			space_types = (<SelectField floatingLabelText="Spaces"
-										hintText="Spaces"
-										value={this.state.selectedSpace}
-										onChange={this.handleSpaceSelection}
-										style={{maxWidth:"200px"}}>
-				<MenuItem value="All" primaryText="All"/>
-				{space_menu_items}
-			</SelectField>);
-		}
-
-		if (this.state.authError) {
-			if (this.state.authLocationFrom !== undefined
-				&& this.state.authLocationFrom !== null
-				&& this.state.authLocationFrom.length > 0) {
-				return (<AuthNotification/>);
-			}
-			else {
-				browserHistory.push(`${config.baseUrl}`);
-				return null;
-			}
-		}
-		else {
-			return (
-				<div style={{padding: "20px", height: "100%"}}>
-					<div style={{display: "flex"}}>
-						<h2>Fragility Function Viewer</h2>
-					</div>
-
-					<GridList cellHeight="auto" cols={12}>
-						{/* Hazard Type */}
-						<GridTile cols={2}>
-							<SelectField floatingLabelText="Hazard Type"
-										 hintText="Hazard Type" value={this.state.selectedHazard}
-										 onChange={this.handleHazardSelection} style={{maxWidth: "200px"}}>
-								<MenuItem primaryText="All" value="All"/>
-								<MenuItem primaryText="Earthquake" value="earthquake"/>
-								<MenuItem primaryText="Tornado" value="tornado"/>
-								<MenuItem primaryText="Tsunami" value="tsunami"/>
-							</SelectField>
-						</GridTile>
-
-						{/* Inventory Type */}
-						<GridTile cols={2}>
-							<SelectField floatingLabelText="Inventory Type"
-										 hintText="Inventory Type" value={this.state.selectedInventory}
-										 onChange={this.handleInventorySelection} style={{maxWidth: "200px"}}>
-								<MenuItem primaryText="All" value="All"/>
-								<MenuItem primaryText="Building" value="building"/>
-								<MenuItem primaryText="Bridge" value="bridge"/>
-								<Divider/>
-								<MenuItem primaryText="Roadway" value="roadway"/>
-								<Divider/>
-								<MenuItem primaryText="Electric Power Facility" value="electric_facility"/>
-								<MenuItem primaryText="Eletric Power Line" value="electric_power_line"/>
-								<MenuItem primaryText="Water Facility" value="water_facility"/>
-								<MenuItem primaryText="Water Pipeline" value="buried_pipeline"/>
-								<MenuItem primaryText="Gas Facility" value="gas_facility"/>
-							</SelectField>
-						</GridTile>
-
-						{/*spaces*/}
-						<GridTile cols={2}>
-							<Space selectedSpace={this.state.selectedSpace}
-												   spaces={this.props.spaces}
-												   handleSpaceSelection={this.handleSpaceSelection}/>
-						</GridTile>
-
-						{/*Data per page */}
-						<GridTile cols={2} style={{float: "left"}}>
-							<DataPerPage dataPerPage={this.state.dataPerPage} changeDataPerPage={this.changeDataPerPage}/>
-						</GridTile>
-
-						{/* Search Box */}
-						<GridTile cols={4} style={{float: "right"}}>
-							<TextField ref="searchBox" hintText="Search All Fragilities"
-									   onKeyPress={this.handleKeyPressed}
-									   value={this.state.searchText}
-									   onChange={e => {
-										   this.setState({searchText: e.target.value});
-									   }}/>
-							<IconButton iconStyle={{position: "absolute", left: 0, bottom: 5, width: 30, height: 30}}
-										onClick={this.handleSearch}>
-								<ActionSearch/>
-							</IconButton>
-						</GridTile>
-
-					</GridList>
-
-					<GridList cols={12} cellHeight="auto" style={{paddingTop: "12px"}}>
-						<GridTile cols={5}>
-							<h2>Fragilities</h2>
-							<div style={{overflow: "auto", height: "45vh", margin: "0 20px"}}>
-								<GroupList id="fragility-list"
-										   onClick={this.onClickFragility}
-										   data={fragilitiesWithInfo} displayField="author"
-										   selectedFragility={this.state.selectedFragility}/>
-							</div>
-							<Pagination pageNumber={this.state.pageNumber}
-										data={fragilitiesWithInfo}
-										dataPerPage={this.state.dataPerPage}
-										previous={this.previous}
-										next={this.next}/>
-						</GridTile>
-
-						{/* Charts */}
-						{this.state.selectedFragility ?
-							<GridTile cols={7}>
-								<h2>Preview</h2>
-								<div style={{overflow: "auto", height: "45vh", margin: "0 20px 20px"}}>
-									<div style={{marginLeft: "auto", marginBottom: "20px"}}>
-										<RaisedButton primary={true} style={{display: "inline-block"}}
-													  label="Download Metadata"
-													  onClick={this.exportJson}/>
-									</div>
-									<Card>
-										{this.state.selectedFragility.is3dPlot ?
-											<div>
-												<h3 style={{textAlign: "center"}}>{this.state.plotData3d.title}</h3>
-												<ThreeDimensionalPlot plotId="3dplot" data={this.state.plotData3d.data}
-																	  xLabel={this.state.selectedFragility.demandType}
-																	  yLabel="Y"
-																	  zLabel={this.state.selectedFragility.fragilityCurves[0].description}
-																	  width="100%" height="350px" style="surface"/>
-											</div>
-											:
-											<LineChart chartId="chart" configuration={this.state.chartConfig}/>}
-									</Card>
-
-									{this.state.selectedFragility.fragilityCurves[0].className.includes("CustomExpressionFragilityCurve") ?
-										<CustomExpressionTable fragility={this.state.selectedFragility}/>
-										:
-										<DistributionTable fragility={this.state.selectedFragility}/>}
-								</div>
-							</GridTile>
-							:
-							<div></div>
-						}
-
-					</GridList>
-				</div>
-			);
-		}
 	}
 
 	generate2dPlotData(fragility) {
@@ -481,8 +397,226 @@ class FragilityViewer extends React.Component {
 			document.body.removeChild(anchor);
 		}
 	}
+
+	preview() {
+		this.setState({
+			preview: true
+		});
+	}
+
+	handlePreviewerClose() {
+		this.setState({
+			preview: false
+		});
+	}
+
+	render() {
+
+		const {classes} = this.props;
+
+		// Fragility list
+		let fragility_list = this.props.fragilities;
+		let fragilitiesWithInfo = [];
+		if (fragility_list.length > 0) {
+			fragility_list.map((fragility) => {
+				fragility["is3dPlot"] = this.is3dFragility(fragility);
+				fragilitiesWithInfo.push(fragility);
+			});
+		}
+
+		// selected Fragilities
+		let selected_fragility_detail = {};
+		if (this.state.selectedFragility) {
+			for (let item in this.state.selectedFragility) {
+				if (redundant_prop.indexOf(item) === -1) {
+					selected_fragility_detail[item] = this.state.selectedFragility[item];
+				}
+			}
+		}
+
+		if (this.state.authError) {
+			if (this.state.authLocationFrom !== undefined
+				&& this.state.authLocationFrom !== null
+				&& this.state.authLocationFrom.length > 0) {
+				return (<AuthNotification/>);
+			}
+			else {
+				browserHistory.push(`${config.urlPrefix}/login`);
+				return null;
+			}
+		}
+		else {
+			return (
+				<div>
+					<div className={classes.root}>
+						<Grid container spacing={4}>
+							{/*filters*/}
+							<Grid item lg={12} sm={12} xl={12} xs={12}>
+								<Paper variant="outlined" className={classes.filter}>
+									{/* Hazard Type */}
+									<div className={classes.selectDiv}>
+										<InputLabel>Hazard Type</InputLabel>
+										<Select value={this.state.selectedHazard} onChange={this.handleHazardSelection}
+												className={classes.select}>
+											<MenuItem value="All" className={classes.denseStyle}>All</MenuItem>
+											<MenuItem value="earthquake"
+													  className={classes.denseStyle}>Earthquake</MenuItem>
+											<MenuItem value="tornado" className={classes.denseStyle}>Tornado</MenuItem>
+											<MenuItem value="tsunami" className={classes.denseStyle}>Tsunami</MenuItem>
+										</Select>
+									</div>
+									{/* Inventory Type */}
+									<div className={classes.selectDiv}>
+										<InputLabel>Inventory Type</InputLabel>
+										<Select value={this.state.selectedInventory}
+												onChange={this.handleInventorySelection}
+												className={classes.select}>
+											<MenuItem value="All" className={classes.denseStyle}>All</MenuItem>
+											<MenuItem value="building"
+													  className={classes.denseStyle}>Building</MenuItem>
+											<MenuItem value="bridge" className={classes.denseStyle}>Bridge</MenuItem>
+											<Divider/>
+											<MenuItem value="roadway" className={classes.denseStyle}>Roadway</MenuItem>
+											<Divider/>
+											<MenuItem value="electric_facility" className={classes.denseStyle}>Electric
+												Power Facility</MenuItem>
+											<MenuItem value="electric_power_line" className={classes.denseStyle}>Eletric
+												Power Line</MenuItem>
+											<MenuItem value="water_facility" className={classes.denseStyle}>Water
+												Facility</MenuItem>
+											<MenuItem value="buried_pipeline" className={classes.denseStyle}>Water
+												Pipeline</MenuItem>
+											<MenuItem value="gas_facility" className={classes.denseStyle}>Gas
+												Facility</MenuItem>
+										</Select>
+									</div>
+									{/*spaces*/}
+									<div className={classes.selectDiv}>
+										<Space selectedSpace={this.state.selectedSpace}
+											   spaces={this.props.spaces}
+											   handleSpaceSelection={this.handleSpaceSelection}/>
+									</div>
+									{/*Data per page */}
+									<div className={classes.selectDiv}>
+										<DataPerPage dataPerPage={this.state.dataPerPage}
+													 changeDataPerPage={this.changeDataPerPage}/>
+									</div>
+									<div className={classes.selectDiv}>
+										<TextField variant="outlined" label="Search"
+												   onKeyPress={this.handleKeyPressed}
+												   value={this.state.searchText}
+												   onChange={e => {
+													   this.setState({searchText: e.target.value});
+												   }}
+												   InputProps={{
+													   endAdornment: (<InputAdornment position="end">
+														   <IconButton onClick={this.clickSearch}>
+															   <SearchIcon fontSize="small"/></IconButton>
+													   </InputAdornment>),
+
+												   }}
+												   margin="dense"
+												   className={classes.select}
+										/>
+									</div>
+								</Paper>
+							</Grid>
+
+							{/*lists*/}
+							<Grid item lg={this.state.selectedFragility ? 4 : 12}
+								  md={this.state.selectedFragility ? 4 : 12}
+								  xl={this.state.selectedFragility ? 4 : 12} xs={12}>
+								<Paper variant="outlined" className={classes.main}>
+									<div className={classes.paperHeader}>
+										<Typography variant="subtitle1">Fragility Curves</Typography>
+									</div>
+									<GroupList id="fragility-list"
+											   onClick={this.onClickFragility}
+											   data={fragilitiesWithInfo} displayField="author"
+											   selectedFragility={this.state.selectedFragility}/>
+									<div className={classes.paperFooter}>
+										<Pagination pageNumber={this.state.pageNumber}
+													data={fragilitiesWithInfo}
+													dataPerPage={this.state.dataPerPage}
+													previous={this.previous}
+													next={this.next}/>
+									</div>
+								</Paper>
+							</Grid>
+
+							{/* Metadata */}
+							<Grid item lg={8} md={8} xl={8} xs={12}
+								  className={this.state.selectedFragility ? null : classes.hide}>
+								<Paper variant="outlined" className={classes.main}>
+									{Object.keys(selected_fragility_detail).length > 0 ?
+										<div>
+											<div className={classes.paperHeader}>
+												<Typography variant="subtitle1">Metadata</Typography>
+											</div>
+											<div className={classes.metadata}>
+												<Button color="primary"
+														variant="contained"
+														className={classes.inlineButtons}
+														size="small"
+														onClick={this.exportJson}>Download Metadata</Button>
+												<Button color="primary"
+														variant="contained"
+														className={classes.inlineButtons}
+														size="small"
+														onClick={this.preview}>Preview</Button>
+												<CopyToClipboard text={this.state.selectedFragility.id}>
+													<Button color="secondary" variant="contained"
+															className={classes.inlineButtons}
+															size="small">Copy
+														ID</Button>
+												</CopyToClipboard>
+											</div>
+											<div className={classes.metadata}>
+												<NestedInfoTable data={selected_fragility_detail}/>
+											</div>
+										</div>
+										:
+										<div></div>
+									}
+								</Paper>
+							</Grid>
+						</Grid>
+					</div>
+
+					{/* Preview */}
+					{this.state.selectedFragility ?
+						<Dialog open={this.state.preview} onClose={this.handlePreviewerClose} maxWidth="lg" fullWidth
+								scroll="paper">
+							<DialogContent className={classes.preview}>
+								<IconButton aria-label="Close" onClick={this.handlePreviewerClose}
+											className={classes.previewClose}>
+									<CloseIcon fontSize="small"/>
+								</IconButton>
+								{this.state.selectedFragility.is3dPlot ?
+									<div>
+										<Typography variant="h6">{this.state.plotData3d.title}</Typography>
+										<ThreeDimensionalPlot plotId="3dplot" data={this.state.plotData3d.data}
+															  xLabel={this.state.selectedFragility.demandType}
+															  yLabel="Y"
+															  zLabel={this.state.selectedFragility.fragilityCurves[0].description}
+															  width="100%" height="350px" style="surface"/>
+									</div>
+									:
+									<LineChart chartId="chart" configuration={this.state.chartConfig}/>}
+								{this.state.selectedFragility.fragilityCurves[0].className.includes("CustomExpressionFragilityCurve") ?
+									<CustomExpressionTable fragility={this.state.selectedFragility}/>
+									:
+									<DistributionTable fragility={this.state.selectedFragility}/>}
+							</DialogContent>
+						</Dialog>
+						:
+						<div></div>
+					}
+				</div>
+			);
+		}
+	}
 }
 
-FragilityViewer.propTypes = {};
 
-export default FragilityViewer;
+export default withStyles(styles)(FragilityViewer);

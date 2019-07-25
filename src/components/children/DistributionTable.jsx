@@ -1,5 +1,5 @@
-import React, { PropTypes } from "react";
-import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from "material-ui";
+import React, {PropTypes} from "react";
+import {Table, TableBody, TableCell, TableHead, TableRow} from "@material-ui/core";
 
 class DistributionTable extends React.Component {
 	constructor(props) {
@@ -12,26 +12,25 @@ class DistributionTable extends React.Component {
 	render() {
 		return (
 			<Table>
-				<TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+				<TableHead>
 					<TableRow>
-						<TableHeaderColumn colSpan="3" tooltip="Fragility GUID"
-										   style={{textAlign: "center"}}>
+						<TableCell colSpan={3}>
 							{this.props.fragility.id}
-						</TableHeaderColumn>
+						</TableCell>
 					</TableRow>
 					<TableRow>
-						<TableHeaderColumn>Limit State</TableHeaderColumn>
-						<TableHeaderColumn>Alpha</TableHeaderColumn>
-						<TableHeaderColumn>Beta</TableHeaderColumn>
+						<TableCell>Limit State</TableCell>
+						<TableCell>Alpha</TableCell>
+						<TableCell>Beta</TableCell>
 					</TableRow>
-				</TableHeader>
+				</TableHead>
 				<TableBody displayRowCheckbox={false}>
 					{this.props.fragility.fragilityCurves.map(function (curve) {
 						return (
 							<TableRow>
-								<TableRowColumn>{curve.description}</TableRowColumn>
-								<TableRowColumn>{curve.median}</TableRowColumn>
-								<TableRowColumn>{curve.beta}</TableRowColumn>
+								<TableCell>{curve.description}</TableCell>
+								<TableCell>{curve.median}</TableCell>
+								<TableCell>{curve.beta}</TableCell>
 							</TableRow>
 						);
 					})}

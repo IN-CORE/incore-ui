@@ -2,8 +2,16 @@ import React, {Component} from "react";
 import config from "../../app.config";
 import {getHeader} from "../../actions/index";
 
-let ol = require("openlayers");
-require("openlayers/css/ol.css");
+import OLMap from "ol/Map";
+import OLView from "ol/View";
+import TileLayer from "ol/layer/Tile";
+import TileWMS from "ol/source/TileWMS";
+import GroupLayer from "ol/layer/Group";
+import XYZ from "ol/source/XYZ";
+import OSM from "ol/source/OSM";
+import WMSCapabilities from "ol/format/WMSCapabilities";
+import Projection from "ol/proj/Projection";
+require("ol/ol.css");
 
 let tileAttribution = "Tiles © <a href=\"https://services.arcgisonline.com/ArcGIS/" +
 	"rest/services/NatGeo_World_Map/MapServer\">ArcGIS</a> &mdash; National Geographic, Esri, DeLorme, NAVTEQ, " +
@@ -11,7 +19,7 @@ let tileAttribution = "Tiles © <a href=\"https://services.arcgisonline.com/ArcG
 
 async function fetchExtent(name: string) {
 
-	let parser = new ol.format.WMSCapabilities();
+	let parser = new WMSCapabilities();
 	try {
 		const extentRequest = await fetch(`${config.geoServer}?SERVICE=WMS&REQUEST=GetCapabilities`,
 			{method: "GET", mode: "cors", headers: getHeader()});
@@ -43,11 +51,11 @@ class Map extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			map: new ol.Map({
-				view: new ol.View(),
+			map: new OLMap({
+				view: new OLView(),
 				layers: [
-					new ol.layer.Tile({
-						source: new ol.source.OSM()
+					new TileLayer({
+						source: new OSM()
 					})
 				],
 				target: "map"
@@ -56,20 +64,14 @@ class Map extends Component {
 	}
 
 	render() {
-
-		return (
-			<div>
-				<div id="map" style={{width: "100%", height: "100%", position: "absolute", className: "root"}}/>
-			</div>
-		);
-
+		return (<div id="map"/>);
 	}
 
 	async componentDidUpdate() {
 		const theMap = this.state.map;
-		theMap.setLayerGroup(new ol.layer.Group());
+		theMap.setLayerGroup(new GroupLayer());
 
-		let sourceTiled = new ol.source.TileWMS({
+		let sourceTiled = new TileWMS({
 			visible: false,
 			url: config.geoServer,
 			tileLoadFunction: customLoader,
@@ -83,13 +85,13 @@ class Map extends Component {
 			}
 		});
 
-		let layerTiled = new ol.layer.Tile({
+		let layerTiled = new TileLayer({
 			source: sourceTiled,
 			opacity: 0.7
 		});
 
-		let mapTile = new ol.layer.Tile({
-			source: new ol.source.XYZ({
+		let mapTile = new TileLayer({
+			source: new XYZ({
 				attribution: tileAttribution,
 				url: "https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}"
 			})
@@ -116,7 +118,7 @@ class Map extends Component {
 	}
 
 	async componentDidMount() {
-		let sourceTiled = new ol.source.TileWMS({
+		let sourceTiled = new TileWMS({
 			visible: false,
 			url: config.geoServer,
 			tileLoadFunction: customLoader,
@@ -130,13 +132,13 @@ class Map extends Component {
 			}
 		});
 
-		let layerTiled = new ol.layer.Tile({
+		let layerTiled = new TileLayer({
 			source: sourceTiled,
 			opacity: 0.7
 		});
 
-		let mapTile = new ol.layer.Tile({
-			source: new ol.source.XYZ({
+		let mapTile = new TileLayer({
+			source: new XYZ({
 				attribution: tileAttribution,
 				url: "https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}",
 			})
@@ -148,7 +150,7 @@ class Map extends Component {
 			layerTiled
 		];
 
-		const projection = new ol.proj.Projection({
+		const projection = new Projection({
 			code: "EPSG:4326",
 			units: "degrees",
 			axisOrientation: "neu",
@@ -156,22 +158,17 @@ class Map extends Component {
 		});
 
 
-		const view = new ol.View({
+		const view = new OLView({
 			projection: projection,
 			minZoom: 3,
 			maxZoom: 12
 		});
 
 		let theMap;
-		theMap = new ol.Map({
+		theMap = new OLMap({
 			target: "map",
 			layers: layers,
 			view: view,
-			controls: ol.control.defaults({
-				attributionOptions: ({
-					collapsible: false
-				})
-			})
 		});
 
 		// snap the map to the hazard bounding box

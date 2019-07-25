@@ -1,5 +1,19 @@
 import * as React from "react";
-import {SelectField, MenuItem} from "material-ui";
+import {InputLabel, MenuItem, Select} from "@material-ui/core";
+import {withStyles} from "@material-ui/core/styles/index";
+
+
+const styles = {
+	denseStyle: {
+		minHeight: "10px",
+		lineHeight: "30px",
+		fontSize: "12px",
+	},
+	select: {
+		width: "80%",
+		fontSize: "12px"
+	}
+};
 
 class Space extends React.Component {
 
@@ -8,23 +22,27 @@ class Space extends React.Component {
 	}
 
 	render() {
+		const {classes} = this.props;
+
 		if (this.props.spaces.length > 0) {
 			return (
-				<SelectField floatingLabelText="Spaces"
-								 hintText="Spaces"
-								 value={this.props.selectedSpace}
-								 onChange={this.props.handleSpaceSelection}
-								 style={{maxWidth: "200px"}}>
-					<MenuItem value="All" primaryText="All"/>
+				<div>
+					<InputLabel>Spaces</InputLabel>
+					<Select value={this.props.selectedSpace} onChange={this.props.handleSpaceSelection}
+							className={classes.select}>
+						<MenuItem key="All" value="All" className={classes.denseStyle}>All</MenuItem>
 						{this.props.spaces.map((space, index) =>
-							<MenuItem value={space.metadata.name} primaryText={space.metadata.name}/>)}
-				</SelectField>);
+							<MenuItem label={space.metadata.name} value={space.metadata.name} name={space.metadata.name}
+									  key={space.metadata.name} className={classes.denseStyle}>
+								{space.metadata.name}</MenuItem>)}
+					</Select>
+				</div>);
 		}
-		else{
+		else {
 			return null;
 		}
 
 	}
 }
 
-export default Space;
+export default withStyles(styles)(Space);

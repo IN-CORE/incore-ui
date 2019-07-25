@@ -1,6 +1,8 @@
 import * as React from "react";
-import FontAwesomeIcon from "@fortawesome/react-fontawesome";
-import {faChevronLeft, faChevronRight} from "@fortawesome/fontawesome-free-solid";
+import {Button, ButtonGroup} from "@material-ui/core";
+import PreviousIcon from "@material-ui/icons/ChevronLeft";
+import NextIcon from "@material-ui/icons/ChevronRight";
+
 
 class Pagination extends React.Component {
 	constructor(props) {
@@ -9,14 +11,15 @@ class Pagination extends React.Component {
 
 	render() {
 		return (
-			<div style={{paddingTop: "5x", textAlign: "center"}} >
-				<button disabled={this.props.pageNumber === 1} onClick={this.props.previous}>
-					<FontAwesomeIcon icon={faChevronLeft} transform="grow-4"/> Prev
-				</button>
-				<button disabled={true}>{this.props.pageNumber}</button>
-				<button disabled={this.props.data.length < this.props.dataPerPage}
-						onClick={this.props.next}>
-					Next <FontAwesomeIcon icon={faChevronRight} transform="grow-4"/></button>
+			<div style={{textAlign: "center"}}>
+				<ButtonGroup color="primary" size="small">
+					<Button disabled={this.props.pageNumber === 1}
+							onClick={this.props.previous}>
+						<PreviousIcon fontSize="small"/></Button>
+					<Button disabled={true}>{this.props.pageNumber}</Button>
+					<Button disabled={this.props.data.length < this.props.dataPerPage} onClick={this.props.next}>
+						<NextIcon fontSize="small"/></Button>
+				</ButtonGroup>
 			</div>
 		);
 	}
