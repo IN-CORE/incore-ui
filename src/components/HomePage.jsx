@@ -237,7 +237,7 @@ function HomePage(props) {
 						size="large"
 						className={classes.button}
 						component="a"
-						href="">
+						href="/release/pyincore-0.3.0.tar.gz">
 						V0.3.0 RELEASED
 					</Button>
 					<div className={classes.backdrop}/>

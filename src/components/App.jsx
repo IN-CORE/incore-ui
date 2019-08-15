@@ -221,16 +221,16 @@ class App extends Component {
 					<ListItemText primary="About IN-CORE"/>
 				</ListItem>
 				<ListItem button component="a" key="pyIncore"
-						  href="https://incore2.ncsa.illinois.edu/#pyincore" target="_blank">
+						  href="https://incore2.ncsa.illinois.edu/doc/pyincore/index.html" target="_blank">
 					<ListItemAvatar><Avatar src="/public/python-logo.png"/></ListItemAvatar>
 					<ListItemText primary="pyIncore"/>
 				</ListItem>
-				<ListItem button component="a" key="services" href="https://incore2.ncsa.illinois.edu/#API"
+				<ListItem button component="a" key="services" href="https://incore2.ncsa.illinois.edu/doc/api"
 						  target="_blank">
 					<ListItemAvatar><Avatar src="/public/swagger-logo.png"/></ListItemAvatar>
 					<ListItemText primary="IN-CORE Web Service API"/>
 				</ListItem>
-				<ListItem button component="a" key="lab" href="https://incore2.ncsa.illinois.edu/#incorelab"
+				<ListItem button component="a" key="lab" href="https://incore-lab.ncsa.illinois.edu"
 						  target="_blank">
 					<ListItemAvatar><Avatar src="/public/jupyter-logo.png"/></ListItemAvatar>
 					<ListItemText primary="IN-CORE lab"/>
