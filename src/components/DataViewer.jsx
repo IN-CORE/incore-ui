@@ -537,7 +537,7 @@ class DataViewer extends Component {
 				right_column =
 					(<div>
 						<Typography variant="h6">Map</Typography>
-						<Map datasetId={this.state.selectedDataset}
+						<Map datasetId={this.state.selectedDataset.id}
 							 boundingBox={this.state.selectedDataset.boundingBox}/>
 					</div>);
 			}
