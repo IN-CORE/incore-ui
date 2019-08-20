@@ -149,6 +149,9 @@ function HomePage(props) {
 	const subTitle = "Run your scientific analyses that model the impact of natural hazards on a community and the \
 		resilience of those communities.";
 
+	// TODO: how to automatically update this field important!
+	const version = "V0.4.1 RELEASED";
+
 	const sections = [
 		{
 			title: "pyIncore",
@@ -237,8 +240,9 @@ function HomePage(props) {
 						size="large"
 						className={classes.button}
 						component="a"
-						href="/release/pyincore-0.4.1.tar.gz">
-						V0.4.1 RELEASED
+						href="https://incore2.ncsa.illinois.edu/doc/pyincore/installation.html"
+						target="_blank">
+						{version}
 					</Button>
 					<div className={classes.backdrop}/>
 					<div className={classes.background}/>
