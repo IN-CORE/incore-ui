@@ -1,0 +1,152 @@
+import React, {Component} from "react";
+import {browserHistory} from "react-router";
+import {
+	Avatar, Typography, TextField, GridListTile, Grid, GridList, Link, Button, Paper, Divider
+} from "@material-ui/core";
+import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import config from "../app.config";
+
+type Props = {
+	name: string
+}
+
+class Login extends Component {
+	constructor(props) {
+		super(props);
+
+		this.state = {
+			username: "",
+			password: "",
+			passwordErrorText: "",
+			loginErrorText:"",
+			error:false,
+		};
+
+		this.changeUsername = this.changeUsername.bind(this);
+		this.changePassword = this.changePassword.bind(this);
+		this.login = this.login.bind(this);
+		this.handleKeyPressed = this.handleKeyPressed.bind(this);
+	}
+
+	handleKeyPressed(event: Object) {
+		if (event.charCode === 13) {
+			this.login();
+		}
+	}
+
+	changeUsername(event: Object) {
+		this.setState({
+			username: event.target.value,
+			loginErrorText: ""
+		});
+	}
+
+	changePassword(event: Object) {
+		let password = event.target.value;
+
+		if (password.length <= 6) {
+			this.setState({
+				error: true,
+				passwordErrorText: "Your password must be at least 6 characters long",
+				loginErrorText: "",
+			});
+		} else {
+			this.setState({
+				error: false,
+				passwordErrorText: "",
+				loginErrorText: "",
+			});
+		}
+
+
+		this.setState({password: password});
+		if (event.charCode === 13) {
+			this.login(event);
+		}
+	}
+
+	async login(event: Object) {
+		await this.props.login(this.state.username, this.state.password);
+		if (this.props.loginError) {
+			this.setState({
+				loginErrorText:"Username/Password is not correct. Try again"
+			});
+		}
+		if(!this.props.loginError) {
+			browserHistory.push(config.baseUrl);
+		}
+
+	}
+
+	render() {
+
+		// if already login, redirect to homepage
+		let user = sessionStorage.getItem("user");
+		let auth = sessionStorage.getItem("auth");
+		if (user !== undefined && user !== "" && user !== null
+			&& auth !== undefined && auth !== "" && auth !== null) {
+				browserHistory.push(config.baseUrl);
+				return null;
+		}
+
+		// else render login page
+		else {
+			return (
+				<div className="center" style={{display: "block", margin: "auto", width: "500px", paddingTop: "10%"}}>
+					<Paper style={{padding: 40}}>
+						<Avatar style={{margin: "auto"}}>
+							<LockOutlinedIcon/>
+						</Avatar>
+						<Typography component="h1" variant="h5">
+							Sign in
+						</Typography>
+						<Divider/>
+						<GridList cols={1} cellHeight="auto">
+							<GridListTile>
+								<p style={{color: "red"}}>{this.state.loginErrorText} </p>
+							</GridListTile>
+							<GridListTile>
+								<TextField
+									variant="outlined"
+									margin="normal"
+									required
+									fullWidth
+									autoFocus
+									id="username"
+									label="Username"
+									name="username"
+									value={this.state.username}
+									onChange={this.changeUsername}
+								/>
+								<TextField
+									variant="outlined"
+									margin="normal"
+									required
+									fullWidth
+									id="password"
+									label="Password"
+									name="password"
+									type="password"
+									error={this.state.error}
+									helperText={this.state.passwordErrorText}
+									value={this.state.password}
+									onChange={this.changePassword}
+									onKeyPress={this.handleKeyPressed}
+								/>
+								<Button
+									type="submit"
+									fullWidth
+									variant="contained"
+									color="primary"
+									onClick={this.login}
+								>Sign In</Button>
+							</GridListTile>
+						</GridList>
+					</Paper>
+				</div>
+			);
+		}
+	}
+}
+
+export default Login;

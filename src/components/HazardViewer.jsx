@@ -1,0 +1,517 @@
+import React, {Component} from "react";
+import {getHeader} from "../actions";
+import {browserHistory} from "react-router";
+import {
+	Button,
+	Dialog,
+	DialogContent,
+	Grid,
+	IconButton,
+	InputAdornment,
+	InputLabel,
+	List,
+	ListItem,
+	ListItemText,
+	MenuItem,
+	Paper,
+	Select,
+	TextField,
+	Typography
+} from "@material-ui/core";
+import SearchIcon from "@material-ui/icons/Search";
+import CloseIcon from "@material-ui/icons/Close";
+import Map from "./children/Map";
+import AuthNotification from "./children/AuthNotification";
+import NestedInfoTable from "./children/NestedInfoTable";
+import config from "../app.config";
+import Pagination from "./children/Pagination";
+import DataPerPage from "./children/DataPerPage";
+import Space from "./children/Space";
+import {CopyToClipboard} from "react-copy-to-clipboard";
+import {createMuiTheme, withStyles} from "@material-ui/core/styles/index";
+
+
+const redundant_prop = ["privileges", "times"];
+
+const theme = createMuiTheme();
+const styles = {
+	root: {
+		padding: theme.spacing(4)
+	},
+	filter: {
+		padding: theme.spacing(4),
+		overflow: "auto",
+		display:"flex"
+	},
+	main: {
+		padding: theme.spacing(4),
+		overflow: "auto",
+		height: "60vh"
+	},
+	selectDiv: {
+		margin: "auto",
+		display: "inline-block",
+		width: "25%"
+	},
+	select:{
+		width:"80%",
+		fontSize:"12px"
+	},
+	denseStyle: {
+		minHeight: "10px",
+		lineHeight: "30px",
+		fontSize: "12px",
+	},
+	metadata: {
+		margin: theme.spacing(2),
+		overflow: "auto"
+	},
+	inlineButtons:{
+		display: "inline-block",
+		margin: "auto 5px"
+	},
+	hide: {
+		display: "none",
+	},
+	paperFooter: {
+		padding: theme.spacing(2),
+		borderTop: "1px solid #eeeeee",
+		borderBottomLeftRadius: "2px",
+		borderBottomRightRadius: "2px"
+	},
+	paperHeader: {
+		padding: theme.spacing(2),
+		borderBottom: "1px solid #eeeeee",
+		borderTopLeftRadius: "2px",
+		borderTopRightRadius: "2px"
+	},
+	preview:{
+		padding: "50px"
+	},
+	previewClose:{
+		display: "inline",
+		float: "right"
+	}
+};
+
+
+class HazardViewer extends Component {
+
+	constructor(props) {
+		super(props);
+		this.state = {
+			selectedHazardType: "earthquakes",
+			selectedSpace: "All",
+			selectedHazard: "",
+			selectedHazardDatasetId: "",
+			boundingBox: [],
+			searchText: "",
+			registeredSearchText: "",
+			searching: false,
+			authError: false,
+			authLocationFrom: null,
+			offset: 0,
+			pageNumber: 1,
+			dataPerPage: 50,
+			preview: false
+		};
+		this.changeHazardType = this.changeHazardType.bind(this);
+		this.onClickHazard = this.onClickHazard.bind(this);
+		this.setSearchState = this.setSearchState.bind(this);
+		this.handleKeyPressed = this.handleKeyPressed.bind(this);
+		this.clickSearch = this.clickSearch.bind(this);
+		this.exportJson = this.exportJson.bind(this);
+		this.handleSpaceSelection = this.handleSpaceSelection.bind(this);
+		this.previous = this.previous.bind(this);
+		this.next = this.next.bind(this);
+		this.changeDataPerPage = this.changeDataPerPage.bind(this);
+		this.preview = this.preview.bind(this);
+		this.handlePreviewerClose = this.handlePreviewerClose.bind(this);
+	}
+
+	componentWillMount() {
+		// check if logged in
+		let user = sessionStorage.getItem("user");
+		let auth = sessionStorage.getItem("auth");
+		let location = sessionStorage.getItem("locationFrom");
+
+		// logged in
+		if (user !== undefined && user !== "" && user !== null
+			&& auth !== undefined && auth !== "" && auth !== null) {
+
+			this.setState({
+				authError: false
+			}, function () {
+				this.props.getAllSpaces();
+				this.props.getAllHazards(this.state.selectedHazardType, this.state.selectedSpace, this.state.dataPerPage, this.state.offset);
+			});
+		}
+		// not logged in
+		else {
+			this.setState({
+				authError: true,
+				authLocationFrom: location
+			});
+		}
+	}
+
+	componentWillReceiveProps(nextProps) {
+		this.setState({
+			authError: nextProps.authError,
+			authLocationFrom: nextProps.locationFrom
+		});
+	}
+
+	changeHazardType(event) {
+		this.setState({
+			pageNumber: 1,
+			offset: 0,
+			selectedHazardType: event.target.value,
+			selectedHazard: "",
+			selectedHazardDatasetId: "",
+			searchText: "",
+			registeredSearchText: "",
+			searching: false,
+		}, function () {
+			this.props.getAllHazards(this.state.selectedHazardType, this.state.selectedSpace, this.state.dataPerPage, this.state.offset);
+		});
+
+	}
+
+	handleSpaceSelection(event) {
+		this.setState({
+			pageNumber: 1,
+			offset: 0,
+			selectedHazard: "",
+			selectedHazardDatasetId: "",
+			searchText: "",
+			registeredSearchText: "",
+			searching: false,
+			selectedSpace: event.target.value
+		}, function () {
+			this.props.getAllHazards(this.state.selectedHazardType, this.state.selectedSpace, this.state.dataPerPage, this.state.offset);
+		});
+	}
+
+	onClickHazard(hazardId) {
+		const hazard = this.props.hazards.find(hazard => hazard.id === hazardId);
+		this.setState({selectedHazard: hazard, selectedHazardDatasetId: ""});
+	}
+
+	async setSearchState() {
+		this.setState({
+			registeredSearchText: this.state.searchText,
+			searching: true,
+			selectedSpace: "All",
+			selectedHazard: "",
+			selectedHazardDatasetId: "",
+			boundingBox: [],
+			pageNumber: 1,
+			offset: 0
+		});
+	}
+
+	async handleKeyPressed(event) {
+		if (event.charCode === 13) { // enter
+			event.preventDefault();
+			await this.setSearchState();
+			this.props.searchAllHazards(this.state.selectedHazardType, this.state.registeredSearchText,
+				this.state.dataPerPage, this.state.offset);
+		}
+	}
+
+	async clickSearch() {
+		await this.setSearchState();
+		this.props.searchAllHazards(this.state.selectedHazardType, this.state.registeredSearchText,
+			this.state.dataPerPage, this.state.offset);
+	}
+
+	exportJson() {
+		let selected_hazard = this.props.hazards.find(hazard => hazard.id === this.state.selectedHazard.id);
+		let hazardJson = JSON.stringify(selected_hazard, null, 4);
+		let blob = new Blob([hazardJson], {type: "application/json"});
+		const filename = `${this.state.selectedHazard.id}.json`;
+
+		if (window.navigator.msSaveOrOpenBlob) {
+			window.navigator.msSaveBlob(blob, filename);
+		} else {
+			let anchor = window.document.createElement("a");
+			anchor.href = window.URL.createObjectURL(blob);
+			anchor.download = filename;
+			document.body.appendChild(anchor);
+			anchor.click();
+			document.body.removeChild(anchor);
+		}
+	}
+
+	previous() {
+		this.setState({
+			offset: (this.state.pageNumber - 2) * this.state.dataPerPage,
+			pageNumber: this.state.pageNumber - 1,
+			selectedHazard: "",
+			selectedHazardDatasetId: "",
+			boundingBox: [],
+		}, function () {
+			if (this.state.registeredSearchText !== "" && this.state.searching) {
+				this.props.searchAllHazards(this.state.selectedHazardType, this.state.registeredSearchText,
+					this.state.dataPerPage, this.state.offset);
+			}
+			else {
+				this.props.getAllHazards(this.state.selectedHazardType, this.state.selectedSpace, this.state.dataPerPage, this.state.offset);
+			}
+		});
+	}
+
+	next() {
+		this.setState({
+			offset: (this.state.pageNumber) * this.state.dataPerPage,
+			pageNumber: this.state.pageNumber + 1,
+			selectedHazard: "",
+			selectedHazardDatasetId: "",
+			boundingBox: [],
+		}, function () {
+			if (this.state.registeredSearchText !== "" && this.state.searching) {
+				this.props.searchAllHazards(this.state.selectedHazardType, this.state.registeredSearchText,
+					this.state.dataPerPage, this.state.offset);
+			}
+			else {
+				this.props.getAllHazards(this.state.selectedHazardType, this.state.selectedSpace, this.state.dataPerPage, this.state.offset);
+			}
+		});
+	}
+
+	changeDataPerPage(event) {
+		this.setState({
+			pageNumber: 1,
+			offset: 0,
+			dataPerPage: event.target.value,
+			selectedHazard: "",
+			selectedHazardDatasetId: "",
+			boundingBox: [],
+		}, function () {
+			if (this.state.registeredSearchText !== "" && this.state.searching) {
+				this.props.searchAllHazards(this.state.selectedHazardType, this.state.registeredSearchText,
+					this.state.dataPerPage, this.state.offset);
+			}
+			else {
+				this.props.getAllHazards(this.state.selectedHazardType, this.state.selectedSpace, this.state.dataPerPage, this.state.offset);
+			}
+		});
+	}
+
+	async preview(hazardDatasetId) {
+		// query data services to:
+		// 1. verify that dataset exists
+		// 2. get the bounding box information
+		const url = `${config.dataServiceBase}data/api/datasets/${hazardDatasetId}`;
+		let response = await fetch(url, {method: "GET", mode: "cors", headers: getHeader()});
+		if (response.ok) {
+			let selectedHazardDataset = await response.json();
+			this.setState({
+				selectedHazardDatasetId: selectedHazardDataset.id,
+				boundingBox: selectedHazardDataset.boundingBox,
+				authError: false,
+				preview: true
+			});
+		}
+		else if (response.status === 403) {
+			this.setState({
+				selectedHazardDatasetId: "",
+				boundingBox: [],
+				authError: true,
+				preview: false
+			});
+		}
+		else {
+			this.setState({
+				selectedHazardDatasetId: "",
+				boundingBox: [],
+				authError: false,
+				preview: false
+			});
+		}
+	}
+
+	handlePreviewerClose() {
+		this.setState({
+			preview: false
+		});
+	}
+
+	render() {
+
+		const {classes} = this.props;
+
+		// rendering filtered hazards list
+		let hazards_list = this.props.hazards;
+		let hazards_list_display = "";
+		if (hazards_list.length > 0) {
+			hazards_list_display = (
+				<List component="nav" id="dataset-list" style={{"overflowY": "auto"}}>
+					{
+						hazards_list.map((hazard) => {
+							return (
+								<ListItem button onClick={() => this.onClickHazard(hazard.id)} key={hazard.id}
+										  selected={hazard.id === this.state.selectedHazard.id}>
+									<ListItemText>{(hazard.name) ? `${hazard.name }` : `${hazard.id}`}</ListItemText>
+								</ListItem>);
+						})
+					}
+				</List>);
+		}
+
+		// selected hazard
+		let selected_hazard_detail = {};
+		if (this.state.selectedHazard) {
+			for (let item in this.state.selectedHazard) {
+				if (redundant_prop.indexOf(item) === -1) {
+					selected_hazard_detail[item] = this.state.selectedHazard[item];
+				}
+			}
+		}
+
+		if (this.state.authError) {
+			if (this.state.authLocationFrom !== undefined
+				&& this.state.authLocationFrom !== null
+				&& this.state.authLocationFrom.length > 0) {
+				return (<AuthNotification/>);
+			}
+			else {
+				browserHistory.push(`${config.urlPrefix}/login`);
+				return null;
+			}
+		}
+		else {
+			return (
+				<div>
+					<div className={classes.root}>
+						<Grid container spacing={4}>
+							{/*filters*/}
+							<Grid item lg={12} sm={12} xl={12} xs={12}>
+								<Paper variant="outlined" className={classes.filter}>
+									{/* select hazard type */}
+									<div className={classes.selectDiv}>
+										<InputLabel>Hazard Type</InputLabel>
+										<Select value={this.state.selectedHazardType} onChange={this.changeHazardType} className={classes.select}>
+											<MenuItem value="earthquakes" key="earthquakes"
+													  className={classes.denseStyle}>Earthquake</MenuItem>
+											<MenuItem value="tornadoes" key="tornadoes"
+													  className={classes.denseStyle}>Tornado</MenuItem>
+											<MenuItem value="hurricaneWindfields"
+													  key="hurricaneWindfields"
+													  className={classes.denseStyle}>Hurricane</MenuItem>
+											<MenuItem value="tsunamis" key="tsunamis"
+													  className={classes.denseStyle}>Tsunami</MenuItem>
+										</Select>
+									</div>
+									{/*spaces*/}
+									<div className={classes.selectDiv}>
+										<Space selectedSpace={this.state.selectedSpace}
+											   spaces={this.props.spaces}
+											   handleSpaceSelection={this.handleSpaceSelection}/>
+									</div>
+									{/* set data per page to be shown */}
+									<div className={classes.selectDiv}>
+										<DataPerPage dataPerPage={this.state.dataPerPage}
+													 changeDataPerPage={this.changeDataPerPage}/>
+									</div>
+									<div className={classes.selectDiv}>
+										<TextField label="Search" variant="outlined"
+												   onKeyPress={this.handleKeyPressed}
+												   value={this.state.searchText}
+												   onChange={e => {
+													   this.setState({searchText: e.target.value});
+												   }}
+												   InputProps={{
+													   endAdornment: (<InputAdornment position="end">
+														   <IconButton
+															   onClick={this.clickSearch}><SearchIcon fontSize="small"/></IconButton>
+													   </InputAdornment>),
+													   style: {fontSize:"12px"}
+												   }}
+												   className={classes.select}
+												   margin="dense"
+										/>
+									</div>
+								</Paper>
+							</Grid>
+
+							{/*lists*/}
+							<Grid item lg={this.state.selectedHazard ? 4 : 12}
+								  md={this.state.selectedHazard ? 4 : 12}
+								  xl={this.state.selectedHazard ? 4 : 12} xs={12}>
+								<Paper variant="outlined" className={classes.main}>
+									<div className={classes.paperHeader}>
+										<Typography variant="subtitle1">Hazards</Typography>
+									</div>
+									{hazards_list_display}
+									<div className={classes.paperFooter}>
+										<Pagination pageNumber={this.state.pageNumber}
+													data={hazards_list_display}
+													dataPerPage={this.state.dataPerPage}
+													previous={this.previous}
+													next={this.next}/>
+									</div>
+								</Paper>
+							</Grid>
+
+							{/* Metadata */}
+							<Grid item lg={8} md={8} xl={8} xs={12}
+								  className={this.state.selectedHazard ? null : classes.hide}>
+								<Paper variant="outlined" className={classes.main}>
+									{Object.keys(selected_hazard_detail).length > 0 ?
+										<div>
+											<div className={classes.paperHeader}>
+												<Typography variant="subtitle1">Metadata</Typography>
+											</div>
+											<div className={classes.metadata}>
+												<Button color="primary" variant="contained"
+														className={classes.inlineButtons}
+														size="small"
+														onClick={this.exportJson}>Download Metadata</Button>
+												<CopyToClipboard text={this.state.selectedHazard.id}>
+													<Button color="secondary" variant="contained"
+															className={classes.inlineButtons}
+															size="small">Copy ID</Button>
+												</CopyToClipboard>
+											</div>
+											<div className={classes.metadata}>
+												<NestedInfoTable data={selected_hazard_detail}
+																 selectedHazardDataset={this.state.selectedHazardDatasetId}
+																 onClick={this.preview}/>
+											</div>
+										</div>
+										:
+										<div></div>
+									}
+								</Paper>
+							</Grid>
+						</Grid>
+					</div>
+
+					{/* Preview */}
+					{this.state.selectedHazard ?
+						<Dialog open={this.state.preview} onClose={this.handlePreviewerClose} maxWidth="lg" fullWidth
+								scroll="paper">
+							<DialogContent className={classes.preview}>
+								<IconButton aria-label="Close" onClick={this.handlePreviewerClose}
+											className={classes.previewClose}>
+									<CloseIcon fontSize="small"/>
+								</IconButton>
+								<div>
+									<Typography variant="h6">Map</Typography>
+									<Map datasetId={this.state.selectedHazardDatasetId}
+										 boundingBox={this.state.boundingBox}/>
+								</div>
+							</DialogContent>
+						</Dialog>
+						:
+						<div></div>
+					}
+				</div>
+			);
+		}
+	}
+}
+
+export default withStyles(styles)(HazardViewer);
