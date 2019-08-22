@@ -27,6 +27,7 @@ import config from "../app.config";
 import Pagination from "./children/Pagination";
 import DataPerPage from "./children/DataPerPage";
 import Space from "./children/Space";
+import Version from "./children/Version";
 import {CopyToClipboard} from "react-copy-to-clipboard";
 import {createMuiTheme, withStyles} from "@material-ui/core/styles/index";
 
@@ -41,7 +42,7 @@ const styles = {
 	filter: {
 		padding: theme.spacing(4),
 		overflow: "auto",
-		display:"flex"
+		display: "flex"
 	},
 	main: {
 		padding: theme.spacing(4),
@@ -53,9 +54,9 @@ const styles = {
 		display: "inline-block",
 		width: "25%"
 	},
-	select:{
-		width:"80%",
-		fontSize:"12px"
+	select: {
+		width: "80%",
+		fontSize: "12px"
 	},
 	denseStyle: {
 		minHeight: "10px",
@@ -66,7 +67,7 @@ const styles = {
 		margin: theme.spacing(2),
 		overflow: "auto"
 	},
-	inlineButtons:{
+	inlineButtons: {
 		display: "inline-block",
 		margin: "auto 5px"
 	},
@@ -85,10 +86,10 @@ const styles = {
 		borderTopLeftRadius: "2px",
 		borderTopRightRadius: "2px"
 	},
-	preview:{
+	preview: {
 		padding: "50px"
 	},
-	previewClose:{
+	previewClose: {
 		display: "inline",
 		float: "right"
 	}
@@ -392,7 +393,8 @@ class HazardViewer extends Component {
 									{/* select hazard type */}
 									<div className={classes.selectDiv}>
 										<InputLabel>Hazard Type</InputLabel>
-										<Select value={this.state.selectedHazardType} onChange={this.changeHazardType} className={classes.select}>
+										<Select value={this.state.selectedHazardType} onChange={this.changeHazardType}
+												className={classes.select}>
 											<MenuItem value="earthquakes" key="earthquakes"
 													  className={classes.denseStyle}>Earthquake</MenuItem>
 											<MenuItem value="tornadoes" key="tornadoes"
@@ -427,7 +429,7 @@ class HazardViewer extends Component {
 														   <IconButton
 															   onClick={this.clickSearch}><SearchIcon fontSize="small"/></IconButton>
 													   </InputAdornment>),
-													   style: {fontSize:"12px"}
+													   style: {fontSize: "12px"}
 												   }}
 												   className={classes.select}
 												   margin="dense"
@@ -487,6 +489,7 @@ class HazardViewer extends Component {
 								</Paper>
 							</Grid>
 						</Grid>
+						<Version/>
 					</div>
 
 					{/* Preview */}
