@@ -31,6 +31,7 @@ import {browserHistory} from "react-router";
 import Pagination from "./children/Pagination";
 import DataPerPage from "./children/DataPerPage";
 import Space from "./children/Space";
+import Version from "./children/Version";
 import {CopyToClipboard} from "react-copy-to-clipboard";
 import {createMuiTheme, withStyles} from "@material-ui/core/styles/index";
 
@@ -581,6 +582,8 @@ class FragilityViewer extends React.Component {
 								</Paper>
 							</Grid>
 						</Grid>
+
+						<Version/>
 					</div>
 
 					{/* Preview */}

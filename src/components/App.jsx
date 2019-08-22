@@ -266,12 +266,12 @@ class App extends Component {
 			<MuiThemeProvider theme={theme}>
 				<AppBar position="static"
 						className={this.state.drawerOpen ? classes.appBarShift : classes.appBar}>
-					<Toolbar title="IN-CORE v2" className={classes.toolBar}>
+					<Toolbar className={classes.toolBar}>
 						<IconButton edge="start" color="inherit" aria-label="Open drawer"
 									onClick={this.toggleDrawer} className={classes.menuButton}>
 							{this.state.drawerOpen ? <CloseIcon fontSize="small"/> : <MenuIcon fontSize="small"/>}
 						</IconButton>
-						<Typography variant="body1" style={{flex: 1}}>IN-CORE V2</Typography>
+						<Typography variant="body1" style={{flex: 1}}></Typography>
 						{contents}
 						{profileMenu}
 					</Toolbar>

@@ -1,10 +1,10 @@
 import React, {Component} from "react";
 import {browserHistory} from "react-router";
-import {
-	Avatar, Typography, TextField, GridListTile, Grid, GridList, Link, Button, Paper, Divider
-} from "@material-ui/core";
+import {Avatar, Button, Divider, GridList, GridListTile, Paper, TextField, Typography} from "@material-ui/core";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import config from "../app.config";
+import Version from "./children/Version";
+
 
 type Props = {
 	name: string
@@ -18,8 +18,8 @@ class Login extends Component {
 			username: "",
 			password: "",
 			passwordErrorText: "",
-			loginErrorText:"",
-			error:false,
+			loginErrorText: "",
+			error: false,
 		};
 
 		this.changeUsername = this.changeUsername.bind(this);
@@ -69,10 +69,10 @@ class Login extends Component {
 		await this.props.login(this.state.username, this.state.password);
 		if (this.props.loginError) {
 			this.setState({
-				loginErrorText:"Username/Password is not correct. Try again"
+				loginErrorText: "Username/Password is not correct. Try again"
 			});
 		}
-		if(!this.props.loginError) {
+		if (!this.props.loginError) {
 			browserHistory.push(config.baseUrl);
 		}
 
@@ -85,64 +85,68 @@ class Login extends Component {
 		let auth = sessionStorage.getItem("auth");
 		if (user !== undefined && user !== "" && user !== null
 			&& auth !== undefined && auth !== "" && auth !== null) {
-				browserHistory.push(config.baseUrl);
-				return null;
+			browserHistory.push(config.baseUrl);
+			return null;
 		}
 
 		// else render login page
 		else {
 			return (
-				<div className="center" style={{display: "block", margin: "auto", width: "500px", paddingTop: "10%"}}>
-					<Paper style={{padding: 40}}>
-						<Avatar style={{margin: "auto"}}>
-							<LockOutlinedIcon/>
-						</Avatar>
-						<Typography component="h1" variant="h5">
-							Sign in
-						</Typography>
-						<Divider/>
-						<GridList cols={1} cellHeight="auto">
-							<GridListTile>
-								<p style={{color: "red"}}>{this.state.loginErrorText} </p>
-							</GridListTile>
-							<GridListTile>
-								<TextField
-									variant="outlined"
-									margin="normal"
-									required
-									fullWidth
-									autoFocus
-									id="username"
-									label="Username"
-									name="username"
-									value={this.state.username}
-									onChange={this.changeUsername}
-								/>
-								<TextField
-									variant="outlined"
-									margin="normal"
-									required
-									fullWidth
-									id="password"
-									label="Password"
-									name="password"
-									type="password"
-									error={this.state.error}
-									helperText={this.state.passwordErrorText}
-									value={this.state.password}
-									onChange={this.changePassword}
-									onKeyPress={this.handleKeyPressed}
-								/>
-								<Button
-									type="submit"
-									fullWidth
-									variant="contained"
-									color="primary"
-									onClick={this.login}
-								>Sign In</Button>
-							</GridListTile>
-						</GridList>
-					</Paper>
+				<div>
+					<div className="center"
+						 style={{display: "block", margin: "auto", width: "500px", paddingTop: "10%"}}>
+						<Paper style={{padding: 40}}>
+							<Avatar style={{margin: "auto"}}>
+								<LockOutlinedIcon/>
+							</Avatar>
+							<Typography component="h1" variant="h5">
+								Sign in
+							</Typography>
+							<Divider/>
+							<GridList cols={1} cellHeight="auto">
+								<GridListTile>
+									<p style={{color: "red"}}>{this.state.loginErrorText} </p>
+								</GridListTile>
+								<GridListTile>
+									<TextField
+										variant="outlined"
+										margin="normal"
+										required
+										fullWidth
+										autoFocus
+										id="username"
+										label="Username"
+										name="username"
+										value={this.state.username}
+										onChange={this.changeUsername}
+									/>
+									<TextField
+										variant="outlined"
+										margin="normal"
+										required
+										fullWidth
+										id="password"
+										label="Password"
+										name="password"
+										type="password"
+										error={this.state.error}
+										helperText={this.state.passwordErrorText}
+										value={this.state.password}
+										onChange={this.changePassword}
+										onKeyPress={this.handleKeyPressed}
+									/>
+									<Button
+										type="submit"
+										fullWidth
+										variant="contained"
+										color="primary"
+										onClick={this.login}
+									>Sign In</Button>
+								</GridListTile>
+							</GridList>
+						</Paper>
+						<Version/>
+					</div>
 				</div>
 			);
 		}
