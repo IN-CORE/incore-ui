@@ -1,6 +1,7 @@
 import React from "react";
 import {Button, Container, Grid, Typography} from "@material-ui/core";
 import {withStyles} from "@material-ui/core/styles";
+import Version from "./children/Version";
 
 
 const styles = theme => ({
@@ -50,10 +51,10 @@ const styles = theme => ({
 	},
 	button: {
 		minWidth: 200,
-		padding:20,
+		padding: 20,
 		margin: theme.spacing(2),
-		color:"#ffffff",
-		fontWeight:"bold"
+		color: "#ffffff",
+		fontWeight: "bold"
 	},
 	h1: {
 		fontWeight: "bold",
@@ -79,15 +80,14 @@ const styles = theme => ({
 		display: "flex",
 		overflow: "hidden"
 	},
-	footer:{
-		display:"flex",
-		overflow:"hidden",
+	footer: {
+		overflow: "hidden",
 		backgroundColor: "#ffffff"
 	},
-	link:{
-		color:theme.palette.secondary.main,
-		textDecoration:"none",
-		fontWeight:"bold"
+	link: {
+		color: theme.palette.secondary.main,
+		textDecoration: "none",
+		fontWeight: "bold"
 	},
 	sectionContainers: {
 		marginTop: theme.spacing(15),
@@ -108,12 +108,12 @@ const styles = theme => ({
 		marginTop: theme.spacing(5),
 		marginBottom: theme.spacing(5),
 	},
-	content:{
-		textAlign:"center",
+	content: {
+		textAlign: "center",
 	},
 	footerContainer: {
-		marginTop: theme.spacing(8),
-		marginBottom: theme.spacing(8),
+		marginTop: theme.spacing(4),
+		marginBottom: theme.spacing(4),
 		display: "flex",
 	},
 	iconsWrapper: {
@@ -150,7 +150,7 @@ function HomePage(props) {
 		resilience of those communities.";
 
 	// TODO: how to automatically update this field important!
-	const version = "V0.4.1 RELEASED";
+	const pyincoreVersion = "V0.4.1 RELEASED";
 
 	const sections = [
 		{
@@ -169,13 +169,13 @@ function HomePage(props) {
 						The Hazard Service supports creating model based or data based hazards."
 		},
 		{
-			title:"IN-CORE Lab",
+			title: "IN-CORE Lab",
 			image: "/public/jupyter-logo.png",
 			description: "IN-CORE Lab which is a customized JupyterLab deployed on JupyterHub, enables user to work with documents and writing code,\
 						using Jupyter notebooks, text editors, terminals, and custom components in a flexible, integrated, and extensible manner.",
 		},
 		{
-			title:"Web Tools",
+			title: "Web Tools",
 			image: "/public/webapp-logo.png",
 			description: "The web application provides the user interface for interacting with the service layer.\
 						It provides a login interface and enables browsing and searching the datasets, hazards and fragilities, \
@@ -242,7 +242,7 @@ function HomePage(props) {
 						component="a"
 						href="https://incore2.ncsa.illinois.edu/doc/pyincore/installation.html"
 						target="_blank">
-						{version}
+						{pyincoreVersion}
 					</Button>
 					<div className={classes.backdrop}/>
 					<div className={classes.background}/>
@@ -296,6 +296,8 @@ function HomePage(props) {
 						}
 					</Grid>
 				</Container>
+				{/*version*/}
+				<Version/>
 			</section>
 		</div>
 	);
