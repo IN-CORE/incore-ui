@@ -150,7 +150,7 @@ function HomePage(props) {
 		resilience of those communities.";
 
 	// TODO: how to automatically update this field important!
-	const pyincoreVersion = "V0.4.1 RELEASED";
+	const pyincoreVersion = "v0.5.0 RELEASED";
 
 	const sections = [
 		{
