@@ -24,7 +24,7 @@ class Version extends React.Component {
 
 	render() {
 		const {classes} = this.props;
-		const webappVersion = "0.3.0";
+		const webappVersion = "0.3.1";
 
 		return (
 			<div className={classes.versionContainer}>
