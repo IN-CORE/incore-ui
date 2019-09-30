@@ -15,8 +15,6 @@ RUN npm install && \
 
 RUN cp -R dist/* /usr/share/nginx/html/. && \
   cp -R src/public /usr/share/nginx/html/public && \
-  chmod -R 777 /usr/share/nginx/html/public && \
-  cd .. && \
-  rm -rf /incore-ui
+  chmod -R 777 /usr/share/nginx/html/public
 
 COPY landing.conf /etc/nginx/conf.d/default.conf
