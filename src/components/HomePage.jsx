@@ -240,7 +240,7 @@ function HomePage(props) {
 						size="large"
 						className={classes.button}
 						component="a"
-						href="https://incore2.ncsa.illinois.edu/doc/pyincore/installation.html"
+						href="/doc/pyincore/installation.html"
 						target="_blank">
 						{pyincoreVersion}
 					</Button>
