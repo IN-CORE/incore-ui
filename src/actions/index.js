@@ -267,19 +267,20 @@ export function fetchHazards(hazard_type: string, space: string, limit, offset) 
 
 export async function loginHelper(username, password) {
 	const endpoint = config.authService;
-	let formData = new FormData();
-	formData.append("grant_type", "password");
-	formData.append("username", username);
-	formData.append("password", password);
-	formData.append("client_id", config.client_id);
-	formData.append("client_secret", config.client_secret);
+	let formData = [
+		encodeURIComponent("grant_type") + "=" + encodeURIComponent("password"),
+		encodeURIComponent("username") + "=" + encodeURIComponent(username),
+		encodeURIComponent("password") + "=" + encodeURIComponent(password),
+		encodeURIComponent("client_id") + "=" + encodeURIComponent(config.client_id),
+		encodeURIComponent("client_secret") + "=" + encodeURIComponent(config.client_secret),
+	];
 
 	const tokenRequest = await fetch(endpoint, {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/x-www-form-urlencoded"
 		},
-		body:formData,
+		body:formData.join("&"),
 	});
 
 	const tokens = await tokenRequest.json();
