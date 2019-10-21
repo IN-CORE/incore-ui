@@ -19,8 +19,7 @@ const config = {
 	geoServer: "https://incore2-services.ncsa.illinois.edu/geoserver/incore/wms",
 	baseUrl: process.env.basePath,
 	urlPrefix: prefix,
-	client_id: keycloak.client_id,
-	client_secret: keycloak.client_secret
+	client_id: "react-auth",
 };
 
 export default config;

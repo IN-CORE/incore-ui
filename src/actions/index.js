@@ -272,7 +272,6 @@ export async function loginHelper(username, password) {
 		encodeURIComponent("username") + "=" + encodeURIComponent(username),
 		encodeURIComponent("password") + "=" + encodeURIComponent(password),
 		encodeURIComponent("client_id") + "=" + encodeURIComponent(config.client_id),
-		encodeURIComponent("client_secret") + "=" + encodeURIComponent(config.client_secret),
 	];
 
 	const tokenRequest = await fetch(endpoint, {
