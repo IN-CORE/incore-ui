@@ -267,17 +267,24 @@ export function fetchHazards(hazard_type: string, space: string, limit, offset) 
 
 export async function loginHelper(username, password) {
 	const endpoint = config.authService;
-	// Currently CORS error due to the header
-	const userRequest = await fetch(endpoint, {
-		method: "GET",
+	let formData = new FormData();
+	formData.append("grant_type", "password");
+	formData.append("client_id", "react-auth");
+	formData.append("username", username);
+	formData.append("password", password);
+	formData.append("client_secret", config.client_secret);
+
+	const tokenRequest = await fetch(endpoint, {
+		method: "POST",
 		headers: {
-			"Authorization": `LDAP ${ window.btoa(`${username }:${ password}`) }`
-		}
+			"Content-Type": "application/x-www-form-urlencoded"
+		},
+		body:formData,
 	});
 
-	const user = await userRequest.json();
+	const tokens = await tokenRequest.json();
 
-	return user;
+	return tokens;
 }
 
 export const LOGIN_ERROR = "LOGIN_ERROR";
@@ -286,13 +293,13 @@ export const SET_USER = "SET_USER";
 export function login(username, password) {
 	return async (dispatch: Dispatch) => {
 		const json = await loginHelper(username, password);
-		if (typeof(Storage) !== "undefined" && json["auth-token"] !== undefined) {
-			sessionStorage.setItem("auth", json["auth-token"]);
-			sessionStorage.setItem("user", json["user"]);
+		if (typeof(Storage) !== "undefined" && json["access_token"] !== undefined) {
+			sessionStorage.setItem("auth_token", json["access_token"]);
+			sessionStorage.setItem("refresh_token", json["refresh_token"]);
 			return dispatch({
 				type: SET_USER,
-				username: json["user"],
-				auth_token: json["auth-token"]
+				refresh_token: json["refresh_token"],
+				access_token: json["access_token"]
 			});
 		} else {
 			return dispatch({
@@ -307,8 +314,8 @@ export function readCredentials(tokens) {
 	// reading credentials from tokens passed in URL and stored in sessionStorage
 	// if there's token passed in, reset the sessionStorage to save that token
 	if (typeof(Storage) !== "undefined") {
-		sessionStorage.setItem("auth", tokens["auth-token"]);
-		sessionStorage.setItem("user", tokens["user"]);
+		sessionStorage.setItem("access_token", tokens["access_token"]);
+		sessionStorage.setItem("refresh_token", tokens["refresh_token"]);
 
 		if (tokens["location"] !== undefined) sessionStorage.setItem("locationFrom", tokens["location"]);
 	}
@@ -320,8 +327,8 @@ export const LOGOUT = "LOGOUT";
 export function logout() {
 	return (dispatch: Dispatch) => {
 		if (typeof(Storage) !== "undefined") {
-			sessionStorage.removeItem("auth");
-			sessionStorage.removeItem("user");
+			sessionStorage.removeItem("access_token");
+			sessionStorage.removeItem("refresh_token");
 			sessionStorage.removeItem("locationFrom");
 		}
 		return dispatch({
@@ -429,15 +436,10 @@ export function executeDatawolfWorkflow(workflowid, creatorid, title, descriptio
 
 }
 
-export function getUsername() {
-	return sessionStorage.user;
-}
-
 export function getHeader() {
 	const headers = new Headers({
 		"Authorization": "LDAP token",
-		"auth-user": sessionStorage.user,
-		"auth-token": sessionStorage.auth
+		"access_token": sessionStorage.access_token,
 	});
 	return headers;
 }

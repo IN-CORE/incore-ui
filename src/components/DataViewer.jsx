@@ -152,8 +152,8 @@ class DataViewer extends Component {
 	componentWillMount() {
 
 		// check if logged in
-		let user = sessionStorage.getItem("user");
-		let auth = sessionStorage.getItem("auth");
+		let refresh_token = sessionStorage.getItem("refresh_token")
+		let access_token = sessionStorage.getItem("access_token")
 		let location = sessionStorage.getItem("locationFrom");
 
 		// logged in

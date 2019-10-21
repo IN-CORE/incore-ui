@@ -1,6 +1,6 @@
 let prefix = process.env.basePath === "/" ? "" : process.env.basePath;
 let apiprotocol = "https";
-let apihost = "incore2-services.ncsa.illinois.edu";
+let apihost = "https://incore-dev-kube.ncsa.illinois.edu";
 let apiurl = `${apiprotocol}://${apihost}`;
 
 const config = {
@@ -10,7 +10,7 @@ const config = {
 	semanticService: "",
 	hazardServiceBase: `${apiurl}/hazard/api/`,
 	maestroService: `${apiurl}/maestro`,
-	authService: `${apiurl}/auth/api/login`,
+	authService: `${apiurl}/auth/realms/In-core/protocol/openid-connect/token`,
 	dataServiceBase: `${apiurl}/`,
 	dataService: `${apiurl}/data/api/datasets`,
 	dataWolf: "https://incore2-datawolf.ncsa.illinois.edu/datawolf/",
