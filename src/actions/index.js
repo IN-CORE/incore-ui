@@ -269,9 +269,9 @@ export async function loginHelper(username, password) {
 	const endpoint = config.authService;
 	let formData = new FormData();
 	formData.append("grant_type", "password");
-	formData.append("client_id", "react-auth");
 	formData.append("username", username);
 	formData.append("password", password);
+	formData.append("client_id", config.client_id);
 	formData.append("client_secret", config.client_secret);
 
 	const tokenRequest = await fetch(endpoint, {

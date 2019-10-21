@@ -1,7 +1,8 @@
 let prefix = process.env.basePath === "/" ? "" : process.env.basePath;
 let apiprotocol = "https";
-let apihost = "https://incore-dev-kube.ncsa.illinois.edu";
+let apihost = "incore-dev-kube.ncsa.illinois.edu";
 let apiurl = `${apiprotocol}://${apihost}`;
+import keycloak from "./keycloak";
 
 const config = {
 	spaceService:`${apiurl}/space/api/spaces`,
@@ -17,7 +18,9 @@ const config = {
 	incoreLab: "https://incore-lab.ncsa.illinois.edu/",
 	geoServer: "https://incore2-services.ncsa.illinois.edu/geoserver/incore/wms",
 	baseUrl: process.env.basePath,
-	urlPrefix: prefix
+	urlPrefix: prefix,
+	client_id: keycloak.client_id,
+	client_secret: keycloak.client_secret
 };
 
 export default config;

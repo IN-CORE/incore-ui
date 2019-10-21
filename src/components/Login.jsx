@@ -81,10 +81,9 @@ class Login extends Component {
 	render() {
 
 		// if already login, redirect to homepage
-		let refresh_token = sessionStorage.getItem("refresh_token")
-		let access_token = sessionStorage.getItem("access_token")
-		if (user !== undefined && user !== "" && user !== null
-			&& auth !== undefined && auth !== "" && auth !== null) {
+		let refresh_token = sessionStorage.getItem("refresh_token");
+		let access_token = sessionStorage.getItem("access_token");
+		if (access_token !== undefined && access_token !== "" && access_token !== null) {
 			browserHistory.push(config.baseUrl);
 			return null;
 		}
