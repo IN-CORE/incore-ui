@@ -1,7 +1,10 @@
 // @flow
 
 import type {AnalysesMetadata, Analysis, Datasets, Fragilities, Hazards, Dispatch} from "../utils/flowtype";
+import Cookies from 'universal-cookie';
 import config from "../app.config";
+
+const cookies = new Cookies();
 
 export const GET_ANALYSES = "GET_ANALYSES";
 
@@ -293,9 +296,13 @@ export const SET_USER = "SET_USER";
 export function login(username, password) {
 	return async (dispatch: Dispatch) => {
 		const json = await loginHelper(username, password);
-		if (typeof(Storage) !== "undefined" && json["access_token"] !== undefined) {
-			sessionStorage.setItem("access_token", json["access_token"]);
-			sessionStorage.setItem("refresh_token", json["refresh_token"]);
+		if (json["access_token"] !== undefined) {
+			cookies.set("access_token", json["access_token"]);
+			cookies.set("refresh_token", json["refresh_token"]);
+			cookies.set("expires_in", json["expires_in"]);
+			cookies.set("refresh_expires_in", json["refresh_expires_in"]);
+			cookies.set("scope", json["scope"]);
+			cookies.set("session_state", json["session_state"]);
 			return dispatch({
 				type: SET_USER,
 				refresh_token: json["refresh_token"],
@@ -311,7 +318,7 @@ export function login(username, password) {
 }
 
 export function readCredentials(tokens) {
-	// reading credentials from tokens passed in URL and stored in sessionStorage
+	// reading credentials from tokens passed in URL and stored in cookies
 	// if there's token passed in, reset the sessionStorage to save that token
 	if (typeof(Storage) !== "undefined") {
 		sessionStorage.setItem("access_token", tokens["access_token"]);
@@ -321,15 +328,17 @@ export function readCredentials(tokens) {
 	}
 }
 
-
 export const LOGOUT = "LOGOUT";
 
 export function logout() {
 	return (dispatch: Dispatch) => {
 		if (typeof(Storage) !== "undefined") {
-			sessionStorage.removeItem("access_token");
-			sessionStorage.removeItem("refresh_token");
-			sessionStorage.removeItem("locationFrom");
+			cookies.remove("access_token");
+			cookies.remove("refresh_token");
+			cookies.remove("expires_in");
+			cookies.remove("refresh_expires_in");
+			cookies.remove("scope");
+			cookies.remove("session_state");
 		}
 		return dispatch({
 			type: LOGOUT
@@ -350,8 +359,6 @@ export function receiveDatawolfResponse(json) {
 			executionId: json,
 			receivedAt: Date.now()
 		});
-
-
 	};
 
 }
