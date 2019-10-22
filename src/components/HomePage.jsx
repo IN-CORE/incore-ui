@@ -241,7 +241,7 @@ function HomePage(props) {
 						size="large"
 						className={classes.button}
 						component="a"
-						href="/doc/pyincore/installation.html"
+						href="/doc/incore/install_pyincore.html"
 						target="_blank">
 						{pyincoreVersion}
 					</Button>

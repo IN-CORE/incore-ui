@@ -216,7 +216,7 @@ class App extends Component {
 					Navigation
 				</ListSubheader>
 			}>
-				<ListItem button component="a" key="about" href={`${config.urlPrefix}/`}>
+				<ListItem button component="a" key="about" href="/doc/incore/index.html" target="_blank">
 					<ListItemAvatar><Avatar src="/public/resilience-logo.png"/></ListItemAvatar>
 					<ListItemText primary="About IN-CORE"/>
 				</ListItem>
