@@ -2,7 +2,6 @@ let prefix = process.env.basePath === "/" ? "" : process.env.basePath;
 let apiprotocol = "https";
 let apihost = "incore-dev-kube.ncsa.illinois.edu";
 let apiurl = `${apiprotocol}://${apihost}`;
-import keycloak from "./keycloak";
 
 const config = {
 	spaceService:`${apiurl}/space/api/spaces`,
