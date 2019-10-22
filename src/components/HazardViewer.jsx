@@ -132,14 +132,12 @@ class HazardViewer extends Component {
 
 	componentWillMount() {
 		// check if logged in
-		let refresh_token = sessionStorage.getItem("refresh_token")
-		let access_token = sessionStorage.getItem("access_token")
+		let refresh_token = sessionStorage.getItem("refresh_token");
+		let access_token = sessionStorage.getItem("access_token");
 		let location = sessionStorage.getItem("locationFrom");
 
 		// logged in
-		if (user !== undefined && user !== "" && user !== null
-			&& auth !== undefined && auth !== "" && auth !== null) {
-
+		if (access_token !== undefined && access_token !== "" && access_token !== null) {
 			this.setState({
 				authError: false
 			}, function () {

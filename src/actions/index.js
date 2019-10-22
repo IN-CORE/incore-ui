@@ -294,7 +294,7 @@ export function login(username, password) {
 	return async (dispatch: Dispatch) => {
 		const json = await loginHelper(username, password);
 		if (typeof(Storage) !== "undefined" && json["access_token"] !== undefined) {
-			sessionStorage.setItem("auth_token", json["access_token"]);
+			sessionStorage.setItem("access_token", json["access_token"]);
 			sessionStorage.setItem("refresh_token", json["refresh_token"]);
 			return dispatch({
 				type: SET_USER,
@@ -438,8 +438,7 @@ export function executeDatawolfWorkflow(workflowid, creatorid, title, descriptio
 
 export function getHeader() {
 	const headers = new Headers({
-		"Authorization": "LDAP token",
-		"access_token": sessionStorage.access_token,
+		"Authorization": `Bearer ${sessionStorage.access_token}`,
 	});
 	return headers;
 }
