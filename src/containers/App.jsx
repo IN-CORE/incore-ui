@@ -4,7 +4,7 @@ import {logout} from "../actions";
 
 const mapStateToProps = () => {
 	return{
-		user: sessionStorage.user
+		access_token: sessionStorage.access_token
 	};
 };
 
