@@ -1,6 +1,7 @@
 import * as React from "react";
 import {Container, Typography} from "@material-ui/core";
 import {withStyles} from "@material-ui/core/styles";
+import config from "../../app.config";
 
 const styles = theme => ({
 	versionContainer: {
@@ -24,7 +25,7 @@ class Version extends React.Component {
 
 	render() {
 		const {classes} = this.props;
-		const webappVersion = "0.3.1";
+		const webappVersion = config.webVersion;
 
 		return (
 			<div className={classes.versionContainer}>

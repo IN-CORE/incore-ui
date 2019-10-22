@@ -2,6 +2,7 @@ import React from "react";
 import {Button, Container, Grid, Typography} from "@material-ui/core";
 import {withStyles} from "@material-ui/core/styles";
 import Version from "./children/Version";
+import config from "../app.config";
 
 
 const styles = theme => ({
@@ -150,7 +151,7 @@ function HomePage(props) {
 		resilience of those communities.";
 
 	// TODO: how to automatically update this field important!
-	const pyincoreVersion = "v0.5.0 RELEASED";
+	const pyincoreVersion = `v${config.pyincoreVersion} RELEASED`;
 
 	const sections = [
 		{
