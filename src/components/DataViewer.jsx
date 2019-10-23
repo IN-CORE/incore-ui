@@ -21,7 +21,8 @@ import {
 	Paper,
 	Select,
 	TextField,
-	Typography
+	Typography,
+	Tooltip
 } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 import TableIcon from "@material-ui/icons/TableChart";
@@ -52,7 +53,7 @@ const styles = {
 	filter: {
 		padding: theme.spacing(4),
 		overflow: "auto",
-		display: "flex"
+		height:"100px"
 	},
 	main: {
 		padding: theme.spacing(4),
@@ -62,11 +63,15 @@ const styles = {
 	selectDiv: {
 		margin: "auto",
 		display: "inline-block",
-		width: "25%"
+		width: "33%",
 	},
 	select: {
 		width: "80%",
 		fontSize: "12px"
+	},
+	search: {
+		width:"100%",
+		fontSize:"12px",
 	},
 	denseStyle: {
 		minHeight: "10px",
@@ -428,7 +433,9 @@ class DataViewer extends Component {
 						<ListItem button
 								  onClick={() => this.onClickDataset(dataset.id)}
 								  selected={dataset.id === this.state.selectedDataset.id}>
-							<ListItemIcon><TableIcon fontSize="small"/></ListItemIcon>
+							<Tooltip title="Table">
+								<ListItemIcon><TableIcon fontSize="small"/></ListItemIcon>
+							</Tooltip>
 							<ListItemText primary={`${dataset.title  } - ${  dataset.creator.capitalize()}`}/>
 						</ListItem>);
 				}
@@ -436,7 +443,9 @@ class DataViewer extends Component {
 					return (<ListItem button
 									  onClick={() => this.onClickDataset(dataset.id)}
 									  selected={dataset.id === this.state.selectedDataset.id}>
-						<ListItemIcon><TextIcon fontSize="small"/></ListItemIcon>
+						<Tooltip title="Text File">
+							<ListItemIcon><TextIcon fontSize="small"/></ListItemIcon>
+						</Tooltip>
 						<ListItemText primary={`${dataset.title  } - ${  dataset.creator.capitalize()}`}/>
 					</ListItem>);
 				}
@@ -444,7 +453,9 @@ class DataViewer extends Component {
 					return (<ListItem button
 									  onClick={() => this.onClickDataset(dataset.id)}
 									  selected={dataset.id === this.state.selectedDataset.id}>
-						<ListItemIcon><MapIcon fontSize="small"/></ListItemIcon>
+						<Tooltip title="Shapefile">
+							<ListItemIcon><MapIcon fontSize="small"/></ListItemIcon>
+						</Tooltip>
 						<ListItemText primary={`${dataset.title  } - ${  dataset.creator.capitalize()}`}/>
 					</ListItem>);
 				}
@@ -452,7 +463,9 @@ class DataViewer extends Component {
 					return (<ListItem button
 									  onClick={() => this.onClickDataset(dataset.id)}
 									  selected={dataset.id === this.state.selectedDataset.id}>
-						<ListItemIcon><MappingIcon fontSize="small"/></ListItemIcon>
+						<Tooltip title="Mapping">
+							<ListItemIcon><MappingIcon fontSize="small"/></ListItemIcon>
+						</Tooltip>
 						<ListItemText primary={`${dataset.title  } - ${  dataset.creator.capitalize()}`}/>
 					</ListItem>);
 				}
@@ -460,7 +473,9 @@ class DataViewer extends Component {
 					return (<ListItem button
 									  onClick={() => this.onClickDataset(dataset.id)}
 									  selected={dataset.id === this.state.selectedDataset.id}>
-						<ListItemIcon><ChartIcon fontSize="small"/></ListItemIcon>
+						<Tooltip title="Fragilities">
+							<ListItemIcon><ChartIcon fontSize="small"/></ListItemIcon>
+						</Tooltip>
 						<ListItemText primary={`${dataset.title  } - ${  dataset.creator.capitalize()}`}/>
 					</ListItem>);
 				}
@@ -468,7 +483,9 @@ class DataViewer extends Component {
 					return (<ListItem button
 									  onClick={() => this.onClickDataset(dataset.id)}
 									  selected={dataset.id === this.state.selectedDataset.id}>
-						<ListItemIcon><NetworkIcon fontSize="small"/></ListItemIcon>
+						<Tooltip title="Network">
+							<ListItemIcon><NetworkIcon fontSize="small"/></ListItemIcon>
+						</Tooltip>
 						<ListItemText primary={`${dataset.title  } - ${  dataset.creator.capitalize()}`}/>
 					</ListItem>);
 				}
@@ -476,7 +493,9 @@ class DataViewer extends Component {
 					return (<ListItem button
 									  onClick={() => this.onClickDataset(dataset.id)}
 									  selected={dataset.id === this.state.selectedDataset.id}>
-						<ListItemIcon><UnknownIcon fontSize="small"/></ListItemIcon>
+						<Tooltip title="Unknown Type">
+							<ListItemIcon><UnknownIcon fontSize="small"/></ListItemIcon>
+						</Tooltip>
 						<ListItemText primary={`${dataset.title  } - ${  dataset.creator.capitalize()}`}/>
 					</ListItem>);
 				}
@@ -568,8 +587,9 @@ class DataViewer extends Component {
 					<div className={classes.root}>
 						<Grid container spacing={4}>
 							{/*filters*/}
-							<Grid item lg={12} sm={12} xl={12} xs={12}>
+							<Grid item lg={8} sm={8} xl={8} xs={12}>
 								<Paper variant="outlined" className={classes.filter}>
+									<Typography variant="h6">Filters</Typography>
 									<div className={classes.selectDiv}>
 										<InputLabel>Dataset Type</InputLabel>
 										{dataset_types}
@@ -583,24 +603,27 @@ class DataViewer extends Component {
 										<DataPerPage dataPerPage={this.state.dataPerPage}
 													 changeDataPerPage={this.changeDataPerPage}/>
 									</div>
-									<div className={classes.selectDiv}>
-										<TextField variant="outlined" label="Search"
-												   onKeyPress={this.handleKeyPressed}
-												   value={this.state.searchText}
-												   onChange={e => {
-													   this.setState({searchText: e.target.value});
-												   }}
-												   InputProps={{
-													   endAdornment: (<InputAdornment position="end">
-														   <IconButton
-															   onClick={this.clickSearch}><SearchIcon fontSize="small"/></IconButton>
-													   </InputAdornment>),
-													   style: {fontSize: "12px"}
-												   }}
-												   className={classes.select}
-												   margin="dense"
-										/>
-									</div>
+								</Paper>
+							</Grid>
+							<Grid item lg={4} sm={4} xl={4} xs={12}>
+								<Paper variant="outlined" className={classes.filter}>
+									<Typography variant="h6">Search all</Typography>
+									<TextField variant="outlined" label="Search"
+											   onKeyPress={this.handleKeyPressed}
+											   value={this.state.searchText}
+											   onChange={e => {
+												   this.setState({searchText: e.target.value});
+											   }}
+											   InputProps={{
+												   endAdornment: (<InputAdornment position="end">
+													   <IconButton
+														   onClick={this.clickSearch}><SearchIcon fontSize="small"/></IconButton>
+												   </InputAdornment>),
+												   style: {fontSize: "12px"}
+											   }}
+											   className={classes.search}
+											   margin="dense"
+									/>
 								</Paper>
 							</Grid>
 

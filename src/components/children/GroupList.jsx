@@ -1,5 +1,5 @@
 import * as React from "react";
-import {List, ListItem, ListItemIcon, ListItemText} from "@material-ui/core";
+import {List, ListItem, ListItemIcon, ListItemText, Tooltip} from "@material-ui/core";
 import ShowChartIcon from "@material-ui/icons/ShowChart";
 import ThreeDRotationIcon from "@material-ui/icons/ThreeDRotation";
 
@@ -12,7 +12,9 @@ const GroupList = (props) => {
 						<ListItem button
 								  onClick={() => props.onClick(fragility)}
 								  selected={fragility === props.selectedFragility}>
-							<ListItemIcon><ThreeDRotationIcon fontSize="small"/></ListItemIcon>
+							<Tooltip title="3D Fragility Curves">
+								<ListItemIcon><ThreeDRotationIcon fontSize="small"/></ListItemIcon>
+							</Tooltip>
 							<ListItemText primary={getTitle(fragility)}/>
 						</ListItem>);
 
@@ -22,7 +24,9 @@ const GroupList = (props) => {
 						<ListItem button
 								  onClick={() => props.onClick(fragility)}
 								  selected={fragility === props.selectedFragility}>
-							<ListItemIcon><ShowChartIcon fontSize="small"/></ListItemIcon>
+							<Tooltip title="2D Fragility Curves">
+								<ListItemIcon><ShowChartIcon fontSize="small"/></ListItemIcon>
+							</Tooltip>
 							<ListItemText primary={getTitle(fragility)}/>
 						</ListItem>);
 				}
