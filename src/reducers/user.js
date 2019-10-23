@@ -6,7 +6,6 @@ type UserAction = {
 	refresh_token: String,
 	access_token: String,
 	loginError: boolean,
-	locationFrom: string
 }
 const defaultState = {refresh_token: "", access_token: "", loginError: false};
 
@@ -15,7 +14,7 @@ const user = (state: UserState = defaultState, action: UserAction) => {
 	case SET_USER:
 		return Object.assign({}, state, {refresh_token: action.refresh_token, access_token: action.access_token, loginError: false});
 	case LOGIN_ERROR:
-		return Object.assign({}, state, {refresh_token: "", access_token: "", loginError: true, locationFrom:sessionStorage.getItem("locationFrom")});
+		return Object.assign({}, state, {refresh_token: "", access_token: "", loginError: true});
 	case LOGOUT:
 		return Object.assign({}, state, {refresh_token: "", access_token: "", loginError: false});
 	default:

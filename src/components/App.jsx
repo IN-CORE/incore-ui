@@ -129,7 +129,6 @@ class App extends Component {
 		super(props);
 		this.state = {
 			authError: false,
-			authLocationFrom: null,
 			drawerOpen: false,
 			collapseOpen: true,
 			profileMenuOpen: false,

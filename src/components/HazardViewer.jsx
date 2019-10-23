@@ -110,7 +110,6 @@ class HazardViewer extends Component {
 			registeredSearchText: "",
 			searching: false,
 			authError: false,
-			authLocationFrom: null,
 			offset: 0,
 			pageNumber: 1,
 			dataPerPage: 50,
@@ -134,7 +133,6 @@ class HazardViewer extends Component {
 		// check if logged in
 		let refresh_token = sessionStorage.getItem("refresh_token");
 		let access_token = sessionStorage.getItem("access_token");
-		let location = sessionStorage.getItem("locationFrom");
 
 		// logged in
 		if (access_token !== undefined && access_token !== "" && access_token !== null) {
@@ -149,7 +147,6 @@ class HazardViewer extends Component {
 		else {
 			this.setState({
 				authError: true,
-				authLocationFrom: location
 			});
 		}
 	}
@@ -157,7 +154,6 @@ class HazardViewer extends Component {
 	componentWillReceiveProps(nextProps) {
 		this.setState({
 			authError: nextProps.authError,
-			authLocationFrom: nextProps.locationFrom
 		});
 	}
 
@@ -370,15 +366,8 @@ class HazardViewer extends Component {
 		}
 
 		if (this.state.authError) {
-			if (this.state.authLocationFrom !== undefined
-				&& this.state.authLocationFrom !== null
-				&& this.state.authLocationFrom.length > 0) {
-				return (<AuthNotification/>);
-			}
-			else {
-				browserHistory.push(`${config.urlPrefix}/login`);
-				return null;
-			}
+			browserHistory.push(`${config.urlPrefix}/login`);
+			return null;
 		}
 		else {
 			return (

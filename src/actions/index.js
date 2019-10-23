@@ -297,12 +297,8 @@ export function login(username, password) {
 	return async (dispatch: Dispatch) => {
 		const json = await loginHelper(username, password);
 		if (json["access_token"] !== undefined) {
-			cookies.set("access_token", json["access_token"]);
-			cookies.set("refresh_token", json["refresh_token"]);
+			cookies.set("Authorization", `bearer ${json["access_token"]}`);
 			cookies.set("expires_in", json["expires_in"]);
-			cookies.set("refresh_expires_in", json["refresh_expires_in"]);
-			cookies.set("scope", json["scope"]);
-			cookies.set("session_state", json["session_state"]);
 			return dispatch({
 				type: SET_USER,
 				refresh_token: json["refresh_token"],
@@ -323,8 +319,6 @@ export function readCredentials(tokens) {
 	if (typeof(Storage) !== "undefined") {
 		sessionStorage.setItem("access_token", tokens["access_token"]);
 		sessionStorage.setItem("refresh_token", tokens["refresh_token"]);
-
-		if (tokens["location"] !== undefined) sessionStorage.setItem("locationFrom", tokens["location"]);
 	}
 }
 
@@ -333,12 +327,7 @@ export const LOGOUT = "LOGOUT";
 export function logout() {
 	return (dispatch: Dispatch) => {
 		if (typeof(Storage) !== "undefined") {
-			cookies.remove("access_token");
-			cookies.remove("refresh_token");
-			cookies.remove("expires_in");
-			cookies.remove("refresh_expires_in");
-			cookies.remove("scope");
-			cookies.remove("session_state");
+			cookies.remove("Authorization");
 		}
 		return dispatch({
 			type: LOGOUT

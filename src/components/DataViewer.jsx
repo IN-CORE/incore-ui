@@ -125,7 +125,6 @@ class DataViewer extends Component {
 			registeredSearchText: "",
 			searching: false,
 			authError: false,
-			authLocationFrom: null,
 			preview: false,
 			offset: 0,
 			pageNumber: 1,
@@ -154,7 +153,6 @@ class DataViewer extends Component {
 		// check if logged in
 		let refresh_token = sessionStorage.getItem("refresh_token");
 		let access_token = sessionStorage.getItem("access_token");
-		let location = sessionStorage.getItem("locationFrom");
 
 		// logged in
 		if (access_token !== undefined && access_token !== "" && access_token !== null) {
@@ -170,7 +168,6 @@ class DataViewer extends Component {
 		else {
 			this.setState({
 				authError: true,
-				authLocationFrom: location
 			});
 		}
 
@@ -179,7 +176,6 @@ class DataViewer extends Component {
 	componentWillReceiveProps(nextProps) {
 		this.setState({
 			authError: nextProps.authError,
-			authLocationFrom: nextProps.locationFrom
 		});
 	}
 
@@ -550,15 +546,8 @@ class DataViewer extends Component {
 		}
 
 		if (this.state.authError) {
-			if (this.state.authLocationFrom !== undefined
-				&& this.state.authLocationFrom !== null
-				&& this.state.authLocationFrom.length > 0) {
-				return (<AuthNotification/>);
-			}
-			else {
-				browserHistory.push(`${config.urlPrefix}/login`);
-				return null;
-			}
+			browserHistory.push(`${config.urlPrefix}/login`);
+			return null;
 		}
 		else {
 			return (
