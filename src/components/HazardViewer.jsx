@@ -21,7 +21,6 @@ import {
 import SearchIcon from "@material-ui/icons/Search";
 import CloseIcon from "@material-ui/icons/Close";
 import Map from "./children/Map";
-import AuthNotification from "./children/AuthNotification";
 import NestedInfoTable from "./children/NestedInfoTable";
 import config from "../app.config";
 import Pagination from "./children/Pagination";
@@ -30,7 +29,9 @@ import Space from "./children/Space";
 import Version from "./children/Version";
 import {CopyToClipboard} from "react-copy-to-clipboard";
 import {createMuiTheme, withStyles} from "@material-ui/core/styles/index";
+import Cookies from 'universal-cookie';
 
+const cookies = new Cookies();
 
 const redundant_prop = ["privileges", "times"];
 
@@ -131,11 +132,10 @@ class HazardViewer extends Component {
 
 	componentWillMount() {
 		// check if logged in
-		let refresh_token = sessionStorage.getItem("refresh_token");
-		let access_token = sessionStorage.getItem("access_token");
+		let authorization = cookies.get("Authorization");
 
 		// logged in
-		if (access_token !== undefined && access_token !== "" && access_token !== null) {
+		if (authorization !== undefined && authorization !== "" && authorization !== null) {
 			this.setState({
 				authError: false
 			}, function () {

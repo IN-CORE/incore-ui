@@ -1,7 +1,6 @@
 import React from "react";
 import GroupList from "./children/GroupList";
 import LineChart from "./children/LineChart";
-import AuthNotification from "./children/AuthNotification";
 import NestedInfoTable from "./children/NestedInfoTable";
 import ThreeDimensionalPlot from "./children/ThreeDimensionalPlot";
 import "whatwg-fetch";
@@ -34,8 +33,9 @@ import Space from "./children/Space";
 import Version from "./children/Version";
 import {CopyToClipboard} from "react-copy-to-clipboard";
 import {createMuiTheme, withStyles} from "@material-ui/core/styles/index";
+import Cookies from 'universal-cookie';
 
-
+const cookies = new Cookies();
 const redundant_prop = ["legacyId", "privileges", "creator", "is3dPlot"];
 
 const theme = createMuiTheme();
@@ -139,11 +139,10 @@ class FragilityViewer extends React.Component {
 
 	async componentWillMount() {
 		// check if logged in
-		let refresh_token = sessionStorage.getItem("refresh_token");
-		let access_token = sessionStorage.getItem("access_token");
+		let authorization = cookies.get("Authorization");
 
 		// logged in
-		if (access_token !== undefined && access_token !== "" && access_token !== null) {
+		if (authorization !== undefined && authorization !== "" && authorization !== null) {
 			this.setState({
 				authError: false
 			}, function () {

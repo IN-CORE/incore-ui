@@ -270,6 +270,5 @@ export type ExecutionState = {
 export type GetState = () => Object;
 
 export type UserState = {
-	access_token: string,
-	refresh_token: string
+	Authorization: string
 }

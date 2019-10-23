@@ -189,7 +189,7 @@ class App extends Component {
 		let contents = (<Button color="inherit" href={`${config.urlPrefix}/login`} className={classes.smallButton}>
 			Login</Button>);
 
-		if (this.props.access_token !== "" && this.props.access_token !== undefined) {
+		if (this.props.Authorization !== "" && this.props.Authorization !== undefined) {
 			contents = (<IconButton color="inherit" className={classes.smallButton} onClick={this.handleProfileMenuOpen}>
 				<AccountCircle fontSize="small"/></IconButton>);
 		}

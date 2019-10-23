@@ -297,12 +297,10 @@ export function login(username, password) {
 	return async (dispatch: Dispatch) => {
 		const json = await loginHelper(username, password);
 		if (json["access_token"] !== undefined) {
-			cookies.set("Authorization", `bearer ${json["access_token"]}`);
-			cookies.set("expires_in", json["expires_in"]);
+			cookies.set("Authorization", `bearer ${json["access_token"]}`, { maxAge: json["expires_in"]});
 			return dispatch({
 				type: SET_USER,
-				refresh_token: json["refresh_token"],
-				access_token: json["access_token"]
+				Authorization: `bearer ${json["access_token"]}`,
 			});
 		} else {
 			return dispatch({
@@ -434,7 +432,7 @@ export function executeDatawolfWorkflow(workflowid, creatorid, title, descriptio
 
 export function getHeader() {
 	const headers = new Headers({
-		"Authorization": `Bearer ${sessionStorage.access_token}`,
+		"Authorization": cookies.get('Authorization'),
 	});
 	return headers;
 }
