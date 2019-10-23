@@ -309,7 +309,7 @@ class HazardViewer extends Component {
 				preview: true
 			});
 		}
-		else if (response.status === 403) {
+		else if (response.status === 401) {
 			this.setState({
 				selectedHazardDatasetId: "",
 				boundingBox: [],

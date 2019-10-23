@@ -120,7 +120,7 @@ export function searchDatasets(keyword, limit, offset) {
 						dispatch(receiveDatasets(RECEIVE_DATASETS, json));
 					});
 				}
-				else if (response.status === 403){
+				else if (response.status === 401){
 					dispatch(receiveDatasets(LOGIN_ERROR, []));
 				}
 				else{
@@ -146,7 +146,7 @@ export function fetchDatasets(dataType, space, limit, offset) {
 						dispatch(receiveDatasets(RECEIVE_DATASETS, json));
 					});
 				}
-				else if (response.status === 403){
+				else if (response.status === 401){
 					dispatch(receiveDatasets(LOGIN_ERROR, []));
 				}
 				else{
@@ -166,7 +166,7 @@ export function fetchSpaces() {
 						dispatch(receiveSpaces(RECEIVE_SPACES, json));
 					});
 				}
-				else if (response.status === 403){
+				else if (response.status === 401){
 					dispatch(receiveSpaces(LOGIN_ERROR, []));
 				}
 				else{
@@ -186,7 +186,7 @@ export function searchFragilities(keyword, limit, offset){
 					dispatch(receiveFragilities(RECEIVE_FRAGILITIES, json));
 				});
 			}
-			else if (response.status === 403){
+			else if (response.status === 401){
 				dispatch(receiveFragilities(LOGIN_ERROR, []));
 			}
 			else{
@@ -215,7 +215,7 @@ export function fetchFragilities(space: string, inventory: string, hazard: strin
 					dispatch(receiveFragilities(RECEIVE_FRAGILITIES, json));
 				});
 			}
-			else if (response.status === 403){
+			else if (response.status === 401){
 				dispatch(receiveFragilities(LOGIN_ERROR, []));
 			}
 			else{
@@ -235,7 +235,7 @@ export function searchHazards(hazard_type, keyword, limit, offset) {
 						dispatch(receiveHazards(RECEIVE_HAZARDS, json));
 					});
 				}
-				else if (response.status === 403){
+				else if (response.status === 401){
 					dispatch(receiveHazards(LOGIN_ERROR, []));
 				}
 				else{
@@ -258,7 +258,7 @@ export function fetchHazards(hazard_type: string, space: string, limit, offset) 
 						dispatch(receiveHazards(RECEIVE_HAZARDS, json));
 					});
 				}
-				else if (response.status === 403){
+				else if (response.status === 401){
 					dispatch(receiveHazards(LOGIN_ERROR, []));
 				}
 				else{

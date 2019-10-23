@@ -264,7 +264,7 @@ class DataViewer extends Component {
 			});
 
 		}
-		else if (response.status === 403) {
+		else if (response.status === 401) {
 			this.setState({
 				fileData: [],
 				fileExtension: null,
@@ -300,7 +300,7 @@ class DataViewer extends Component {
 				document.body.removeChild(anchor);
 			}
 		}
-		else if (response.status === 403) {
+		else if (response.status === 401) {
 			this.setState({
 				authError: true
 			});

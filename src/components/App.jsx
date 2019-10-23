@@ -200,57 +200,98 @@ class App extends Component {
 			</Menu>
 		);
 
-		let sideList = (
-			<List subheader={
-				<ListSubheader component="div" color="inherit">
-					Navigation
-				</ListSubheader>
-			}>
-				<ListItem button component="a" key="about" href={`${config.urlPrefix}/`}>
-					<ListItemAvatar><Avatar src="/public/resilience-logo.png"/></ListItemAvatar>
-					<ListItemText primary="About IN-CORE"/>
-				</ListItem>
-				<ListItem button component="a" key="pyIncore"
-						  href="/doc/pyincore/index.html" target="_blank">
-					<ListItemAvatar><Avatar src="/public/python-logo.png"/></ListItemAvatar>
-					<ListItemText primary="pyIncore"/>
-				</ListItem>
-				<ListItem button component="a" key="services" href="/doc/api"
-						  target="_blank">
-					<ListItemAvatar><Avatar src="/public/swagger-logo.png"/></ListItemAvatar>
-					<ListItemText primary="IN-CORE Web Service API"/>
-				</ListItem>
-				<ListItem button component="a" key="lab" href="https://incore-lab.ncsa.illinois.edu"
-						  target="_blank">
-					<ListItemAvatar><Avatar src="/public/jupyter-logo.png"/></ListItemAvatar>
-					<ListItemText primary="IN-CORE lab"/>
-				</ListItem>
-				<ListItem button key="webapp" onClick={this.handleCollapse}>
-					<ListItemAvatar><Avatar src="/public/webapp-logo.png"/></ListItemAvatar>
-					<ListItemText primary="IN-CORE Web Tools"/>
-					{this.state.collapseOpen ? <ExpandLess/> : <ExpandMore/>}
-				</ListItem>
-				<Collapse in={this.state.collapseOpen} timeout="auto" unmountOnExit>
-					<List component="div" disablePadding>
-						<ListItem button component="a" href={`${config.urlPrefix}/FragilityViewer`}
-								  className={classes.nested}>
-							<ListItemIcon><FragilityViewerIcon/></ListItemIcon>
-							<ListItemText primary="Fragility Explorer"/>
-						</ListItem>
-						<ListItem button component="a" href={`${config.urlPrefix}/DataViewer`}
-								  className={classes.nested}>
-							<ListItemIcon><DataViewerIcon/></ListItemIcon>
-							<ListItemText primary="Data Explorer"/>
-						</ListItem>
-						<ListItem button component="a" href={`${config.urlPrefix}/HazardViewer`}
-								  className={classes.nested}>
-							<ListItemIcon><HazardViewerIcon/></ListItemIcon>
-							<ListItemText primary="Hazard Explorer"/>
-						</ListItem>
-					</List>
-				</Collapse>
-			</List>
-		);
+		let sideList;
+		if (this.props.Authorization !== "" && this.props.Authorization !== undefined) {
+			sideList = (
+				<List subheader={
+					<ListSubheader component="div" color="inherit">
+						Navigation
+					</ListSubheader>
+				}>
+					<ListItem button component="a" key="about" href={`${config.urlPrefix}/`}>
+						<ListItemAvatar><Avatar src="/public/resilience-logo.png"/></ListItemAvatar>
+						<ListItemText primary="About IN-CORE"/>
+					</ListItem>
+					<ListItem button component="a" key="pyIncore"
+							  href="/doc/pyincore/index.html" target="_blank">
+						<ListItemAvatar><Avatar src="/public/python-logo.png"/></ListItemAvatar>
+						<ListItemText primary="pyIncore"/>
+					</ListItem>
+					<ListItem button component="a" key="services" href="/doc/api"
+							  target="_blank">
+						<ListItemAvatar><Avatar src="/public/swagger-logo.png"/></ListItemAvatar>
+						<ListItemText primary="IN-CORE Web Service API"/>
+					</ListItem>
+					<ListItem button component="a" key="lab" href="https://incore-lab.ncsa.illinois.edu"
+							  target="_blank">
+						<ListItemAvatar><Avatar src="/public/jupyter-logo.png"/></ListItemAvatar>
+						<ListItemText primary="IN-CORE lab"/>
+					</ListItem>
+					<ListItem button key="webapp" onClick={this.handleCollapse}>
+						<ListItemAvatar><Avatar src="/public/webapp-logo.png"/></ListItemAvatar>
+						<ListItemText primary="IN-CORE Web Tools"/>
+						{this.state.collapseOpen ? <ExpandLess/> : <ExpandMore/>}
+					</ListItem>
+					<Collapse in={this.state.collapseOpen} timeout="auto" unmountOnExit>
+						<List component="div" disablePadding>
+							<ListItem button component="a" href={`${config.urlPrefix}/FragilityViewer`}
+									  className={classes.nested}>
+								<ListItemIcon><FragilityViewerIcon/></ListItemIcon>
+								<ListItemText primary="Fragility Explorer"/>
+							</ListItem>
+							<ListItem button component="a" href={`${config.urlPrefix}/DataViewer`}
+									  className={classes.nested}>
+								<ListItemIcon><DataViewerIcon/></ListItemIcon>
+								<ListItemText primary="Data Explorer"/>
+							</ListItem>
+							<ListItem button component="a" href={`${config.urlPrefix}/HazardViewer`}
+									  className={classes.nested}>
+								<ListItemIcon><HazardViewerIcon/></ListItemIcon>
+								<ListItemText primary="Hazard Explorer"/>
+							</ListItem>
+						</List>
+					</Collapse>
+				</List>
+			);
+		}else{
+			sideList = (
+				<List subheader={
+					<ListSubheader component="div" color="inherit">
+						Navigation
+					</ListSubheader>
+				}>
+					<ListItem button component="a" key="lab" href="https://incore-lab.ncsa.illinois.edu"
+							  target="_blank">
+						<ListItemAvatar><Avatar src="/public/jupyter-logo.png"/></ListItemAvatar>
+						<ListItemText primary="IN-CORE lab"/>
+					</ListItem>
+					<ListItem button key="webapp" onClick={this.handleCollapse}>
+						<ListItemAvatar><Avatar src="/public/webapp-logo.png"/></ListItemAvatar>
+						<ListItemText primary="IN-CORE Web Tools"/>
+						{this.state.collapseOpen ? <ExpandLess/> : <ExpandMore/>}
+					</ListItem>
+					<Collapse in={this.state.collapseOpen} timeout="auto" unmountOnExit>
+						<List component="div" disablePadding>
+							<ListItem button component="a" href={`${config.urlPrefix}/FragilityViewer`}
+									  className={classes.nested}>
+								<ListItemIcon><FragilityViewerIcon/></ListItemIcon>
+								<ListItemText primary="Fragility Explorer"/>
+							</ListItem>
+							<ListItem button component="a" href={`${config.urlPrefix}/DataViewer`}
+									  className={classes.nested}>
+								<ListItemIcon><DataViewerIcon/></ListItemIcon>
+								<ListItemText primary="Data Explorer"/>
+							</ListItem>
+							<ListItem button component="a" href={`${config.urlPrefix}/HazardViewer`}
+									  className={classes.nested}>
+								<ListItemIcon><HazardViewerIcon/></ListItemIcon>
+								<ListItemText primary="Hazard Explorer"/>
+							</ListItem>
+						</List>
+					</Collapse>
+				</List>
+			);
+		}
 
 		return (
 			<MuiThemeProvider theme={theme}>
