@@ -27,7 +27,6 @@ import HazardViewerIcon from "@material-ui/icons/Warning";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import CloseIcon from "@material-ui/icons/Close";
 import {browserHistory} from "react-router";
-import {readCredentials} from "../actions";
 import config from "../app.config";
 
 
@@ -139,14 +138,6 @@ class App extends Component {
 		this.handleCollapse = this.handleCollapse.bind(this);
 		this.handleProfileMenuOpen = this.handleProfileMenuOpen.bind(this);
 		this.handleProfileMenuClose = this.handleProfileMenuClose.bind(this);
-	}
-
-	componentWillMount() {
-		let {query} = this.props.location;
-		if (Object.keys(query).length > 0) {
-			readCredentials(query);
-			this.props.router.push(window.location.pathname);
-		}
 	}
 
 	logout() {

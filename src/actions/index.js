@@ -311,15 +311,6 @@ export function login(username, password) {
 	};
 }
 
-export function readCredentials(tokens) {
-	// reading credentials from tokens passed in URL and stored in cookies
-	// if there's token passed in, reset the sessionStorage to save that token
-	if (typeof(Storage) !== "undefined") {
-		sessionStorage.setItem("access_token", tokens["access_token"]);
-		sessionStorage.setItem("refresh_token", tokens["refresh_token"]);
-	}
-}
-
 export const LOGOUT = "LOGOUT";
 
 export function logout() {

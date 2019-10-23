@@ -4,7 +4,9 @@ import {Avatar, Button, Divider, GridList, GridListTile, Paper, TextField, Typog
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import config from "../app.config";
 import Version from "./children/Version";
+import Cookies from 'universal-cookie';
 
+const cookies = new Cookies();
 
 type Props = {
 	name: string
@@ -81,9 +83,8 @@ class Login extends Component {
 	render() {
 
 		// if already login, redirect to homepage
-		let refresh_token = sessionStorage.getItem("refresh_token");
-		let access_token = sessionStorage.getItem("access_token");
-		if (access_token !== undefined && access_token !== "" && access_token !== null) {
+		let Authorization = cookies.get("Authorization");
+		if (Authorization !== undefined && Authorization !== "" && Authorization !== null) {
 			browserHistory.push(config.baseUrl);
 			return null;
 		}
