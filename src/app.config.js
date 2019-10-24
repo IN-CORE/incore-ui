@@ -17,7 +17,11 @@ const config = {
 	incoreLab: "https://incore-lab.ncsa.illinois.edu/",
 	geoServer: "https://incore2-services.ncsa.illinois.edu/geoserver/incore/wms",
 	baseUrl: process.env.basePath,
-	urlPrefix: prefix
+	urlPrefix: prefix,
+	pyIncoreDocUrl:"/doc/pyincore/index.html",
+	swaggerUrl:"/doc/api",
+	pyincoreVersion:"0.5.2",
+	webVersion:"0.3.2"
 };
 
 export default config;

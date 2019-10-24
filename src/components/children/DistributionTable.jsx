@@ -29,7 +29,7 @@ class DistributionTable extends React.Component {
 						return (
 							<TableRow>
 								<TableCell>{curve.description}</TableCell>
-								<TableCell>{curve.median}</TableCell>
+								<TableCell>{curve.alpha}</TableCell>
 								<TableCell>{curve.beta}</TableCell>
 							</TableRow>
 						);
