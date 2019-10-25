@@ -265,6 +265,7 @@ class DataViewer extends Component {
 
 		}
 		else if (response.status === 401) {
+			// TODO NOT handling it correctly
 			this.setState({
 				fileData: [],
 				fileExtension: null,
