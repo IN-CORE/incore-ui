@@ -330,23 +330,7 @@ class FragilityViewer extends React.Component {
 			if (curve.className.includes("CustomExpressionFragilityCurve")) {
 				plotData = chartSampler.computeExpressionSamples(0, 1.0, 90, curve.expression);
 			} else if (curve.className.includes("StandardFragilityCurve")) {
-				if (curve.curveType === "Normal") { // Actually Log Normal
-					plotData = chartSampler.sampleLogNormalCdf(0, 0.999, 1000, curve.alpha, curve.beta);
-				}
-
-				if (curve.curveType === "StandardNormal") {
-					plotData = chartSampler.sampleNormalCdf(0, 0.999, 1000, curve.alpha, curve.beta);
-				}
-
-				if (curve.curveType === "LogNormal") { // Log Normal with Normal mean and Normal variance
-					plotData = chartSampler.sampleLogNormalAlternate(0, 0.999, 1000, curve.alpha, curve.beta);
-				}
-			} else if (curve.className.includes("periodStandardFragilityCurve")) {
-				console.log("not implemented");
-			} else if (curve.className.includes("buildingPeriodStandardFragilityCurve")) {
-				console.log("not implemented");
-			} else {
-				console.log("not implemented");
+				plotData = chartSampler.sample(0, 0.999, 1000, curve.alphaType, curve.alpha, curve.beta)
 			}
 
 			let series = {
