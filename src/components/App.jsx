@@ -213,16 +213,16 @@ class App extends Component {
 						<ListItemText primary="About IN-CORE"/>
 					</ListItem>
 					<ListItem button component="a" key="pyIncore"
-							  href="/doc/pyincore/index.html" target="_blank">
+							  href={config.pyIncoreDocUrl} target="_blank">
 						<ListItemAvatar><Avatar src="/public/python-logo.png"/></ListItemAvatar>
 						<ListItemText primary="pyIncore"/>
 					</ListItem>
-					<ListItem button component="a" key="services" href="/doc/api"
+					<ListItem button component="a" key="services" href={config.swaggerUrl}
 							  target="_blank">
 						<ListItemAvatar><Avatar src="/public/swagger-logo.png"/></ListItemAvatar>
 						<ListItemText primary="IN-CORE Web Service API"/>
 					</ListItem>
-					<ListItem button component="a" key="lab" href="https://incore-lab.ncsa.illinois.edu"
+					<ListItem button component="a" key="lab" href={config.incoreLab}
 							  target="_blank">
 						<ListItemAvatar><Avatar src="/public/jupyter-logo.png"/></ListItemAvatar>
 						<ListItemText primary="IN-CORE lab"/>
@@ -260,11 +260,6 @@ class App extends Component {
 						Navigation
 					</ListSubheader>
 				}>
-					<ListItem button component="a" key="lab" href="https://incore-lab.ncsa.illinois.edu"
-							  target="_blank">
-						<ListItemAvatar><Avatar src="/public/jupyter-logo.png"/></ListItemAvatar>
-						<ListItemText primary="IN-CORE lab"/>
-					</ListItem>
 					<ListItem button key="webapp" onClick={this.handleCollapse}>
 						<ListItemAvatar><Avatar src="/public/webapp-logo.png"/></ListItemAvatar>
 						<ListItemText primary="IN-CORE Web Tools"/>

@@ -46,7 +46,7 @@ const styles = {
 	filter: {
 		padding: theme.spacing(4),
 		overflow: "auto",
-		display:"flex"
+		height:"100px"
 	},
 	main: {
 		padding: theme.spacing(4),
@@ -56,11 +56,15 @@ const styles = {
 	selectDiv: {
 		margin: "auto",
 		display: "inline-block",
-		width: "20%"
+		width: "25%"
 	},
 	select: {
 		width: "80%",
 		fontSize: "12px"
+	},
+	search: {
+		width:"100%",
+		fontSize:"12px",
 	},
 	denseStyle: {
 		minHeight: "10px",
@@ -319,23 +323,7 @@ class FragilityViewer extends React.Component {
 			if (curve.className.includes("CustomExpressionFragilityCurve")) {
 				plotData = chartSampler.computeExpressionSamples(0, 1.0, 90, curve.expression);
 			} else if (curve.className.includes("StandardFragilityCurve")) {
-				if (curve.curveType === "Normal") { // Actually Log Normal
-					plotData = chartSampler.sampleLogNormalCdf(0, 0.999, 1000, curve.median, curve.beta);
-				}
-
-				if (curve.curveType === "StandardNormal") {
-					plotData = chartSampler.sampleNormalCdf(0, 0.999, 1000, curve.median, curve.beta);
-				}
-
-				if (curve.curveType === "LogNormal") { // Log Normal with Normal mean and Normal variance
-					plotData = chartSampler.sampleLogNormalAlternate(0, 0.999, 1000, curve.median, curve.beta);
-				}
-			} else if (curve.className.includes("periodStandardFragilityCurve")) {
-				console.log("not implemented");
-			} else if (curve.className.includes("buildingPeriodStandardFragilityCurve")) {
-				console.log("not implemented");
-			} else {
-				console.log("not implemented");
+				plotData = chartSampler.sample(0, 0.999, 1000, curve.alphaType, curve.alpha, curve.beta)
 			}
 
 			let series = {
@@ -438,8 +426,9 @@ class FragilityViewer extends React.Component {
 					<div className={classes.root}>
 						<Grid container spacing={4}>
 							{/*filters*/}
-							<Grid item lg={12} sm={12} xl={12} xs={12}>
+							<Grid item lg={8} sm={8} xl={8} xs={12}>
 								<Paper variant="outlined" className={classes.filter}>
+									<Typography variant="h6">Filters</Typography>
 									{/* Hazard Type */}
 									<div className={classes.selectDiv}>
 										<InputLabel>Hazard Type</InputLabel>
@@ -488,24 +477,27 @@ class FragilityViewer extends React.Component {
 										<DataPerPage dataPerPage={this.state.dataPerPage}
 													 changeDataPerPage={this.changeDataPerPage}/>
 									</div>
-									<div className={classes.selectDiv}>
-										<TextField variant="outlined" label="Search"
-												   onKeyPress={this.handleKeyPressed}
-												   value={this.state.searchText}
-												   onChange={e => {
-													   this.setState({searchText: e.target.value});
-												   }}
-												   InputProps={{
-													   endAdornment: (<InputAdornment position="end">
-														   <IconButton onClick={this.clickSearch}>
-															   <SearchIcon fontSize="small"/></IconButton>
-													   </InputAdornment>),
+								</Paper>
+							</Grid>
+							<Grid item lg={4} sm={4} xl={4} xs={12}>
+								<Paper variant="outlined" className={classes.filter}>
+									<Typography variant="h6">Search all</Typography>
+									<TextField variant="outlined" label="Search"
+											   onKeyPress={this.handleKeyPressed}
+											   value={this.state.searchText}
+											   onChange={e => {
+												   this.setState({searchText: e.target.value});
+											   }}
+											   InputProps={{
+												   endAdornment: (<InputAdornment position="end">
+													   <IconButton onClick={this.clickSearch}>
+														   <SearchIcon fontSize="small"/></IconButton>
+												   </InputAdornment>),
 
-												   }}
-												   margin="dense"
-												   className={classes.select}
-										/>
-									</div>
+											   }}
+											   margin="dense"
+											   className={classes.search}
+									/>
 								</Paper>
 							</Grid>
 

@@ -220,7 +220,7 @@ export type Datasets = Dataset[];
 export type FragilityCurve2D = {
 	className: string,
 	description: name,
-	median: number,
+	alpha: number,
 	beta: number,
 	curveType: string,
 	periodParam2: number,

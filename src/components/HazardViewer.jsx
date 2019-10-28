@@ -43,7 +43,7 @@ const styles = {
 	filter: {
 		padding: theme.spacing(4),
 		overflow: "auto",
-		display: "flex"
+		height: "100px"
 	},
 	main: {
 		padding: theme.spacing(4),
@@ -58,6 +58,10 @@ const styles = {
 	select: {
 		width: "80%",
 		fontSize: "12px"
+	},
+	search: {
+		width:"100%",
+		fontSize:"12px",
 	},
 	denseStyle: {
 		minHeight: "10px",
@@ -375,8 +379,9 @@ class HazardViewer extends Component {
 					<div className={classes.root}>
 						<Grid container spacing={4}>
 							{/*filters*/}
-							<Grid item lg={12} sm={12} xl={12} xs={12}>
+							<Grid item lg={8} sm={8} xl={8} xs={12}>
 								<Paper variant="outlined" className={classes.filter}>
+									<Typography variant="h6">Filters</Typography>
 									{/* select hazard type */}
 									<div className={classes.selectDiv}>
 										<InputLabel>Hazard Type</InputLabel>
@@ -404,24 +409,27 @@ class HazardViewer extends Component {
 										<DataPerPage dataPerPage={this.state.dataPerPage}
 													 changeDataPerPage={this.changeDataPerPage}/>
 									</div>
-									<div className={classes.selectDiv}>
-										<TextField label="Search" variant="outlined"
-												   onKeyPress={this.handleKeyPressed}
-												   value={this.state.searchText}
-												   onChange={e => {
-													   this.setState({searchText: e.target.value});
-												   }}
-												   InputProps={{
-													   endAdornment: (<InputAdornment position="end">
-														   <IconButton
-															   onClick={this.clickSearch}><SearchIcon fontSize="small"/></IconButton>
-													   </InputAdornment>),
-													   style: {fontSize: "12px"}
-												   }}
-												   className={classes.select}
-												   margin="dense"
-										/>
-									</div>
+								</Paper>
+							</Grid>
+							<Grid item lg={4} sm={4} xl={4} xs={12}>
+								<Paper variant="outlined" className={classes.filter}>
+									<Typography variant="h6">Search all {this.state.selectedHazardType}</Typography>
+									<TextField label="Search" variant="outlined"
+											   onKeyPress={this.handleKeyPressed}
+											   value={this.state.searchText}
+											   onChange={e => {
+												   this.setState({searchText: e.target.value});
+											   }}
+											   InputProps={{
+												   endAdornment: (<InputAdornment position="end">
+													   <IconButton
+														   onClick={this.clickSearch}><SearchIcon fontSize="small"/></IconButton>
+												   </InputAdornment>),
+												   style: {fontSize: "12px"}
+											   }}
+											   className={classes.search}
+											   margin="dense"
+									/>
 								</Paper>
 							</Grid>
 

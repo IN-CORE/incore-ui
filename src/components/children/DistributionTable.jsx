@@ -20,7 +20,14 @@ class DistributionTable extends React.Component {
 					</TableRow>
 					<TableRow>
 						<TableCell>Limit State</TableCell>
-						<TableCell>Alpha</TableCell>
+						<TableCell>Alpha/
+							{
+							this.props.fragility.fragilityCurves[0].alphaType?
+								this.props.fragility.fragilityCurves[0].alphaType[0].toUpperCase()
+								+ this.props.fragility.fragilityCurves[0].alphaType.slice(1)
+								:
+								''
+							}</TableCell>
 						<TableCell>Beta</TableCell>
 					</TableRow>
 				</TableHead>
@@ -29,7 +36,7 @@ class DistributionTable extends React.Component {
 						return (
 							<TableRow>
 								<TableCell>{curve.description}</TableCell>
-								<TableCell>{curve.median}</TableCell>
+								<TableCell>{curve.alpha}</TableCell>
 								<TableCell>{curve.beta}</TableCell>
 							</TableRow>
 						);
