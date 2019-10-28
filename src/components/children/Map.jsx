@@ -22,7 +22,8 @@ async function fetchExtent(name: string) {
 	let parser = new WMSCapabilities();
 	try {
 		const extentRequest = await fetch(`${config.geoServer}?SERVICE=WMS&REQUEST=GetCapabilities`,
-			{method: "GET", mode: "cors", headers: getHeader()});
+			{method: "GET", mode: "cors"});
+			// {method: "GET", mode: "cors", headers: getHeader()});
 		const text = await extentRequest.text();
 		let result = parser.read(text);
 		let extent = result.Capability.Layer.Layer.find(l => l.Name === name).EX_GeographicBoundingBox;
