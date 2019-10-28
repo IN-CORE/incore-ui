@@ -270,7 +270,7 @@ class DataViewer extends Component {
 
 		}
 		else if (response.status === 401) {
-			// TODO NOT handling it correctly
+			cookies.remove("Authorization");
 			this.setState({
 				fileData: [],
 				fileExtension: null,
@@ -307,6 +307,7 @@ class DataViewer extends Component {
 			}
 		}
 		else if (response.status === 401) {
+			cookies.remove("Authorization");
 			this.setState({
 				authError: true
 			});

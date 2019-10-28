@@ -314,6 +314,7 @@ class HazardViewer extends Component {
 			});
 		}
 		else if (response.status === 401) {
+			cookies.remove("Authorization");
 			this.setState({
 				selectedHazardDatasetId: "",
 				boundingBox: [],

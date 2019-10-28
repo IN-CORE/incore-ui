@@ -121,6 +121,7 @@ export function searchDatasets(keyword, limit, offset) {
 					});
 				}
 				else if (response.status === 401){
+					cookies.remove("Authorization");
 					dispatch(receiveDatasets(LOGIN_ERROR, []));
 				}
 				else{
@@ -147,6 +148,7 @@ export function fetchDatasets(dataType, space, limit, offset) {
 					});
 				}
 				else if (response.status === 401){
+					cookies.remove("Authorization");
 					dispatch(receiveDatasets(LOGIN_ERROR, []));
 				}
 				else{
@@ -167,6 +169,7 @@ export function fetchSpaces() {
 					});
 				}
 				else if (response.status === 401){
+					cookies.remove("Authorization");
 					dispatch(receiveSpaces(LOGIN_ERROR, []));
 				}
 				else{
@@ -187,6 +190,7 @@ export function searchFragilities(keyword, limit, offset){
 				});
 			}
 			else if (response.status === 401){
+				cookies.remove("Authorization");
 				dispatch(receiveFragilities(LOGIN_ERROR, []));
 			}
 			else{
@@ -216,6 +220,7 @@ export function fetchFragilities(space: string, inventory: string, hazard: strin
 				});
 			}
 			else if (response.status === 401){
+				cookies.remove("Authorization");
 				dispatch(receiveFragilities(LOGIN_ERROR, []));
 			}
 			else{
@@ -236,6 +241,7 @@ export function searchHazards(hazard_type, keyword, limit, offset) {
 					});
 				}
 				else if (response.status === 401){
+					cookies.remove("Authorization");
 					dispatch(receiveHazards(LOGIN_ERROR, []));
 				}
 				else{
@@ -259,6 +265,7 @@ export function fetchHazards(hazard_type: string, space: string, limit, offset) 
 					});
 				}
 				else if (response.status === 401){
+					cookies.remove("Authorization");
 					dispatch(receiveHazards(LOGIN_ERROR, []));
 				}
 				else{
