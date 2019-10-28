@@ -14,7 +14,7 @@ const config = {
 	dataServiceBase: `${apiurl}/`,
 	dataService: `${apiurl}/data/api/datasets`,
 	dataWolf: "https://incore2-datawolf.ncsa.illinois.edu/datawolf/",
-	incoreLab: "https://incore-lab.ncsa.illinois.edu/",
+	incoreLab: `${apiurl}/lab`,
 	geoServer: "https://incore2-services.ncsa.illinois.edu/geoserver/incore/wms",
 	baseUrl: process.env.basePath,
 	urlPrefix: prefix,
