@@ -177,7 +177,7 @@ class App extends Component {
 	render() {
 		const {classes} = this.props;
 
-		let contents = (<Button color="inherit" href={`${config.urlPrefix}/login`} className={classes.smallButton}>
+		let contents = (<Button color="inherit" href="login" className={classes.smallButton}>
 			Login</Button>);
 
 		if (this.props.Authorization !== "" && this.props.Authorization !== undefined) {
@@ -208,7 +208,7 @@ class App extends Component {
 						Navigation
 					</ListSubheader>
 				}>
-					<ListItem button component="a" key="about" href={`${config.urlPrefix}/`}>
+					<ListItem button component="a" key="about" href="/doc/incore/index.html" target="_blank">
 						<ListItemAvatar><Avatar src="/public/resilience-logo.png"/></ListItemAvatar>
 						<ListItemText primary="About IN-CORE"/>
 					</ListItem>
@@ -234,17 +234,17 @@ class App extends Component {
 					</ListItem>
 					<Collapse in={this.state.collapseOpen} timeout="auto" unmountOnExit>
 						<List component="div" disablePadding>
-							<ListItem button component="a" href={`${config.urlPrefix}/FragilityViewer`}
+							<ListItem button component="a" href={`/FragilityViewer`}
 									  className={classes.nested}>
 								<ListItemIcon><FragilityViewerIcon/></ListItemIcon>
 								<ListItemText primary="Fragility Explorer"/>
 							</ListItem>
-							<ListItem button component="a" href={`${config.urlPrefix}/DataViewer`}
+							<ListItem button component="a" href={`/DataViewer`}
 									  className={classes.nested}>
 								<ListItemIcon><DataViewerIcon/></ListItemIcon>
 								<ListItemText primary="Data Explorer"/>
 							</ListItem>
-							<ListItem button component="a" href={`${config.urlPrefix}/HazardViewer`}
+							<ListItem button component="a" href={`/HazardViewer`}
 									  className={classes.nested}>
 								<ListItemIcon><HazardViewerIcon/></ListItemIcon>
 								<ListItemText primary="Hazard Explorer"/>
@@ -267,17 +267,17 @@ class App extends Component {
 					</ListItem>
 					<Collapse in={this.state.collapseOpen} timeout="auto" unmountOnExit>
 						<List component="div" disablePadding>
-							<ListItem button component="a" href={`${config.urlPrefix}/FragilityViewer`}
+							<ListItem button component="a" href={`/FragilityViewer`}
 									  className={classes.nested}>
 								<ListItemIcon><FragilityViewerIcon/></ListItemIcon>
 								<ListItemText primary="Fragility Explorer"/>
 							</ListItem>
-							<ListItem button component="a" href={`${config.urlPrefix}/DataViewer`}
+							<ListItem button component="a" href={`/DataViewer`}
 									  className={classes.nested}>
 								<ListItemIcon><DataViewerIcon/></ListItemIcon>
 								<ListItemText primary="Data Explorer"/>
 							</ListItem>
-							<ListItem button component="a" href={`${config.urlPrefix}/HazardViewer`}
+							<ListItem button component="a" href={`/HazardViewer`}
 									  className={classes.nested}>
 								<ListItemIcon><HazardViewerIcon/></ListItemIcon>
 								<ListItemText primary="Hazard Explorer"/>

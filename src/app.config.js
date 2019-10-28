@@ -1,4 +1,3 @@
-let prefix = process.env.basePath === "/" ? "" : process.env.basePath;
 let apiprotocol = "https";
 let apihost = "incore-dev-kube.ncsa.illinois.edu";
 let apiurl = `${apiprotocol}://${apihost}`;
@@ -17,7 +16,6 @@ const config = {
 	incoreLab: `${apiurl}/lab`,
 	geoServer: "https://incore2-services.ncsa.illinois.edu/geoserver/incore/wms",
 	baseUrl: process.env.basePath,
-	urlPrefix: prefix,
 	client_id: "react-auth",
 	pyIncoreDocUrl:"/doc/pyincore/index.html",
 	swaggerUrl:"/doc/api",

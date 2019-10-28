@@ -565,7 +565,7 @@ class DataViewer extends Component {
 		}
 
 		if (this.state.authError) {
-			browserHistory.push(`${config.urlPrefix}/login`);
+			browserHistory.push("/login");
 			return null;
 		}
 		else {

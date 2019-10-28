@@ -124,6 +124,7 @@ class FragilityViewer extends React.Component {
 			offset: 0,
 			pageNumber: 1,
 			dataPerPage: 50,
+			urlPrefix : config.urlPrefix
 		};
 
 		this.onClickFragility = this.onClickFragility.bind(this);
@@ -417,7 +418,7 @@ class FragilityViewer extends React.Component {
 		}
 
 		if (this.state.authError) {
-			browserHistory.push(`${config.urlPrefix}/login`);
+			browserHistory.push("/login");
 			return null;
 		}
 		else {

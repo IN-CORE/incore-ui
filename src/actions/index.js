@@ -315,9 +315,7 @@ export const LOGOUT = "LOGOUT";
 
 export function logout() {
 	return (dispatch: Dispatch) => {
-		if (typeof(Storage) !== "undefined") {
-			cookies.remove("Authorization");
-		}
+		cookies.remove("Authorization");
 		return dispatch({
 			type: LOGOUT
 		});
