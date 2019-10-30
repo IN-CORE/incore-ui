@@ -9,7 +9,7 @@ const config = {
 	semanticService: "",
 	hazardServiceBase: `${apiurl}/hazard/api/`,
 	maestroService: `${apiurl}/maestro`,
-	authService: `https://incore2-datawolf.ncsa.illinois.edu/auth/realms/farmdoc/protocol/openid-connect/token`,
+	authService: `${apiurl}/auth/realms/In-core/protocol/openid-connect/token`,
 	dataServiceBase: `${apiurl}/`,
 	dataService: `${apiurl}/data/api/datasets`,
 	dataWolf: "https://incore2-datawolf.ncsa.illinois.edu/datawolf/",
