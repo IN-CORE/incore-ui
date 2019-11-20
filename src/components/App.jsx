@@ -178,6 +178,9 @@ class App extends Component {
 	render() {
 		const {classes} = this.props;
 
+		let home = (<IconButton color="inherit" className={classes.smallButton} href="/">
+			<HomeIcon fontSize="small"/></IconButton>);
+
 		let contents = (<Button color="inherit" href="login" className={classes.smallButton}>
 			Login</Button>);
 
