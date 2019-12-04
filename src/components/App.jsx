@@ -19,6 +19,7 @@ import {
 } from "@material-ui/core";
 import {createMuiTheme, MuiThemeProvider, withStyles} from "@material-ui/core/styles";
 import MenuIcon from "@material-ui/icons/Menu";
+import HomeIcon from "@material-ui/icons/Home";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import FragilityViewerIcon from "@material-ui/icons/ShowChart";
@@ -98,7 +99,7 @@ const styles = {
 		minHeight: "48px"
 	},
 	menuButton: {
-		marginRight: 36,
+		// marginRight: 36,
 		padding: "6px"
 	},
 	smallButton: {
@@ -177,8 +178,10 @@ class App extends Component {
 	render() {
 		const {classes} = this.props;
 
-		let contents = (<Button color="inherit" href="login" className={classes.smallButton}>
-			Login</Button>);
+		let home = (<IconButton color="inherit" className={classes.smallButton} href="/">
+			<HomeIcon fontSize="small"/></IconButton>);
+
+		let contents = (<Button color="inherit" href={`login`} className={classes.smallButton}>Login</Button>);
 
 		if (this.props.Authorization !== "" && this.props.Authorization !== undefined) {
 			contents = (<IconButton color="inherit" className={classes.smallButton} onClick={this.handleProfileMenuOpen}>
@@ -195,7 +198,7 @@ class App extends Component {
 				open={this.state.profileMenuOpen}
 				onClose={this.handleProfileMenuClose}
 			>
-				<MenuItem className={classes.denseStyle}>My account</MenuItem>
+				{/*<MenuItem className={classes.denseStyle}>My account</MenuItem>*/}
 				<MenuItem className={classes.denseStyle} onClick={this.logout}>Log Out</MenuItem>
 			</Menu>
 		);
@@ -297,6 +300,7 @@ class App extends Component {
 									onClick={this.toggleDrawer} className={classes.menuButton}>
 							{this.state.drawerOpen ? <CloseIcon fontSize="small"/> : <MenuIcon fontSize="small"/>}
 						</IconButton>
+						{home}
 						<Typography variant="body1" style={{flex: 1}}></Typography>
 						{contents}
 						{profileMenu}

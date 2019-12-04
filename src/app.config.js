@@ -20,7 +20,7 @@ const config = {
 	pyIncoreDocUrl:"/doc/pyincore/index.html",
 	swaggerUrl:"/doc/api",
 	pyincoreVersion:"0.5.2",
-	webVersion:"0.3.2"
+	webVersion:"0.3.3"
 };
 
 export default config;
