@@ -1,5 +1,7 @@
 import React from "react";
-import {Button, Divider, List, ListItem, Table, TableBody, TableCell, TableRow} from "@material-ui/core";
+import {
+	Button, Divider, List, ListItem, Table, TableBody,
+	TableCell, TableRow, Tooltip} from "@material-ui/core";
 import {withStyles} from "@material-ui/core/styles/index";
 
 
@@ -79,9 +81,20 @@ class NestedInfoTable extends React.Component {
 						else if (this.props.data[key]) {
 							return (
 								<TableRow>
-									<TableCell style={{width: "30%", fontWeight: "bold", backgroundColor: "#eee"}}>
-										{key}
-									</TableCell>
+									{
+										key === "creator" ?
+											(<Tooltip title="The person who created the resource">
+												<TableCell
+													style={{width: "30%", fontWeight: "bold", backgroundColor: "#eee"}}>
+													{key}
+												</TableCell>
+											</Tooltip>)
+											:
+											(<TableCell
+												style={{width: "30%", fontWeight: "bold", backgroundColor: "#eee"}}>
+												{key}
+											</TableCell>)
+									}
 
 									{(typeof this.props.data[key] === "object" && this.props.data[key]) ?
 										Object.keys(this.props.data[key]).map((key2) => {
