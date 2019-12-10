@@ -49,6 +49,7 @@
     "redux": "~4.0.1",
     "redux-thunk": "~2.3.0",
     "shapefile": "0.6.2",
+    "universal-cookie": "^4.0.2",
     "vis": "4.18.1",
     "whatwg-fetch": "2.0.2",
     "xml2js": "0.4.17"

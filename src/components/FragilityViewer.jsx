@@ -1,7 +1,6 @@
 import React from "react";
 import GroupList from "./children/GroupList";
 import LineChart from "./children/LineChart";
-import AuthNotification from "./children/AuthNotification";
 import NestedInfoTable from "./children/NestedInfoTable";
 import ThreeDimensionalPlot from "./children/ThreeDimensionalPlot";
 import "whatwg-fetch";
@@ -34,8 +33,9 @@ import Space from "./children/Space";
 import Version from "./children/Version";
 import {CopyToClipboard} from "react-copy-to-clipboard";
 import {createMuiTheme, withStyles} from "@material-ui/core/styles/index";
+import Cookies from 'universal-cookie';
 
-
+const cookies = new Cookies();
 const redundant_prop = ["legacyId", "privileges", "creator", "is3dPlot"];
 
 const theme = createMuiTheme();
@@ -119,12 +119,12 @@ class FragilityViewer extends React.Component {
 			chartConfig: chartConfig.FragilityConfig,
 			plotData3d: {},
 			authError: false,
-			authLocationFrom: sessionStorage.getItem("locationFrom"),
 			spaces: [],
 			preview: false,
 			offset: 0,
 			pageNumber: 1,
 			dataPerPage: 50,
+			urlPrefix : config.urlPrefix
 		};
 
 		this.onClickFragility = this.onClickFragility.bind(this);
@@ -144,14 +144,10 @@ class FragilityViewer extends React.Component {
 
 	async componentWillMount() {
 		// check if logged in
-		let user = sessionStorage.getItem("user");
-		let auth = sessionStorage.getItem("auth");
-		let location = sessionStorage.getItem("locationFrom");
+		let authorization = cookies.get("Authorization");
 
 		// logged in
-		if (user !== undefined && user !== "" && user !== null
-			&& auth !== undefined && auth !== "" && auth !== null) {
-
+		if (authorization !== undefined && authorization !== "" && authorization !== null) {
 			this.setState({
 				authError: false
 			}, function () {
@@ -164,7 +160,6 @@ class FragilityViewer extends React.Component {
 		else {
 			this.setState({
 				authError: true,
-				authLocationFrom: location
 			});
 		}
 	}
@@ -172,7 +167,6 @@ class FragilityViewer extends React.Component {
 	componentWillReceiveProps(nextProps) {
 		this.setState({
 			authError: nextProps.authError,
-			authLocationFrom: nextProps.locationFrom
 		});
 	}
 
@@ -424,15 +418,8 @@ class FragilityViewer extends React.Component {
 		}
 
 		if (this.state.authError) {
-			if (this.state.authLocationFrom !== undefined
-				&& this.state.authLocationFrom !== null
-				&& this.state.authLocationFrom.length > 0) {
-				return (<AuthNotification/>);
-			}
-			else {
-				browserHistory.push(`${config.urlPrefix}/login`);
-				return null;
-			}
+			browserHistory.push("/login");
+			return null;
 		}
 		else {
 			return (

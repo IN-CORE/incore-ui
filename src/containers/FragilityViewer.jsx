@@ -7,7 +7,6 @@ const mapStateToProps = (state) => {
 		fragilities: state.fragility.fragilities,
 		spaces: state.space.spaces,
 		authError: state.user.loginError,
-		locationFrom: state.user.locationFrom
 	};
 };
 

@@ -8,7 +8,6 @@ const mapStateToProps = (state, ownProps) => {
 		datasets: state.data.datasets,
 		spaces: state.space.spaces,
 		authError: state.user.loginError,
-		locationFrom: state.user.locationFrom
 	};
 };
 

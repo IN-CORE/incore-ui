@@ -1,7 +1,10 @@
 // @flow
 
 import type {AnalysesMetadata, Analysis, Datasets, Fragilities, Hazards, Dispatch} from "../utils/flowtype";
+import Cookies from 'universal-cookie';
 import config from "../app.config";
+
+const cookies = new Cookies();
 
 export const GET_ANALYSES = "GET_ANALYSES";
 
@@ -117,7 +120,8 @@ export function searchDatasets(keyword, limit, offset) {
 						dispatch(receiveDatasets(RECEIVE_DATASETS, json));
 					});
 				}
-				else if (response.status === 403){
+				else if (response.status === 401){
+					cookies.remove("Authorization");
 					dispatch(receiveDatasets(LOGIN_ERROR, []));
 				}
 				else{
@@ -143,7 +147,8 @@ export function fetchDatasets(dataType, space, limit, offset) {
 						dispatch(receiveDatasets(RECEIVE_DATASETS, json));
 					});
 				}
-				else if (response.status === 403){
+				else if (response.status === 401){
+					cookies.remove("Authorization");
 					dispatch(receiveDatasets(LOGIN_ERROR, []));
 				}
 				else{
@@ -163,7 +168,8 @@ export function fetchSpaces() {
 						dispatch(receiveSpaces(RECEIVE_SPACES, json));
 					});
 				}
-				else if (response.status === 403){
+				else if (response.status === 401){
+					cookies.remove("Authorization");
 					dispatch(receiveSpaces(LOGIN_ERROR, []));
 				}
 				else{
@@ -183,7 +189,8 @@ export function searchFragilities(keyword, limit, offset){
 					dispatch(receiveFragilities(RECEIVE_FRAGILITIES, json));
 				});
 			}
-			else if (response.status === 403){
+			else if (response.status === 401){
+				cookies.remove("Authorization");
 				dispatch(receiveFragilities(LOGIN_ERROR, []));
 			}
 			else{
@@ -212,7 +219,8 @@ export function fetchFragilities(space: string, inventory: string, hazard: strin
 					dispatch(receiveFragilities(RECEIVE_FRAGILITIES, json));
 				});
 			}
-			else if (response.status === 403){
+			else if (response.status === 401){
+				cookies.remove("Authorization");
 				dispatch(receiveFragilities(LOGIN_ERROR, []));
 			}
 			else{
@@ -232,7 +240,8 @@ export function searchHazards(hazard_type, keyword, limit, offset) {
 						dispatch(receiveHazards(RECEIVE_HAZARDS, json));
 					});
 				}
-				else if (response.status === 403){
+				else if (response.status === 401){
+					cookies.remove("Authorization");
 					dispatch(receiveHazards(LOGIN_ERROR, []));
 				}
 				else{
@@ -255,7 +264,8 @@ export function fetchHazards(hazard_type: string, space: string, limit, offset) 
 						dispatch(receiveHazards(RECEIVE_HAZARDS, json));
 					});
 				}
-				else if (response.status === 403){
+				else if (response.status === 401){
+					cookies.remove("Authorization");
 					dispatch(receiveHazards(LOGIN_ERROR, []));
 				}
 				else{
@@ -267,17 +277,24 @@ export function fetchHazards(hazard_type: string, space: string, limit, offset) 
 
 export async function loginHelper(username, password) {
 	const endpoint = config.authService;
-	// Currently CORS error due to the header
-	const userRequest = await fetch(endpoint, {
-		method: "GET",
+	let formData = [
+		encodeURIComponent("grant_type") + "=" + encodeURIComponent("password"),
+		encodeURIComponent("username") + "=" + encodeURIComponent(username),
+		encodeURIComponent("password") + "=" + encodeURIComponent(password),
+		encodeURIComponent("client_id") + "=" + encodeURIComponent(config.client_id),
+	];
+
+	const tokenRequest = await fetch(endpoint, {
+		method: "POST",
 		headers: {
-			"Authorization": `LDAP ${ window.btoa(`${username }:${ password}`) }`
-		}
+			"Content-Type": "application/x-www-form-urlencoded"
+		},
+		body:formData.join("&"),
 	});
 
-	const user = await userRequest.json();
+	const tokens = await tokenRequest.json();
 
-	return user;
+	return tokens;
 }
 
 export const LOGIN_ERROR = "LOGIN_ERROR";
@@ -286,13 +303,11 @@ export const SET_USER = "SET_USER";
 export function login(username, password) {
 	return async (dispatch: Dispatch) => {
 		const json = await loginHelper(username, password);
-		if (typeof(Storage) !== "undefined" && json["auth-token"] !== undefined) {
-			sessionStorage.setItem("auth", json["auth-token"]);
-			sessionStorage.setItem("user", json["user"]);
+		if (json["access_token"] !== undefined) {
+			cookies.set("Authorization", `bearer ${json["access_token"]}`, { maxAge: json["expires_in"]});
 			return dispatch({
 				type: SET_USER,
-				username: json["user"],
-				auth_token: json["auth-token"]
+				Authorization: `bearer ${json["access_token"]}`,
 			});
 		} else {
 			return dispatch({
@@ -303,27 +318,11 @@ export function login(username, password) {
 	};
 }
 
-export function readCredentials(tokens) {
-	// reading credentials from tokens passed in URL and stored in sessionStorage
-	// if there's token passed in, reset the sessionStorage to save that token
-	if (typeof(Storage) !== "undefined") {
-		sessionStorage.setItem("auth", tokens["auth-token"]);
-		sessionStorage.setItem("user", tokens["user"]);
-
-		if (tokens["location"] !== undefined) sessionStorage.setItem("locationFrom", tokens["location"]);
-	}
-}
-
-
 export const LOGOUT = "LOGOUT";
 
 export function logout() {
 	return (dispatch: Dispatch) => {
-		if (typeof(Storage) !== "undefined") {
-			sessionStorage.removeItem("auth");
-			sessionStorage.removeItem("user");
-			sessionStorage.removeItem("locationFrom");
-		}
+		cookies.remove("Authorization");
 		return dispatch({
 			type: LOGOUT
 		});
@@ -343,8 +342,6 @@ export function receiveDatawolfResponse(json) {
 			executionId: json,
 			receivedAt: Date.now()
 		});
-
-
 	};
 
 }
@@ -429,15 +426,9 @@ export function executeDatawolfWorkflow(workflowid, creatorid, title, descriptio
 
 }
 
-export function getUsername() {
-	return sessionStorage.user;
-}
-
 export function getHeader() {
 	const headers = new Headers({
-		"Authorization": "LDAP token",
-		"auth-user": sessionStorage.user,
-		"auth-token": sessionStorage.auth
+		"Authorization": cookies.get('Authorization'),
 	});
 	return headers;
 }
