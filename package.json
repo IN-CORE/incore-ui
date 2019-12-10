@@ -6,6 +6,7 @@
     "npm": ">=3.10",
     "node": ">=6.9.5"
   },
+  "license": "MPL-2.0",
   "scripts": {
     "preinstall": "node tools/nodeVersionCheck.js",
     "start-message": "babel-node tools/startMessage.js",

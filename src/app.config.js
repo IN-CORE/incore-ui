@@ -18,7 +18,7 @@ const config = {
 	baseUrl: process.env.basePath,
 	client_id: "react-auth",
 	pyIncoreDocUrl:"/doc/pyincore/index.html",
-	swaggerUrl:"/doc/api",
+	swaggerUrl:"/doc/api/",
 	pyincoreVersion:"0.5.2",
 	webVersion:"0.3.3"
 };
