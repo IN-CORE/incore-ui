@@ -22,7 +22,7 @@ class Login extends Component {
 			passwordErrorText: "",
 			loginErrorText: "",
 			error: false,
-			origin: props.location.query
+			origin: props.location.query["origin"]
 		};
 
 		this.changeUsername = this.changeUsername.bind(this);
@@ -76,7 +76,13 @@ class Login extends Component {
 			});
 		}
 		if (!this.props.loginError) {
-			browserHistory.push(config.baseUrl);
+			if ( this.state.origin === undefined ){
+				browserHistory.push(config.baseUrl);
+			}
+			else{
+				browserHistory.push(this.state.origin);
+			}
+
 		}
 
 	}
