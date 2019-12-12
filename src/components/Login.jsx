@@ -22,6 +22,7 @@ class Login extends Component {
 			passwordErrorText: "",
 			loginErrorText: "",
 			error: false,
+			origin: props.location.query
 		};
 
 		this.changeUsername = this.changeUsername.bind(this);

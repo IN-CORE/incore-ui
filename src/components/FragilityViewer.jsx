@@ -418,7 +418,7 @@ class FragilityViewer extends React.Component {
 		}
 
 		if (this.state.authError) {
-			browserHistory.push("/login");
+			browserHistory.push("/login?origin=FragilityViewer");
 			return null;
 		}
 		else {
