@@ -99,7 +99,6 @@ const styles = {
 		minHeight: "48px"
 	},
 	menuButton: {
-		// marginRight: 36,
 		padding: "6px"
 	},
 	smallButton: {
@@ -213,12 +212,12 @@ class App extends Component {
 				}>
 					<ListItem button component="a" key="about" href="/doc/incore/index.html" target="_blank">
 						<ListItemAvatar><Avatar src="/public/resilience-logo.png"/></ListItemAvatar>
-						<ListItemText primary="About IN-CORE"/>
+						<ListItemText primary="IN-CORE Manual"/>
 					</ListItem>
 					<ListItem button component="a" key="pyIncore"
 							  href={config.pyIncoreDocUrl} target="_blank">
 						<ListItemAvatar><Avatar src="/public/python-logo.png"/></ListItemAvatar>
-						<ListItemText primary="pyIncore"/>
+						<ListItemText primary="pyIncore Reference"/>
 					</ListItem>
 					<ListItem button component="a" key="services" href={config.swaggerUrl}
 							  target="_blank">
@@ -240,17 +239,17 @@ class App extends Component {
 							<ListItem button component="a" href={`/FragilityViewer`}
 									  className={classes.nested}>
 								<ListItemIcon><FragilityViewerIcon/></ListItemIcon>
-								<ListItemText primary="Fragility Explorer"/>
+								<ListItemText primary="Fragility Viewer"/>
 							</ListItem>
 							<ListItem button component="a" href={`/DataViewer`}
 									  className={classes.nested}>
 								<ListItemIcon><DataViewerIcon/></ListItemIcon>
-								<ListItemText primary="Data Explorer"/>
+								<ListItemText primary="Data Viewer"/>
 							</ListItem>
 							<ListItem button component="a" href={`/HazardViewer`}
 									  className={classes.nested}>
 								<ListItemIcon><HazardViewerIcon/></ListItemIcon>
-								<ListItemText primary="Hazard Explorer"/>
+								<ListItemText primary="Hazard Viewer"/>
 							</ListItem>
 						</List>
 					</Collapse>
@@ -263,6 +262,20 @@ class App extends Component {
 						Navigation
 					</ListSubheader>
 				}>
+					<ListItem button component="a" key="about" href="/doc/incore/index.html" target="_blank">
+						<ListItemAvatar><Avatar src="/public/resilience-logo.png"/></ListItemAvatar>
+						<ListItemText primary="IN-CORE Manual"/>
+					</ListItem>
+					<ListItem button component="a" key="pyIncore"
+							  href={config.pyIncoreDocUrl} target="_blank">
+						<ListItemAvatar><Avatar src="/public/python-logo.png"/></ListItemAvatar>
+						<ListItemText primary="pyIncore Reference"/>
+					</ListItem>
+					<ListItem button component="a" key="services" href={config.swaggerUrl}
+							  target="_blank">
+						<ListItemAvatar><Avatar src="/public/swagger-logo.png"/></ListItemAvatar>
+						<ListItemText primary="IN-CORE Web Service API"/>
+					</ListItem>
 					<ListItem button key="webapp" onClick={this.handleCollapse}>
 						<ListItemAvatar><Avatar src="/public/webapp-logo.png"/></ListItemAvatar>
 						<ListItemText primary="IN-CORE Web Tools"/>
@@ -273,17 +286,17 @@ class App extends Component {
 							<ListItem button component="a" href={`/FragilityViewer`}
 									  className={classes.nested}>
 								<ListItemIcon><FragilityViewerIcon/></ListItemIcon>
-								<ListItemText primary="Fragility Explorer"/>
+								<ListItemText primary="Fragility Viewer"/>
 							</ListItem>
 							<ListItem button component="a" href={`/DataViewer`}
 									  className={classes.nested}>
 								<ListItemIcon><DataViewerIcon/></ListItemIcon>
-								<ListItemText primary="Data Explorer"/>
+								<ListItemText primary="Data Viewer"/>
 							</ListItem>
 							<ListItem button component="a" href={`/HazardViewer`}
 									  className={classes.nested}>
 								<ListItemIcon><HazardViewerIcon/></ListItemIcon>
-								<ListItemText primary="Hazard Explorer"/>
+								<ListItemText primary="Hazard Viewer"/>
 							</ListItem>
 						</List>
 					</Collapse>
