@@ -1,5 +1,5 @@
 let apiprotocol = "https";
-let apihost = "incore-dev-kube.ncsa.illinois.edu";
+let apihost = "incore.ncsa.illinois.edu";
 let apiurl = `${apiprotocol}://${apihost}`;
 
 const config = {
@@ -14,7 +14,7 @@ const config = {
 	dataService: `${apiurl}/data/api/datasets`,
 	dataWolf: "https://incore2-datawolf.ncsa.illinois.edu/datawolf/",
 	incoreLab: `${apiurl}/lab`,
-	geoServer: "https://incore-dev-kube.ncsa.illinois.edu/geoserver/incore/wms",
+	geoServer: "https://incore-geoserver.ncsa.illinois.edu/geoserver/incore/wms",
 	baseUrl: process.env.basePath,
 	client_id: "react-auth",
 	pyIncoreDocUrl:"/doc/pyincore/index.html",
