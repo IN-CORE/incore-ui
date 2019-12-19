@@ -1,6 +1,5 @@
-let prefix = process.env.basePath === "/" ? "" : process.env.basePath;
 let apiprotocol = "https";
-let apihost = "incore2-services.ncsa.illinois.edu";
+let apihost = "incore.ncsa.illinois.edu";
 let apiurl = `${apiprotocol}://${apihost}`;
 
 const config = {
@@ -10,18 +9,18 @@ const config = {
 	semanticService: "",
 	hazardServiceBase: `${apiurl}/hazard/api/`,
 	maestroService: `${apiurl}/maestro`,
-	authService: `${apiurl}/auth/api/login`,
+	authService: `${apiurl}/auth/realms/In-core/protocol/openid-connect/token`,
 	dataServiceBase: `${apiurl}/`,
 	dataService: `${apiurl}/data/api/datasets`,
 	dataWolf: "https://incore2-datawolf.ncsa.illinois.edu/datawolf/",
-	incoreLab: "https://incore-lab.ncsa.illinois.edu/",
-	geoServer: "https://incore2-services.ncsa.illinois.edu/geoserver/incore/wms",
+	incoreLab: `${apiurl}/lab`,
+	geoServer: "https://incore-geoserver.ncsa.illinois.edu/geoserver/incore/wms",
 	baseUrl: process.env.basePath,
-	urlPrefix: prefix,
+	client_id: "react-auth",
 	pyIncoreDocUrl:"/doc/pyincore/index.html",
-	swaggerUrl:"/doc/api",
-	pyincoreVersion:"0.5.2",
-	webVersion:"0.3.2"
+	swaggerUrl:"/doc/api/",
+	pyincoreVersion:"0.5.3",
+	webVersion:"0.3.3"
 };
 
 export default config;

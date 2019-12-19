@@ -157,7 +157,6 @@ function HomePage(props) {
 		{
 			title: "pyIncore",
 			image: "/public/python-logo.png",
-			url:config.pyIncoreDocUrl,
 			description: "pyIncore is a Python package to analyze and visualize various hazard scenarios\
 							developed by the Center for Risk-Based Community Resilience Planning team from NCSA. \
 							pyIncore allows users to apply hazards on infrastructure in selected areas.",
@@ -165,7 +164,6 @@ function HomePage(props) {
 		{
 			title: "Web Service API",
 			image: "/public/swagger-logo.png",
-			url:config.swaggerUrl,
 			description: "IN-CORE currently maintains 4 different services: The Authentication Service supports secure LDAP authentication. \
 						Data Service provides basic capabilities to fetch/store data from file storage. Fragility \
 						service that supports fragilities and fragility mapping.\
@@ -174,14 +172,12 @@ function HomePage(props) {
 		{
 			title: "IN-CORE Lab",
 			image: "/public/jupyter-logo.png",
-			url:config.incoreLab,
 			description: "IN-CORE Lab which is a customized JupyterLab deployed on JupyterHub, enables user to work with documents and writing code,\
 						using Jupyter notebooks, text editors, terminals, and custom components in a flexible, integrated, and extensible manner.",
 		},
 		{
 			title: "Web Tools",
 			image: "/public/webapp-logo.png",
-			url:"/FragilityViewer",
 			description: "The web application provides the user interface for interacting with the service layer.\
 						It provides a login interface and enables browsing and searching the datasets, hazards and fragilities, \
 						viewing the metadata and visualizations, and downloading the datasets."
@@ -267,10 +263,8 @@ function HomePage(props) {
 						{sections.map((section) =>
 							<Grid item xs={12} md={3}>
 								<div className={classes.item}>
-									<a href={section.url} target={"_blank"}>
-										<img className={classes.image}
-											 src={section.image}/>
-									</a>
+									<img className={classes.image}
+										 src={section.image}/>
 									<Typography variant="h6" className={classes.title}>
 										{section.title}
 									</Typography>

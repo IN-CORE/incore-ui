@@ -19,6 +19,7 @@ import {
 } from "@material-ui/core";
 import {createMuiTheme, MuiThemeProvider, withStyles} from "@material-ui/core/styles";
 import MenuIcon from "@material-ui/icons/Menu";
+import HomeIcon from "@material-ui/icons/Home";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import FragilityViewerIcon from "@material-ui/icons/ShowChart";
@@ -27,7 +28,6 @@ import HazardViewerIcon from "@material-ui/icons/Warning";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import CloseIcon from "@material-ui/icons/Close";
 import {browserHistory} from "react-router";
-import {readCredentials} from "../actions";
 import config from "../app.config";
 
 
@@ -99,7 +99,6 @@ const styles = {
 		minHeight: "48px"
 	},
 	menuButton: {
-		marginRight: 36,
 		padding: "6px"
 	},
 	smallButton: {
@@ -129,7 +128,6 @@ class App extends Component {
 		super(props);
 		this.state = {
 			authError: false,
-			authLocationFrom: null,
 			drawerOpen: false,
 			collapseOpen: true,
 			profileMenuOpen: false,
@@ -140,14 +138,6 @@ class App extends Component {
 		this.handleCollapse = this.handleCollapse.bind(this);
 		this.handleProfileMenuOpen = this.handleProfileMenuOpen.bind(this);
 		this.handleProfileMenuClose = this.handleProfileMenuClose.bind(this);
-	}
-
-	componentWillMount() {
-		let {query} = this.props.location;
-		if (Object.keys(query).length > 0) {
-			readCredentials(query);
-			this.props.router.push(window.location.pathname);
-		}
 	}
 
 	logout() {
@@ -187,10 +177,12 @@ class App extends Component {
 	render() {
 		const {classes} = this.props;
 
-		let contents = (<Button color="inherit" href={`${config.urlPrefix}/login`} className={classes.smallButton}>
-			Login</Button>);
+		let home = (<IconButton color="inherit" className={classes.smallButton} href="/">
+			<HomeIcon fontSize="small"/></IconButton>);
 
-		if (this.props.user !== "" && this.props.user !== undefined) {
+		let contents = (<Button color="inherit" href={`login`} className={classes.smallButton}>Login</Button>);
+
+		if (this.props.Authorization !== "" && this.props.Authorization !== undefined) {
 			contents = (<IconButton color="inherit" className={classes.smallButton} onClick={this.handleProfileMenuOpen}>
 				<AccountCircle fontSize="small"/></IconButton>);
 		}
@@ -205,62 +197,112 @@ class App extends Component {
 				open={this.state.profileMenuOpen}
 				onClose={this.handleProfileMenuClose}
 			>
-				<MenuItem className={classes.denseStyle}>My account</MenuItem>
+				{/*<MenuItem className={classes.denseStyle}>My account</MenuItem>*/}
 				<MenuItem className={classes.denseStyle} onClick={this.logout}>Log Out</MenuItem>
 			</Menu>
 		);
 
-		let sideList = (
-			<List subheader={
-				<ListSubheader component="div" color="inherit">
-					Navigation
-				</ListSubheader>
-			}>
-				<ListItem button component="a" key="about" href="/doc/incore/index.html" target="_blank">
-					<ListItemAvatar><Avatar src="/public/resilience-logo.png"/></ListItemAvatar>
-					<ListItemText primary="About IN-CORE"/>
-				</ListItem>
-				<ListItem button component="a" key="pyIncore"
-						  href={config.pyIncoreDocUrl} target="_blank">
-					<ListItemAvatar><Avatar src="/public/python-logo.png"/></ListItemAvatar>
-					<ListItemText primary="pyIncore"/>
-				</ListItem>
-				<ListItem button component="a" key="services" href={config.swaggerUrl}
-						  target="_blank">
-					<ListItemAvatar><Avatar src="/public/swagger-logo.png"/></ListItemAvatar>
-					<ListItemText primary="IN-CORE Web Service API"/>
-				</ListItem>
-				<ListItem button component="a" key="lab" href={config.incoreLab}
-						  target="_blank">
-					<ListItemAvatar><Avatar src="/public/jupyter-logo.png"/></ListItemAvatar>
-					<ListItemText primary="IN-CORE lab"/>
-				</ListItem>
-				<ListItem button key="webapp" onClick={this.handleCollapse}>
-					<ListItemAvatar><Avatar src="/public/webapp-logo.png"/></ListItemAvatar>
-					<ListItemText primary="IN-CORE Web Tools"/>
-					{this.state.collapseOpen ? <ExpandLess/> : <ExpandMore/>}
-				</ListItem>
-				<Collapse in={this.state.collapseOpen} timeout="auto" unmountOnExit>
-					<List component="div" disablePadding>
-						<ListItem button component="a" href={`${config.urlPrefix}/FragilityViewer`}
-								  className={classes.nested}>
-							<ListItemIcon><FragilityViewerIcon/></ListItemIcon>
-							<ListItemText primary="Fragility Explorer"/>
-						</ListItem>
-						<ListItem button component="a" href={`${config.urlPrefix}/DataViewer`}
-								  className={classes.nested}>
-							<ListItemIcon><DataViewerIcon/></ListItemIcon>
-							<ListItemText primary="Data Explorer"/>
-						</ListItem>
-						<ListItem button component="a" href={`${config.urlPrefix}/HazardViewer`}
-								  className={classes.nested}>
-							<ListItemIcon><HazardViewerIcon/></ListItemIcon>
-							<ListItemText primary="Hazard Explorer"/>
-						</ListItem>
-					</List>
-				</Collapse>
-			</List>
-		);
+		let sideList;
+		if (this.props.Authorization !== "" && this.props.Authorization !== undefined) {
+			sideList = (
+				<List subheader={
+					<ListSubheader component="div" color="inherit">
+						Navigation
+					</ListSubheader>
+				}>
+					<ListItem button component="a" key="about" href="/doc/incore/index.html" target="_blank">
+						<ListItemAvatar><Avatar src="/public/resilience-logo.png"/></ListItemAvatar>
+						<ListItemText primary="IN-CORE Manual"/>
+					</ListItem>
+					<ListItem button component="a" key="pyIncore"
+							  href={config.pyIncoreDocUrl} target="_blank">
+						<ListItemAvatar><Avatar src="/public/python-logo.png"/></ListItemAvatar>
+						<ListItemText primary="pyIncore Reference"/>
+					</ListItem>
+					<ListItem button component="a" key="services" href={config.swaggerUrl}
+							  target="_blank">
+						<ListItemAvatar><Avatar src="/public/swagger-logo.png"/></ListItemAvatar>
+						<ListItemText primary="IN-CORE Web Service API"/>
+					</ListItem>
+					<ListItem button component="a" key="lab" href={config.incoreLab}
+							  target="_blank">
+						<ListItemAvatar><Avatar src="/public/jupyter-logo.png"/></ListItemAvatar>
+						<ListItemText primary="IN-CORE lab"/>
+					</ListItem>
+					<ListItem button key="webapp" onClick={this.handleCollapse}>
+						<ListItemAvatar><Avatar src="/public/webapp-logo.png"/></ListItemAvatar>
+						<ListItemText primary="IN-CORE Web Tools"/>
+						{this.state.collapseOpen ? <ExpandLess/> : <ExpandMore/>}
+					</ListItem>
+					<Collapse in={this.state.collapseOpen} timeout="auto" unmountOnExit>
+						<List component="div" disablePadding>
+							<ListItem button component="a" href={`/FragilityViewer`}
+									  className={classes.nested}>
+								<ListItemIcon><FragilityViewerIcon/></ListItemIcon>
+								<ListItemText primary="Fragility Viewer"/>
+							</ListItem>
+							<ListItem button component="a" href={`/DataViewer`}
+									  className={classes.nested}>
+								<ListItemIcon><DataViewerIcon/></ListItemIcon>
+								<ListItemText primary="Data Viewer"/>
+							</ListItem>
+							<ListItem button component="a" href={`/HazardViewer`}
+									  className={classes.nested}>
+								<ListItemIcon><HazardViewerIcon/></ListItemIcon>
+								<ListItemText primary="Hazard Viewer"/>
+							</ListItem>
+						</List>
+					</Collapse>
+				</List>
+			);
+		}else{
+			sideList = (
+				<List subheader={
+					<ListSubheader component="div" color="inherit">
+						Navigation
+					</ListSubheader>
+				}>
+					<ListItem button component="a" key="about" href="/doc/incore/index.html" target="_blank">
+						<ListItemAvatar><Avatar src="/public/resilience-logo.png"/></ListItemAvatar>
+						<ListItemText primary="IN-CORE Manual"/>
+					</ListItem>
+					<ListItem button component="a" key="pyIncore"
+							  href={config.pyIncoreDocUrl} target="_blank">
+						<ListItemAvatar><Avatar src="/public/python-logo.png"/></ListItemAvatar>
+						<ListItemText primary="pyIncore Reference"/>
+					</ListItem>
+					<ListItem button component="a" key="services" href={config.swaggerUrl}
+							  target="_blank">
+						<ListItemAvatar><Avatar src="/public/swagger-logo.png"/></ListItemAvatar>
+						<ListItemText primary="IN-CORE Web Service API"/>
+					</ListItem>
+					<ListItem button key="webapp" onClick={this.handleCollapse}>
+						<ListItemAvatar><Avatar src="/public/webapp-logo.png"/></ListItemAvatar>
+						<ListItemText primary="IN-CORE Web Tools"/>
+						{this.state.collapseOpen ? <ExpandLess/> : <ExpandMore/>}
+					</ListItem>
+					<Collapse in={this.state.collapseOpen} timeout="auto" unmountOnExit>
+						<List component="div" disablePadding>
+							<ListItem button component="a" href={`/FragilityViewer`}
+									  className={classes.nested}>
+								<ListItemIcon><FragilityViewerIcon/></ListItemIcon>
+								<ListItemText primary="Fragility Viewer"/>
+							</ListItem>
+							<ListItem button component="a" href={`/DataViewer`}
+									  className={classes.nested}>
+								<ListItemIcon><DataViewerIcon/></ListItemIcon>
+								<ListItemText primary="Data Viewer"/>
+							</ListItem>
+							<ListItem button component="a" href={`/HazardViewer`}
+									  className={classes.nested}>
+								<ListItemIcon><HazardViewerIcon/></ListItemIcon>
+								<ListItemText primary="Hazard Viewer"/>
+							</ListItem>
+						</List>
+					</Collapse>
+				</List>
+			);
+		}
 
 		return (
 			<MuiThemeProvider theme={theme}>
@@ -271,6 +313,7 @@ class App extends Component {
 									onClick={this.toggleDrawer} className={classes.menuButton}>
 							{this.state.drawerOpen ? <CloseIcon fontSize="small"/> : <MenuIcon fontSize="small"/>}
 						</IconButton>
+						{home}
 						<Typography variant="body1" style={{flex: 1}}></Typography>
 						{contents}
 						{profileMenu}

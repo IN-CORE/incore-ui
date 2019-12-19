@@ -1,10 +1,13 @@
 import {connect} from "react-redux";
 import AppComponent from "../components/App";
 import {logout} from "../actions";
+import Cookies from 'universal-cookie';
+
+const cookies = new Cookies();
 
 const mapStateToProps = () => {
 	return{
-		user: sessionStorage.user
+		Authorization: cookies.get("Authorization")
 	};
 };
 

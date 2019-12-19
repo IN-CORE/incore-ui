@@ -1,11 +1,12 @@
 {
   "name": "incore-v2",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "The Interdependent Networked Community Resilience Modeling Environment (IN-CORE) has the capability of computing resiliency measures at the user-desired community level. The methodologies and algorithms have been developed by different research groups within the Center of Excellence.",
   "engines": {
     "npm": ">=3.10",
     "node": ">=6.9.5"
   },
+  "license": "MPL-2.0",
   "scripts": {
     "preinstall": "node tools/nodeVersionCheck.js",
     "start-message": "babel-node tools/startMessage.js",
@@ -48,6 +49,7 @@
     "redux": "~4.0.1",
     "redux-thunk": "~2.3.0",
     "shapefile": "0.6.2",
+    "universal-cookie": "^4.0.2",
     "vis": "4.18.1",
     "whatwg-fetch": "2.0.2",
     "xml2js": "0.4.17"

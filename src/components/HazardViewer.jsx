@@ -21,7 +21,6 @@ import {
 import SearchIcon from "@material-ui/icons/Search";
 import CloseIcon from "@material-ui/icons/Close";
 import Map from "./children/Map";
-import AuthNotification from "./children/AuthNotification";
 import NestedInfoTable from "./children/NestedInfoTable";
 import config from "../app.config";
 import Pagination from "./children/Pagination";
@@ -30,7 +29,9 @@ import Space from "./children/Space";
 import Version from "./children/Version";
 import {CopyToClipboard} from "react-copy-to-clipboard";
 import {createMuiTheme, withStyles} from "@material-ui/core/styles/index";
+import Cookies from 'universal-cookie';
 
+const cookies = new Cookies();
 
 const redundant_prop = ["privileges", "times"];
 
@@ -114,7 +115,6 @@ class HazardViewer extends Component {
 			registeredSearchText: "",
 			searching: false,
 			authError: false,
-			authLocationFrom: null,
 			offset: 0,
 			pageNumber: 1,
 			dataPerPage: 50,
@@ -136,14 +136,10 @@ class HazardViewer extends Component {
 
 	componentWillMount() {
 		// check if logged in
-		let user = sessionStorage.getItem("user");
-		let auth = sessionStorage.getItem("auth");
-		let location = sessionStorage.getItem("locationFrom");
+		let authorization = cookies.get("Authorization");
 
 		// logged in
-		if (user !== undefined && user !== "" && user !== null
-			&& auth !== undefined && auth !== "" && auth !== null) {
-
+		if (authorization !== undefined && authorization !== "" && authorization !== null) {
 			this.setState({
 				authError: false
 			}, function () {
@@ -155,7 +151,6 @@ class HazardViewer extends Component {
 		else {
 			this.setState({
 				authError: true,
-				authLocationFrom: location
 			});
 		}
 	}
@@ -163,7 +158,6 @@ class HazardViewer extends Component {
 	componentWillReceiveProps(nextProps) {
 		this.setState({
 			authError: nextProps.authError,
-			authLocationFrom: nextProps.locationFrom
 		});
 	}
 
@@ -319,7 +313,8 @@ class HazardViewer extends Component {
 				preview: true
 			});
 		}
-		else if (response.status === 403) {
+		else if (response.status === 401) {
+			cookies.remove("Authorization");
 			this.setState({
 				selectedHazardDatasetId: "",
 				boundingBox: [],
@@ -376,15 +371,8 @@ class HazardViewer extends Component {
 		}
 
 		if (this.state.authError) {
-			if (this.state.authLocationFrom !== undefined
-				&& this.state.authLocationFrom !== null
-				&& this.state.authLocationFrom.length > 0) {
-				return (<AuthNotification/>);
-			}
-			else {
-				browserHistory.push(`${config.urlPrefix}/login`);
-				return null;
-			}
+			browserHistory.push("/login?origin=HazardViewer");
+			return null;
 		}
 		else {
 			return (

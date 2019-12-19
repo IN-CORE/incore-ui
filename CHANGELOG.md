@@ -5,11 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased]
+## [0.3.3] - 2019-12-20
 
-### Fixed 
-- Renaming Dataset type field in MongoDBRepository
-  [INCORE-325](https://jira.ncsa.illinois.edu/browse/INCORE-325)
+IN-CORE Web tools for IN-CORE 1.0 release.
+
+## [0.3.2] - 2019-10-24
+
+## [0.3.1] - 2019-08-30
+
+## [0.3.0] - 2019-08-23
+
+## [0.2.0] - 2019-03-06
 
 ## [0.1.0] - 2018-01-24
 

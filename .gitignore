@@ -1,3 +1,6 @@
+# keycloak client secret
+keycloak.json
+
 # Logs
 logs
 *.log*
