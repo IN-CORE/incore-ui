@@ -211,7 +211,7 @@ class App extends Component {
 					</ListSubheader>
 				}>
 					<ListItem button component="a" key="about" href="/doc/incore/index.html" target="_blank">
-						<ListItemAvatar><Avatar src="/public/resilience-logo.png"/></ListItemAvatar>
+						<ListItemAvatar><Avatar src="/public/resilience-logo-icon.png"/></ListItemAvatar>
 						<ListItemText primary="IN-CORE Manual"/>
 					</ListItem>
 					<ListItem button component="a" key="pyIncore"
@@ -263,7 +263,7 @@ class App extends Component {
 					</ListSubheader>
 				}>
 					<ListItem button component="a" key="about" href="/doc/incore/index.html" target="_blank">
-						<ListItemAvatar><Avatar src="/public/resilience-logo.png"/></ListItemAvatar>
+						<ListItemAvatar><Avatar src="/public/resilience-logo-icon.png"/></ListItemAvatar>
 						<ListItemText primary="IN-CORE Manual"/>
 					</ListItem>
 					<ListItem button component="a" key="pyIncore"

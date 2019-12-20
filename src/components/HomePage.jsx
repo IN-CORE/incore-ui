@@ -7,19 +7,19 @@ import config from "../app.config";
 
 const styles = theme => ({
 	root: {
-		color: theme.palette.common.white,
+		color: theme.palette.primary,
 		position: "relative",
 		display: "flex",
 		alignItems: "center",
 		[theme.breakpoints.up("sm")]: {
-			height: "80vh",
-			minHeight: 500,
+			height: "60vh",
+			minHeight: 400,
 			maxHeight: 1300,
 		},
 	},
 	container: {
 		marginTop: theme.spacing(3),
-		marginBottom: theme.spacing(14),
+		marginBottom: theme.spacing(10),
 		display: "flex",
 		flexDirection: "column",
 		alignItems: "center",
@@ -30,17 +30,11 @@ const styles = theme => ({
 		right: 0,
 		top: 0,
 		bottom: 0,
-		backgroundColor: theme.palette.common.black,
 		opacity: 0.7,
 		zIndex: -1,
 	},
-	arrowDown: {
-		position: "absolute",
-		bottom: theme.spacing(4),
-	},
 	background: {
-		backgroundImage: "url('/public/resilience-logo.png')",
-		backgroundColor: "#7fc7d9",
+		backgroundColor: "#ffffff",
 		backgroundPosition: "center",
 		position: "absolute",
 		left: 0,
@@ -62,11 +56,8 @@ const styles = theme => ({
 		color: theme.palette.primary
 	},
 	h5: {
-		marginBottom: theme.spacing(4),
-		marginTop: theme.spacing(4),
-		[theme.breakpoints.up("sm")]: {
-			marginTop: theme.spacing(10),
-		},
+		marginBottom: theme.spacing(3),
+		marginTop: theme.spacing(3),
 	},
 	more: {
 		textAlign: "center",
@@ -146,7 +137,6 @@ const styles = theme => ({
 function HomePage(props) {
 
 	const {classes} = props;
-	const title = "IN-CORE";
 	const subTitle = "Run your scientific analyses that model the impact of natural hazards on a community and the \
 		resilience of those communities.";
 
@@ -190,7 +180,7 @@ function HomePage(props) {
 			url: "https://www.colostate.edu/"
 		},
 		{
-			image: "/public/resilience-logo-small.png",
+			image: "/public/resilience-logo.png",
 			url: "http://resilience.colostate.edu/"
 		},
 		{
@@ -208,9 +198,7 @@ function HomePage(props) {
 			{/*header*/}
 			<section className={classes.root}>
 				<Container className={classes.container}>
-					<Typography color="inherit" align="center" variant="h1" className={classes.h1} marked="center">
-						{title}
-					</Typography>
+						<img src="/public/resilience-logo.png"/>
 					<Typography color="inherit" align="center" variant="h5" className={classes.h5}>
 						{subTitle}
 					</Typography>
@@ -247,13 +235,6 @@ function HomePage(props) {
 					</Button>
 					<div className={classes.backdrop}/>
 					<div className={classes.background}/>
-					<img
-						className={classes.arrowDown}
-						src="/public/productHeroArrowDown.png"
-						height="18"
-						width="14"
-						alt="arrow down"
-					/>
 				</Container>
 			</section>
 			{/*products*/}
