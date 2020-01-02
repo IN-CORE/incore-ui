@@ -288,7 +288,7 @@ class HomePage extends Component {
 										<Typography variant="h6" className={classes.title}>
 											{section.title}
 										</Typography>
-										<SplitButton options={[section.version, "View Changelog", "View Documentations", "View Source Code"]}/>
+										<SplitButton name={section.title} options={[section.version, "View Changelog", "View Documentations", "View Source Code"]}/>
 										<Typography variant="body1" className={classes.content}>
 											{section.description}
 										</Typography>

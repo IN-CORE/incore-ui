@@ -1,6 +1,7 @@
 import React, {Component, useState, useRef} from "react";
-import { Grid, Button, ButtonGroup, Grow, Paper, Popper, MenuItem, MenuList, ClickAwayListener} from "@material-ui/core";
+import { Grid, Button, ButtonGroup, IconButton, Menu, Grow, Paper, Popper, MenuItem, MenuList, ClickAwayListener} from "@material-ui/core";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
+import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
 
 
 class SplitButton extends Component {
@@ -9,6 +10,7 @@ class SplitButton extends Component {
 		super(props);
 
 		this.state = {
+			selectedIndex: 0,
 			dropDownOpen: false,
 			anchorEl: null
 		};
@@ -20,76 +22,59 @@ class SplitButton extends Component {
 	}
 
 	handleClick() {
-		console.info(`You clicked ${options[selectedIndex]}`);
+		console.log(`You clicked ${this.props.options[this.state.selectedIndex]}`);
 	}
 
 	handleToggle(event) {
+		event.persist();
 		this.setState( prevState => ({
 			dropDownOpen: !prevState.dropDownOpen,
-			anchorEl: event.currentTarget
+			anchorEl: event.target
 		}));
-		console.log(this.state);
 	}
 
 	handleMenuItemClick(event, index){
-		setSelectedIndex(index);
-		setOpen(false);
+		this.setState({
+			selectedIndex: index,
+			dropDownOpen: false
+		});
 	}
 
-	handleClose(event) {
-		if (anchorRef.current && anchorRef.current.contains(event.target)) {
-			return;
-		}
-
-		setOpen(false);
+	handleClose() {
+		this.setState({
+			dropDownOpen: false
+		});
 	}
 
 	render() {
-		const selectedIndex = 0;
-
 		return (
 			<Grid container direction="column" alignItems="center">
 				<Grid item xs={12}>
-					<ButtonGroup variant="contained" color="primary" ref={this.state.anchorEl} aria-label="split button">
-						<Button onClick={this.handleClick}>{this.props.options[selectedIndex]}</Button>
-						<Button
-							color="primary"
-							size="small"
-							aria-controls={this.state.dropDownOpen ? "split-button-menu" : undefined}
-							aria-expanded={this.state.dropDownOpen ? "true" : undefined}
-							aria-haspopup="menu"
-							onClick={this.handleToggle}
-						>
+					<ButtonGroup variant="contained" color="primary">
+						<Button onClick={this.handleClick}>{this.props.options[this.state.selectedIndex]}</Button>
+						<IconButton value={this.props.name} color="primary" onClick={this.handleToggle}>
 							<ArrowDropDownIcon />
-						</Button>
+						</IconButton>
 					</ButtonGroup>
-					<Popper open={this.state.dropDownOpen} anchorEl={this.state.anchorEl} role={undefined} transition disablePortal>
-						{({ TransitionProps, placement }) => (
-							<Grow
-								{...TransitionProps}
-								style={{
-									transformOrigin: placement === "bottom" ? "center top" : "center bottom",
-								}}
+					<Menu
+						anchorEl = {this.state.anchorEl}
+						anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+						keepMounted
+						transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+						open={this.state.dropDownOpen}
+						onClose={this.handleClose}
+					>
+						{this.props.options.map((option, index) => (
+							<MenuItem
+								key={option}
+								disabled={index === 0}
+								selected={index === this.state.selectedIndex}
+								onClick={event => this.handleMenuItemClick(event, index)}
 							>
-								<Paper>
-									<ClickAwayListener onClickAway={this.handleClose}>
-										<MenuList id="split-button-menu">
-											{this.props.options.map((option, index) => (
-												<MenuItem
-													key={option}
-													disabled={index === 2}
-													selected={index === selectedIndex}
-													onClick={event => this.handleMenuItemClick(event, index)}
-												>
-													{option}
-												</MenuItem>
-											))}
-										</MenuList>
-									</ClickAwayListener>
-								</Paper>
-							</Grow>
-						)}
-					</Popper>
+								{option}
+							</MenuItem>
+						))}
+					</Menu>
 				</Grid>
 			</Grid>
 		);
