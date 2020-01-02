@@ -1,8 +1,9 @@
-import React from "react";
+import React, {Component} from "react";
 import {Button, Container, Grid, Typography} from "@material-ui/core";
 import {withStyles} from "@material-ui/core/styles";
 import Version from "./children/Version";
 import config from "../app.config";
+import {getRepoVersion} from "../actions/index";
 
 
 const styles = theme => ({
@@ -97,8 +98,8 @@ const styles = theme => ({
 		height: 100,
 	},
 	title: {
-		marginTop: theme.spacing(5),
-		marginBottom: theme.spacing(5),
+		marginTop: theme.spacing(4),
+		marginBottom: theme.spacing(4),
 	},
 	content: {
 		textAlign: "center",
@@ -133,156 +134,191 @@ const styles = theme => ({
 	},
 });
 
+class HomePage extends Component {
 
-function HomePage(props) {
+	constructor(props) {
+		super(props);
 
-	const {classes} = props;
-	const subTitle = "Run your scientific analyses that model the impact of natural hazards on a community and the \
-		resilience of those communities.";
+		this.state = {
+			sections: [],
+			subTitle: "",
+			pyincoreVersion: "",
+			footerLogos: []
+		};
+	}
 
-	// TODO: how to automatically update this field important!
-	const pyincoreVersion = `v${config.pyincoreVersion} RELEASED`;
-
-	const sections = [
-		{
-			title: "pyIncore",
-			image: "/public/python-logo.png",
-			description: "pyIncore is a Python package to analyze and visualize various hazard scenarios\
+	async componentDidMount() {
+		let sections = [
+			{
+				title: "pyIncore",
+				image: "/public/python-logo.png",
+				description: "pyIncore is a Python package to analyze and visualize various hazard scenarios\
 							developed by the Center for Risk-Based Community Resilience Planning team from NCSA. \
 							pyIncore allows users to apply hazards on infrastructure in selected areas.",
-		},
-		{
-			title: "Web Service API",
-			image: "/public/swagger-logo.png",
-			description: "IN-CORE currently maintains 4 different services: The Authentication Service supports secure LDAP authentication. \
+				version: await getRepoVersion("pyincore")
+			},
+			{
+				title: "pyIncore-viz",
+				image: "/public/python-logo.png",
+				description: "pyincore-viz is a Python project that provides visualization and other utilities for use\
+							with pyincore The development is part of NIST sponsored IN-CORE (Interdependent Networked\
+							Community Resilience Modeling Environment) initiative.",
+				version: await getRepoVersion("pyincore-viz")
+			},
+			{
+				title: "Web Service API",
+				image: "/public/swagger-logo.png",
+				description: "IN-CORE currently maintains 4 different services: The Authentication Service supports secure LDAP authentication. \
 						Data Service provides basic capabilities to fetch/store data from file storage. Fragility \
 						service that supports fragilities and fragility mapping.\
-						The Hazard Service supports creating model based or data based hazards."
-		},
-		{
-			title: "IN-CORE Lab",
-			image: "/public/jupyter-logo.png",
-			description: "IN-CORE Lab which is a customized JupyterLab deployed on JupyterHub, enables user to work with documents and writing code,\
+						The Hazard Service supports creating model based or data based hazards.",
+				version: await getRepoVersion("incore-services")
+			},
+			{
+				title: "IN-CORE Lab",
+				image: "/public/jupyter-logo.png",
+				description: "IN-CORE Lab which is a customized JupyterLab deployed on JupyterHub, enables user to work with documents and writing code,\
 						using Jupyter notebooks, text editors, terminals, and custom components in a flexible, integrated, and extensible manner.",
-		},
-		{
-			title: "Web Tools",
-			image: "/public/webapp-logo.png",
-			description: "The web application provides the user interface for interacting with the service layer.\
+				version: "placeholder"
+			},
+			{
+				title: "Web Tools",
+				image: "/public/webapp-logo.png",
+				description: "The web application provides the user interface for interacting with the service layer.\
 						It provides a login interface and enables browsing and searching the datasets, hazards and fragilities, \
-						viewing the metadata and visualizations, and downloading the datasets."
-		}
-	];
+						viewing the metadata and visualizations, and downloading the datasets.",
+				version: await getRepoVersion("incore-ui")
+			}
+		];
 
-	const footerLogos = [
-		{
-			image: "/public/CSU-logo.png",
-			url: "https://www.colostate.edu/"
-		},
-		{
-			image: "/public/resilience-logo.png",
-			url: "http://resilience.colostate.edu/"
-		},
-		{
-			image: "/public/UIUC-logo.png",
-			url: "https://illinois.edu/"
-		},
-		{
-			image: "/public/NCSA-logo.png",
-			url: "http://www.ncsa.illinois.edu/"
-		}
-	];
 
-	return (
-		<div>
-			{/*header*/}
-			<section className={classes.root}>
-				<Container className={classes.container}>
+		const subTitle = "Run your scientific analyses that model the impact of natural hazards on a community and the \
+		resilience of those communities.";
+
+		// TODO: how to automatically update this field important!
+		const pyincoreVersion = `v${config.pyincoreVersion} RELEASED`;
+
+		const footerLogos = [
+			{
+				image: "/public/CSU-logo.png",
+				url: "https://www.colostate.edu/"
+			},
+			{
+				image: "/public/resilience-logo.png",
+				url: "http://resilience.colostate.edu/"
+			},
+			{
+				image: "/public/UIUC-logo.png",
+				url: "https://illinois.edu/"
+			},
+			{
+				image: "/public/NCSA-logo.png",
+				url: "http://www.ncsa.illinois.edu/"
+			}
+		];
+
+		this.setState({
+			sections: sections,
+			subTitle: subTitle,
+			pyincoreVersion: pyincoreVersion,
+			footerLogos: footerLogos
+		});
+	}
+
+	render() {
+		const {classes} = this.props;
+		return (
+			<div>
+				{/*header*/}
+				<section className={classes.root}>
+					<Container className={classes.container}>
 						<img src="/public/resilience-logo.png"/>
-					<Typography color="inherit" align="center" variant="h5" className={classes.h5}>
-						{subTitle}
-					</Typography>
-					<Typography variant="body1" color="inherit" className={classes.more}>
-						The <a href="https://www.nist.gov" className={classes.link} target="_blank">National
-						Institute of Standards and
-						Technology (NIST)</a> funded the multi-university five-year <a
-						href="http://resilience.colostate.edu" className={classes.link} target="_blank">Center of
-						Excellence
-						for Risk-Based Community Resilience Planning (CoE)</a>, headquartered at <a
-						href="https://www.colostate.edu" className={classes.link} target="_blank">
-						Colorado State University</a>, to develop the measurement science to support community
-						resilience assessment.
-						Measurement science is implemented on a platform called <a
-						href="http://resilience.colostate.edu/in_core.shtml" className={classes.link}
-						target="_blank">
-						Interdependent Networked Community Resilience Modeling Environment (IN-CORE)</a>. On
-						IN-CORE,
-						users can run scientific analyses that model the impact of natural hazards and resiliency
-						against the impact on communities. The IN-CORE platform is built on a <a
-						href="https://kubernetes.io" className={classes.link} target="_blank">Kubernetes
-						cluster</a> with<a href="https://www.docker.com" className={classes.link}
-										   target="_blank"> Docker</a> container technology.
-					</Typography>
-					<Button
-						color="secondary"
-						variant="contained"
-						size="large"
-						className={classes.button}
-						component="a"
-						href="/doc/incore/install_pyincore.html"
-						target="_blank">
-						{pyincoreVersion}
-					</Button>
-					<div className={classes.backdrop}/>
-					<div className={classes.background}/>
-				</Container>
-			</section>
-			{/*products*/}
-			<section className={classes.sectionDark}>
-				<Container className={classes.sectionContainers}>
-					<Grid container spacing={3}>
-						{sections.map((section) =>
-							<Grid item xs={12} md={3}>
-								<div className={classes.item}>
-									<img className={classes.image}
-										 src={section.image}/>
-									<Typography variant="h6" className={classes.title}>
-										{section.title}
-									</Typography>
-									<Typography variant="body1" className={classes.content}>
-										{section.description}
-									</Typography>
-								</div>
-							</Grid>)
-						}
-					</Grid>
-				</Container>
-			</section>
-			{/*footer*/}
-			<section className={classes.footer}>
-				<Container className={classes.footerContainer}>
-					<Grid container spacing={5}>
-						{
-							footerLogos.map((footerLogo) =>
-								<Grid item xs={6} sm={3} md={3}>
-									<Grid container direction="column" justify="flex-end"
-										  className={classes.iconsWrapper}
-										  spacing={2}>
-										<Grid item className={classes.icons}>
-											<a href={footerLogo.url} target="_blank">
-												<img src={footerLogo.image} className={classes.icon}/>
-											</a>
-										</Grid>
-									</Grid>
+						<Typography color="inherit" align="center" variant="h5" className={classes.h5}>
+							{this.state.subTitle}
+						</Typography>
+						<Typography variant="body1" color="inherit" className={classes.more}>
+							The <a href="https://www.nist.gov" className={classes.link} target="_blank">National
+							Institute of Standards and
+							Technology (NIST)</a> funded the multi-university five-year <a
+							href="http://resilience.colostate.edu" className={classes.link} target="_blank">Center of
+							Excellence
+							for Risk-Based Community Resilience Planning (CoE)</a>, headquartered at <a
+							href="https://www.colostate.edu" className={classes.link} target="_blank">
+							Colorado State University</a>, to develop the measurement science to support community
+							resilience assessment.
+							Measurement science is implemented on a platform called <a
+							href="http://resilience.colostate.edu/in_core.shtml" className={classes.link}
+							target="_blank">
+							Interdependent Networked Community Resilience Modeling Environment (IN-CORE)</a>. On
+							IN-CORE,
+							users can run scientific analyses that model the impact of natural hazards and resiliency
+							against the impact on communities. The IN-CORE platform is built on a <a
+							href="https://kubernetes.io" className={classes.link} target="_blank">Kubernetes
+							cluster</a> with<a href="https://www.docker.com" className={classes.link}
+											   target="_blank"> Docker</a> container technology.
+						</Typography>
+						<Button
+							color="secondary"
+							variant="contained"
+							size="large"
+							className={classes.button}
+							component="a"
+							href="/doc/incore/install_pyincore.html"
+							target="_blank">
+							{this.state.pyincoreVersion}
+						</Button>
+						<div className={classes.backdrop}/>
+						<div className={classes.background}/>
+					</Container>
+				</section>
+				{/*products*/}
+				<section className={classes.sectionDark}>
+					<Container className={classes.sectionContainers}>
+						<Grid container spacing={4}>
+							{this.state.sections.map((section) =>
+								<Grid item xs={12} md={4}>
+									<div className={classes.item}>
+										<img className={classes.image}
+											 src={section.image}/>
+										<Typography variant="h6" className={classes.title}>
+											{section.title}
+										</Typography>
+										<a href="">{section.version}</a>
+										<Typography variant="body1" className={classes.content}>
+											{section.description}
+										</Typography>
+									</div>
 								</Grid>)
-						}
-					</Grid>
-				</Container>
-				{/*version*/}
-				<Version/>
-			</section>
-		</div>
-	);
+							}
+						</Grid>
+					</Container>
+				</section>
+				{/*footer*/}
+				<section className={classes.footer}>
+					<Container className={classes.footerContainer}>
+						<Grid container spacing={5}>
+							{
+								this.state.footerLogos.map((footerLogo) =>
+									<Grid item xs={6} sm={3} md={3}>
+										<Grid container direction="column" justify="flex-end"
+											  className={classes.iconsWrapper}
+											  spacing={2}>
+											<Grid item className={classes.icons}>
+												<a href={footerLogo.url} target="_blank">
+													<img src={footerLogo.image} className={classes.icon}/>
+												</a>
+											</Grid>
+										</Grid>
+									</Grid>)
+							}
+						</Grid>
+					</Container>
+					{/*version*/}
+					<Version/>
+				</section>
+			</div>
+		);
+	}
 
 }
 
