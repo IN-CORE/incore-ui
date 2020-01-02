@@ -1,5 +1,6 @@
 import React, {Component} from "react";
-import {Button, Container, Grid, Typography} from "@material-ui/core";
+import {Button, Container, Grid, Typography } from "@material-ui/core";
+import SplitButton from "./children/SplitButton";
 import {withStyles} from "@material-ui/core/styles";
 import Version from "./children/Version";
 import config from "../app.config";
@@ -143,7 +144,7 @@ class HomePage extends Component {
 			sections: [],
 			subTitle: "",
 			pyincoreVersion: "",
-			footerLogos: []
+			footerLogos: [],
 		};
 	}
 
@@ -227,6 +228,10 @@ class HomePage extends Component {
 
 	render() {
 		const {classes} = this.props;
+
+		// TODO put it somewhere else
+		const options = ['Create a merge commit', 'Squash and merge', 'Rebase and merge'];
+
 		return (
 			<div>
 				{/*header*/}
@@ -283,7 +288,7 @@ class HomePage extends Component {
 										<Typography variant="h6" className={classes.title}>
 											{section.title}
 										</Typography>
-										<a href="">{section.version}</a>
+										<SplitButton options={[section.version, "View Changelog", "View Documentations", "View Source Code"]}/>
 										<Typography variant="body1" className={classes.content}>
 											{section.description}
 										</Typography>
