@@ -144,7 +144,7 @@ class HomePage extends Component {
 		this.state = {
 			sections: [],
 			subTitle: "",
-			pyincoreVersion: "",
+			incoreVersion: "",
 			footerLogos: [],
 		};
 	}
@@ -217,7 +217,7 @@ class HomePage extends Component {
 		resilience of those communities.";
 
 		// TODO: how to automatically update this field important!
-		const pyincoreVersion = `v${config.pyincoreVersion} RELEASED`;
+		const incoreVersion = `IN-CORE ${await getRepoVersion("incore-docs")} RELEASED...`;
 
 		const footerLogos = [
 			{
@@ -241,7 +241,7 @@ class HomePage extends Component {
 		this.setState({
 			sections: sections,
 			subTitle: subTitle,
-			pyincoreVersion: pyincoreVersion,
+			incoreVersion: incoreVersion,
 			footerLogos: footerLogos
 		});
 	}
@@ -288,9 +288,9 @@ class HomePage extends Component {
 							size="large"
 							className={classes.button}
 							component="a"
-							href="/doc/incore/install_pyincore.html"
+							href="https://github.com/IN-CORE"
 							target="_blank">
-							{this.state.pyincoreVersion}
+							{this.state.incoreVersion}
 						</Button>
 						<div className={classes.backdrop}/>
 						<div className={classes.background}/>
