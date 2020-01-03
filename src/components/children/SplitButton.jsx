@@ -1,7 +1,9 @@
 import React, {Component} from "react";
 import {Button, ButtonGroup, Grid, IconButton, Menu, MenuItem} from "@material-ui/core";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
+import {withStyles} from "@material-ui/core/styles/index";
 
+const styles = theme => ({});
 
 class SplitButton extends Component {
 
@@ -53,10 +55,12 @@ class SplitButton extends Component {
 						{
 							this.state.selectedKey ?
 								<Button onClick={this.handleClick}
-										href={this.props.options[this.state.selectedKey]}>{this.state.selectedKey}</Button> :
-								<Button disabled>{this.props.version}</Button>
+										href={this.props.options[this.state.selectedKey]}
+										target="_blank" size="small">
+									{this.state.selectedKey}</Button> :
+								<Button size="small">{this.props.version}</Button>
 						}
-						<IconButton color="primary" onClick={this.handleToggle}>
+						<IconButton color="primary" size="small" onClick={this.handleToggle}>
 							<ArrowDropDownIcon/>
 						</IconButton>
 					</ButtonGroup>
@@ -84,4 +88,4 @@ class SplitButton extends Component {
 	}
 }
 
-export default SplitButton;
+export default withStyles(styles)(SplitButton);

@@ -99,10 +99,11 @@ const styles = theme => ({
 		height: 100,
 	},
 	title: {
-		marginTop: theme.spacing(4),
-		marginBottom: theme.spacing(4),
+		marginTop: theme.spacing(3),
 	},
 	content: {
+		marginTop: theme.spacing(3),
+		marginBottom: theme.spacing(3),
 		textAlign: "center",
 	},
 	footerContainer: {
@@ -159,8 +160,8 @@ class HomePage extends Component {
 				version: await getRepoVersion("pyincore"),
 				options:{
 					"conda package":"https://anaconda.org/in-core/pyincore",
-					"change log":"https://github.com/IN-CORE/pyincore/blob/master/changelog.md",
-					"source code":"https://github.com/IN-CORE/pyincore"
+					"view change log":"https://github.com/IN-CORE/pyincore/blob/master/CHANGELOG.md",
+					"view source code":"https://github.com/IN-CORE/pyincore"
 				}
 			},
 			{
@@ -172,8 +173,8 @@ class HomePage extends Component {
 				version: await getRepoVersion("pyincore-viz"),
 				options:{
 					"conda package":"https://anaconda.org/in-core/pyincore-viz",
-					"change log":"https://github.com/IN-CORE/pyincore-viz/blob/master/changelog.md",
-					"source code":"https://github.com/IN-CORE/pyincore-viz"
+					"view change log":"https://github.com/IN-CORE/pyincore-viz/blob/master/CHANGELOG.md",
+					"view source code":"https://github.com/IN-CORE/pyincore-viz"
 				}
 			},
 			{
@@ -185,8 +186,8 @@ class HomePage extends Component {
 						The Hazard Service supports creating model based or data based hazards.",
 				version: await getRepoVersion("incore-services"),
 				options:{
-					"change log":"https://github.com/IN-CORE/incore-services/blob/master/changelog.md",
-					"source code":"https://github.com/IN-CORE/incore-services"
+					"view change log":"https://github.com/IN-CORE/incore-services/blob/master/CHANGELOG.md",
+					"view source code":"https://github.com/IN-CORE/incore-services"
 				}
 			},
 			{
@@ -205,8 +206,8 @@ class HomePage extends Component {
 						viewing the metadata and visualizations, and downloading the datasets.",
 				version: await getRepoVersion("incore-ui"),
 				options:{
-					"change log":"https://github.com/IN-CORE/incore-ui/blob/master/changelog.md",
-					"source code":"https://github.com/IN-CORE/incore-ui"
+					"view change log":"https://github.com/IN-CORE/incore-ui/blob/master/CHANGELOG.md",
+					"view source code":"https://github.com/IN-CORE/incore-ui"
 				}
 			}
 		];
@@ -307,7 +308,9 @@ class HomePage extends Component {
 										<Typography variant="h6" className={classes.title}>
 											{section.title}
 										</Typography>
-										<SplitButton version={section.version} options={section.options}/>
+										<div className={classes.title}>
+											<SplitButton version={section.version} options={section.options}/>
+										</div>
 										<Typography variant="body1" className={classes.content}>
 											{section.description}
 										</Typography>
