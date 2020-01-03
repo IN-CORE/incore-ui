@@ -1,7 +1,6 @@
-import React, {Component, useState, useRef} from "react";
-import { Grid, Button, ButtonGroup, IconButton, Menu, Grow, Paper, Popper, MenuItem, MenuList, ClickAwayListener} from "@material-ui/core";
+import React, {Component} from "react";
+import {Button, ButtonGroup, Grid, IconButton, Menu, MenuItem} from "@material-ui/core";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
-import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
 
 
 class SplitButton extends Component {
@@ -10,7 +9,7 @@ class SplitButton extends Component {
 		super(props);
 
 		this.state = {
-			selectedIndex: 0,
+			selectedKey: "",
 			dropDownOpen: false,
 			anchorEl: null
 		};
@@ -22,20 +21,20 @@ class SplitButton extends Component {
 	}
 
 	handleClick() {
-		console.log(`You clicked ${this.props.options[this.state.selectedIndex]}`);
+		console.log(`You clicked ${this.props.options[this.state.selectedKey]}`);
 	}
 
 	handleToggle(event) {
 		event.persist();
-		this.setState( prevState => ({
+		this.setState(prevState => ({
 			dropDownOpen: !prevState.dropDownOpen,
 			anchorEl: event.target
 		}));
 	}
 
-	handleMenuItemClick(event, index){
+	handleMenuItemClick(event, index) {
 		this.setState({
-			selectedIndex: index,
+			selectedKey: Object.keys(this.props.options)[index],
 			dropDownOpen: false
 		});
 	}
@@ -51,24 +50,28 @@ class SplitButton extends Component {
 			<Grid container direction="column" alignItems="center">
 				<Grid item xs={12}>
 					<ButtonGroup variant="contained" color="primary">
-						<Button onClick={this.handleClick}>{this.props.options[this.state.selectedIndex]}</Button>
-						<IconButton value={this.props.name} color="primary" onClick={this.handleToggle}>
-							<ArrowDropDownIcon />
+						{
+							this.state.selectedKey ?
+								<Button onClick={this.handleClick}
+										href={this.props.options[this.state.selectedKey]}>{this.state.selectedKey}</Button> :
+								<Button disabled>{this.props.version}</Button>
+						}
+						<IconButton color="primary" onClick={this.handleToggle}>
+							<ArrowDropDownIcon/>
 						</IconButton>
 					</ButtonGroup>
 					<Menu
-						anchorEl = {this.state.anchorEl}
-						anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+						anchorEl={this.state.anchorEl}
+						anchorOrigin={{vertical: 'top', horizontal: 'right'}}
 						keepMounted
-						transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+						transformOrigin={{vertical: 'top', horizontal: 'right'}}
 						open={this.state.dropDownOpen}
 						onClose={this.handleClose}
 					>
-						{this.props.options.map((option, index) => (
+						{Object.keys(this.props.options).map((option, index) => (
 							<MenuItem
 								key={option}
-								disabled={index === 0}
-								selected={index === this.state.selectedIndex}
+								selected={option === this.state.selectedKey}
 								onClick={event => this.handleMenuItemClick(event, index)}
 							>
 								{option}

@@ -156,15 +156,25 @@ class HomePage extends Component {
 				description: "pyIncore is a Python package to analyze and visualize various hazard scenarios\
 							developed by the Center for Risk-Based Community Resilience Planning team from NCSA. \
 							pyIncore allows users to apply hazards on infrastructure in selected areas.",
-				version: await getRepoVersion("pyincore")
+				version: await getRepoVersion("pyincore"),
+				options:{
+					"conda package":"https://anaconda.org/in-core/pyincore",
+					"change log":"https://github.com/IN-CORE/pyincore/blob/master/changelog.md",
+					"source code":"https://github.com/IN-CORE/pyincore"
+				}
 			},
 			{
 				title: "pyIncore-viz",
 				image: "/public/python-logo.png",
 				description: "pyincore-viz is a Python project that provides visualization and other utilities for use\
-							with pyincore The development is part of NIST sponsored IN-CORE (Interdependent Networked\
+							with pyincore. The development is part of NIST sponsored IN-CORE (Interdependent Networked\
 							Community Resilience Modeling Environment) initiative.",
-				version: await getRepoVersion("pyincore-viz")
+				version: await getRepoVersion("pyincore-viz"),
+				options:{
+					"conda package":"https://anaconda.org/in-core/pyincore-viz",
+					"change log":"https://github.com/IN-CORE/pyincore-viz/blob/master/changelog.md",
+					"source code":"https://github.com/IN-CORE/pyincore-viz"
+				}
 			},
 			{
 				title: "Web Service API",
@@ -173,14 +183,19 @@ class HomePage extends Component {
 						Data Service provides basic capabilities to fetch/store data from file storage. Fragility \
 						service that supports fragilities and fragility mapping.\
 						The Hazard Service supports creating model based or data based hazards.",
-				version: await getRepoVersion("incore-services")
+				version: await getRepoVersion("incore-services"),
+				options:{
+					"change log":"https://github.com/IN-CORE/incore-services/blob/master/changelog.md",
+					"source code":"https://github.com/IN-CORE/incore-services"
+				}
 			},
 			{
 				title: "IN-CORE Lab",
 				image: "/public/jupyter-logo.png",
 				description: "IN-CORE Lab which is a customized JupyterLab deployed on JupyterHub, enables user to work with documents and writing code,\
 						using Jupyter notebooks, text editors, terminals, and custom components in a flexible, integrated, and extensible manner.",
-				version: "placeholder"
+				version: "placeholder",
+				options:{}
 			},
 			{
 				title: "Web Tools",
@@ -188,7 +203,11 @@ class HomePage extends Component {
 				description: "The web application provides the user interface for interacting with the service layer.\
 						It provides a login interface and enables browsing and searching the datasets, hazards and fragilities, \
 						viewing the metadata and visualizations, and downloading the datasets.",
-				version: await getRepoVersion("incore-ui")
+				version: await getRepoVersion("incore-ui"),
+				options:{
+					"change log":"https://github.com/IN-CORE/incore-ui/blob/master/changelog.md",
+					"source code":"https://github.com/IN-CORE/incore-ui"
+				}
 			}
 		];
 
@@ -288,7 +307,7 @@ class HomePage extends Component {
 										<Typography variant="h6" className={classes.title}>
 											{section.title}
 										</Typography>
-										<SplitButton name={section.title} options={[section.version, "View Changelog", "View Documentations", "View Source Code"]}/>
+										<SplitButton version={section.version} options={section.options}/>
 										<Typography variant="body1" className={classes.content}>
 											{section.description}
 										</Typography>
