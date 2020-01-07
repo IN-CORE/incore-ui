@@ -245,7 +245,7 @@ class HomePage extends Component {
 		resilience of those communities.";
 
 		// TODO: how to automatically update this field important!
-		const incoreVersion = `IN-CORE ${await getRepoVersion("incore-docs")} RELEASED...`;
+		const incoreVersion = `IN-CORE ${await getRepoVersion("incore-docs")} IS RELEASED INCLUDING`;
 
 		const footerLogos = [
 			{
