@@ -1,9 +1,7 @@
 import React, {Component} from "react";
-import {Button, Container, Grid, Typography } from "@material-ui/core";
-import SplitButton from "./children/SplitButton";
+import {Button, Chip, Container, Grid, Link, Typography} from "@material-ui/core";
 import {withStyles} from "@material-ui/core/styles";
 import Version from "./children/Version";
-import config from "../app.config";
 import {getRepoVersion} from "../actions/index";
 
 
@@ -14,7 +12,7 @@ const styles = theme => ({
 		display: "flex",
 		alignItems: "center",
 		[theme.breakpoints.up("sm")]: {
-			height: "60vh",
+			height: "70vh",
 			minHeight: 400,
 			maxHeight: 1300,
 		},
@@ -65,6 +63,18 @@ const styles = theme => ({
 		textAlign: "center",
 		marginTop: theme.spacing(2),
 	},
+	versionSection: {
+		margin: theme.spacing(0.5)
+	},
+	versionLine: {
+		margin: theme.spacing(1)
+	},
+	versioning: {
+		margin: theme.spacing(0.5),
+		fontSize: 14,
+		display: "inline",
+		fontWeight: "bold"
+	},
 	sectionDark: {
 		display: "flex",
 		overflow: "hidden",
@@ -100,6 +110,7 @@ const styles = theme => ({
 	},
 	title: {
 		marginTop: theme.spacing(3),
+		minHeight: theme.spacing(10),
 	},
 	content: {
 		marginTop: theme.spacing(3),
@@ -143,6 +154,7 @@ class HomePage extends Component {
 
 		this.state = {
 			sections: [],
+			versions: [],
 			subTitle: "",
 			incoreVersion: "",
 			footerLogos: [],
@@ -150,65 +162,81 @@ class HomePage extends Component {
 	}
 
 	async componentDidMount() {
-		let sections = [
+		let versions = [
 			{
 				title: "pyIncore",
-				image: "/public/python-logo.png",
-				description: "pyIncore is a Python package to analyze and visualize various hazard scenarios\
-							developed by the Center for Risk-Based Community Resilience Planning team from NCSA. \
-							pyIncore allows users to apply hazards on infrastructure in selected areas.",
 				version: await getRepoVersion("pyincore"),
-				options:{
-					"conda package":"https://anaconda.org/in-core/pyincore",
-					"view change log":"https://github.com/IN-CORE/pyincore/blob/master/CHANGELOG.md",
-					"view source code":"https://github.com/IN-CORE/pyincore"
+				options: {
+					"Change log": "https://github.com/IN-CORE/pyincore/blob/master/CHANGELOG.md",
+					"GitHub": "https://github.com/IN-CORE/pyincore",
+					"Conda package": "https://anaconda.org/in-core/pyincore",
 				}
 			},
 			{
 				title: "pyIncore-viz",
-				image: "/public/python-logo.png",
-				description: "pyincore-viz is a Python project that provides visualization and other utilities for use\
-							with pyincore. The development is part of NIST sponsored IN-CORE (Interdependent Networked\
-							Community Resilience Modeling Environment) initiative.",
 				version: await getRepoVersion("pyincore-viz"),
-				options:{
-					"conda package":"https://anaconda.org/in-core/pyincore-viz",
-					"view change log":"https://github.com/IN-CORE/pyincore-viz/blob/master/CHANGELOG.md",
-					"view source code":"https://github.com/IN-CORE/pyincore-viz"
+				options: {
+					"Change log": "https://github.com/IN-CORE/pyincore-viz/blob/master/CHANGELOG.md",
+					"GitHub": "https://github.com/IN-CORE/pyincore-viz",
+					"Conda package": "https://anaconda.org/in-core/pyincore-viz",
 				}
 			},
 			{
-				title: "Web Service API",
+				title: "Web Services",
+				version: await getRepoVersion("incore-services"),
+				options: {
+					"Change log": "https://github.com/IN-CORE/incore-services/blob/master/CHANGELOG.md",
+					"GitHub": "https://github.com/IN-CORE/incore-services"
+				}
+			},
+			{
+				title: "Web Tools",
+				version: await getRepoVersion("incore-ui"),
+				options: {
+					"Change log": "https://github.com/IN-CORE/incore-ui/blob/master/CHANGELOG.md",
+					"GitHub": "https://github.com/IN-CORE/incore-ui"
+				}
+			},
+			{
+				title: "IN-CORE Lab",
+				version: await getRepoVersion("incore-lab"),
+				options: {
+					"Change log": "https://github.com/IN-CORE/incore-lab/blob/develop/CHANGELOG.md",
+					"GitHub": "https://github.com/IN-CORE/incore-lab"
+				}
+			},
+		];
+
+		let sections = [
+			{
+				titles: ["pyIncore", "pyIncore-viz"],
+				image: "/public/python-logo.png",
+				description: "pyIncore is a component of IN-CORE. It is a python package that allows users to apply \
+						various hazards to infrastructure in selected areas, \
+		 				propagating the effect of physical infrastructure damage \
+						and loss of functionality to social and economic impacts. pyIncore-viz is a python package that \
+						provides visualization and other utilities for use with pyIncore."
+			},
+			{
+				titles: ["Web Service API"],
 				image: "/public/swagger-logo.png",
 				description: "IN-CORE currently maintains 4 different services: The Authentication Service supports secure LDAP authentication. \
 						Data Service provides basic capabilities to fetch/store data from file storage. Fragility \
 						service that supports fragilities and fragility mapping.\
 						The Hazard Service supports creating model based or data based hazards.",
-				version: await getRepoVersion("incore-services"),
-				options:{
-					"view change log":"https://github.com/IN-CORE/incore-services/blob/master/CHANGELOG.md",
-					"view source code":"https://github.com/IN-CORE/incore-services"
-				}
 			},
 			{
-				title: "IN-CORE Lab",
+				titles: ["IN-CORE Lab"],
 				image: "/public/jupyter-logo.png",
 				description: "IN-CORE Lab which is a customized JupyterLab deployed on JupyterHub, enables user to work with documents and writing code,\
 						using Jupyter notebooks, text editors, terminals, and custom components in a flexible, integrated, and extensible manner.",
-				version: "placeholder",
-				options:{}
 			},
 			{
-				title: "Web Tools",
+				titles: ["Web Tools"],
 				image: "/public/webapp-logo.png",
 				description: "The web application provides the user interface for interacting with the service layer.\
 						It provides a login interface and enables browsing and searching the datasets, hazards and fragilities, \
 						viewing the metadata and visualizations, and downloading the datasets.",
-				version: await getRepoVersion("incore-ui"),
-				options:{
-					"view change log":"https://github.com/IN-CORE/incore-ui/blob/master/CHANGELOG.md",
-					"view source code":"https://github.com/IN-CORE/incore-ui"
-				}
 			}
 		];
 
@@ -240,6 +268,7 @@ class HomePage extends Component {
 
 		this.setState({
 			sections: sections,
+			versions: versions,
 			subTitle: subTitle,
 			incoreVersion: incoreVersion,
 			footerLogos: footerLogos
@@ -292,24 +321,45 @@ class HomePage extends Component {
 							target="_blank">
 							{this.state.incoreVersion}
 						</Button>
+
+						{/*display versions*/}
+						<div className={classes.versionSection}>
+							{this.state.versions.map((version) =>
+								<div className={classes.versionLine}>
+									<Typography variant="body1" className={classes.versioning}>
+										{version.title}
+										<Chip size="small" color="primary" label={version.version}
+											  className={classes.versioning}/>
+										{Object.keys(version.options).map(
+											(option) =>
+												<Link color="primary" underline="always"
+													  className={classes.versioning} href={version.options[option]}
+													  target="_blank">{option}</Link>)
+										}
+									</Typography>
+								</div>)}
+						</div>
 						<div className={classes.backdrop}/>
 						<div className={classes.background}/>
 					</Container>
+				</section>
+				<section className={classes.sectionLight}>
 				</section>
 				{/*products*/}
 				<section className={classes.sectionDark}>
 					<Container className={classes.sectionContainers}>
 						<Grid container spacing={4}>
 							{this.state.sections.map((section) =>
-								<Grid item xs={12} md={4}>
+								<Grid item xs={12} md={3}>
 									<div className={classes.item}>
 										<img className={classes.image}
 											 src={section.image}/>
-										<Typography variant="h6" className={classes.title}>
-											{section.title}
-										</Typography>
 										<div className={classes.title}>
-											<SplitButton version={section.version} options={section.options}/>
+											{section.titles.map((title) =>
+												<Typography variant="h6">
+													{title}
+												</Typography>
+											)}
 										</div>
 										<Typography variant="body1" className={classes.content}>
 											{section.description}
