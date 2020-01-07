@@ -44,12 +44,12 @@ const styles = theme => ({
 		backgroundSize: "cover",
 		zIndex: -2,
 	},
-	button: {
+	releaseChip: {
 		minWidth: 200,
-		padding: 20,
+		padding: 25,
 		margin: theme.spacing(2),
 		color: "#ffffff",
-		fontWeight: "bold"
+		fontWeight: "bold",
 	},
 	h1: {
 		fontWeight: "bold",
@@ -311,17 +311,11 @@ class HomePage extends Component {
 							cluster</a> with<a href="https://www.docker.com" className={classes.link}
 											   target="_blank"> Docker</a> container technology.
 						</Typography>
-						<Button
+						<Chip
 							color="secondary"
-							variant="contained"
-							size="large"
-							className={classes.button}
-							component="a"
-							href="https://github.com/IN-CORE"
-							target="_blank">
-							{this.state.incoreVersion}
-						</Button>
-
+							size="medium"
+							className={classes.releaseChip}
+							label={this.state.incoreVersion} />
 						{/*display versions*/}
 						<div className={classes.versionSection}>
 							{this.state.versions.map((version) =>
