@@ -72,7 +72,7 @@ const styles = theme => ({
 	versioning: {
 		margin: theme.spacing(0.5),
 		fontSize: 14,
-		display: "inline",
+		// display: "inline",
 		fontWeight: "bold"
 	},
 	sectionDark: {
