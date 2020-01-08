@@ -5,8 +5,9 @@ RUN apt-get -qq update && \
   apt-get install -qq -y npm && \
   npm cache clean -f && \
   npm install -g npm && \
-  npm install -g n && n latest
+  npm install -g n && n latest  # curl is being used in here
 
+# the following line make the new installation of updated nodejs path
 RUN PATH="$PATH"
 
 COPY *.* /usr/share/nginx/html/incore-ui/
@@ -24,5 +25,3 @@ RUN cp -R dist/* /usr/share/nginx/html/. && \
   chmod -R 777 /usr/share/nginx/html/public
 
 COPY landing.conf /etc/nginx/conf.d/default.conf
-
-
