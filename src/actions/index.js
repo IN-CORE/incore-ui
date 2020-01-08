@@ -439,3 +439,14 @@ function getDatawolfHeader() {
 	});
 	return headers;
 }
+
+export async function getRepoVersion(repoName){
+
+	const endpoint = `https://api.github.com/repos/IN-CORE/${repoName}/tags`;
+	const versionRequest = await fetch(endpoint);
+	const version = await versionRequest.json();
+	const versionName = version[0].name;
+
+	return versionName;
+
+}
