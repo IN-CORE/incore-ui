@@ -19,7 +19,7 @@ const config = {
 	client_id: "react-auth",
 	pyIncoreDocUrl:"/doc/pyincore/index.html",
 	swaggerUrl:"/doc/api/",
-	webVersion:"0.3.3"
+	webVersion:"0.3.4"
 };
 
 export default config;
