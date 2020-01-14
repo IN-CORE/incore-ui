@@ -33,7 +33,7 @@
     "csv": "^2.0.0",
     "d3": "4.5.0",
     "handsontable": "^0.34.5",
-    "highcharts": "5.0.7",
+    "highcharts": "6.1.0",
     "jstat": "1.5.3",
     "mathjs": "^5.9.0",
     "object-assign": "4.1.1",
