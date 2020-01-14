@@ -1,7 +1,14 @@
 FROM nginx
 
-RUN apt-get -qq update && apt-get -qq install git && \
-  apt-get install -qq -y npm && npm update npm -g
+RUN apt-get -qq update && \
+  apt-get -qq -y install curl && \
+  apt-get install -qq -y npm && \
+  npm cache clean -f && \
+  npm install -g npm && \
+  npm install -g n && n latest  # curl is being used in here
+
+# the following line make the new installation of updated nodejs path
+RUN PATH="$PATH"
 
 COPY *.* /usr/share/nginx/html/incore-ui/
 COPY src /usr/share/nginx/html/incore-ui/src/
