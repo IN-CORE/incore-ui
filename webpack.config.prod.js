@@ -6,7 +6,7 @@ import WebpackMd5Hash from "webpack-md5-hash";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import autoprefixer from "autoprefixer";
 import path from "path";
-import UglifyJsPlugin from "uglifyjs-webpack-plugin";
+import TerserPlugin from "terser-webpack-plugin";
 
 
 export default {
@@ -70,9 +70,9 @@ export default {
 		// new webpack.optimize.DedupePlugin(),
 
 		// Minify JS
-		new UglifyJsPlugin({
+		new TerserPlugin({
 			sourceMap: true,
-			uglifyOptions: {
+			terserOptions: {
 				ecma:8,
 				compress: {
 					warnings: false
