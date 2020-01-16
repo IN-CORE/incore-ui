@@ -9,7 +9,7 @@ import { Router, browserHistory } from "react-router";
 import routes from "./routes";
 import configureStore from "./store/configureStore";
 
-// import "./styles/styles.scss";
+import "./styles/styles.scss";
 import { syncHistoryWithStore } from "react-router-redux";
 
 require("./public/favicon.ico");
