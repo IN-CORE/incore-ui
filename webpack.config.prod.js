@@ -94,7 +94,7 @@ export default {
 		})
 	],
 	module: {
-		loaders: [
+		rules: [
 			{test: /\.jsx?$/, exclude: /node_modules/, loader: "babel-loader"},
 			{test: /\.eot(\?v=\d+.\d+.\d+)?$/, loader: "url-loader?name=[name].[ext]"},
 			{

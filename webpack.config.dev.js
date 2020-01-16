@@ -53,7 +53,7 @@ export default {
 		})
 	],
 	module: {
-		loaders: [
+		rules: [
 			{test: /\.jsx?$/, exclude: /node_modules/, loaders: ["babel-loader"]},
 			{test: /\.eot(\?v=\d+.\d+.\d+)?$/, loader: "file-loader"},
 			{
