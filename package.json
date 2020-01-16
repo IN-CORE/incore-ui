@@ -99,7 +99,7 @@
 		"eslint-plugin-jsx-a11y": "3.0.2",
 		"eslint-plugin-react": "6.8.0",
 		"eslint-watch": "^6.0.1",
-		"extract-text-webpack-plugin": "beta",
+		"mini-css-extract-plugin": "^0.9.0",
 		"file-loader": "0.9.0",
 		"flow-bin": "0.38.0",
 		"html-webpack-plugin": "^3.2.0",
