@@ -497,7 +497,7 @@ class DFR3Viewer extends React.Component {
 													  className={classes.denseStyle}>Restoration</MenuItem>
 											<MenuItem value="repairs"
 													  key="repairs"
-													  className={classes.denseStyle}>Recovery</MenuItem>
+													  className={classes.denseStyle}>Repair</MenuItem>
 										</Select>
 									</div>
 									{/* Hazard Type */}
@@ -578,7 +578,7 @@ class DFR3Viewer extends React.Component {
 								  xl={this.state.selectedDFR3Curve ? 4 : 12} xs={12}>
 								<Paper variant="outlined" className={classes.main}>
 									<div className={classes.paperHeader}>
-										<Typography variant="subtitle1">{this.state.selectedDFR3Type} Curves</Typography>
+										<Typography variant="subtitle1">DFR3 Curves</Typography>
 									</div>
 									<GroupList id="DFR3Curve-list"
 											   onClick={this.onClickDFR3Curve}

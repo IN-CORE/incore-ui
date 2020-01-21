@@ -62,7 +62,7 @@ export function receiveDFR3Curves(type: string, json: DFR3Curves){
 	return (dispatch: Dispatch) =>{
 		dispatch({
 			type: type,
-			DFR3Curves: json,
+			dfr3Curves: json,
 			recievedAt: Date.now(),
 		});
 	};
