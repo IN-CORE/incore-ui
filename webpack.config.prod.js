@@ -10,6 +10,7 @@ import TerserPlugin from "terser-webpack-plugin";
 
 
 export default {
+	mode:"production",
 	resolve: {
 		extensions: [".js", ".jsx", ".json"]
 	},
