@@ -1,7 +1,5 @@
 import React, {Component} from "react";
 import config from "../../app.config";
-import {getHeader} from "../../actions/index";
-
 import OLMap from "ol/Map";
 import OLView from "ol/View";
 import TileLayer from "ol/layer/Tile";
@@ -22,7 +20,6 @@ async function fetchExtent(name: string) {
 	try {
 		const extentRequest = await fetch(`${config.geoServer}?SERVICE=WMS&REQUEST=GetCapabilities`,
 			{method: "GET", mode: "cors"});
-			// {method: "GET", mode: "cors", headers: getHeader()});
 		const text = await extentRequest.text();
 		let result = parser.read(text);
 		let extent = result.Capability.Layer.Layer.find(l => l.Name === name).EX_GeographicBoundingBox;
@@ -37,7 +34,7 @@ async function fetchExtent(name: string) {
 
 async function customLoader(tile, src) {
 
-	let response = await fetch(src, {method: "GET", mode: "cors", headers: getHeader()});
+	let response = await fetch(src, {method: "GET", mode: "cors"});
 	if (response.ok) {
 		let blob = await response.blob();
 		let urlCreator = window.URL || window.webkitURL;
