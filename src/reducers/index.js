@@ -11,7 +11,7 @@ const rootReducer = combineReducers({
 	data: datasets,
 	user: user,
 	hazard: hazards,
-	fragility: DFR3Curves,
+	DFR3Curve: DFR3Curves,
 	space: spaces
 });
 

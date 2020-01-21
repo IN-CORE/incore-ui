@@ -117,7 +117,7 @@ class DFR3Viewer extends React.Component {
 			searchText: "",
 			registeredSearchText: "",
 			searching: false,
-			chartConfig: chartConfig.FragilityConfig,
+			chartConfig: chartConfig.DFR3Config,
 			plotData3d: {},
 			authError: false,
 			spaces: [],
@@ -321,7 +321,7 @@ class DFR3Viewer extends React.Component {
 	}
 
 	generate2dPlotData(DFR3Curve) {
-		let updatedChartConfig = Object.assign({}, chartConfig.FragilityConfig);
+		let updatedChartConfig = Object.assign({}, chartConfig.DFR3Config);
 
 		let demandType = DFR3Curve.demandType !== null ? DFR3Curve.demandType : "";
 		let demandUnit = DFR3Curve.demandUnits !== null ? DFR3Curve.demandUnits : "";
@@ -578,7 +578,7 @@ class DFR3Viewer extends React.Component {
 								  xl={this.state.selectedDFR3Curve ? 4 : 12} xs={12}>
 								<Paper variant="outlined" className={classes.main}>
 									<div className={classes.paperHeader}>
-										<Typography variant="subtitle1">Fragility Curves</Typography>
+										<Typography variant="subtitle1">{this.state.selectedDFR3Type} Curves</Typography>
 									</div>
 									<GroupList id="DFR3Curve-list"
 											   onClick={this.onClickDFR3Curve}

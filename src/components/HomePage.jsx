@@ -221,8 +221,8 @@ class HomePage extends Component {
 				titles: ["Web Service API"],
 				image: "/public/swagger-logo.png",
 				description: "IN-CORE currently maintains 4 different services: The Authentication Service supports secure LDAP authentication. \
-						Data Service provides basic capabilities to fetch/store data from file storage. Fragility \
-						service that supports DFR3Curves and fragility mapping.\
+						Data Service provides basic capabilities to fetch/store data from file storage. DFR3 \
+						service that supports DFR3 curves and DFR3 mapping.\
 						The Hazard Service supports creating model based or data based hazards.",
 			},
 			{
