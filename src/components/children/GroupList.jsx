@@ -6,28 +6,32 @@ import ThreeDRotationIcon from "@material-ui/icons/ThreeDRotation";
 const GroupList = (props) => {
 	return (
 		<List component="nav" id={props.id} style={{"overflowY": "auto"}}>
-			{props.data.map(function (fragility) {
-				if (fragility.is3dPlot) {
+			{props.data.map(function (dfr3Curve) {
+				if (dfr3Curve.is3dPlot) {
 					return (
 						<ListItem button
-								  onClick={() => props.onClick(fragility)}
-								  selected={fragility === props.selectedDFR3Curve}>
+								  onClick={() => props.onClick(dfr3Curve)}
+								  selected={dfr3Curve === props.selectedDFR3Curve}
+								  key={dfr3Curve.id}
+						>
 							<Tooltip title="3D DFR3 Curves">
 								<ListItemIcon><ThreeDRotationIcon fontSize="small"/></ListItemIcon>
 							</Tooltip>
-							<ListItemText primary={getTitle(fragility)}/>
+							<ListItemText primary={getTitle(dfr3Curve)}/>
 						</ListItem>);
 
 				}
 				else {
 					return (
 						<ListItem button
-								  onClick={() => props.onClick(fragility)}
-								  selected={fragility === props.selectedDFR3Curve}>
+								  onClick={() => props.onClick(dfr3Curve)}
+								  selected={dfr3Curve === props.selectedDFR3Curve}
+								  key={dfr3Curve.id}
+						>
 							<Tooltip title="2D DFR3 Curves">
 								<ListItemIcon><ShowChartIcon fontSize="small"/></ListItemIcon>
 							</Tooltip>
-							<ListItemText primary={getTitle(fragility)}/>
+							<ListItemText primary={getTitle(dfr3Curve)}/>
 						</ListItem>);
 				}
 			})}
@@ -35,14 +39,14 @@ const GroupList = (props) => {
 	);
 };
 
-function getTitle(fragility) {
-	let title = fragility.authors.join(", ");
+function getTitle(dfr3Curve) {
+	let title = dfr3Curve.authors.join(", ");
 
-	if (fragility.paperReference !== null) {
-		title += ` (${fragility.paperReference.yearPublished})`;
+	if (dfr3Curve.paperReference !== null) {
+		title += ` (${dfr3Curve.paperReference.yearPublished})`;
 	}
 
-	title += ` - ${fragility.legacyId}`;
+	title += ` - ${dfr3Curve.legacyId}`;
 
 	return title;
 }

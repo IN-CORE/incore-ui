@@ -513,7 +513,7 @@ class DFR3Viewer extends React.Component {
 									<Typography variant="h6">Filters</Typography>
 									{/* select dfr3 curve type */}
 									<div className={classes.selectDiv}>
-										<InputLabel>DFR3 Curve Type</InputLabel>
+										<InputLabel>Curve Type</InputLabel>
 										<Select value={this.state.selectedDFR3Type} onChange={this.changeDFR3Type}
 												className={classes.select}>
 											<MenuItem value="fragilities" key="fragilities"
