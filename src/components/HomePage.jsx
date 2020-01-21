@@ -235,7 +235,7 @@ class HomePage extends Component {
 				titles: ["Web Tools"],
 				image: "/public/webapp-logo.png",
 				description: "The web application provides the user interface for interacting with the service layer.\
-						It provides a login interface and enables browsing and searching the datasets, hazards and DFR3Curves, \
+						It provides a login interface and enables browsing and searching the datasets, hazards and DFR3 Curves, \
 						viewing the metadata and visualizations, and downloading the datasets.",
 			}
 		];

@@ -454,7 +454,7 @@ class DFR3Viewer extends React.Component {
 		const {classes} = this.props;
 
 		// Curve list
-		let curve_list = this.props.DFR3Curves;
+		let curve_list = this.props.dfr3Curves;
 		let curvesWithInfo = [];
 		if (curve_list.length > 0) {
 			curve_list.map((DFR3Curve) => {

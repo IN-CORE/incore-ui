@@ -4,7 +4,7 @@ import {fetchDFR3Curves, fetchSpaces, searchDFR3Curves} from "../actions";
 
 const mapStateToProps = (state) => {
 	return {
-		DFR3Curves: state.DFR3Curve.DFR3Curves,
+		dfr3Curves: state.dfr3Curve.dfr3Curves,
 		spaces: state.space.spaces,
 		authError: state.user.loginError,
 	};
