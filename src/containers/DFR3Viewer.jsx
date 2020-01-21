@@ -1,10 +1,10 @@
 import {connect} from "react-redux";
-import FragilityViewerComponent from "../components/FragilityViewer";
+import DFR3ViewerComponent from "../components/DFR3Viewer";
 import {fetchDFR3Curves, fetchSpaces, searchDFR3Curves} from "../actions";
 
 const mapStateToProps = (state) => {
 	return {
-		fragilities: state.fragility.fragilities,
+		DFR3Curves: state.DFR3Curve.DFR3Curves,
 		spaces: state.space.spaces,
 		authError: state.user.loginError,
 	};
@@ -24,6 +24,6 @@ const mapDispatchToProps = (dispatch) => {
 	};
 };
 
-const FragilityViewer = connect(mapStateToProps, mapDispatchToProps)(FragilityViewerComponent);
+const DFR3Viewer = connect(mapStateToProps, mapDispatchToProps)(DFR3ViewerComponent);
 
-export default FragilityViewer;
+export default DFR3Viewer;

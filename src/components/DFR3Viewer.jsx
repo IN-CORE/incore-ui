@@ -103,7 +103,7 @@ const styles = {
 	}
 };
 
-class FragilityViewer extends React.Component {
+class DFR3Viewer extends React.Component {
 
 	constructor(props) {
 		super(props);
@@ -113,7 +113,7 @@ class FragilityViewer extends React.Component {
 			selectedInventory: "All",
 			selectedHazard: "All",
 			selectedSpace: "All",
-			selectedFragility: "",
+			selectedDFR3Curve: "",
 			searchText: "",
 			registeredSearchText: "",
 			searching: false,
@@ -129,7 +129,7 @@ class FragilityViewer extends React.Component {
 		};
 
 		this.changeDFR3Type = this.changeDFR3Type.bind(this);
-		this.onClickFragility = this.onClickFragility.bind(this);
+		this.onClickDFR3Curve = this.onClickDFR3Curve.bind(this);
 		this.handleInventorySelection = this.handleInventorySelection.bind(this);
 		this.handleHazardSelection = this.handleHazardSelection.bind(this);
 		this.setSearchState = this.setSearchState.bind(this);
@@ -177,7 +177,7 @@ class FragilityViewer extends React.Component {
 			searching: false,
 			searchText: "",
 			registeredSearchText: "",
-			selectedFragility: "",
+			selectedDFR3Curve: "",
 			selectedDFR3Type: event.target.value,
 			pageNumber: 1,
 			offset: 0
@@ -192,7 +192,7 @@ class FragilityViewer extends React.Component {
 			searching: false,
 			searchText: "",
 			registeredSearchText: "",
-			selectedFragility: "",
+			selectedDFR3Curve: "",
 			selectedInventory: event.target.value,
 			pageNumber: 1,
 			offset: 0
@@ -208,7 +208,7 @@ class FragilityViewer extends React.Component {
 			searching: false,
 			searchText: "",
 			registeredSearchText: "",
-			selectedFragility: "",
+			selectedDFR3Curve: "",
 			pageNumber: 1,
 			offset: 0
 		}, function () {
@@ -222,7 +222,7 @@ class FragilityViewer extends React.Component {
 			searching: false,
 			searchText: "",
 			registeredSearchText: "",
-			selectedFragility: "",
+			selectedDFR3Curve: "",
 			selectedHazard: event.target.value,
 			pageNumber: 1,
 			offset: 0
@@ -241,7 +241,7 @@ class FragilityViewer extends React.Component {
 			selectedInventory: "All",
 			selectedHazard: "All",
 			selectedSpace: "All",
-			selectedFragility: "",
+			selectedDFR3Curve: "",
 		});
 	}
 
@@ -258,20 +258,20 @@ class FragilityViewer extends React.Component {
 		this.props.searchAllDFR3Curves(this.state.selectedDFR3Type, this.state.registeredSearchText, this.state.dataPerPage, this.state.offset);
 	}
 
-	async onClickFragility(fragility) {
-		let is3dPlot = this.is3dFragility(fragility);
+	async onClickDFR3Curve(DFR3Curve) {
+		let is3dPlot = this.is3dCurve(DFR3Curve);
 		let plotData3d = {};
 		let plotConfig2d = {};
 		if (is3dPlot) {
-			plotData3d = await this.generate3dPlotData(fragility);
+			plotData3d = await this.generate3dPlotData(DFR3Curve);
 		} else {
-			plotConfig2d = this.generate2dPlotData(fragility);
+			plotConfig2d = this.generate2dPlotData(DFR3Curve);
 		}
 
 		this.setState({
 			chartConfig: plotConfig2d,
 			plotData3d: plotData3d,
-			selectedFragility: fragility
+			selectedDFR3Curve: DFR3Curve
 		});
 	}
 
@@ -279,7 +279,7 @@ class FragilityViewer extends React.Component {
 		this.setState({
 			offset: (this.state.pageNumber - 2) * this.state.dataPerPage,
 			pageNumber: this.state.pageNumber - 1,
-			selectedFragility: ""
+			selectedDFR3Curve: ""
 		}, function () {
 			if (this.state.registeredSearchText !== "" && this.state.searching) {
 				this.props.searchAllDFR3Curves(this.state.selectedDFR3Type, this.state.registeredSearchText, this.state.dataPerPage, this.state.offset);
@@ -295,7 +295,7 @@ class FragilityViewer extends React.Component {
 		this.setState({
 			offset: (this.state.pageNumber) * this.state.dataPerPage,
 			pageNumber: this.state.pageNumber + 1,
-			selectedFragility: ""
+			selectedDFR3Curve: ""
 		}, function () {
 			if (this.state.registeredSearchText !== "" && this.state.searching) {
 				this.props.searchAllDFR3Curves(this.state.selectedDFR3Type, this.state.registeredSearchText, this.state.dataPerPage, this.state.offset);
@@ -313,34 +313,48 @@ class FragilityViewer extends React.Component {
 			pageNumber: 1,
 			offset: 0,
 			dataPerPage: event.target.value,
-			selectedFragility: ""
+			selectedDFR3Curve: ""
 		}, function () {
 			this.props.getAllDFR3Curves(this.state.selectedDFR3Type, this.state.selectedSpace, this.state.selectedInventory,
 				this.state.selectedHazard, this.state.dataPerPage, this.state.offset);
 		});
 	}
 
-	generate2dPlotData(fragility) {
+	generate2dPlotData(DFR3Curve) {
 		let updatedChartConfig = Object.assign({}, chartConfig.FragilityConfig);
 
-		let demandType = fragility.demandType !== null ? fragility.demandType : "";
-		let demandUnit = fragility.demandUnits !== null ? fragility.demandUnits : "";
-		let description = fragility.description !== null ? fragility.description : "";
-		let authors = fragility.authors.join(", ");
+		let demandType = DFR3Curve.demandType !== null ? DFR3Curve.demandType : "";
+		let demandUnit = DFR3Curve.demandUnits !== null ? DFR3Curve.demandUnits : "";
+		let description = DFR3Curve.description !== null ? DFR3Curve.description : "";
+		let authors = DFR3Curve.authors.join(", ");
 
 		updatedChartConfig.xAxis.title.text = `${demandType} (${demandUnit})`;
 		updatedChartConfig.title.text = `${description} [${authors}]`;
 
 		updatedChartConfig.series = [];
 
-		for (let i = 0; i < fragility.fragilityCurves.length; i++) {
-			let curve = fragility.fragilityCurves[i];
+		let curves;
+		if ("fragilityCurves" in DFR3Curve) {
+			curves = DFR3Curve.fragilityCurves;
+		}
+		else if ("repairCurves" in DFR3Curve) {
+			curves = DFR3Curve.repairCurves;
+		}
+		else if ("restorationCurves" in DFR3Curve) {
+			curves = DFR3Curve.restorationCurves;
+		}
+		else{
+			curves = [];
+		}
+
+		for (let i = 0; i < curves.length; i++) {
+			let curve = curves[i];
 
 			let plotData;
 
-			if (curve.className.includes("CustomExpressionFragilityCurve")) {
+			if (curve.className.includes("CustomExpression")) {
 				plotData = chartSampler.computeExpressionSamples(0, 1.0, 90, curve.expression);
-			} else if (curve.className.includes("StandardFragilityCurve")) {
+			} else if (curve.className.includes("Standard")) {
 				plotData = chartSampler.sample(0, 0.999, 1000, curve.alphaType, curve.alpha, curve.beta)
 			}
 
@@ -355,24 +369,49 @@ class FragilityViewer extends React.Component {
 		return updatedChartConfig;
 	}
 
-	async generate3dPlotData(fragility) {
-		let curve = fragility.fragilityCurves[0];
+	async generate3dPlotData(DFR3Curve) {
+		let curves;
+		if ("fragilityCurves" in DFR3Curve) {
+			curves = DFR3Curve.fragilityCurves;
+		}
+		else if ("repairCurves" in DFR3Curve) {
+			curves = DFR3Curve.repairCurves;
+		}
+		else if ("restorationCurves" in DFR3Curve) {
+			curves = DFR3Curve.restorationCurves;
+		}
+		else{
+			curves = [];
+		}
+		let curve = curves[0];
 		let plotData = await chartSampler.computeExpressionSamples3d(0.001, 1.0, 50, 0.001, 1.0, 50, curve.expression);
 
-		let description = fragility.description !== null ? fragility.description : "";
-		let authors = fragility.authors.join(", ");
+		let description = DFR3Curve.description !== null ? DFR3Curve.description : "";
+		let authors = DFR3Curve.authors.join(", ");
 		let title = `${description} [${authors}]`;
 
 		return {"data": plotData, "title": title};
 	}
 
-	is3dFragility(fragility) {
-		let curves = fragility.fragilityCurves;
+	is3dCurve(DFR3Curve) {
+		let curves;
+		if ("fragilityCurves" in DFR3Curve) {
+			curves = DFR3Curve.fragilityCurves;
+		}
+		else if ("repairCurves" in DFR3Curve) {
+			curves = DFR3Curve.repairCurves;
+		}
+		else if ("restorationCurves" in DFR3Curve) {
+			curves = DFR3Curve.restorationCurves;
+		}
+		else{
+			curves = [];
+		}
 
 		for (let i = 0; i < curves.length; i++) {
 			let curve = curves[i];
 
-			if (curve.className.includes("CustomExpressionFragilityCurve") && curve.expression.includes("y")) {
+			if (curve.className.includes("CustomExpression") && curve.expression.includes("y")) {
 				return true;
 			}
 		}
@@ -381,10 +420,10 @@ class FragilityViewer extends React.Component {
 	}
 
 	exportJson() {
-		let fragilityJSON = JSON.stringify(this.state.selectedFragility, null, 4);
-		let blob = new Blob([fragilityJSON], {type: "application/json"});
+		let curveJSON = JSON.stringify(this.state.selectedDFR3Curve, null, 4);
+		let blob = new Blob([curveJSON], {type: "application/json"});
 
-		const filename = `${this.state.selectedFragility.id}.json`;
+		const filename = `${this.state.selectedDFR3Curve.id}.json`;
 
 		if (window.navigator.msSaveOrOpenBlob) {
 			window.navigator.msSaveBlob(blob, filename);
@@ -414,28 +453,28 @@ class FragilityViewer extends React.Component {
 
 		const {classes} = this.props;
 
-		// Fragility list
-		let fragility_list = this.props.fragilities;
-		let fragilitiesWithInfo = [];
-		if (fragility_list.length > 0) {
-			fragility_list.map((fragility) => {
-				fragility["is3dPlot"] = this.is3dFragility(fragility);
-				fragilitiesWithInfo.push(fragility);
+		// Curve list
+		let curve_list = this.props.DFR3Curves;
+		let curvesWithInfo = [];
+		if (curve_list.length > 0) {
+			curve_list.map((DFR3Curve) => {
+				DFR3Curve["is3dPlot"] = this.is3dCurve(DFR3Curve);
+				curvesWithInfo.push(DFR3Curve);
 			});
 		}
 
-		// selected Fragilities
-		let selected_fragility_detail = {};
-		if (this.state.selectedFragility) {
-			for (let item in this.state.selectedFragility) {
+		// selected Curves
+		let selected_curve_detail = {};
+		if (this.state.selectedDFR3Curve) {
+			for (let item in this.state.selectedDFR3Curve) {
 				if (redundant_prop.indexOf(item) === -1) {
-					selected_fragility_detail[item] = this.state.selectedFragility[item];
+					selected_curve_detail[item] = this.state.selectedDFR3Curve[item];
 				}
 			}
 		}
 
 		if (this.state.authError) {
-			browserHistory.push("/login?origin=FragilityViewer");
+			browserHistory.push("/login?origin=DFR3Viewer");
 			return null;
 		}
 		else {
@@ -534,20 +573,20 @@ class FragilityViewer extends React.Component {
 							</Grid>
 
 							{/*lists*/}
-							<Grid item lg={this.state.selectedFragility ? 4 : 12}
-								  md={this.state.selectedFragility ? 4 : 12}
-								  xl={this.state.selectedFragility ? 4 : 12} xs={12}>
+							<Grid item lg={this.state.selectedDFR3Curve ? 4 : 12}
+								  md={this.state.selectedDFR3Curve ? 4 : 12}
+								  xl={this.state.selectedDFR3Curve ? 4 : 12} xs={12}>
 								<Paper variant="outlined" className={classes.main}>
 									<div className={classes.paperHeader}>
 										<Typography variant="subtitle1">Fragility Curves</Typography>
 									</div>
-									<GroupList id="fragility-list"
-											   onClick={this.onClickFragility}
-											   data={fragilitiesWithInfo} displayField="author"
-											   selectedFragility={this.state.selectedFragility}/>
+									<GroupList id="DFR3Curve-list"
+											   onClick={this.onClickDFR3Curve}
+											   data={curvesWithInfo} displayField="author"
+											   selectedDFR3Curve={this.state.selectedDFR3Curve}/>
 									<div className={classes.paperFooter}>
 										<Pagination pageNumber={this.state.pageNumber}
-													data={fragilitiesWithInfo}
+													data={curvesWithInfo}
 													dataPerPage={this.state.dataPerPage}
 													previous={this.previous}
 													next={this.next}/>
@@ -557,9 +596,9 @@ class FragilityViewer extends React.Component {
 
 							{/* Metadata */}
 							<Grid item lg={8} md={8} xl={8} xs={12}
-								  className={this.state.selectedFragility ? null : classes.hide}>
+								  className={this.state.selectedDFR3Curve ? null : classes.hide}>
 								<Paper variant="outlined" className={classes.main}>
-									{Object.keys(selected_fragility_detail).length > 0 ?
+									{Object.keys(selected_curve_detail).length > 0 ?
 										<div>
 											<div className={classes.paperHeader}>
 												<Typography variant="subtitle1">Metadata</Typography>
@@ -575,7 +614,7 @@ class FragilityViewer extends React.Component {
 														className={classes.inlineButtons}
 														size="small"
 														onClick={this.preview}>Preview</Button>
-												<CopyToClipboard text={this.state.selectedFragility.id}>
+												<CopyToClipboard text={this.state.selectedDFR3Curve.id}>
 													<Button color="secondary" variant="contained"
 															className={classes.inlineButtons}
 															size="small">Copy
@@ -583,7 +622,7 @@ class FragilityViewer extends React.Component {
 												</CopyToClipboard>
 											</div>
 											<div className={classes.metadata}>
-												<NestedInfoTable data={selected_fragility_detail}/>
+												<NestedInfoTable data={selected_curve_detail}/>
 											</div>
 										</div>
 										:
@@ -597,7 +636,7 @@ class FragilityViewer extends React.Component {
 					</div>
 
 					{/* Preview */}
-					{this.state.selectedFragility ?
+					{this.state.selectedDFR3Curve ?
 						<Dialog open={this.state.preview} onClose={this.handlePreviewerClose} maxWidth="lg" fullWidth
 								scroll="paper">
 							<DialogContent className={classes.preview}>
@@ -605,21 +644,21 @@ class FragilityViewer extends React.Component {
 											className={classes.previewClose}>
 									<CloseIcon fontSize="small"/>
 								</IconButton>
-								{this.state.selectedFragility.is3dPlot ?
+								{this.state.selectedDFR3Curve.is3dPlot ?
 									<div>
 										<Typography variant="h6">{this.state.plotData3d.title}</Typography>
 										<ThreeDimensionalPlot plotId="3dplot" data={this.state.plotData3d.data}
-															  xLabel={this.state.selectedFragility.demandType}
+															  xLabel={this.state.selectedDFR3Curve.demandType}
 															  yLabel="Y"
-															  zLabel={this.state.selectedFragility.fragilityCurves[0].description}
+															  zLabel={this.state.selectedDFR3Curve.fragilityCurves[0].description}
 															  width="100%" height="350px" style="surface"/>
 									</div>
 									:
 									<LineChart chartId="chart" configuration={this.state.chartConfig}/>}
-								{this.state.selectedFragility.fragilityCurves[0].className.includes("CustomExpressionFragilityCurve") ?
-									<CustomExpressionTable fragility={this.state.selectedFragility}/>
+								{this.state.selectedDFR3Curve.fragilityCurves[0].className.includes("CustomExpression") ?
+									<CustomExpressionTable DFR3Curve={this.state.selectedDFR3Curve}/>
 									:
-									<DistributionTable fragility={this.state.selectedFragility}/>}
+									<DistributionTable DFR3Curve={this.state.selectedDFR3Curve}/>}
 							</DialogContent>
 						</Dialog>
 						:
@@ -632,4 +671,4 @@ class FragilityViewer extends React.Component {
 }
 
 
-export default withStyles(styles)(FragilityViewer);
+export default withStyles(styles)(DFR3Viewer);

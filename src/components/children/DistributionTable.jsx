@@ -15,16 +15,16 @@ class DistributionTable extends React.Component {
 				<TableHead>
 					<TableRow>
 						<TableCell colSpan={3}>
-							{this.props.fragility.id}
+							{this.props.DFR3Curve.id}
 						</TableCell>
 					</TableRow>
 					<TableRow>
 						<TableCell>Limit State</TableCell>
 						<TableCell>Alpha/
 							{
-							this.props.fragility.fragilityCurves[0].alphaType?
-								this.props.fragility.fragilityCurves[0].alphaType[0].toUpperCase()
-								+ this.props.fragility.fragilityCurves[0].alphaType.slice(1)
+							this.props.DFR3Curve.fragilityCurves[0].alphaType?
+								this.props.DFR3Curve.fragilityCurves[0].alphaType[0].toUpperCase()
+								+ this.props.DFR3Curve.fragilityCurves[0].alphaType.slice(1)
 								:
 								''
 							}</TableCell>
@@ -32,7 +32,7 @@ class DistributionTable extends React.Component {
 					</TableRow>
 				</TableHead>
 				<TableBody displayRowCheckbox={false}>
-					{this.props.fragility.fragilityCurves.map(function (curve) {
+					{this.props.DFR3Curve.fragilityCurves.map(function (curve) {
 						return (
 							<TableRow>
 								<TableCell>{curve.description}</TableCell>

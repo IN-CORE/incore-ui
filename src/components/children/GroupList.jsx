@@ -11,8 +11,8 @@ const GroupList = (props) => {
 					return (
 						<ListItem button
 								  onClick={() => props.onClick(fragility)}
-								  selected={fragility === props.selectedFragility}>
-							<Tooltip title="3D Fragility Curves">
+								  selected={fragility === props.selectedDFR3Curve}>
+							<Tooltip title="3D DFR3 Curves">
 								<ListItemIcon><ThreeDRotationIcon fontSize="small"/></ListItemIcon>
 							</Tooltip>
 							<ListItemText primary={getTitle(fragility)}/>
@@ -23,8 +23,8 @@ const GroupList = (props) => {
 					return (
 						<ListItem button
 								  onClick={() => props.onClick(fragility)}
-								  selected={fragility === props.selectedFragility}>
-							<Tooltip title="2D Fragility Curves">
+								  selected={fragility === props.selectedDFR3Curve}>
+							<Tooltip title="2D DFR3 Curves">
 								<ListItemIcon><ShowChartIcon fontSize="small"/></ListItemIcon>
 							</Tooltip>
 							<ListItemText primary={getTitle(fragility)}/>

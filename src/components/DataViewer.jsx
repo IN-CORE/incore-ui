@@ -135,6 +135,7 @@ class DataViewer extends Component {
 			pageNumber: 1,
 			dataPerPage: 50,
 		};
+
 		this.changeDatasetType = this.changeDatasetType.bind(this);
 		this.onClickDataset = this.onClickDataset.bind(this);
 		this.setSearchState = this.setSearchState.bind(this);
@@ -468,7 +469,7 @@ class DataViewer extends Component {
 					return (<ListItem button
 									  onClick={() => this.onClickDataset(dataset.id)}
 									  selected={dataset.id === this.state.selectedDataset.id}>
-						<Tooltip title="Fragilities">
+						<Tooltip title="DFR3Curves">
 							<ListItemIcon><ChartIcon fontSize="small"/></ListItemIcon>
 						</Tooltip>
 						<ListItemText primary={`${dataset.title  } - ${  dataset.creator.capitalize()}`}/>

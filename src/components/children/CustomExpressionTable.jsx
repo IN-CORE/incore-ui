@@ -14,8 +14,8 @@ class CustomExpressionTable extends React.Component {
 			<Table>
 				<TableHead>
 					<TableRow>
-						<TableCell colSpan="2" tooltip="Fragility GUID" style={{textAlign: "center"}}>
-							{this.props.fragility.id}
+						<TableCell colSpan="2" tooltip="DFR3Curve GUID" style={{textAlign: "center"}}>
+							{this.props.DFR3Curve.id}
 						</TableCell>
 					</TableRow>
 					<TableRow>
@@ -24,7 +24,7 @@ class CustomExpressionTable extends React.Component {
 					</TableRow>
 				</TableHead>
 				<TableBody displayRowCheckbox={false}>
-					{this.props.fragility.fragilityCurves.map(function (curve) {
+					{this.props.DFR3Curve.fragilityCurves.map(function (curve) {
 						return (
 							<TableRow>
 								<TableCell>{curve.description}</TableCell>

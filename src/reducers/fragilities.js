@@ -1,19 +1,19 @@
 import {RECEIVE_DFR3_CURVES} from "../actions";
-import {FragilityState, Fragility} from "../utils/flowtype";
+import {DFR3CurvesState, DFR3Curves} from "../utils/flowtype";
 
-type FragilityAction = {
+type DFR3Action = {
 	type: RECEIVE_DFR3_CURVES,
-	fragilities: Fragility[]
+	DFR3Curves: DFR3Curve[]
 }
-const defaultState = {fragilities: []};
+const defaultState = {DFR3Curves: []};
 
-const fragilities = (state: FragilityState = defaultState, action: FragilityAction) => {
+const DFR3Curves = (state: DFR3CurvesState = defaultState, action: DFR3Action) => {
 	switch(action.type) {
 	case RECEIVE_DFR3_CURVES:
-		return Object.assign({}, state, {fragilities: action.fragilities});
+		return Object.assign({}, state, {DFR3Curves: action.DFR3Curves});
 	default:
 		return state;
 	}
 };
 
-export default fragilities;
+export default DFR3Curves;

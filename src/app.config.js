@@ -5,7 +5,7 @@ let apiurl = `${apiprotocol}://${apihost}`;
 const config = {
 	spaceService:`${apiurl}/space/api/spaces`,
 	dfr3Service:`${apiurl}/dfr3/api/`,
-	fragilityServiceBase: `${apiurl}/dfr3/api/`,
+	DFR3ServiceBase: `${apiurl}/dfr3/api/`,
 	semanticService: "",
 	hazardServiceBase: `${apiurl}/hazard/api/`,
 	maestroService: `${apiurl}/maestro`,
