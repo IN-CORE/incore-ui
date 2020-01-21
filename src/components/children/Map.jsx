@@ -10,6 +10,8 @@ import OSM from "ol/source/OSM";
 import WMSCapabilities from "ol/format/WMSCapabilities";
 import Projection from "ol/proj/Projection";
 
+require("ol/ol.css");
+
 let tileAttribution = "Tiles © <a href=\"https://services.arcgisonline.com/ArcGIS/" +
 	"rest/services/NatGeo_World_Map/MapServer\">ArcGIS</a> &mdash; National Geographic, Esri, DeLorme, NAVTEQ, " +
 	"UNEP-WCMC, USGS, NASA, ESA, METI, NRCAN, GEBCO, NOAA, iPC";
