@@ -577,7 +577,7 @@ class DFR3Viewer extends React.Component {
 							</Grid>
 							<Grid item lg={4} sm={4} xl={4} xs={12}>
 								<Paper variant="outlined" className={classes.filter}>
-									<Typography variant="h6">Search all</Typography>
+									<Typography variant="h6">Search all {this.state.selectedDFR3Type}</Typography>
 									<TextField variant="outlined" label="Search"
 											   onKeyPress={this.handleKeyPressed}
 											   value={this.state.searchText}
