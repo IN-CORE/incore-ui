@@ -37,7 +37,6 @@ export default {
 		new webpack.DefinePlugin({
 			"process.env": {
 				"NODE_ENV": JSON.stringify("production"),
-				// "basePath": JSON.stringify("/incore")
 				"basePath": JSON.stringify("/")
 			},
 			__DEV__: false
@@ -67,20 +66,6 @@ export default {
 			trackJSToken: ""
 		}),
 
-		// Eliminate duplicate packages when generating bundle
-		// new webpack.optimize.DedupePlugin(),
-
-		// Minify JS
-		new TerserPlugin({
-			sourceMap: true,
-			terserOptions: {
-				ecma:8,
-				compress: {
-					warnings: false
-				}
-			}
-		}),
-
 		new webpack.LoaderOptionsPlugin({
 			debug: true,
 			options: {
@@ -96,7 +81,7 @@ export default {
 	],
 	module: {
 		rules: [
-			{test: /\.jsx?$/, exclude: /node_modules/, loader: "babel-loader"},
+			{test: /\.jsx?$/, exclude: /node_modules/, loaders:["babel-loader"]},
 			{test: /\.eot(\?v=\d+.\d+.\d+)?$/, loader: "url-loader?name=[name].[ext]"},
 			{
 				test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
@@ -116,13 +101,23 @@ export default {
 				test: /(\.css|\.scss)$/,
 				use: [
 					MiniCssExtractPlugin.loader,
-					"css-loader",
-					"postcss-loader",
-					"sass-loader"
+					{ loader: 'css-loader', options: { sourceMap: true } },
+					{ loader: 'postcss-loader', options: { plugins: () => [require('autoprefixer')] } },
+					{ loader: 'sass-loader', options: { sourceMap: true } }
 				]
-				// loader: MiniCssExtractPlugin.extract("css-loader?sourceMap!postcss-loader!sass-loader?sourceMap")
 			},
 			{test: /\.json$/, loader: "json-loader"}
 		]
+	},
+	optimization:{
+		minimizer: [new TerserPlugin({
+			sourceMap: true,
+			terserOptions: {
+				ecma:8,
+				compress: {
+					warnings: false
+				}
+			}
+		})],
 	}
 };
