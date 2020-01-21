@@ -419,6 +419,31 @@ class DFR3Viewer extends React.Component {
 		return false;
 	}
 
+	isCustomExpression(DFR3Curve){
+		let curves;
+		if ("fragilityCurves" in DFR3Curve) {
+			curves = DFR3Curve.fragilityCurves;
+		}
+		else if ("repairCurves" in DFR3Curve) {
+			curves = DFR3Curve.repairCurves;
+		}
+		else if ("restorationCurves" in DFR3Curve) {
+			curves = DFR3Curve.restorationCurves;
+		}
+		else{
+			curves = [];
+		}
+		for (let i = 0; i < curves.length; i++) {
+			let curve = curves[i];
+
+			if (curve.className.includes("CustomExpression")) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	exportJson() {
 		let curveJSON = JSON.stringify(this.state.selectedDFR3Curve, null, 4);
 		let blob = new Blob([curveJSON], {type: "application/json"});
@@ -650,15 +675,15 @@ class DFR3Viewer extends React.Component {
 										<ThreeDimensionalPlot plotId="3dplot" data={this.state.plotData3d.data}
 															  xLabel={this.state.selectedDFR3Curve.demandType}
 															  yLabel="Y"
-															  zLabel={this.state.selectedDFR3Curve.fragilityCurves[0].description}
+															  // zLabel={this.state.selectedDFR3Curve.fragilityCurves[0].description}
 															  width="100%" height="350px" style="surface"/>
 									</div>
 									:
 									<LineChart chartId="chart" configuration={this.state.chartConfig}/>}
-								{this.state.selectedDFR3Curve.fragilityCurves[0].className.includes("CustomExpression") ?
-									<CustomExpressionTable DFR3Curve={this.state.selectedDFR3Curve}/>
+								{this.isCustomExpression(this.state.selectedDFR3Curve) ?
+									<CustomExpressionTable dfr3Curve={this.state.selectedDFR3Curve}/>
 									:
-									<DistributionTable DFR3Curve={this.state.selectedDFR3Curve}/>}
+									<DistributionTable dfr3Curve={this.state.selectedDFR3Curve}/>}
 							</DialogContent>
 						</Dialog>
 						:

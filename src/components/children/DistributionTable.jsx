@@ -10,21 +10,35 @@ class DistributionTable extends React.Component {
 	}
 
 	render() {
+		let curves;
+		if ("fragilityCurves" in this.props.dfr3Curve) {
+			curves = this.props.dfr3Curve.fragilityCurves;
+		}
+		else if ("repairCurves" in this.props.dfr3Curve) {
+			curves = this.props.dfr3Curve.repairCurves;
+		}
+		else if ("restorationCurves" in this.props.dfr3Curve) {
+			curves = this.props.dfr3Curve.restorationCurves;
+		}
+		else{
+			curves = [];
+		}
+
 		return (
 			<Table>
 				<TableHead>
 					<TableRow>
 						<TableCell colSpan={3}>
-							{this.props.DFR3Curve.id}
+							{this.props.dfr3Curve.id}
 						</TableCell>
 					</TableRow>
 					<TableRow>
 						<TableCell>Limit State</TableCell>
 						<TableCell>Alpha/
 							{
-							this.props.DFR3Curve.fragilityCurves[0].alphaType?
-								this.props.DFR3Curve.fragilityCurves[0].alphaType[0].toUpperCase()
-								+ this.props.DFR3Curve.fragilityCurves[0].alphaType.slice(1)
+							curves[0].alphaType?
+								curves[0].alphaType[0].toUpperCase()
+								+ curves[0].alphaType.slice(1)
 								:
 								''
 							}</TableCell>
@@ -32,7 +46,7 @@ class DistributionTable extends React.Component {
 					</TableRow>
 				</TableHead>
 				<TableBody displayRowCheckbox={false}>
-					{this.props.DFR3Curve.fragilityCurves.map(function (curve) {
+					{curves.map(function (curve) {
 						return (
 							<TableRow>
 								<TableCell>{curve.description}</TableCell>
