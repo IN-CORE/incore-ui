@@ -1,6 +1,6 @@
 import {connect} from "react-redux";
 import FragilityViewerComponent from "../components/FragilityViewer";
-import {fetchFragilities, fetchSpaces, searchFragilities} from "../actions";
+import {fetchDFR3Curves, fetchSpaces, searchDFR3Curves} from "../actions";
 
 const mapStateToProps = (state) => {
 	return {
@@ -15,11 +15,11 @@ const mapDispatchToProps = (dispatch) => {
 		getAllSpaces: () =>{
 			dispatch(fetchSpaces());
 		},
-		getAllFragilities: (space, inventory, hazard, limit, offset) => {
-			dispatch(fetchFragilities(space, inventory, hazard, limit, offset));
+		getAllDFR3Curves: (dfr3_type, space, inventory, hazard, limit, offset) => {
+			dispatch(fetchDFR3Curves(dfr3_type, space, inventory, hazard, limit, offset));
 		},
-		searchAllFragilities: (keyword, limit, offset) => {
-			dispatch(searchFragilities(keyword, limit, offset));
+		searchAllDFR3Curves: (dfr3_type, keyword, limit, offset) => {
+			dispatch(searchDFR3Curves(dfr3_type, keyword, limit, offset));
 		}
 	};
 };

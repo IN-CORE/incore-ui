@@ -46,7 +46,7 @@ const styles = {
 	filter: {
 		padding: theme.spacing(4),
 		overflow: "auto",
-		height:"100px"
+		height: "100px"
 	},
 	main: {
 		padding: theme.spacing(4),
@@ -56,15 +56,15 @@ const styles = {
 	selectDiv: {
 		margin: "auto",
 		display: "inline-block",
-		width: "25%"
+		width: "20%"
 	},
 	select: {
 		width: "80%",
 		fontSize: "12px"
 	},
 	search: {
-		width:"100%",
-		fontSize:"12px",
+		width: "100%",
+		fontSize: "12px",
 	},
 	denseStyle: {
 		minHeight: "10px",
@@ -75,7 +75,7 @@ const styles = {
 		margin: theme.spacing(2),
 		overflow: "auto"
 	},
-	inlineButtons:{
+	inlineButtons: {
 		display: "inline-block",
 		margin: "auto 5px"
 	},
@@ -94,10 +94,10 @@ const styles = {
 		borderTopLeftRadius: "2px",
 		borderTopRightRadius: "2px"
 	},
-	preview:{
+	preview: {
 		padding: "50px"
 	},
-	previewClose:{
+	previewClose: {
 		display: "inline",
 		float: "right"
 	}
@@ -109,6 +109,7 @@ class FragilityViewer extends React.Component {
 		super(props);
 
 		this.state = {
+			selectedDFR3Type: "fragilities",
 			selectedInventory: "All",
 			selectedHazard: "All",
 			selectedSpace: "All",
@@ -124,9 +125,10 @@ class FragilityViewer extends React.Component {
 			offset: 0,
 			pageNumber: 1,
 			dataPerPage: 50,
-			urlPrefix : config.urlPrefix
+			urlPrefix: config.urlPrefix
 		};
 
+		this.changeDFR3Type = this.changeDFR3Type.bind(this);
 		this.onClickFragility = this.onClickFragility.bind(this);
 		this.handleInventorySelection = this.handleInventorySelection.bind(this);
 		this.handleHazardSelection = this.handleHazardSelection.bind(this);
@@ -152,7 +154,7 @@ class FragilityViewer extends React.Component {
 				authError: false
 			}, function () {
 				this.props.getAllSpaces();
-				this.props.getAllFragilities(this.state.selectedSpace, this.state.selectedInventory,
+				this.props.getAllDFR3Curves(this.state.selectedDFR3Type, this.state.selectedSpace, this.state.selectedInventory,
 					this.state.selectedHazard, this.state.dataPerPage, this.state.offset);
 			});
 		}
@@ -170,6 +172,21 @@ class FragilityViewer extends React.Component {
 		});
 	}
 
+	changeDFR3Type(event) {
+		this.setState({
+			searching: false,
+			searchText: "",
+			registeredSearchText: "",
+			selectedFragility: "",
+			selectedDFR3Type: event.target.value,
+			pageNumber: 1,
+			offset: 0
+		}, function () {
+			this.props.getAllDFR3Curves(this.state.selectedDFR3Type, this.state.selectedSpace, this.state.selectedInventory,
+				this.state.selectedHazard, this.state.dataPerPage, this.state.offset);
+		});
+	}
+
 	handleInventorySelection(event) {
 		this.setState({
 			searching: false,
@@ -180,7 +197,7 @@ class FragilityViewer extends React.Component {
 			pageNumber: 1,
 			offset: 0
 		}, function () {
-			this.props.getAllFragilities(this.state.selectedSpace, this.state.selectedInventory,
+			this.props.getAllDFR3Curves(this.state.selectedDFR3Type, this.state.selectedSpace, this.state.selectedInventory,
 				this.state.selectedHazard, this.state.dataPerPage, this.state.offset);
 		});
 	}
@@ -195,7 +212,7 @@ class FragilityViewer extends React.Component {
 			pageNumber: 1,
 			offset: 0
 		}, function () {
-			this.props.getAllFragilities(this.state.selectedSpace, this.state.selectedInventory,
+			this.props.getAllDFR3Curves(this.state.selectedDFR3Type, this.state.selectedSpace, this.state.selectedInventory,
 				this.state.selectedHazard, this.state.dataPerPage, this.state.offset);
 		});
 	}
@@ -210,7 +227,7 @@ class FragilityViewer extends React.Component {
 			pageNumber: 1,
 			offset: 0
 		}, function () {
-			this.props.getAllFragilities(this.state.selectedSpace, this.state.selectedInventory,
+			this.props.getAllDFR3Curves(this.state.selectedDFR3Type, this.state.selectedSpace, this.state.selectedInventory,
 				this.state.selectedHazard, this.state.dataPerPage, this.state.offset);
 		});
 	}
@@ -232,13 +249,13 @@ class FragilityViewer extends React.Component {
 		if (event.charCode === 13) { // enter
 			event.preventDefault();
 			await this.setSearchState();
-			this.props.searchAllFragilities(this.state.registeredSearchText, this.state.dataPerPage, this.state.offset);
+			this.props.searchAllDFR3Curves(this.state.selectedDFR3Type, this.state.registeredSearchText, this.state.dataPerPage, this.state.offset);
 		}
 	}
 
 	async clickSearch() {
 		await this.setSearchState();
-		this.props.searchAllFragilities(this.state.registeredSearchText, this.state.dataPerPage, this.state.offset);
+		this.props.searchAllDFR3Curves(this.state.selectedDFR3Type, this.state.registeredSearchText, this.state.dataPerPage, this.state.offset);
 	}
 
 	async onClickFragility(fragility) {
@@ -265,10 +282,10 @@ class FragilityViewer extends React.Component {
 			selectedFragility: ""
 		}, function () {
 			if (this.state.registeredSearchText !== "" && this.state.searching) {
-				this.props.searchAllFragilities(this.state.registeredSearchText, this.state.dataPerPage, this.state.offset);
+				this.props.searchAllDFR3Curves(this.state.selectedDFR3Type, this.state.registeredSearchText, this.state.dataPerPage, this.state.offset);
 			}
 			else {
-				this.props.getAllFragilities(this.state.selectedSpace, this.state.selectedInventory,
+				this.props.getAllDFR3Curves(this.state.selectedDFR3Type, this.state.selectedSpace, this.state.selectedInventory,
 					this.state.selectedHazard, this.state.dataPerPage, this.state.offset);
 			}
 		});
@@ -281,10 +298,10 @@ class FragilityViewer extends React.Component {
 			selectedFragility: ""
 		}, function () {
 			if (this.state.registeredSearchText !== "" && this.state.searching) {
-				this.props.searchAllFragilities(this.state.registeredSearchText, this.state.dataPerPage, this.state.offset);
+				this.props.searchAllDFR3Curves(this.state.selectedDFR3Type, this.state.registeredSearchText, this.state.dataPerPage, this.state.offset);
 			}
 			else {
-				this.props.getAllFragilities(this.state.selectedSpace, this.state.selectedInventory,
+				this.props.getAllDFR3Curves(this.state.selectedDFR3Type, this.state.selectedSpace, this.state.selectedInventory,
 					this.state.selectedHazard, this.state.dataPerPage, this.state.offset);
 			}
 		});
@@ -298,7 +315,7 @@ class FragilityViewer extends React.Component {
 			dataPerPage: event.target.value,
 			selectedFragility: ""
 		}, function () {
-			this.props.getAllFragilities(this.state.selectedSpace, this.state.selectedInventory,
+			this.props.getAllDFR3Curves(this.state.selectedDFR3Type, this.state.selectedSpace, this.state.selectedInventory,
 				this.state.selectedHazard, this.state.dataPerPage, this.state.offset);
 		});
 	}
@@ -430,6 +447,20 @@ class FragilityViewer extends React.Component {
 							<Grid item lg={8} sm={8} xl={8} xs={12}>
 								<Paper variant="outlined" className={classes.filter}>
 									<Typography variant="h6">Filters</Typography>
+									{/* select dfr3 curve type */}
+									<div className={classes.selectDiv}>
+										<InputLabel>DFR3 Curve Type</InputLabel>
+										<Select value={this.state.selectedDFR3Type} onChange={this.changeDFR3Type}
+												className={classes.select}>
+											<MenuItem value="fragilities" key="fragilities"
+													  className={classes.denseStyle}>Fragility</MenuItem>
+											<MenuItem value="restorations" key="restorations"
+													  className={classes.denseStyle}>Restoration</MenuItem>
+											<MenuItem value="repairs"
+													  key="repairs"
+													  className={classes.denseStyle}>Recovery</MenuItem>
+										</Select>
+									</div>
 									{/* Hazard Type */}
 									<div className={classes.selectDiv}>
 										<InputLabel>Hazard Type</InputLabel>

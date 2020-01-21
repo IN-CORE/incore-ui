@@ -56,7 +56,7 @@ export function receiveHazards(type: string, json: Hazards) {
 	};
 }
 
-export const RECEIVE_FRAGILITIES = "RECEIVE_FRAGILITIES";
+export const RECEIVE_DFR3_CURVES = "RECEIVE_DFR3_CURVES";
 
 export function receiveFragilities(type: string, json: Fragilities){
 	return (dispatch: Dispatch) =>{
@@ -179,14 +179,14 @@ export function fetchSpaces() {
 	};
 }
 
-export function searchFragilities(keyword, limit, offset){
-	let endpoint = `${config.fragilityService}/search?limit=${limit}&skip=${offset}&text=${keyword}`;
+export function searchDFR3Curves(dfr3_type, keyword, limit, offset){
+	let endpoint = `${config.fragilityServiceBase}${dfr3_type}/search?limit=${limit}&skip=${offset}&text=${keyword}`;
 	return (dispatch: Dispatch) => {
 		return fetch(endpoint, {mode: "cors", headers: getHeader()})
 		.then(response =>{
 			if (response.status === 200){
 				response.json().then(json =>{
-					dispatch(receiveFragilities(RECEIVE_FRAGILITIES, json));
+					dispatch(receiveFragilities(RECEIVE_DFR3_CURVES, json));
 				});
 			}
 			else if (response.status === 401){
@@ -194,14 +194,14 @@ export function searchFragilities(keyword, limit, offset){
 				dispatch(receiveFragilities(LOGIN_ERROR, []));
 			}
 			else{
-				dispatch(receiveFragilities(RECEIVE_FRAGILITIES, []));
+				dispatch(receiveFragilities(RECEIVE_DFR3_CURVES, []));
 			}
 		});
 	};
 }
 
-export function fetchFragilities(space: string, inventory: string, hazard: string, limit, offset){
-	let endpoint = `${config.fragilityService}?limit=${limit}&skip=${offset}`;
+export function fetchDFR3Curves(dfr3_type: string, space: string, inventory: string, hazard: string, limit, offset){
+	let endpoint = `${config.fragilityServiceBase}${dfr3_type}?limit=${limit}&skip=${offset}`;
 	if (space !== null && space !== "All"){
 		endpoint = `${endpoint}&space=${space}`;
 	}
@@ -216,7 +216,7 @@ export function fetchFragilities(space: string, inventory: string, hazard: strin
 		.then(response => {
 			if (response.status === 200){
 				response.json().then(json =>{
-					dispatch(receiveFragilities(RECEIVE_FRAGILITIES, json));
+					dispatch(receiveFragilities(RECEIVE_DFR3_CURVES, json));
 				});
 			}
 			else if (response.status === 401){
@@ -224,7 +224,7 @@ export function fetchFragilities(space: string, inventory: string, hazard: strin
 				dispatch(receiveFragilities(LOGIN_ERROR, []));
 			}
 			else{
-				dispatch(receiveFragilities(RECEIVE_FRAGILITIES, []));
+				dispatch(receiveFragilities(RECEIVE_DFR3_CURVES, []));
 			}
 		});
 	};
