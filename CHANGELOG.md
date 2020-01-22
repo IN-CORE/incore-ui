@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+
+update dependency libraries to resolve security vulnerabilities
+
 ## [0.3.5] - 2020-01-09
 
 fixing the security warning of some dependency libraries
