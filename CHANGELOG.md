@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+
+change fragility viewer to dfr3 viewer and add support for viewing restoration and repair curves
+
 ## [0.3.5] - 2020-01-09
 
 fixing the security warning of some dependency libraries
