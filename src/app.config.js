@@ -1,9 +1,11 @@
 let apiprotocol = "https";
 
-if (process.env.NODE_ENV === "production"){
+let config;
+
+if (process.env.DEPLOY_ENV === "production"){
 	let apihost = "incore.ncsa.illinois.edu";
 	let apiurl = `${apiprotocol}://${apihost}`;
-	const config = {
+	config = {
 		spaceService:`${apiurl}/space/api/spaces`,
 		dfr3Service:`${apiurl}/dfr3/api/`,
 		fragilityService: `${apiurl}/dfr3/api/fragilities`,
@@ -25,7 +27,7 @@ if (process.env.NODE_ENV === "production"){
 else{
 	let apihost = "incore-dev-kube.ncsa.illinois.edu";
 	let apiurl = `${apiprotocol}://${apihost}`;
-	const config = {
+	config = {
 		spaceService:`${apiurl}/space/api/spaces`,
 		dfr3Service:`${apiurl}/dfr3/api/`,
 		fragilityService: `${apiurl}/dfr3/api/fragilities`,

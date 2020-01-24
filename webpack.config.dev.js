@@ -3,6 +3,8 @@ import HtmlWebpackPlugin from "html-webpack-plugin";
 import autoprefixer from "autoprefixer";
 import path from "path";
 
+console.log("the current DEPLOY_ENV environment variable is " + process.env.DEPLOY_ENV);
+
 export default {
 	resolve: {
 		extensions: [".js", ".jsx", ".json"]
@@ -24,7 +26,8 @@ export default {
 	plugins: [
 		new webpack.DefinePlugin({
 			"process.env": {
-				"NODE_ENV": JSON.stringify("development")
+				"NODE_ENV": JSON.stringify("development"),
+				"DEPLOY_ENV": JSON.stringify(process.env.DEPLOY_ENV)
 			},
 			__DEV__: true
 		}),

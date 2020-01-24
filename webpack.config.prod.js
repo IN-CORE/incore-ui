@@ -8,8 +8,7 @@ import autoprefixer from "autoprefixer";
 import path from "path";
 import UglifyJsPlugin from "uglifyjs-webpack-plugin";
 
-// Tells React to build in prod mode. https://facebook.github.io/react/downloads.html
-console.log("the current NODE_ENV environment variable is " + process.env.NODE_ENV);
+console.log("the current DEPLOY_ENV environment variable is " + process.env.DEPLOY_ENV);
 
 export default {
 	resolve: {
@@ -36,7 +35,8 @@ export default {
 
 		new webpack.DefinePlugin({
 			"process.env": {
-				"NODE_ENV": JSON.stringify(process.env.NODE_ENV),
+				"NODE_ENV": JSON.stringify("production"),
+				"DEPLOY_ENV": JSON.stringify(process.env.DEPLOY_ENV)
 			},
 			__DEV__: false
 		}),
