@@ -24,8 +24,7 @@ export default {
 	plugins: [
 		new webpack.DefinePlugin({
 			"process.env": {
-				"NODE_ENV": JSON.stringify("development"),
-				"basePath": JSON.stringify("/")
+				"NODE_ENV": JSON.stringify("development")
 			},
 			__DEV__: true
 		}),

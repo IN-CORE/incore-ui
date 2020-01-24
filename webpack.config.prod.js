@@ -36,8 +36,6 @@ export default {
 		new webpack.DefinePlugin({
 			"process.env": {
 				"NODE_ENV": JSON.stringify("production"),
-				// "basePath": JSON.stringify("/incore")
-				"basePath": JSON.stringify("/")
 			},
 			__DEV__: false
 		}),
