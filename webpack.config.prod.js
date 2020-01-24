@@ -8,6 +8,8 @@ import autoprefixer from "autoprefixer";
 import path from "path";
 import UglifyJsPlugin from "uglifyjs-webpack-plugin";
 
+// Tells React to build in prod mode. https://facebook.github.io/react/downloads.html
+console.log("the current NODE_ENV environment variable is " + process.env.NODE_ENV);
 
 export default {
 	resolve: {
@@ -32,10 +34,9 @@ export default {
 		// Optimize the order that items are bundled. This assures the hash is deterministic.
 		new webpack.optimize.OccurrenceOrderPlugin(),
 
-		// Tells React to build in prod mode. https://facebook.github.io/react/downloads.html
 		new webpack.DefinePlugin({
 			"process.env": {
-				"NODE_ENV": JSON.stringify("production"),
+				"NODE_ENV": JSON.stringify(process.env.NODE_ENV),
 			},
 			__DEV__: false
 		}),
