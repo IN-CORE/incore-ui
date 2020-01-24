@@ -7,11 +7,10 @@ import Login from "./containers/Login";
 import DataViewer from "./containers/DataViewer";
 import FragilityViewer from "./containers/FragilityViewer";
 import HazardViewer from "./containers/HazardViewer";
-import config from "./app.config";
 
 
 export default (
-	<Route path={`${config.baseUrl}`} component={App}>
+	<Route path="/" component={App}>
 		<IndexRoute component={HomePage}/>
 		<Route path="Login" component={Login}/>
 		<Route path="DataViewer" component={DataViewer}/>
