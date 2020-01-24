@@ -3,11 +3,18 @@
 
 /* eslint-disable no-console */
 import webpack from "webpack";
-import config from "../webpack.config.prod";
+import prodConfig from "../webpack.config.prod";
+import devConfig from "../webpack.config.dev";
 import { chalkError, chalkSuccess, chalkWarning, chalkProcessing } from "./chalkConfig";
 
-process.env.NODE_ENV = "production"; // this assures React is built in prod mode and that the Babel dev config doesn"t apply.
-
+if (process.env.NODE_ENV === "production"){
+	let config = prodConfig;
+	console.log(chalkProcessing("Building from PRODUCTION configuration..."))
+}
+else{
+	let config = devConfig;
+	console.log(chalkProcessing("Building from DEVELOPMENT configuration..."))
+}
 console.log(chalkProcessing("Generating minified bundle. This will take a moment..."));
 
 webpack(config).run((error, stats) => {
