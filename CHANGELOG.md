@@ -6,10 +6,15 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Added
+turn fragility viewer to dfr3 viewer and add support for viewing restoration and repair curves [INCORE1-432](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-432)
+ 
+### Changed
+update dependency libraries to resolve security vulnerabilities [INCORE1-412](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-412)
+ 
+### Fixed
+fix the problem that the header image covers the topbar when screen is small [INCORE1-437](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-437)
 
-update dependency libraries to resolve security vulnerabilities
-fix the problem that the header image covers the topbar when screen is small
-change fragility viewer to dfr3 viewer and add support for viewing restoration and repair curves
 
 ## [0.3.5] - 2020-01-09
 
