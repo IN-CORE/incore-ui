@@ -10,12 +10,26 @@ class CustomExpressionTable extends React.Component {
 	}
 
 	render() {
+		let curves;
+		if ("fragilityCurves" in this.props.dfr3Curve) {
+			curves = this.props.dfr3Curve.fragilityCurves;
+		}
+		else if ("repairCurves" in this.props.dfr3Curve) {
+			curves = this.props.dfr3Curve.repairCurves;
+		}
+		else if ("restorationCurves" in this.props.dfr3Curve) {
+			curves = this.props.dfr3Curve.restorationCurves;
+		}
+		else{
+			curves = [];
+		}
+
 		return (
 			<Table>
 				<TableHead>
 					<TableRow>
-						<TableCell colSpan="2" tooltip="Fragility GUID" style={{textAlign: "center"}}>
-							{this.props.fragility.id}
+						<TableCell colSpan="2" tooltip="DFR3 Curve GUID" style={{textAlign: "center"}}>
+							{this.props.dfr3Curve.id}
 						</TableCell>
 					</TableRow>
 					<TableRow>
@@ -24,7 +38,7 @@ class CustomExpressionTable extends React.Component {
 					</TableRow>
 				</TableHead>
 				<TableBody displayRowCheckbox={false}>
-					{this.props.fragility.fragilityCurves.map(function (curve) {
+					{curves.map(function (curve) {
 						return (
 							<TableRow>
 								<TableCell>{curve.description}</TableCell>
