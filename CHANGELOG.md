@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 
 fix the problem that the header image covers the topbar when screen is small
+change fragility viewer to dfr3 viewer and add support for viewing restoration and repair curves
 
 ## [0.3.5] - 2020-01-09
 

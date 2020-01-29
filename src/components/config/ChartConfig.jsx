@@ -1,7 +1,7 @@
-let FragilityConfig = {
+let DFR3Config = {
 	credits: false,
 	title: {
-		text: "Fragility Viewer",
+		text: "DFR3 Viewer",
 		x: -20 //center
 	},
 	xAxis: {
@@ -33,4 +33,4 @@ let FragilityConfig = {
 	series: []
 };
 
-export default {FragilityConfig};
+export default {DFR3Config};
