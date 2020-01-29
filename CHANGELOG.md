@@ -12,7 +12,7 @@ turn fragility viewer to dfr3 viewer and add support for viewing restoration and
 ### Changed
 update dependency libraries to resolve security vulnerabilities [INCORE1-412](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-412)
  
-### Fixed
+### Removed
 fix the problem that the header image covers the topbar when screen is small [INCORE1-437](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-437)
 
 
@@ -26,7 +26,7 @@ fixing the INCORE release versions
 
 ## [0.3.3] - 2019-12-20
 
-IN-CORE Web tools for IN-CORE 1.0 release.
+IN-CORE Web tools for IN-CORE 1.0 release
 
 ## [0.3.2] - 2019-10-24
 
