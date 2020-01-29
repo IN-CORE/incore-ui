@@ -11,9 +11,9 @@ turn fragility viewer to dfr3 viewer and add support for viewing restoration and
  
 ### Changed
 update dependency libraries to resolve security vulnerabilities [INCORE1-412](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-412)
- 
-### Removed
 fix the problem that the header image covers the topbar when screen is small [INCORE1-437](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-437)
+
+### Removed
 
 
 ## [0.3.5] - 2020-01-09
