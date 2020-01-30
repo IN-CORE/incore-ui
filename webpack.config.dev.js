@@ -68,10 +68,10 @@ export default {
 			{
 				test: /(\.css|\.scss)$/,
 				use:[
-					{ loader: 'style-loader', options: { sourceMap: true } },
-					{ loader: 'css-loader', options: { sourceMap: true } },
-					{ loader: 'postcss-loader', options: { plugins: () => [require('autoprefixer')] } },
-					{ loader: 'sass-loader', options: { sourceMap: true } }
+					{ loader: "style-loader", options: { sourceMap: true } },
+					{ loader: "css-loader", options: { sourceMap: true } },
+					{ loader: "postcss-loader", options: { plugins: () => [require("autoprefixer")] } },
+					{ loader: "sass-loader", options: { sourceMap: true } }
 				]
 			},
 			{test: /\.json$/, loader: "json-loader"}

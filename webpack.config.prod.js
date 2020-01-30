@@ -101,9 +101,9 @@ export default {
 				test: /(\.css|\.scss)$/,
 				use: [
 					MiniCssExtractPlugin.loader,
-					{ loader: 'css-loader', options: { sourceMap: true } },
-					{ loader: 'postcss-loader', options: { plugins: () => [require('autoprefixer')] } },
-					{ loader: 'sass-loader', options: { sourceMap: true } }
+					{ loader: "css-loader", options: { sourceMap: true } },
+					{ loader: "postcss-loader", options: { plugins: () => [require("autoprefixer")] } },
+					{ loader: "sass-loader", options: { sourceMap: true } }
 				]
 			},
 			{test: /\.json$/, loader: "json-loader"}
