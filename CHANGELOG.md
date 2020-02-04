@@ -8,8 +8,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Added
 
-Turn fragility viewer to dfr3 viewer and add support for viewing restoration and repair curves [INCORE1-432](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-432)
- 
+- Turn fragility viewer to dfr3 viewer and add support for viewing restoration and repair curves [INCORE1-432](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-432)
+- Add Environment variable DEPLOY_ENV to differentiate prod versus dev settings (various different urls) [INCORE1-443](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-443) 
 ### Fixed
 
 Fix the problem that the header image covers the topbar when screen is small [INCORE1-437](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-437)
