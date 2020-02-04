@@ -6,6 +6,7 @@ import path from "path";
 console.log("the current DEPLOY_ENV environment variable is " + process.env.DEPLOY_ENV);
 
 export default {
+	mode:"development",
 	resolve: {
 		extensions: [".js", ".jsx", ".json"]
 	},
@@ -55,7 +56,7 @@ export default {
 		})
 	],
 	module: {
-		loaders: [
+		rules: [
 			{test: /\.jsx?$/, exclude: /node_modules/, loaders: ["babel-loader"]},
 			{test: /\.eot(\?v=\d+.\d+.\d+)?$/, loader: "file-loader"},
 			{
@@ -68,7 +69,12 @@ export default {
 			{test: /\.ico$/, loader: "file-loader?name=[name].[ext]"},
 			{
 				test: /(\.css|\.scss)$/,
-				loaders: ["style-loader", "css-loader?sourceMap", "postcss-loader", "sass-loader?sourceMap"]
+				use:[
+					{ loader: "style-loader", options: { sourceMap: true } },
+					{ loader: "css-loader", options: { sourceMap: true } },
+					{ loader: "postcss-loader", options: { plugins: () => [require("autoprefixer")] } },
+					{ loader: "sass-loader", options: { sourceMap: true } }
+				]
 			},
 			{test: /\.json$/, loader: "json-loader"}
 		]

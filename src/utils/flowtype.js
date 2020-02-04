@@ -216,8 +216,8 @@ export type HazardState = {
 
 export type Datasets = Dataset[];
 
-/* Fragility */
-export type FragilityCurve2D = {
+/* DFR3 */
+export type DFR3Curve2D = {
 	className: string,
 	description: name,
 	alpha: number,
@@ -229,13 +229,13 @@ export type FragilityCurve2D = {
 	periodEqnType: number
 }
 
-export type FragilityCurve3D = {
+export type DFR3Curve3D = {
 	className: string,
 	description: name,
 	expression: string,
 }
 
-export type Fragility = {
+export type DFR3Curve = {
 	id: string,
 	legacyId: string,
 	description: string,
@@ -247,15 +247,15 @@ export type Fragility = {
 	demandUnits: string,
 	hazardType: string,
 	inventoryType: string,
-	fragilityCurves: FragilityCurve2D[] | FragilityCurve3D[],
+	fragilityCurves: DFR3Curve2D[] | DFR3Curve3D[],
 	privileges: Privileges,
 	creator: string
 }
 
-export type Fragilities = Fragility[];
+export type DFR3Curves = DFR3Curve[];
 
-export type FragilityState = {
-	fragilities: Fragilities
+export type DFR3CurvesState = {
+	DFR3Curves: DFR3Curves
 }
 
 /* Dataset */
