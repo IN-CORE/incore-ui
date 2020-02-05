@@ -17,6 +17,8 @@ COPY tools /usr/share/nginx/html/incore-ui/tools/
 
 WORKDIR /usr/share/nginx/html/incore-ui
 
+ENV DEPLOY_ENV="development"
+
 RUN npm install && \
   npm run build
 
