@@ -77,7 +77,7 @@ class Login extends Component {
 		}
 		if (!this.props.loginError) {
 			if ( this.state.origin === undefined ){
-				browserHistory.push(config.baseUrl);
+				browserHistory.push("/");
 			}
 			else{
 				browserHistory.push(this.state.origin);
@@ -92,7 +92,7 @@ class Login extends Component {
 		// if already login, redirect to homepage
 		let Authorization = cookies.get("Authorization");
 		if (Authorization !== undefined && Authorization !== "" && Authorization !== null) {
-			browserHistory.push(config.baseUrl);
+			browserHistory.push("/");
 			return null;
 		}
 

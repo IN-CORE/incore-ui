@@ -142,7 +142,7 @@ class App extends Component {
 
 	logout() {
 		this.props.logout();
-		browserHistory.push(config.baseUrl);
+		browserHistory.push("/");
 		this.setState({
 			profileMenuOpen:false,
 		});

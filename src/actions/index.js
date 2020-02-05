@@ -180,7 +180,7 @@ export function fetchSpaces() {
 }
 
 export function searchDFR3Curves(dfr3_type, keyword, limit, offset){
-	let endpoint = `${config.DFR3ServiceBase}${dfr3_type}/search?limit=${limit}&skip=${offset}&text=${keyword}`;
+	let endpoint = `${config.dfr3Service}${dfr3_type}/search?limit=${limit}&skip=${offset}&text=${keyword}`;
 	return (dispatch: Dispatch) => {
 		return fetch(endpoint, {mode: "cors", headers: getHeader()})
 		.then(response =>{
@@ -201,7 +201,7 @@ export function searchDFR3Curves(dfr3_type, keyword, limit, offset){
 }
 
 export function fetchDFR3Curves(dfr3_type: string, space: string, inventory: string, hazard: string, limit, offset){
-	let endpoint = `${config.DFR3ServiceBase}${dfr3_type}?limit=${limit}&skip=${offset}`;
+	let endpoint = `${config.dfr3Service}${dfr3_type}?limit=${limit}&skip=${offset}`;
 	if (space !== null && space !== "All"){
 		endpoint = `${endpoint}&space=${space}`;
 	}
