@@ -39,7 +39,7 @@ else{
 		dataService: `${apiurl}/data/api/datasets`,
 		dataWolf: "https://incore2-datawolf.ncsa.illinois.edu/datawolf/",
 		incoreLab: `${apiurl}/lab`,
-		geoServer: "incore-dev-kube.ncsa.illinois.edu/geoserver/incore/wms",
+		geoServer: "https://incore-dev-kube.ncsa.illinois.edu/geoserver/incore/wms",
 		client_id: "react-auth",
 		pyIncoreDocUrl:"/doc/pyincore/index.html",
 		swaggerUrl:"/doc/api/",
