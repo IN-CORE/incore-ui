@@ -21,7 +21,7 @@ if (process.env.DEPLOY_ENV === "production"){
 		client_id: "react-auth",
 		pyIncoreDocUrl:"/doc/pyincore/index.html",
 		swaggerUrl:"/doc/api/",
-		webVersion:"0.3.5"
+		webVersion:"0.4.0"
 	};
 }
 else{
@@ -43,7 +43,7 @@ else{
 		client_id: "react-auth",
 		pyIncoreDocUrl:"/doc/pyincore/index.html",
 		swaggerUrl:"/doc/api/",
-		webVersion:"0.3.5"
+		webVersion:"0.4.0"
 	};
 }
 
