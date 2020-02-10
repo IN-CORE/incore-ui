@@ -6,6 +6,10 @@ set -e
 # use DEBUG=echo ./docker.sh to print all commands
 export DEBUG=${DEBUG:-""}
 
+# decide where to deploy based on environment variable
+export DEPLOY_ENV=production
+# export DEPLOY_ENV=development
+
 # Find out what branch we are on
 BRANCH=${BRANCH:-"$(git rev-parse --abbrev-ref HEAD)"}
 

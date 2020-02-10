@@ -1,15 +1,17 @@
 // For info about this file refer to webpack and webpack-hot-middleware documentation
 // For info on how we"re generating bundles with hashed filenames for cache busting: https://medium.com/@okonetchnikov/long-term-caching-of-static-assets-with-webpack-1ecb139adb95#.w99i89nsz
 import webpack from "webpack";
-import ExtractTextPlugin from "extract-text-webpack-plugin";
+import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import WebpackMd5Hash from "webpack-md5-hash";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import autoprefixer from "autoprefixer";
 import path from "path";
-import UglifyJsPlugin from "uglifyjs-webpack-plugin";
+import TerserPlugin from "terser-webpack-plugin";
 
+console.log("the current DEPLOY_ENV environment variable is " + process.env.DEPLOY_ENV);
 
 export default {
+	mode:"production",
 	resolve: {
 		extensions: [".js", ".jsx", ".json"]
 	},
@@ -32,18 +34,16 @@ export default {
 		// Optimize the order that items are bundled. This assures the hash is deterministic.
 		new webpack.optimize.OccurrenceOrderPlugin(),
 
-		// Tells React to build in prod mode. https://facebook.github.io/react/downloads.html
 		new webpack.DefinePlugin({
 			"process.env": {
 				"NODE_ENV": JSON.stringify("production"),
-				// "basePath": JSON.stringify("/incore")
-				"basePath": JSON.stringify("/")
+				"DEPLOY_ENV": JSON.stringify(process.env.DEPLOY_ENV)
 			},
 			__DEV__: false
 		}),
 
 		// Generate an external css file with a hash in the filename
-		new ExtractTextPlugin("[name].[contenthash].css"),
+		new MiniCssExtractPlugin("[name].[contenthash].css"),
 
 		// Generate HTML file that contains references to generated bundles. See here for how this works: https://github.com/ampedandwired/html-webpack-plugin#basic-usage
 		new HtmlWebpackPlugin({
@@ -66,20 +66,6 @@ export default {
 			trackJSToken: ""
 		}),
 
-		// Eliminate duplicate packages when generating bundle
-		// new webpack.optimize.DedupePlugin(),
-
-		// Minify JS
-		new UglifyJsPlugin({
-			sourceMap: true,
-			uglifyOptions: {
-				ecma:8,
-				compress: {
-					warnings: false
-				}
-			}
-		}),
-
 		new webpack.LoaderOptionsPlugin({
 			debug: true,
 			options: {
@@ -94,8 +80,8 @@ export default {
 		})
 	],
 	module: {
-		loaders: [
-			{test: /\.jsx?$/, exclude: /node_modules/, loader: "babel-loader"},
+		rules: [
+			{test: /\.jsx?$/, exclude: /node_modules/, loaders:["babel-loader"]},
 			{test: /\.eot(\?v=\d+.\d+.\d+)?$/, loader: "url-loader?name=[name].[ext]"},
 			{
 				test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
@@ -113,9 +99,25 @@ export default {
 			{test: /\.ico$/, loader: "file-loader?name=[name].[ext]"},
 			{
 				test: /(\.css|\.scss)$/,
-				loader: ExtractTextPlugin.extract("css-loader?sourceMap!postcss-loader!sass-loader?sourceMap")
+				use: [
+					MiniCssExtractPlugin.loader,
+					{ loader: "css-loader", options: { sourceMap: true } },
+					{ loader: "postcss-loader", options: { plugins: () => [require("autoprefixer")] } },
+					{ loader: "sass-loader", options: { sourceMap: true } }
+				]
 			},
 			{test: /\.json$/, loader: "json-loader"}
 		]
+	},
+	optimization:{
+		minimizer: [new TerserPlugin({
+			sourceMap: true,
+			terserOptions: {
+				ecma:8,
+				compress: {
+					warnings: false
+				}
+			}
+		})],
 	}
 };

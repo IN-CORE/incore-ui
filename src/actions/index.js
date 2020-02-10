@@ -1,6 +1,6 @@
 // @flow
 
-import type {AnalysesMetadata, Analysis, Datasets, Fragilities, Hazards, Dispatch} from "../utils/flowtype";
+import type {AnalysesMetadata, Analysis, Datasets, DFR3Curves, Hazards, Dispatch} from "../utils/flowtype";
 import Cookies from 'universal-cookie';
 import config from "../app.config";
 
@@ -56,13 +56,13 @@ export function receiveHazards(type: string, json: Hazards) {
 	};
 }
 
-export const RECEIVE_FRAGILITIES = "RECEIVE_FRAGILITIES";
+export const RECEIVE_DFR3_CURVES = "RECEIVE_DFR3_CURVES";
 
-export function receiveFragilities(type: string, json: Fragilities){
+export function receiveDFR3Curves(type: string, json: DFR3Curves){
 	return (dispatch: Dispatch) =>{
 		dispatch({
 			type: type,
-			fragilities: json,
+			dfr3Curves: json,
 			recievedAt: Date.now(),
 		});
 	};
@@ -179,29 +179,29 @@ export function fetchSpaces() {
 	};
 }
 
-export function searchFragilities(keyword, limit, offset){
-	let endpoint = `${config.fragilityService}/search?limit=${limit}&skip=${offset}&text=${keyword}`;
+export function searchDFR3Curves(dfr3_type, keyword, limit, offset){
+	let endpoint = `${config.dfr3Service}${dfr3_type}/search?limit=${limit}&skip=${offset}&text=${keyword}`;
 	return (dispatch: Dispatch) => {
 		return fetch(endpoint, {mode: "cors", headers: getHeader()})
 		.then(response =>{
 			if (response.status === 200){
 				response.json().then(json =>{
-					dispatch(receiveFragilities(RECEIVE_FRAGILITIES, json));
+					dispatch(receiveDFR3Curves(RECEIVE_DFR3_CURVES, json));
 				});
 			}
 			else if (response.status === 401){
 				cookies.remove("Authorization");
-				dispatch(receiveFragilities(LOGIN_ERROR, []));
+				dispatch(receiveDFR3Curves(LOGIN_ERROR, []));
 			}
 			else{
-				dispatch(receiveFragilities(RECEIVE_FRAGILITIES, []));
+				dispatch(receiveDFR3Curves(RECEIVE_DFR3_CURVES, []));
 			}
 		});
 	};
 }
 
-export function fetchFragilities(space: string, inventory: string, hazard: string, limit, offset){
-	let endpoint = `${config.fragilityService}?limit=${limit}&skip=${offset}`;
+export function fetchDFR3Curves(dfr3_type: string, space: string, inventory: string, hazard: string, limit, offset){
+	let endpoint = `${config.dfr3Service}${dfr3_type}?limit=${limit}&skip=${offset}`;
 	if (space !== null && space !== "All"){
 		endpoint = `${endpoint}&space=${space}`;
 	}
@@ -216,15 +216,15 @@ export function fetchFragilities(space: string, inventory: string, hazard: strin
 		.then(response => {
 			if (response.status === 200){
 				response.json().then(json =>{
-					dispatch(receiveFragilities(RECEIVE_FRAGILITIES, json));
+					dispatch(receiveDFR3Curves(RECEIVE_DFR3_CURVES, json));
 				});
 			}
 			else if (response.status === 401){
 				cookies.remove("Authorization");
-				dispatch(receiveFragilities(LOGIN_ERROR, []));
+				dispatch(receiveDFR3Curves(LOGIN_ERROR, []));
 			}
 			else{
-				dispatch(receiveFragilities(RECEIVE_FRAGILITIES, []));
+				dispatch(receiveDFR3Curves(RECEIVE_DFR3_CURVES, []));
 			}
 		});
 	};

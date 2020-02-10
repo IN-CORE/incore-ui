@@ -22,7 +22,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import HomeIcon from "@material-ui/icons/Home";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
-import FragilityViewerIcon from "@material-ui/icons/ShowChart";
+import DFR3ViewerIcon from "@material-ui/icons/ShowChart";
 import DataViewerIcon from "@material-ui/icons/Folder";
 import HazardViewerIcon from "@material-ui/icons/Warning";
 import AccountCircle from "@material-ui/icons/AccountCircle";
@@ -142,7 +142,7 @@ class App extends Component {
 
 	logout() {
 		this.props.logout();
-		browserHistory.push(config.baseUrl);
+		browserHistory.push("/");
 		this.setState({
 			profileMenuOpen:false,
 		});
@@ -236,10 +236,10 @@ class App extends Component {
 					</ListItem>
 					<Collapse in={this.state.collapseOpen} timeout="auto" unmountOnExit>
 						<List component="div" disablePadding>
-							<ListItem button component="a" href={`/FragilityViewer`}
+							<ListItem button component="a" href={`/DFR3Viewer`}
 									  className={classes.nested}>
-								<ListItemIcon><FragilityViewerIcon/></ListItemIcon>
-								<ListItemText primary="Fragility Viewer"/>
+								<ListItemIcon><DFR3ViewerIcon/></ListItemIcon>
+								<ListItemText primary="DFR3 Viewer"/>
 							</ListItem>
 							<ListItem button component="a" href={`/DataViewer`}
 									  className={classes.nested}>
@@ -283,10 +283,10 @@ class App extends Component {
 					</ListItem>
 					<Collapse in={this.state.collapseOpen} timeout="auto" unmountOnExit>
 						<List component="div" disablePadding>
-							<ListItem button component="a" href={`/FragilityViewer`}
+							<ListItem button component="a" href={`/DFR3Viewer`}
 									  className={classes.nested}>
-								<ListItemIcon><FragilityViewerIcon/></ListItemIcon>
-								<ListItemText primary="Fragility Viewer"/>
+								<ListItemIcon><DFR3ViewerIcon/></ListItemIcon>
+								<ListItemText primary="DFR3 Viewer"/>
 							</ListItem>
 							<ListItem button component="a" href={`/DataViewer`}
 									  className={classes.nested}>

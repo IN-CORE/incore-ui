@@ -5,17 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.4.0] - 2020-01-31
+
+### Added
+
+- Turn fragility viewer to dfr3 viewer and add support for viewing restoration and repair curves [INCORE1-432](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-432)
+- Add Environment variable DEPLOY_ENV to differentiate prod versus dev settings (various different urls) [INCORE1-443](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-443) 
+### Fixed
+
+- Fix the problem that the header image covers the topbar when screen is small [INCORE1-437](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-437)
+- Update dependency libraries to resolve security vulnerabilities [INCORE1-412](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-412)
+
+
 ## [0.3.5] - 2020-01-09
 
-fixing the security warning of some dependency libraries
+Fixing the security warning of some dependency libraries
 
 ## [0.3.4] - 2020-01-08
 
-fixing the INCORE release versions
+Fixing the INCORE release versions
 
 ## [0.3.3] - 2019-12-20
 
-IN-CORE Web tools for IN-CORE 1.0 release.
+IN-CORE Web tools for IN-CORE 1.0 release
 
 ## [0.3.2] - 2019-10-24
 
@@ -28,7 +40,6 @@ IN-CORE Web tools for IN-CORE 1.0 release.
 ## [0.1.0] - 2018-01-24
 
 Prototype for IN-CORE v2, a web application with a service oriented architecture based on IN-CORE v1.
-
 
 ### Added
 

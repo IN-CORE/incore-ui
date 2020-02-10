@@ -34,7 +34,7 @@ class ThreeDimensionalPlot extends React.Component {
 			keepAspectRatio: false,
 			xLabel: this.props.xLabel,
 			yLabel: this.props.yLabel,
-			zLabel: this.props.zLabel,
+			// zLabel: this.props.zLabel,
 			verticalRatio: 0.5,
 			cameraPosition:{
 				distance:3.5

@@ -1,26 +1,51 @@
 let apiprotocol = "https";
-let apihost = "incore.ncsa.illinois.edu";
-let apiurl = `${apiprotocol}://${apihost}`;
 
-const config = {
-	spaceService:`${apiurl}/space/api/spaces`,
-	dfr3Service:`${apiurl}/dfr3/api/`,
-	fragilityService: `${apiurl}/dfr3/api/fragilities`,
-	semanticService: "",
-	hazardServiceBase: `${apiurl}/hazard/api/`,
-	maestroService: `${apiurl}/maestro`,
-	authService: `${apiurl}/auth/realms/In-core/protocol/openid-connect/token`,
-	dataServiceBase: `${apiurl}/`,
-	dataService: `${apiurl}/data/api/datasets`,
-	dataWolf: "https://incore2-datawolf.ncsa.illinois.edu/datawolf/",
-	incoreLab: `${apiurl}/lab`,
-	geoServer: "https://incore-geoserver.ncsa.illinois.edu/geoserver/incore/wms",
-	baseUrl: process.env.basePath,
-	client_id: "react-auth",
-	pyIncoreDocUrl:"/doc/pyincore/index.html",
-	swaggerUrl:"/doc/api/",
-	webVersion:"0.3.5"
-};
+let config;
+
+if (process.env.DEPLOY_ENV === "production"){
+	let apihost = "incore.ncsa.illinois.edu";
+	let apiurl = `${apiprotocol}://${apihost}`;
+	config = {
+		spaceService:`${apiurl}/space/api/spaces`,
+		dfr3Service:`${apiurl}/dfr3/api/`,
+		fragilityService: `${apiurl}/dfr3/api/fragilities`,
+		semanticService: "",
+		hazardServiceBase: `${apiurl}/hazard/api/`,
+		maestroService: `${apiurl}/maestro`,
+		authService: `${apiurl}/auth/realms/In-core/protocol/openid-connect/token`,
+		dataServiceBase: `${apiurl}/`,
+		dataService: `${apiurl}/data/api/datasets`,
+		dataWolf: "https://incore2-datawolf.ncsa.illinois.edu/datawolf/",
+		incoreLab: `${apiurl}/lab`,
+		geoServer: "https://incore-geoserver.ncsa.illinois.edu/geoserver/incore/wms",
+		client_id: "react-auth",
+		pyIncoreDocUrl:"/doc/pyincore/index.html",
+		swaggerUrl:"/doc/api/",
+		webVersion:"0.4.0"
+	};
+}
+else{
+	let apihost = "incore-dev-kube.ncsa.illinois.edu";
+	let apiurl = `${apiprotocol}://${apihost}`;
+	config = {
+		spaceService:`${apiurl}/space/api/spaces`,
+		dfr3Service:`${apiurl}/dfr3/api/`,
+		fragilityService: `${apiurl}/dfr3/api/fragilities`,
+		semanticService: "",
+		hazardServiceBase: `${apiurl}/hazard/api/`,
+		maestroService: `${apiurl}/maestro`,
+		authService: `${apiurl}/auth/realms/In-core/protocol/openid-connect/token`,
+		dataServiceBase: `${apiurl}/`,
+		dataService: `${apiurl}/data/api/datasets`,
+		dataWolf: "https://incore2-datawolf.ncsa.illinois.edu/datawolf/",
+		incoreLab: `${apiurl}/lab`,
+		geoServer: "https://incore-dev-kube.ncsa.illinois.edu/geoserver/incore/wms",
+		client_id: "react-auth",
+		pyIncoreDocUrl:"/doc/pyincore/index.html",
+		swaggerUrl:"/doc/api/",
+		webVersion:"0.4.0"
+	};
+}
 
 export default config;
 

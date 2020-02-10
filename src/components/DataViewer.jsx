@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import FileContentTable from "./children/Table";
+import FileContentTable from "./children/FileContentTable";
 import NestedInfoTable from "./children/NestedInfoTable";
 import Map from "./children/Map";
 import {
@@ -135,6 +135,7 @@ class DataViewer extends Component {
 			pageNumber: 1,
 			dataPerPage: 50,
 		};
+
 		this.changeDatasetType = this.changeDatasetType.bind(this);
 		this.onClickDataset = this.onClickDataset.bind(this);
 		this.setSearchState = this.setSearchState.bind(this);
@@ -468,7 +469,7 @@ class DataViewer extends Component {
 					return (<ListItem button
 									  onClick={() => this.onClickDataset(dataset.id)}
 									  selected={dataset.id === this.state.selectedDataset.id}>
-						<Tooltip title="Fragilities">
+						<Tooltip title="DFR3Curves">
 							<ListItemIcon><ChartIcon fontSize="small"/></ListItemIcon>
 						</Tooltip>
 						<ListItemText primary={`${dataset.title  } - ${  dataset.creator.capitalize()}`}/>
@@ -528,8 +529,7 @@ class DataViewer extends Component {
 				file_contents = (
 					<div>
 						<Typography variant="h6">File Content Preview</Typography>
-						<FileContentTable container="data_container" data={data.slice(2, 8)} colHeaders={data[0]}
-										  rowHeaders={false}/>;
+						<FileContentTable container="data_container" data={data.slice(2, 8)} colHeaders={data[0]}/>
 					</div>
 				);
 			}
