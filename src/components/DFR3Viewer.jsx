@@ -353,7 +353,7 @@ class DFR3Viewer extends React.Component {
 			let plotData;
 
 			if (curve.className.includes("CustomExpression")) {
-				plotData = chartSampler.computeExpressionSamples(0, 1.0, 90, curve.expression);
+				plotData = chartSampler.computeExpressionSamples(0.001, 1.0, 1000, curve.expression);
 			} else if (curve.className.includes("Standard")) {
 				plotData = chartSampler.sample(0, 0.999, 1000, curve.alphaType, curve.alpha, curve.beta)
 			}

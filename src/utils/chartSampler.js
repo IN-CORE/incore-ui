@@ -1,4 +1,3 @@
-import alegbra from "algebra.js";
 import math from "mathjs";
 import { jStat } from "jstat";
 
@@ -6,15 +5,13 @@ export default class chartSampler {
 
 	static computeExpressionSamples(min, max, numberOfSamples, expression) {
 		let steps = ((max - min) / numberOfSamples);
-
+		let parser = math.parser();
 		let samples = [];
 
 		for (let i = 1; i <= numberOfSamples; i++) {
-			let y = steps * i;
-			let equation = alegbra.parse(`${y} = ${expression}`);
-
-			let x = equation.solveFor("x").valueOf();
-
+			let x = steps * i;
+			parser.set('x', x);
+			let y = parser.eval(`${expression}`);
 			samples.push([x, y]);
 		}
 
@@ -27,7 +24,7 @@ export default class chartSampler {
 
 		let parser = math.parser();
 
-		parser.eval(`f(x,y) = ${  expression}`);
+		parser.eval(`f(x,y) = ${expression}`);
 
 		let promises = [];
 
