@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased]
+## [0.4.1] - 2020-03-02
 
 ### Fixed
 - Fix the bug that custom expression fragility curves are not displaying in preview [INCORE1-481](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-481)
