@@ -3,7 +3,6 @@ import DFR3ViewerComponent from "../components/DFR3Viewer";
 import {fetchDFR3Curves, fetchDFR3Mappings, fetchSpaces, searchDFR3Curves} from "../actions";
 
 const mapStateToProps = (state) => {
-	console.log(state);
 	return {
 		dfr3Curves: state.dfr3Curve.dfr3Curves,
 		dfr3Mappings: state.dfr3Mapping.dfr3Mappings,

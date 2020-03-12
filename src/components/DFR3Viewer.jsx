@@ -1,5 +1,6 @@
 import React from "react";
-import GroupList from "./children/GroupList";
+import DFR3CurvesGroupList from "./children/DFR3CurvesGroupList";
+import DFR3MappingsGroupList from "./children/DFR3MappingsGroupList";
 import LineChart from "./children/LineChart";
 import NestedInfoTable from "./children/NestedInfoTable";
 import ThreeDimensionalPlot from "./children/ThreeDimensionalPlot";
@@ -33,7 +34,7 @@ import Space from "./children/Space";
 import Version from "./children/Version";
 import {CopyToClipboard} from "react-copy-to-clipboard";
 import {createMuiTheme, withStyles} from "@material-ui/core/styles/index";
-import Cookies from 'universal-cookie';
+import Cookies from "universal-cookie";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 
@@ -116,6 +117,7 @@ class DFR3Viewer extends React.Component {
 			selectedHazard: "All",
 			selectedSpace: "All",
 			selectedDFR3Curve: "",
+			selectedMapping: "",
 			searchText: "",
 			registeredSearchText: "",
 			searching: false,
@@ -127,12 +129,15 @@ class DFR3Viewer extends React.Component {
 			offset: 0,
 			pageNumber: 1,
 			dataPerPage: 50,
+			offsetMappings: 0,
+			pageNumberMappings: 1,
 			urlPrefix: config.urlPrefix,
 			tabIndex: 0
 		};
 
 		this.changeDFR3Type = this.changeDFR3Type.bind(this);
 		this.onClickDFR3Curve = this.onClickDFR3Curve.bind(this);
+		this.onClickDFR3Mapping = this.onClickDFR3Mapping.bind(this);
 		this.handleInventorySelection = this.handleInventorySelection.bind(this);
 		this.handleHazardSelection = this.handleHazardSelection.bind(this);
 		this.setSearchState = this.setSearchState.bind(this);
@@ -142,6 +147,8 @@ class DFR3Viewer extends React.Component {
 		this.exportJson = this.exportJson.bind(this);
 		this.previous = this.previous.bind(this);
 		this.next = this.next.bind(this);
+		this.previousMappings = this.previousMappings.bind(this);
+		this.nextMappings = this.nextMappings.bind(this);
 		this.handlePreviewerClose = this.handlePreviewerClose.bind(this);
 		this.changeDataPerPage = this.changeDataPerPage.bind(this);
 		this.handleSpaceSelection = this.handleSpaceSelection.bind(this);
@@ -160,7 +167,7 @@ class DFR3Viewer extends React.Component {
 				this.props.getAllDFR3Curves(this.state.selectedDFR3Type, this.state.selectedSpace, this.state.selectedInventory,
 					this.state.selectedHazard, this.state.dataPerPage, this.state.offset);
 				this.props.getAllDFR3Mappings(this.state.selectedDFR3Type, this.state.selectedSpace, this.state.selectedInventory,
-					this.state.selectedHazard, this.state.dataPerPage, this.state.offset);
+					this.state.selectedHazard, this.state.dataPerPage, this.state.offsetMappings);
 			});
 		}
 		// not logged in
@@ -185,12 +192,15 @@ class DFR3Viewer extends React.Component {
 			selectedDFR3Curve: "",
 			selectedDFR3Type: event.target.value,
 			pageNumber: 1,
-			offset: 0
+			offset: 0,
+			pageNumberMappings: 1,
+			offsetMappings: 0,
+			selectedMapping: ""
 		}, function () {
 			this.props.getAllDFR3Curves(this.state.selectedDFR3Type, this.state.selectedSpace, this.state.selectedInventory,
 				this.state.selectedHazard, this.state.dataPerPage, this.state.offset);
 			this.props.getAllDFR3Mappings(this.state.selectedDFR3Type, this.state.selectedSpace, this.state.selectedInventory,
-				this.state.selectedHazard, this.state.dataPerPage, this.state.offset);
+				this.state.selectedHazard, this.state.dataPerPage, this.state.offsetMappings);
 		});
 	}
 
@@ -206,12 +216,15 @@ class DFR3Viewer extends React.Component {
 			selectedDFR3Curve: "",
 			selectedInventory: event.target.value,
 			pageNumber: 1,
-			offset: 0
+			offset: 0,
+			pageNumberMappings: 1,
+			offsetMappings: 0,
+			selectedMapping: ""
 		}, function () {
 			this.props.getAllDFR3Curves(this.state.selectedDFR3Type, this.state.selectedSpace, this.state.selectedInventory,
 				this.state.selectedHazard, this.state.dataPerPage, this.state.offset);
 			this.props.getAllDFR3Mappings(this.state.selectedDFR3Type, this.state.selectedSpace, this.state.selectedInventory,
-				this.state.selectedHazard, this.state.dataPerPage, this.state.offset);
+				this.state.selectedHazard, this.state.dataPerPage, this.state.offsetMappings);
 		});
 	}
 
@@ -223,12 +236,15 @@ class DFR3Viewer extends React.Component {
 			registeredSearchText: "",
 			selectedDFR3Curve: "",
 			pageNumber: 1,
-			offset: 0
+			offset: 0,
+			pageNumberMappings: 1,
+			offsetMappings: 0,
+			selectedMapping: ""
 		}, function () {
 			this.props.getAllDFR3Curves(this.state.selectedDFR3Type, this.state.selectedSpace, this.state.selectedInventory,
 				this.state.selectedHazard, this.state.dataPerPage, this.state.offset);
 			this.props.getAllDFR3Mappings(this.state.selectedDFR3Type, this.state.selectedSpace, this.state.selectedInventory,
-				this.state.selectedHazard, this.state.dataPerPage, this.state.offset);
+				this.state.selectedHazard, this.state.dataPerPage, this.state.offsetMappings);
 		});
 	}
 
@@ -240,12 +256,15 @@ class DFR3Viewer extends React.Component {
 			selectedDFR3Curve: "",
 			selectedHazard: event.target.value,
 			pageNumber: 1,
-			offset: 0
+			offset: 0,
+			pageNumberMappings: 1,
+			offsetMappings: 0,
+			selectedMapping: ""
 		}, function () {
 			this.props.getAllDFR3Curves(this.state.selectedDFR3Type, this.state.selectedSpace, this.state.selectedInventory,
 				this.state.selectedHazard, this.state.dataPerPage, this.state.offset);
 			this.props.getAllDFR3Mappings(this.state.selectedDFR3Type, this.state.selectedSpace, this.state.selectedInventory,
-				this.state.selectedHazard, this.state.dataPerPage, this.state.offset);
+				this.state.selectedHazard, this.state.dataPerPage, this.state.offsetMappings);
 		});
 	}
 
@@ -255,10 +274,13 @@ class DFR3Viewer extends React.Component {
 			searching: true,
 			pageNumber: 1,
 			offset: 0,
+			pageNumberMappings: 1,
+			offsetMappings: 0,
+			selectedMapping: "",
 			selectedInventory: "All",
 			selectedHazard: "All",
 			selectedSpace: "All",
-			selectedDFR3Curve: "",
+			selectedDFR3Curve: ""
 		});
 	}
 
@@ -292,6 +314,12 @@ class DFR3Viewer extends React.Component {
 		});
 	}
 
+	 onClickDFR3Mapping(DFR3Mapping) {
+		this.setState({
+			selectedMapping: DFR3Mapping
+		});
+	}
+
 	previous() {
 		this.setState({
 			offset: (this.state.pageNumber - 2) * this.state.dataPerPage,
@@ -322,7 +350,6 @@ class DFR3Viewer extends React.Component {
 					this.state.selectedHazard, this.state.dataPerPage, this.state.offset);
 			}
 		});
-
 	}
 
 	changeDataPerPage(event) {
@@ -330,10 +357,49 @@ class DFR3Viewer extends React.Component {
 			pageNumber: 1,
 			offset: 0,
 			dataPerPage: event.target.value,
-			selectedDFR3Curve: ""
+			selectedDFR3Curve: "",
+			pageNumberMappings: 1,
+			offsetMappings: 0,
+			selectedMapping: ""
 		}, function () {
 			this.props.getAllDFR3Curves(this.state.selectedDFR3Type, this.state.selectedSpace, this.state.selectedInventory,
 				this.state.selectedHazard, this.state.dataPerPage, this.state.offset);
+			this.props.getAllDFR3Mappings(this.state.selectedDFR3Type, this.state.selectedSpace, this.state.selectedInventory,
+				this.state.selectedHazard, this.state.dataPerPage, this.state.offsetMappings);
+		});
+	}
+
+	previousMappings() {
+		this.setState({
+			offsetMappings: (this.state.pageNumberMappings - 2) * this.state.dataPerPage,
+			pageNumberMappings: this.state.pageNumberMappings - 1,
+			selectedMapping: ""
+		}, function () {
+			if (this.state.registeredSearchText !== "" && this.state.searching) {
+				//TODO: Add mappings search
+				this.props.searchAllDFR3Curves(this.state.selectedDFR3Type, this.state.registeredSearchText, this.state.dataPerPage, this.state.offset);
+			}
+			else {
+				this.props.getAllDFR3Mappings(this.state.selectedDFR3Type, this.state.selectedSpace, this.state.selectedInventory,
+					this.state.selectedHazard, this.state.dataPerPage, this.state.offsetMappings);
+			}
+		});
+	}
+
+	nextMappings() {
+		this.setState({
+			offsetMappings: (this.state.pageNumberMappings) * this.state.dataPerPage,
+			pageNumberMappings: this.state.pageNumberMappings + 1,
+			selectedMapping: ""
+		}, function () {
+			if (this.state.registeredSearchText !== "" && this.state.searching) {
+				//TODO: Add mappings search
+				this.props.searchAllDFR3Curves(this.state.selectedDFR3Type, this.state.registeredSearchText, this.state.dataPerPage, this.state.offset);
+			}
+			else {
+				this.props.getAllDFR3Mappings(this.state.selectedDFR3Type, this.state.selectedSpace, this.state.selectedInventory,
+					this.state.selectedHazard, this.state.dataPerPage, this.state.offsetMappings);
+			}
 		});
 	}
 
@@ -372,7 +438,7 @@ class DFR3Viewer extends React.Component {
 			if (curve.className.includes("CustomExpression")) {
 				plotData = chartSampler.computeExpressionSamples(0.001, 1.0, 1000, curve.expression);
 			} else if (curve.className.includes("Standard")) {
-				plotData = chartSampler.sample(0, 0.999, 1000, curve.alphaType, curve.alpha, curve.beta)
+				plotData = chartSampler.sample(0, 0.999, 1000, curve.alphaType, curve.alpha, curve.beta);
 			}
 
 			let series = {
@@ -516,6 +582,26 @@ class DFR3Viewer extends React.Component {
 			}
 		}
 
+		let mappingsList = this.props.dfr3Mappings;
+		let mappingsWithInfo = [];
+		if (mappingsList.length > 0) {
+			mappingsList.map((DFR3Mappings) => {
+				mappingsWithInfo.push(DFR3Mappings);
+			});
+		}
+
+		// selected Curves
+		let selectedMappingDetails = {};
+		if (this.state.selectedMapping) {
+			for (let item in this.state.selectedMapping) {
+				if (redundant_prop.indexOf(item) === -1) {
+					selectedMappingDetails[item] = this.state.selectedMapping[item];
+				}
+			}
+		}
+
+
+
 		if (this.state.authError) {
 			browserHistory.push("/login?origin=DFR3Viewer");
 			return null;
@@ -623,7 +709,7 @@ class DFR3Viewer extends React.Component {
 
 						{/*lists*/}
 						{tabIndex === 0 ?
-							<Grid container>
+							<Grid container spacing={4}>
 								<Grid item lg={this.state.selectedDFR3Curve ? 4 : 12}
 									md={this.state.selectedDFR3Curve ? 4 : 12}
 									xl={this.state.selectedDFR3Curve ? 4 : 12} xs={12}>
@@ -631,10 +717,10 @@ class DFR3Viewer extends React.Component {
 										<div className={classes.paperHeader}>
 											<Typography variant="subtitle1">DFR3 Curves</Typography>
 										</div>
-										<GroupList id="DFR3Curve-list"
-																 onClick={this.onClickDFR3Curve}
-																 data={curvesWithInfo} displayField="author"
-																 selectedDFR3Curve={this.state.selectedDFR3Curve}/>
+										<DFR3CurvesGroupList id="DFR3Curve-list"
+																				 onClick={this.onClickDFR3Curve}
+																				 data={curvesWithInfo} displayField="author"
+																				 selectedDFR3Curve={this.state.selectedDFR3Curve}/>
 										<div className={classes.paperFooter}>
 											<Pagination pageNumber={this.state.pageNumber}
 												data={curvesWithInfo}
@@ -716,7 +802,59 @@ class DFR3Viewer extends React.Component {
 						}
 
 						{tabIndex === 1 ?
-							<div>Mappings go here </div>
+							<Grid container spacing={4}>
+								<Grid item lg={this.state.selectedMapping ? 4 : 12}
+									md={this.state.selectedMapping ? 4 : 12}
+									xl={this.state.selectedMapping ? 4 : 12} xs={12}>
+									<Paper variant="outlined" className={classes.main}>
+										<div className={classes.paperHeader}>
+											<Typography variant="subtitle1">DFR3 Mappings</Typography>
+										</div>
+										<DFR3MappingsGroupList id="DFR3Mappings-list"
+																					 onClick={this.onClickDFR3Mapping}
+																					 data={mappingsWithInfo} displayField="name"
+																					 selectedMapping={this.state.selectedMapping}/>
+										<div className={classes.paperFooter}>
+											<Pagination pageNumber={this.state.pageNumberMappings}
+												data={mappingsWithInfo}
+												dataPerPage={this.state.dataPerPage}
+												previous={this.previousMappings}
+												next={this.nextMappings}/>
+										</div>
+									</Paper>
+								</Grid>
+
+								<Grid item lg={8} md={8} xl={8} xs={12}
+									className={this.state.selectedMapping ? null : classes.hide}>
+									<Paper variant="outlined" className={classes.main}>
+										{Object.keys(selectedMappingDetails).length > 0 ?
+											<div>
+												<div className={classes.paperHeader}>
+													<Typography variant="subtitle1">Metadata</Typography>
+												</div>
+												<div className={classes.metadata}>
+													<Button color="primary"
+														variant="contained"
+														className={classes.inlineButtons}
+														size="small"
+														onClick={this.exportJson}>Download Metadata</Button>
+													<CopyToClipboard text={this.state.selectedMapping.id}>
+														<Button color="secondary" variant="contained"
+															className={classes.inlineButtons}
+															size="small">Copy
+																ID</Button>
+													</CopyToClipboard>
+												</div>
+												<div className={classes.metadata}>
+													<NestedInfoTable data={selectedMappingDetails}/>
+												</div>
+											</div>
+											:
+											<div />
+										}
+									</Paper>
+								</Grid>
+							</Grid>
 							:
 							<div/>
 						}

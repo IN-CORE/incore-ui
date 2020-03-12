@@ -3,7 +3,7 @@ import {List, ListItem, ListItemIcon, ListItemText, Tooltip} from "@material-ui/
 import ShowChartIcon from "@material-ui/icons/ShowChart";
 import ThreeDRotationIcon from "@material-ui/icons/ThreeDRotation";
 
-const GroupList = (props) => {
+const DFR3CurvesGroupList = (props) => {
 	return (
 		<List component="nav" id={props.id} style={{"overflowY": "auto"}}>
 			{props.data.map(function (dfr3Curve) {
@@ -51,4 +51,4 @@ function getTitle(dfr3Curve) {
 	return title;
 }
 
-export default GroupList;
+export default DFR3CurvesGroupList;

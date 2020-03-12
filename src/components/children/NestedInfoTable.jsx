@@ -108,20 +108,25 @@ class NestedInfoTable extends React.Component {
 													{
 														(typeof this.props.data[key][key2] === "object" && this.props.data[key][key2]) ?
 															Object.keys(this.props.data[key][key2]).map((key3) => {
-																return (
-
+																if(key3 !== "legacyEntry") {
+																	return (
 																	// third level
-																	<TableRow>
-																		<TableCell
-																			style={{width: "30%", fontWeight: "bold"}}>
-																			{key3}
-																		</TableCell>
-																		<TableCell>
-																			{JSON.stringify(this.props.data[key][key2][key3])}
-																		</TableCell>
-																	</TableRow>
+																		<TableRow>
+																			<TableCell
+																				style={{
+																					width: "30%",
+																					fontWeight: "bold"
+																				}}>
+																				{key3}
+																			</TableCell>
+																			<TableCell>
+																				{JSON.stringify(
+																					this.props.data[key][key2][key3])}
+																			</TableCell>
+																		</TableRow>
 
-																);
+																	);
+																}
 															}) : (
 																<TableCell>{JSON.stringify(this.props.data[key][key2])}</TableCell>)
 													}
