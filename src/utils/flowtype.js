@@ -258,6 +258,20 @@ export type DFR3CurvesState = {
 	DFR3Curves: DFR3Curves
 }
 
+export type DFR3Mappings = {
+	id: string,
+	name: string,
+	authors: string[],
+	hazardType: string,
+	inventoryType: string,
+	mappings: Object[],
+	mappingType: string
+}
+
+export type DFR3MappingsState = {
+	DFR3Mappings: DFR3Mappings
+}
+
 /* Dataset */
 export type DatasetState = {
 	datasets: Dataset[]

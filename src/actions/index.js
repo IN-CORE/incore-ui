@@ -1,7 +1,7 @@
 // @flow
 
-import type {AnalysesMetadata, Analysis, Datasets, DFR3Curves, Hazards, Dispatch} from "../utils/flowtype";
-import Cookies from 'universal-cookie';
+import type {AnalysesMetadata, Analysis, Datasets, DFR3Curves, Hazards, Dispatch, DFR3Mappings} from "../utils/flowtype";
+import Cookies from "universal-cookie";
 import config from "../app.config";
 
 const cookies = new Cookies();
@@ -63,6 +63,18 @@ export function receiveDFR3Curves(type: string, json: DFR3Curves){
 		dispatch({
 			type: type,
 			dfr3Curves: json,
+			recievedAt: Date.now(),
+		});
+	};
+}
+
+export const RECEIVE_DFR3_MAPPINGS = "RECEIVE_DFR3_MAPPINGS";
+
+export function receiveDFR3Mappings(type: string, json: DFR3Mappings){
+	return (dispatch: Dispatch) =>{
+		dispatch({
+			type: type,
+			dfr3Mappings: json,
 			recievedAt: Date.now(),
 		});
 	};
@@ -183,20 +195,20 @@ export function searchDFR3Curves(dfr3_type, keyword, limit, offset){
 	let endpoint = `${config.dfr3Service}${dfr3_type}/search?limit=${limit}&skip=${offset}&text=${keyword}`;
 	return (dispatch: Dispatch) => {
 		return fetch(endpoint, {mode: "cors", headers: getHeader()})
-		.then(response =>{
-			if (response.status === 200){
-				response.json().then(json =>{
-					dispatch(receiveDFR3Curves(RECEIVE_DFR3_CURVES, json));
-				});
-			}
-			else if (response.status === 401){
-				cookies.remove("Authorization");
-				dispatch(receiveDFR3Curves(LOGIN_ERROR, []));
-			}
-			else{
-				dispatch(receiveDFR3Curves(RECEIVE_DFR3_CURVES, []));
-			}
-		});
+			.then(response =>{
+				if (response.status === 200){
+					response.json().then(json =>{
+						dispatch(receiveDFR3Curves(RECEIVE_DFR3_CURVES, json));
+					});
+				}
+				else if (response.status === 401){
+					cookies.remove("Authorization");
+					dispatch(receiveDFR3Curves(LOGIN_ERROR, []));
+				}
+				else{
+					dispatch(receiveDFR3Curves(RECEIVE_DFR3_CURVES, []));
+				}
+			});
 	};
 }
 
@@ -227,6 +239,55 @@ export function fetchDFR3Curves(dfr3_type: string, space: string, inventory: str
 				dispatch(receiveDFR3Curves(RECEIVE_DFR3_CURVES, []));
 			}
 		});
+	};
+}
+
+//TODO: Move this to app.config?
+export function getMappingTypeFromDFR3Url(dfr3_type: string){
+	switch(dfr3_type.toLowerCase()){
+	case "fragilities":
+		return "fragility";
+	case "repairs":
+		return "repair";
+	case "restorations":
+		return "restoration";
+	}
+}
+
+export function fetchDFR3Mappings(dfr3_type: string, space: string, inventory: string, hazard: string, limit, offset){
+	let endpoint = `${config.dfr3Service}mappings?limit=${limit}&skip=${offset}`;
+
+	if (dfr3_type !== null && dfr3_type !== "All"){
+		dfr3_type = getMappingTypeFromDFR3Url(dfr3_type);
+
+		endpoint = `${endpoint}&mappingType=${dfr3_type}`;
+	}
+	if (space !== null && space !== "All"){
+		endpoint = `${endpoint}&space=${space}`;
+	}
+	if (inventory !== null && inventory !== "All"){
+		endpoint = `${endpoint}&inventory=${inventory}`;
+	}
+	if (hazard !== null && hazard !== "All"){
+		endpoint = `${endpoint}&hazard=${hazard}`;
+	}
+
+	return (dispatch:Dispatch) => {
+		return fetch(endpoint, {mode: "cors", headers: getHeader()})
+			.then(response => {
+				if (response.status === 200){
+					response.json().then(json =>{
+						dispatch(receiveDFR3Mappings(RECEIVE_DFR3_MAPPINGS, json));
+					});
+				}
+				else if (response.status === 401){
+					cookies.remove("Authorization");
+					dispatch(receiveDFR3Mappings(LOGIN_ERROR, []));
+				}
+				else{
+					dispatch(receiveDFR3Mappings(RECEIVE_DFR3_MAPPINGS, []));
+				}
+			});
 	};
 }
 

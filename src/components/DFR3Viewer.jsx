@@ -156,6 +156,8 @@ class DFR3Viewer extends React.Component {
 				this.props.getAllSpaces();
 				this.props.getAllDFR3Curves(this.state.selectedDFR3Type, this.state.selectedSpace, this.state.selectedInventory,
 					this.state.selectedHazard, this.state.dataPerPage, this.state.offset);
+				this.props.getAllDFR3Mappings(this.state.selectedDFR3Type, this.state.selectedSpace, this.state.selectedInventory,
+					this.state.selectedHazard, this.state.dataPerPage, this.state.offset);
 			});
 		}
 		// not logged in
@@ -184,6 +186,8 @@ class DFR3Viewer extends React.Component {
 		}, function () {
 			this.props.getAllDFR3Curves(this.state.selectedDFR3Type, this.state.selectedSpace, this.state.selectedInventory,
 				this.state.selectedHazard, this.state.dataPerPage, this.state.offset);
+			this.props.getAllDFR3Mappings(this.state.selectedDFR3Type, this.state.selectedSpace, this.state.selectedInventory,
+				this.state.selectedHazard, this.state.dataPerPage, this.state.offset);
 		});
 	}
 
@@ -198,6 +202,8 @@ class DFR3Viewer extends React.Component {
 			offset: 0
 		}, function () {
 			this.props.getAllDFR3Curves(this.state.selectedDFR3Type, this.state.selectedSpace, this.state.selectedInventory,
+				this.state.selectedHazard, this.state.dataPerPage, this.state.offset);
+			this.props.getAllDFR3Mappings(this.state.selectedDFR3Type, this.state.selectedSpace, this.state.selectedInventory,
 				this.state.selectedHazard, this.state.dataPerPage, this.state.offset);
 		});
 	}
@@ -214,6 +220,8 @@ class DFR3Viewer extends React.Component {
 		}, function () {
 			this.props.getAllDFR3Curves(this.state.selectedDFR3Type, this.state.selectedSpace, this.state.selectedInventory,
 				this.state.selectedHazard, this.state.dataPerPage, this.state.offset);
+			this.props.getAllDFR3Mappings(this.state.selectedDFR3Type, this.state.selectedSpace, this.state.selectedInventory,
+				this.state.selectedHazard, this.state.dataPerPage, this.state.offset);
 		});
 	}
 
@@ -228,6 +236,8 @@ class DFR3Viewer extends React.Component {
 			offset: 0
 		}, function () {
 			this.props.getAllDFR3Curves(this.state.selectedDFR3Type, this.state.selectedSpace, this.state.selectedInventory,
+				this.state.selectedHazard, this.state.dataPerPage, this.state.offset);
+			this.props.getAllDFR3Mappings(this.state.selectedDFR3Type, this.state.selectedSpace, this.state.selectedInventory,
 				this.state.selectedHazard, this.state.dataPerPage, this.state.offset);
 		});
 	}
