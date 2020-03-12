@@ -125,7 +125,8 @@ class DFR3Viewer extends React.Component {
 			offset: 0,
 			pageNumber: 1,
 			dataPerPage: 50,
-			urlPrefix: config.urlPrefix
+			urlPrefix: config.urlPrefix,
+			tabIndex: 0
 		};
 
 		this.changeDFR3Type = this.changeDFR3Type.bind(this);
@@ -190,6 +191,10 @@ class DFR3Viewer extends React.Component {
 				this.state.selectedHazard, this.state.dataPerPage, this.state.offset);
 		});
 	}
+
+	handleTabChange = (event, value) => {
+		this.setState({tabIndex: value});
+	};
 
 	handleInventorySelection(event) {
 		this.setState({
@@ -487,6 +492,7 @@ class DFR3Viewer extends React.Component {
 	render() {
 
 		const {classes} = this.props;
+		let tabIndex = this.state.tabIndex;
 
 		// Curve list
 		let curve_list = this.props.dfr3Curves;
@@ -606,99 +612,116 @@ class DFR3Viewer extends React.Component {
 									/>
 								</Paper>
 							</Grid>
+						</Grid>
 
-							{/*lists*/}
-							<Grid item lg={this.state.selectedDFR3Curve ? 4 : 12}
-								  md={this.state.selectedDFR3Curve ? 4 : 12}
-								  xl={this.state.selectedDFR3Curve ? 4 : 12} xs={12}>
-								<Paper variant="outlined" className={classes.main}>
-									<div className={classes.paperHeader}>
-										<Typography variant="subtitle1">DFR3 Curves</Typography>
-									</div>
-									<GroupList id="DFR3Curve-list"
-											   onClick={this.onClickDFR3Curve}
-											   data={curvesWithInfo} displayField="author"
-											   selectedDFR3Curve={this.state.selectedDFR3Curve}/>
-									<div className={classes.paperFooter}>
-										<Pagination pageNumber={this.state.pageNumber}
-													data={curvesWithInfo}
-													dataPerPage={this.state.dataPerPage}
-													previous={this.previous}
-													next={this.next}/>
-									</div>
-								</Paper>
-							</Grid>
+						<Tabs value={tabIndex} onChange={this.handleTabChange}>
+							<Tab label="DFR3 Curves" />
+							<Tab label="DFR3 Mappings" />
+						</Tabs>
 
-							{/* Metadata */}
-							<Grid item lg={8} md={8} xl={8} xs={12}
-								  className={this.state.selectedDFR3Curve ? null : classes.hide}>
-								<Paper variant="outlined" className={classes.main}>
-									{Object.keys(selected_curve_detail).length > 0 ?
-										<div>
-											<div className={classes.paperHeader}>
-												<Typography variant="subtitle1">Metadata</Typography>
-											</div>
-											<div className={classes.metadata}>
-												<Button color="primary"
+						{/*lists*/}
+						{tabIndex === 0 ?
+							<Grid container>
+								<Grid item lg={this.state.selectedDFR3Curve ? 4 : 12}
+									md={this.state.selectedDFR3Curve ? 4 : 12}
+									xl={this.state.selectedDFR3Curve ? 4 : 12} xs={12}>
+									<Paper variant="outlined" className={classes.main}>
+										<div className={classes.paperHeader}>
+											<Typography variant="subtitle1">DFR3 Curves</Typography>
+										</div>
+										<GroupList id="DFR3Curve-list"
+																 onClick={this.onClickDFR3Curve}
+																 data={curvesWithInfo} displayField="author"
+																 selectedDFR3Curve={this.state.selectedDFR3Curve}/>
+										<div className={classes.paperFooter}>
+											<Pagination pageNumber={this.state.pageNumber}
+												data={curvesWithInfo}
+												dataPerPage={this.state.dataPerPage}
+												previous={this.previous}
+												next={this.next}/>
+										</div>
+									</Paper>
+								</Grid>
+								<Grid item lg={8} md={8} xl={8} xs={12}
+									className={this.state.selectedDFR3Curve ? null : classes.hide}>
+									<Paper variant="outlined" className={classes.main}>
+										{Object.keys(selected_curve_detail).length > 0 ?
+											<div>
+												<div className={classes.paperHeader}>
+													<Typography variant="subtitle1">Metadata</Typography>
+												</div>
+												<div className={classes.metadata}>
+													<Button color="primary"
 														variant="contained"
 														className={classes.inlineButtons}
 														size="small"
 														onClick={this.exportJson}>Download Metadata</Button>
-												<Button color="primary"
+													<Button color="primary"
 														variant="contained"
 														className={classes.inlineButtons}
 														size="small"
 														onClick={this.preview}>Preview</Button>
-												<CopyToClipboard text={this.state.selectedDFR3Curve.id}>
-													<Button color="secondary" variant="contained"
+													<CopyToClipboard text={this.state.selectedDFR3Curve.id}>
+														<Button color="secondary" variant="contained"
 															className={classes.inlineButtons}
 															size="small">Copy
-														ID</Button>
-												</CopyToClipboard>
+																		ID</Button>
+													</CopyToClipboard>
+												</div>
+												<div className={classes.metadata}>
+													<NestedInfoTable data={selected_curve_detail}/>
+												</div>
 											</div>
-											<div className={classes.metadata}>
-												<NestedInfoTable data={selected_curve_detail}/>
-											</div>
-										</div>
-										:
-										<div></div>
-									}
-								</Paper>
+											:
+											<div />
+										}
+									</Paper>
+								</Grid>
+
+								{/* Preview */}
+								{this.state.selectedDFR3Curve ?
+									<Dialog open={this.state.preview} onClose={this.handlePreviewerClose} maxWidth="lg" fullWidth
+										scroll="paper">
+										<DialogContent className={classes.preview}>
+											<IconButton aria-label="Close" onClick={this.handlePreviewerClose}
+												className={classes.previewClose}>
+												<CloseIcon fontSize="small"/>
+											</IconButton>
+											{this.state.selectedDFR3Curve.is3dPlot ?
+												<div>
+													<Typography variant="h6">{this.state.plotData3d.title}</Typography>
+													<ThreeDimensionalPlot plotId="3dplot" data={this.state.plotData3d.data}
+														xLabel={this.state.selectedDFR3Curve.demandType}
+														yLabel="Y"
+														// zLabel={this.state.selectedDFR3Curve.fragilityCurves[0].description}
+														width="100%" height="350px" style="surface"/>
+												</div>
+												:
+												<LineChart chartId="chart" configuration={this.state.chartConfig}/>}
+											{this.isCustomExpression(this.state.selectedDFR3Curve) ?
+												<CustomExpressionTable dfr3Curve={this.state.selectedDFR3Curve}/>
+												:
+												<DistributionTable dfr3Curve={this.state.selectedDFR3Curve}/>}
+										</DialogContent>
+									</Dialog>
+									:
+									<div />
+								}
+
 							</Grid>
-						</Grid>
+
+							: <div/>
+						}
+
+						{tabIndex === 1 ?
+							<div>Mappings go here </div>
+							:
+							<div/>
+						}
 
 						<Version/>
 					</div>
 
-					{/* Preview */}
-					{this.state.selectedDFR3Curve ?
-						<Dialog open={this.state.preview} onClose={this.handlePreviewerClose} maxWidth="lg" fullWidth
-								scroll="paper">
-							<DialogContent className={classes.preview}>
-								<IconButton aria-label="Close" onClick={this.handlePreviewerClose}
-											className={classes.previewClose}>
-									<CloseIcon fontSize="small"/>
-								</IconButton>
-								{this.state.selectedDFR3Curve.is3dPlot ?
-									<div>
-										<Typography variant="h6">{this.state.plotData3d.title}</Typography>
-										<ThreeDimensionalPlot plotId="3dplot" data={this.state.plotData3d.data}
-															  xLabel={this.state.selectedDFR3Curve.demandType}
-															  yLabel="Y"
-															  // zLabel={this.state.selectedDFR3Curve.fragilityCurves[0].description}
-															  width="100%" height="350px" style="surface"/>
-									</div>
-									:
-									<LineChart chartId="chart" configuration={this.state.chartConfig}/>}
-								{this.isCustomExpression(this.state.selectedDFR3Curve) ?
-									<CustomExpressionTable dfr3Curve={this.state.selectedDFR3Curve}/>
-									:
-									<DistributionTable dfr3Curve={this.state.selectedDFR3Curve}/>}
-							</DialogContent>
-						</Dialog>
-						:
-						<div></div>
-					}
 				</div>
 			);
 		}
