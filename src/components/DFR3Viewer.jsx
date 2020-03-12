@@ -34,6 +34,8 @@ import Version from "./children/Version";
 import {CopyToClipboard} from "react-copy-to-clipboard";
 import {createMuiTheme, withStyles} from "@material-ui/core/styles/index";
 import Cookies from 'universal-cookie';
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
 
 const cookies = new Cookies();
 const redundant_prop = ["legacyId", "privileges", "creator", "is3dPlot"];
