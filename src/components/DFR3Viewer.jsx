@@ -144,7 +144,8 @@ class DFR3Viewer extends React.Component {
 		this.handleKeyPressed = this.handleKeyPressed.bind(this);
 		this.clickSearch = this.clickSearch.bind(this);
 		this.preview = this.preview.bind(this);
-		this.exportJson = this.exportJson.bind(this);
+		this.exportCurveJson = this.exportCurveJson.bind(this);
+		this.exportMappingJson = this.exportMappingJson.bind(this);
 		this.previous = this.previous.bind(this);
 		this.next = this.next.bind(this);
 		this.previousMappings = this.previousMappings.bind(this);
@@ -527,11 +528,13 @@ class DFR3Viewer extends React.Component {
 		return false;
 	}
 
-	exportJson() {
-		let curveJSON = JSON.stringify(this.state.selectedDFR3Curve, null, 4);
+	//TODO: Create a common util and move this method there.
+	// Many such static methods are in this file that need to be moved
+	exportJson(json) {
+		let curveJSON = JSON.stringify(json, null, 4);
 		let blob = new Blob([curveJSON], {type: "application/json"});
 
-		const filename = `${this.state.selectedDFR3Curve.id}.json`;
+		const filename = `${json.id}.json`;
 
 		if (window.navigator.msSaveOrOpenBlob) {
 			window.navigator.msSaveBlob(blob, filename);
@@ -543,6 +546,14 @@ class DFR3Viewer extends React.Component {
 			anchor.click();
 			document.body.removeChild(anchor);
 		}
+	}
+
+	exportMappingJson(){
+		this.exportJson(this.state.selectedMapping);
+	}
+
+	exportCurveJson(){
+		this.exportJson(this.state.selectedDFR3Curve);
 	}
 
 	preview() {
@@ -743,7 +754,7 @@ class DFR3Viewer extends React.Component {
 														variant="contained"
 														className={classes.inlineButtons}
 														size="small"
-														onClick={this.exportJson}>Download Metadata</Button>
+														onClick={this.exportCurveJson}>Download Metadata</Button>
 													<Button color="primary"
 														variant="contained"
 														className={classes.inlineButtons}
@@ -837,7 +848,7 @@ class DFR3Viewer extends React.Component {
 														variant="contained"
 														className={classes.inlineButtons}
 														size="small"
-														onClick={this.exportJson}>Download Metadata</Button>
+														onClick={this.exportMappingJson}>Download Metadata</Button>
 													<CopyToClipboard text={this.state.selectedMapping.id}>
 														<Button color="secondary" variant="contained"
 															className={classes.inlineButtons}
