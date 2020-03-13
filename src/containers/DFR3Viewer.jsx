@@ -1,6 +1,6 @@
 import {connect} from "react-redux";
 import DFR3ViewerComponent from "../components/DFR3Viewer";
-import {fetchDFR3Curves, fetchDFR3Mappings, fetchSpaces, searchDFR3Curves} from "../actions";
+import {fetchDFR3Curves, fetchDFR3Mappings, fetchSpaces, searchDFR3Curves, searchDFR3Mappings} from "../actions";
 
 const mapStateToProps = (state) => {
 	return {
@@ -24,6 +24,9 @@ const mapDispatchToProps = (dispatch) => {
 		},
 		searchAllDFR3Curves: (dfr3_type, keyword, limit, offset) => {
 			dispatch(searchDFR3Curves(dfr3_type, keyword, limit, offset));
+		},
+		searchAllDFR3Mappings: (dfr3_type, keyword, limit, offset) => {
+			dispatch(searchDFR3Mappings(dfr3_type, keyword, limit, offset));
 		}
 	};
 };

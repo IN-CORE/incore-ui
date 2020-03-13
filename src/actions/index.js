@@ -291,6 +291,35 @@ export function fetchDFR3Mappings(dfr3_type: string, space: string, inventory: s
 	};
 }
 
+export function searchDFR3Mappings(dfr3_type, keyword, limit, offset){
+	let endpoint = `${config.dfr3Service}mappings/search?limit=${limit}&skip=${offset}&text=${keyword}`;
+
+	if (dfr3_type !== null && dfr3_type !== "All"){
+		dfr3_type = getMappingTypeFromDFR3Url(dfr3_type);
+
+		endpoint = `${endpoint}&mappingType=${dfr3_type}`;
+	}
+
+	return (dispatch: Dispatch) => {
+		return fetch(endpoint, {mode: "cors", headers: getHeader()})
+			.then(response =>{
+				if (response.status === 200){
+					response.json().then(json =>{
+						dispatch(receiveDFR3Mappings(RECEIVE_DFR3_MAPPINGS, json));
+					});
+				}
+				else if (response.status === 401){
+					cookies.remove("Authorization");
+					dispatch(receiveDFR3Mappings(LOGIN_ERROR, []));
+				}
+				else{
+					dispatch(receiveDFR3Mappings(RECEIVE_DFR3_MAPPINGS, []));
+				}
+			});
+	};
+}
+
+
 export function searchHazards(hazard_type, keyword, limit, offset) {
 	let endpoint = `${config.hazardServiceBase}${hazard_type}/search?limit=${limit}&skip=${offset}&text=${keyword}`;
 	return (dispatch: Dispatch) => {

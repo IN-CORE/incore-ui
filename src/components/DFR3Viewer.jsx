@@ -290,12 +290,14 @@ class DFR3Viewer extends React.Component {
 			event.preventDefault();
 			await this.setSearchState();
 			this.props.searchAllDFR3Curves(this.state.selectedDFR3Type, this.state.registeredSearchText, this.state.dataPerPage, this.state.offset);
+			this.props.searchAllDFR3Mappings(this.state.selectedDFR3Type, this.state.registeredSearchText, this.state.dataPerPage, this.state.offsetMappings);
 		}
 	}
 
 	async clickSearch() {
 		await this.setSearchState();
 		this.props.searchAllDFR3Curves(this.state.selectedDFR3Type, this.state.registeredSearchText, this.state.dataPerPage, this.state.offset);
+		this.props.searchAllDFR3Mappings(this.state.selectedDFR3Type, this.state.registeredSearchText, this.state.dataPerPage, this.state.offsetMappings);
 	}
 
 	async onClickDFR3Curve(DFR3Curve) {
@@ -377,8 +379,7 @@ class DFR3Viewer extends React.Component {
 			selectedMapping: ""
 		}, function () {
 			if (this.state.registeredSearchText !== "" && this.state.searching) {
-				//TODO: Add mappings search
-				this.props.searchAllDFR3Curves(this.state.selectedDFR3Type, this.state.registeredSearchText, this.state.dataPerPage, this.state.offset);
+				this.props.searchAllDFR3Mappings(this.state.selectedDFR3Type, this.state.registeredSearchText, this.state.dataPerPage, this.state.offsetMappings);
 			}
 			else {
 				this.props.getAllDFR3Mappings(this.state.selectedDFR3Type, this.state.selectedSpace, this.state.selectedInventory,
@@ -394,8 +395,7 @@ class DFR3Viewer extends React.Component {
 			selectedMapping: ""
 		}, function () {
 			if (this.state.registeredSearchText !== "" && this.state.searching) {
-				//TODO: Add mappings search
-				this.props.searchAllDFR3Curves(this.state.selectedDFR3Type, this.state.registeredSearchText, this.state.dataPerPage, this.state.offset);
+				this.props.searchAllDFR3Mappings(this.state.selectedDFR3Type, this.state.registeredSearchText, this.state.dataPerPage, this.state.offsetMappings);
 			}
 			else {
 				this.props.getAllDFR3Mappings(this.state.selectedDFR3Type, this.state.selectedSpace, this.state.selectedInventory,
