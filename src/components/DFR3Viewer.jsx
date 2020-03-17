@@ -361,6 +361,8 @@ class DFR3Viewer extends React.Component {
 			offset: 0,
 			dataPerPage: event.target.value,
 			selectedDFR3Curve: "",
+			searchText: "",
+			registeredSearchText: "",
 			pageNumberMappings: 1,
 			offsetMappings: 0,
 			selectedMapping: ""
