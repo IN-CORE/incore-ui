@@ -24,7 +24,7 @@ if (process.env.DEPLOY_ENV === "production"){
 		webVersion:"0.4.1"
 	};
 }
-else{
+else if (process.env.DEPLOY_ENV === 'development'){
 	let apihost = "incore-dev-kube.ncsa.illinois.edu";
 	let apiurl = `${apiprotocol}://${apihost}`;
 	config = {
@@ -40,6 +40,28 @@ else{
 		dataWolf: "https://incore2-datawolf.ncsa.illinois.edu/datawolf/",
 		incoreLab: `${apiurl}/lab`,
 		geoServer: "https://incore-dev-kube.ncsa.illinois.edu/geoserver/incore/wms",
+		client_id: "react-auth",
+		pyIncoreDocUrl:"/doc/pyincore/index.html",
+		swaggerUrl:"/doc/api/",
+		webVersion:"0.4.1"
+	};
+}
+else if(process.env.DEPLOY_ENV === 'test'){
+	let apihost = "incore-test-kube.ncsa.illinois.edu";
+	let apiurl = `${apiprotocol}://${apihost}`;
+	config = {
+		spaceService:`${apiurl}/space/api/spaces`,
+		dfr3Service:`${apiurl}/dfr3/api/`,
+		fragilityService: `${apiurl}/dfr3/api/fragilities`,
+		semanticService: "",
+		hazardServiceBase: `${apiurl}/hazard/api/`,
+		maestroService: `${apiurl}/maestro`,
+		authService: `${apiurl}/auth/realms/In-core/protocol/openid-connect/token`,
+		dataServiceBase: `${apiurl}/`,
+		dataService: `${apiurl}/data/api/datasets`,
+		dataWolf: "https://incore2-datawolf.ncsa.illinois.edu/datawolf/",
+		incoreLab: `${apiurl}/lab`,
+		geoServer: "https://incore-test-kube.ncsa.illinois.edu/geoserver/incore/wms",
 		client_id: "react-auth",
 		pyIncoreDocUrl:"/doc/pyincore/index.html",
 		swaggerUrl:"/doc/api/",
