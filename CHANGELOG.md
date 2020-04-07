@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [0.4.2] - 2020-03-26
 
+### Security
+- Resolve npm package security alert [INCORE1-547](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-547)
+
 ### Added
 
 - DFR3 Mappings are added to the DFR3 Viewer in a separate tab [INCORE1-497](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-497)
