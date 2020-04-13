@@ -148,7 +148,7 @@ class App extends Component {
 		});
 	}
 
-	toggleDrawer(event) {
+	toggleDrawer() {
 		this.setState(prevState => ({
 			drawerOpen: !prevState.drawerOpen
 		}));
@@ -180,7 +180,7 @@ class App extends Component {
 		let home = (<IconButton color="inherit" className={classes.smallButton} href="/">
 			<HomeIcon fontSize="small"/></IconButton>);
 
-		let contents = (<Button color="inherit" href={`login`} className={classes.smallButton}>Login</Button>);
+		let contents = (<Button color="inherit" href={"login"} className={classes.smallButton}>Login</Button>);
 
 		if (this.props.Authorization !== "" && this.props.Authorization !== undefined) {
 			contents = (<IconButton color="inherit" className={classes.smallButton} onClick={this.handleProfileMenuOpen}>
@@ -191,9 +191,9 @@ class App extends Component {
 		let profileMenu = (
 			<Menu
 				anchorEl = {this.state.anchorEl}
-				anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+				anchorOrigin={{ vertical: "top", horizontal: "right" }}
 				keepMounted
-				transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+				transformOrigin={{ vertical: "top", horizontal: "right" }}
 				open={this.state.profileMenuOpen}
 				onClose={this.handleProfileMenuClose}
 			>
@@ -236,17 +236,17 @@ class App extends Component {
 					</ListItem>
 					<Collapse in={this.state.collapseOpen} timeout="auto" unmountOnExit>
 						<List component="div" disablePadding>
-							<ListItem button component="a" href={`/DFR3Viewer`}
+							<ListItem button component="a" href={"/DFR3Viewer"}
 									  className={classes.nested}>
 								<ListItemIcon><DFR3ViewerIcon/></ListItemIcon>
 								<ListItemText primary="DFR3 Viewer"/>
 							</ListItem>
-							<ListItem button component="a" href={`/DataViewer`}
+							<ListItem button component="a" href={"/DataViewer"}
 									  className={classes.nested}>
 								<ListItemIcon><DataViewerIcon/></ListItemIcon>
 								<ListItemText primary="Data Viewer"/>
 							</ListItem>
-							<ListItem button component="a" href={`/HazardViewer`}
+							<ListItem button component="a" href={"/HazardViewer"}
 									  className={classes.nested}>
 								<ListItemIcon><HazardViewerIcon/></ListItemIcon>
 								<ListItemText primary="Hazard Viewer"/>
@@ -283,17 +283,17 @@ class App extends Component {
 					</ListItem>
 					<Collapse in={this.state.collapseOpen} timeout="auto" unmountOnExit>
 						<List component="div" disablePadding>
-							<ListItem button component="a" href={`/DFR3Viewer`}
+							<ListItem button component="a" href={"/DFR3Viewer"}
 									  className={classes.nested}>
 								<ListItemIcon><DFR3ViewerIcon/></ListItemIcon>
 								<ListItemText primary="DFR3 Viewer"/>
 							</ListItem>
-							<ListItem button component="a" href={`/DataViewer`}
+							<ListItem button component="a" href={"/DataViewer"}
 									  className={classes.nested}>
 								<ListItemIcon><DataViewerIcon/></ListItemIcon>
 								<ListItemText primary="Data Viewer"/>
 							</ListItem>
-							<ListItem button component="a" href={`/HazardViewer`}
+							<ListItem button component="a" href={"/HazardViewer"}
 									  className={classes.nested}>
 								<ListItemIcon><HazardViewerIcon/></ListItemIcon>
 								<ListItemText primary="Hazard Viewer"/>
@@ -307,20 +307,20 @@ class App extends Component {
 		return (
 			<MuiThemeProvider theme={theme}>
 				<AppBar position="static"
-						className={this.state.drawerOpen ? classes.appBarShift : classes.appBar}>
+					className={this.state.drawerOpen ? classes.appBarShift : classes.appBar}>
 					<Toolbar className={classes.toolBar}>
 						<IconButton edge="start" color="inherit" aria-label="Open drawer"
-									onClick={this.toggleDrawer} className={classes.menuButton}>
+							onClick={this.toggleDrawer} className={classes.menuButton}>
 							{this.state.drawerOpen ? <CloseIcon fontSize="small"/> : <MenuIcon fontSize="small"/>}
 						</IconButton>
 						{home}
-						<Typography variant="body1" style={{flex: 1}}></Typography>
+						<Typography variant="body1" style={{flex: 1}} />
 						{contents}
 						{profileMenu}
 					</Toolbar>
 				</AppBar>
 				<Drawer variant="persistent" open={this.state.drawerOpen} onClose={this.toggleDrawer}
-						classes={{paper: classes.drawerPaper}}>
+					classes={{paper: classes.drawerPaper}}>
 					{sideList}
 				</Drawer>
 				<div className={this.state.drawerOpen ? classes.appBarShift : classes.appBar}>

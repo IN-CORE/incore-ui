@@ -24,7 +24,7 @@ if (process.env.DEPLOY_ENV === "production"){
 		webVersion:"0.4.2"
 	};
 }
-else if (process.env.DEPLOY_ENV === 'development'){
+else if (process.env.DEPLOY_ENV === "development"){
 	let apihost = "incore-dev-kube.ncsa.illinois.edu";
 	let apiurl = `${apiprotocol}://${apihost}`;
 	config = {
@@ -46,7 +46,7 @@ else if (process.env.DEPLOY_ENV === 'development'){
 		webVersion:"0.4.2"
 	};
 }
-else if(process.env.DEPLOY_ENV === 'test'){
+else if(process.env.DEPLOY_ENV === "test"){
 	let apihost = "incore-test-kube.ncsa.illinois.edu";
 	let apiurl = `${apiprotocol}://${apihost}`;
 	config = {

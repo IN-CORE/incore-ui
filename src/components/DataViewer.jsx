@@ -41,7 +41,7 @@ import Space from "./children/Space";
 import Version from "./children/Version";
 import {CopyToClipboard} from "react-copy-to-clipboard";
 import {createMuiTheme, withStyles} from "@material-ui/core/styles/index";
-import Cookies from 'universal-cookie';
+import Cookies from "universal-cookie";
 
 const cookies = new Cookies();
 const redundant_prop = ["deleted", "privileges", "spaces"];
@@ -627,10 +627,10 @@ class DataViewer extends Component {
 									</List>
 									<div className={classes.paperFooter}>
 										<Pagination pageNumber={this.state.pageNumber}
-													data={list_items}
-													dataPerPage={this.state.dataPerPage}
-													previous={this.previous}
-													next={this.next}/>
+											data={list_items}
+											dataPerPage={this.state.dataPerPage}
+											previous={this.previous}
+											next={this.next}/>
 									</div>
 								</Paper>
 							</Grid>
@@ -646,24 +646,24 @@ class DataViewer extends Component {
 											</div>
 											<div className={classes.metadata}>
 												<Button color="primary"
-														variant="contained"
-														className={classes.inlineButtons}
-														size="small"
-														onClick={this.exportJson}>Download Metadata</Button>
+													variant="contained"
+													className={classes.inlineButtons}
+													size="small"
+													onClick={this.exportJson}>Download Metadata</Button>
 												<Button color="primary"
-														variant="contained"
-														className={classes.inlineButtons}
-														size="small"
-														onClick={this.downloadDataset}>Download Dataset</Button>
+													variant="contained"
+													className={classes.inlineButtons}
+													size="small"
+													onClick={this.downloadDataset}>Download Dataset</Button>
 												<Button color="primary"
-														variant="contained"
-														className={classes.inlineButtons}
-														size="small"
-														onClick={this.preview}>Preview</Button>
+													variant="contained"
+													className={classes.inlineButtons}
+													size="small"
+													onClick={this.preview}>Preview</Button>
 												<CopyToClipboard text={this.state.selectedDataset.id}>
 													<Button color="secondary" variant="contained"
-															className={classes.inlineButtons}
-															size="small">Copy ID</Button>
+														className={classes.inlineButtons}
+														size="small">Copy ID</Button>
 												</CopyToClipboard>
 											</div>
 											<div className={classes.metadata}>
@@ -671,7 +671,7 @@ class DataViewer extends Component {
 											</div>
 										</div>
 										:
-										<div></div>
+										<div />
 									}
 								</Paper>
 							</Grid>
@@ -683,10 +683,10 @@ class DataViewer extends Component {
 					{/* Preview */}
 					{this.state.selectedDataset ?
 						<Dialog open={this.state.preview} onClose={this.handlePreviewerClose} maxWidth="lg" fullWidth
-								scroll="paper">
+							scroll="paper">
 							<DialogContent className={classes.preview}>
 								<IconButton aria-label="Close" onClick={this.handlePreviewerClose}
-											className={classes.previewClose}>
+									className={classes.previewClose}>
 									<CloseIcon fontSize="small"/>
 								</IconButton>
 								<div>
@@ -696,7 +696,7 @@ class DataViewer extends Component {
 							</DialogContent>
 						</Dialog>
 						:
-						<div></div>
+						<div />
 					}
 				</div>
 			);

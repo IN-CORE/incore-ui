@@ -632,7 +632,7 @@ class DFR3Viewer extends React.Component {
 									<div className={classes.selectDiv}>
 										<InputLabel>Curve Type</InputLabel>
 										<Select value={this.state.selectedDFR3Type} onChange={this.changeDFR3Type}
-												className={classes.select}>
+											className={classes.select}>
 											<MenuItem value="fragilities" key="fragilities"
 													  className={classes.denseStyle}>Fragility</MenuItem>
 											<MenuItem value="restorations" key="restorations"
@@ -646,7 +646,7 @@ class DFR3Viewer extends React.Component {
 									<div className={classes.selectDiv}>
 										<InputLabel>Hazard Type</InputLabel>
 										<Select value={this.state.selectedHazard} onChange={this.handleHazardSelection}
-												className={classes.select}>
+											className={classes.select}>
 											<MenuItem value="All" className={classes.denseStyle}>All</MenuItem>
 											<MenuItem value="earthquake"
 													  className={classes.denseStyle}>Earthquake</MenuItem>
@@ -658,8 +658,8 @@ class DFR3Viewer extends React.Component {
 									<div className={classes.selectDiv}>
 										<InputLabel>Inventory Type</InputLabel>
 										<Select value={this.state.selectedInventory}
-												onChange={this.handleInventorySelection}
-												className={classes.select}>
+											onChange={this.handleInventorySelection}
+											className={classes.select}>
 											<MenuItem value="All" className={classes.denseStyle}>All</MenuItem>
 											<MenuItem value="building"
 													  className={classes.denseStyle}>Building</MenuItem>

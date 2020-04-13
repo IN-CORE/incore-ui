@@ -28,8 +28,8 @@ class DataPerPage extends React.Component {
 			<div>
 				<InputLabel>Results per page</InputLabel>
 				<Select value={this.props.dataPerPage}
-						onChange={this.props.changeDataPerPage}
-						className={classes.select}>
+					onChange={this.props.changeDataPerPage}
+					className={classes.select}>
 					<MenuItem value={15} className={classes.denseStyle}>15</MenuItem>
 					<MenuItem value={30} className={classes.denseStyle}>30</MenuItem>
 					<MenuItem value={50} className={classes.denseStyle}>50</MenuItem>

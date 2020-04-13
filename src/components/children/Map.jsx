@@ -62,60 +62,6 @@ class Map extends Component {
 		};
 	}
 
-	render() {
-		return (<div id="map"/>);
-	}
-
-	async componentDidUpdate() {
-		const theMap = this.state.map;
-		theMap.setLayerGroup(new GroupLayer());
-
-		let sourceTiled = new TileWMS({
-			visible: false,
-			url: config.geoServer,
-			tileLoadFunction: customLoader,
-			params: {
-				"FORMAT": "image/png",
-				"VERSION": "1.1.1",
-				tiled: true,
-				name: "tiledLayer",
-				STYLES: "",
-				LAYERS: `incore:${this.props.datasetId}`
-			}
-		});
-
-		let layerTiled = new TileLayer({
-			source: sourceTiled,
-			opacity: 0.7
-		});
-
-		let mapTile = new TileLayer({
-			source: new XYZ({
-				attribution: tileAttribution,
-				url: "https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}"
-			})
-		});
-		theMap.addLayer(mapTile);
-		theMap.addLayer(layerTiled);
-
-		// snap the map to the hazard bounding box
-		// default using the bounding box within dataset
-		// if absent, then query geoserver
-		if (this.props.boundingBox !== undefined
-			&& this.props.boundingBox !== null
-			&& this.props.boundingBox.length === 4
-			&& this.props.boundingBox[2] > this.props.boundingBox[0]
-			&& this.props.boundingBox[3] > this.props.boundingBox[1]
-		) {
-			let extent = this.props.boundingBox;
-			theMap.getView().fit(extent, theMap.getSize());
-		}
-		else {
-			let extent = await fetchExtent(this.props.datasetId);
-			theMap.getView().fit(extent, theMap.getSize());
-		}
-	}
-
 	async componentDidMount() {
 		let sourceTiled = new TileWMS({
 			visible: false,
@@ -174,10 +120,10 @@ class Map extends Component {
 		// default using the bounding box within dataset
 		// if absent, then query geoserver
 		if (this.props.boundingBox !== undefined
-			&& this.props.boundingBox !== null
-			&& this.props.boundingBox.length === 4
-			&& this.props.boundingBox[2] > this.props.boundingBox[0]
-			&& this.props.boundingBox[3] > this.props.boundingBox[1]
+				&& this.props.boundingBox !== null
+				&& this.props.boundingBox.length === 4
+				&& this.props.boundingBox[2] > this.props.boundingBox[0]
+				&& this.props.boundingBox[3] > this.props.boundingBox[1]
 		) {
 			let extent = this.props.boundingBox;
 			theMap.getView().fit(extent, theMap.getSize());
@@ -190,6 +136,59 @@ class Map extends Component {
 		this.setState({map: theMap});
 	}
 
+	async componentDidUpdate() {
+		const theMap = this.state.map;
+		theMap.setLayerGroup(new GroupLayer());
+
+		let sourceTiled = new TileWMS({
+			visible: false,
+			url: config.geoServer,
+			tileLoadFunction: customLoader,
+			params: {
+				"FORMAT": "image/png",
+				"VERSION": "1.1.1",
+				tiled: true,
+				name: "tiledLayer",
+				STYLES: "",
+				LAYERS: `incore:${this.props.datasetId}`
+			}
+		});
+
+		let layerTiled = new TileLayer({
+			source: sourceTiled,
+			opacity: 0.7
+		});
+
+		let mapTile = new TileLayer({
+			source: new XYZ({
+				attribution: tileAttribution,
+				url: "https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}"
+			})
+		});
+		theMap.addLayer(mapTile);
+		theMap.addLayer(layerTiled);
+
+		// snap the map to the hazard bounding box
+		// default using the bounding box within dataset
+		// if absent, then query geoserver
+		if (this.props.boundingBox !== undefined
+			&& this.props.boundingBox !== null
+			&& this.props.boundingBox.length === 4
+			&& this.props.boundingBox[2] > this.props.boundingBox[0]
+			&& this.props.boundingBox[3] > this.props.boundingBox[1]
+		) {
+			let extent = this.props.boundingBox;
+			theMap.getView().fit(extent, theMap.getSize());
+		}
+		else {
+			let extent = await fetchExtent(this.props.datasetId);
+			theMap.getView().fit(extent, theMap.getSize());
+		}
+	}
+
+	render() {
+		return (<div id="map"/>);
+	}
 }
 
 export default Map;

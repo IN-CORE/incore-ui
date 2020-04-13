@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Container, Typography} from "@material-ui/core";
+import {Typography} from "@material-ui/core";
 import {withStyles} from "@material-ui/core/styles";
 import config from "../../app.config";
 

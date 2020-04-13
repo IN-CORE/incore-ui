@@ -225,20 +225,20 @@ export function fetchDFR3Curves(dfr3_type: string, space: string, inventory: str
 	}
 	return (dispatch:Dispatch) => {
 		return fetch(endpoint, {mode: "cors", headers: getHeader()})
-		.then(response => {
-			if (response.status === 200){
-				response.json().then(json =>{
-					dispatch(receiveDFR3Curves(RECEIVE_DFR3_CURVES, json));
-				});
-			}
-			else if (response.status === 401){
-				cookies.remove("Authorization");
-				dispatch(receiveDFR3Curves(LOGIN_ERROR, []));
-			}
-			else{
-				dispatch(receiveDFR3Curves(RECEIVE_DFR3_CURVES, []));
-			}
-		});
+			.then(response => {
+				if (response.status === 200){
+					response.json().then(json =>{
+						dispatch(receiveDFR3Curves(RECEIVE_DFR3_CURVES, json));
+					});
+				}
+				else if (response.status === 401){
+					cookies.remove("Authorization");
+					dispatch(receiveDFR3Curves(LOGIN_ERROR, []));
+				}
+				else{
+					dispatch(receiveDFR3Curves(RECEIVE_DFR3_CURVES, []));
+				}
+			});
 	};
 }
 
@@ -368,10 +368,10 @@ export function fetchHazards(hazard_type: string, space: string, limit, offset) 
 export async function loginHelper(username, password) {
 	const endpoint = config.authService;
 	let formData = [
-		encodeURIComponent("grant_type") + "=" + encodeURIComponent("password"),
-		encodeURIComponent("username") + "=" + encodeURIComponent(username),
-		encodeURIComponent("password") + "=" + encodeURIComponent(password),
-		encodeURIComponent("client_id") + "=" + encodeURIComponent(config.client_id),
+		`${encodeURIComponent("grant_type")  }=${  encodeURIComponent("password")}`,
+		`${encodeURIComponent("username")  }=${  encodeURIComponent(username)}`,
+		`${encodeURIComponent("password")  }=${  encodeURIComponent(password)}`,
+		`${encodeURIComponent("client_id")  }=${  encodeURIComponent(config.client_id)}`,
 	];
 
 	const tokenRequest = await fetch(endpoint, {
@@ -518,7 +518,7 @@ export function executeDatawolfWorkflow(workflowid, creatorid, title, descriptio
 
 export function getHeader() {
 	const headers = new Headers({
-		"Authorization": cookies.get('Authorization'),
+		"Authorization": cookies.get("Authorization"),
 	});
 	return headers;
 }

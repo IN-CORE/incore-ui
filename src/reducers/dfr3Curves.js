@@ -1,5 +1,5 @@
 import {RECEIVE_DFR3_CURVES} from "../actions";
-import {DFR3CurvesState, DFR3Curves} from "../utils/flowtype";
+import {DFR3CurvesState, DFR3Curve} from "../utils/flowtype";
 
 type DFR3Action = {
 	type: RECEIVE_DFR3_CURVES,

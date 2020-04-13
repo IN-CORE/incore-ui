@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Button, Chip, Container, Grid, Link, Typography} from "@material-ui/core";
+import {Chip, Container, Grid, Link, Typography} from "@material-ui/core";
 import {withStyles} from "@material-ui/core/styles";
 import Version from "./children/Version";
 import {getRepoVersion} from "../actions/index";
@@ -210,11 +210,11 @@ class HomePage extends Component {
 			{
 				titles: ["pyIncore", "pyIncore-viz"],
 				image: "/public/python-logo.png",
-				description: "pyIncore is a component of IN-CORE. It is a python package that allows users to apply \
-						various hazards to infrastructure in selected areas, \
-		 				propagating the effect of physical infrastructure damage \
-						and loss of functionality to social and economic impacts. pyIncore-viz is a python package that \
-						provides visualization and other utilities for use with pyIncore."
+				description: "pyIncore is a component of IN-CORE. It is a python package" +
+						" that allows users to apply various hazards to infrastructure in selected areas," +
+						" propagating the effect of physical infrastructure damage and loss of " +
+						"functionality to social and economic impacts. pyIncore-viz is a python " +
+						"package that provides visualization and other utilities for use with pyIncore."
 			},
 			{
 				titles: ["Web Service API"],
@@ -277,9 +277,6 @@ class HomePage extends Component {
 	render() {
 		const {classes} = this.props;
 
-		// TODO put it somewhere else
-		const options = ['Create a merge commit', 'Squash and merge', 'Rebase and merge'];
-
 		return (
 			<div>
 				{/*header*/}
@@ -293,20 +290,20 @@ class HomePage extends Component {
 							The <a href="https://www.nist.gov" className={classes.link} target="_blank">National
 							Institute of Standards and
 							Technology (NIST)</a> funded the multi-university five-year <a
-							href="http://resilience.colostate.edu" className={classes.link} target="_blank">Center of
+								href="http://resilience.colostate.edu" className={classes.link} target="_blank">Center of
 							Excellence
 							for Risk-Based Community Resilience Planning (CoE)</a>, headquartered at <a
-							href="https://www.colostate.edu" className={classes.link} target="_blank">
+								href="https://www.colostate.edu" className={classes.link} target="_blank">
 							Colorado State University</a>, to develop the measurement science to support community
 							resilience assessment.
 							Measurement science is implemented on a platform called <a
-							href="http://resilience.colostate.edu/in_core.shtml" className={classes.link}
-							target="_blank">
+								href="http://resilience.colostate.edu/in_core.shtml" className={classes.link}
+								target="_blank">
 							Interdependent Networked Community Resilience Modeling Environment (IN-CORE)</a>. On
 							IN-CORE,
 							users can run scientific analyses that model the impact of natural hazards and resiliency
 							against the impact on communities. The IN-CORE platform is built on a <a
-							href="https://kubernetes.io" className={classes.link} target="_blank">Kubernetes
+								href="https://kubernetes.io" className={classes.link} target="_blank">Kubernetes
 							cluster</a> with<a href="https://www.docker.com" className={classes.link}
 											   target="_blank"> Docker</a> container technology.
 						</Typography>
@@ -336,8 +333,7 @@ class HomePage extends Component {
 						<div className={classes.background}/>
 					</Container>
 				</section>
-				<section className={classes.sectionLight}>
-				</section>
+				<section className={classes.sectionLight} />
 				{/*products*/}
 				<section className={classes.sectionDark}>
 					<Container className={classes.sectionContainers}>

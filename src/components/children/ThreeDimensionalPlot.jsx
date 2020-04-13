@@ -65,9 +65,6 @@ class ThreeDimensionalPlot extends React.Component {
 	render() {
 		return (<div id={this.props.plotId} ref={this.props.plotId} />);
 	}
-
-	componentWillUnmount() {
-	}
 }
 
 ThreeDimensionalPlot.propTypes = {};

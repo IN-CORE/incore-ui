@@ -3,7 +3,7 @@ import DataViewerComponent from "../components/DataViewer";
 import {fetchDatasets, fetchSpaces, searchDatasets} from "../actions";
 
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
 	return {
 		datasets: state.data.datasets,
 		spaces: state.space.spaces,
@@ -11,7 +11,7 @@ const mapStateToProps = (state, ownProps) => {
 	};
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => {
+const mapDispatchToProps = (dispatch) => {
 	return {
 		getAllSpaces: () => {
 			dispatch(fetchSpaces());

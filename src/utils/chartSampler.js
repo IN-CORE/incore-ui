@@ -10,7 +10,7 @@ export default class chartSampler {
 
 		for (let i = 1; i <= numberOfSamples; i++) {
 			let x = steps * i;
-			parser.set('x', x);
+			parser.set("x", x);
 			let y = parser.eval(`${expression}`);
 			samples.push([x, y]);
 		}
@@ -57,7 +57,7 @@ export default class chartSampler {
 			samples = chartSampler.sampleLogNormalCdf(min, max, numberOfSamples, alpha, beta);
 		}
 
-		return samples
+		return samples;
 	}
 
 	static sampleNormalCdf(min, max, numberOfSamples, mean, std) {

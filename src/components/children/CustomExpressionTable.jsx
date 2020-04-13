@@ -1,4 +1,4 @@
-import React, { PropTypes } from "react";
+import React from "react";
 import { Table, TableBody, TableHead, TableCell, TableRow } from "@material-ui/core";
 
 class CustomExpressionTable extends React.Component {
@@ -51,8 +51,6 @@ class CustomExpressionTable extends React.Component {
 		);
 	}
 
-	componentWillUnmount() {
-	}
 }
 
 CustomExpressionTable.propTypes = {};

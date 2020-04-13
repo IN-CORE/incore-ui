@@ -29,7 +29,7 @@ class Space extends React.Component {
 				<div>
 					<InputLabel>Spaces</InputLabel>
 					<Select value={this.props.selectedSpace} onChange={this.props.handleSpaceSelection}
-							className={classes.select}>
+						className={classes.select}>
 						<MenuItem key="All" value="All" className={classes.denseStyle}>All</MenuItem>
 						{this.props.spaces.map((space, index) =>
 							<MenuItem label={space.metadata.name} value={space.metadata.name} name={space.metadata.name}

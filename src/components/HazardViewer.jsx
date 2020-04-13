@@ -29,7 +29,7 @@ import Space from "./children/Space";
 import Version from "./children/Version";
 import {CopyToClipboard} from "react-copy-to-clipboard";
 import {createMuiTheme, withStyles} from "@material-ui/core/styles/index";
-import Cookies from 'universal-cookie';
+import Cookies from "universal-cookie";
 
 const cookies = new Cookies();
 
@@ -387,7 +387,7 @@ class HazardViewer extends Component {
 									<div className={classes.selectDiv}>
 										<InputLabel>Hazard Type</InputLabel>
 										<Select value={this.state.selectedHazardType} onChange={this.changeHazardType}
-												className={classes.select}>
+											className={classes.select}>
 											<MenuItem value="earthquakes" key="earthquakes"
 													  className={classes.denseStyle}>Earthquake</MenuItem>
 											<MenuItem value="tornadoes" key="tornadoes"
@@ -445,10 +445,10 @@ class HazardViewer extends Component {
 									{hazards_list_display}
 									<div className={classes.paperFooter}>
 										<Pagination pageNumber={this.state.pageNumber}
-													data={hazards_list_display}
-													dataPerPage={this.state.dataPerPage}
-													previous={this.previous}
-													next={this.next}/>
+											data={hazards_list_display}
+											dataPerPage={this.state.dataPerPage}
+											previous={this.previous}
+											next={this.next}/>
 									</div>
 								</Paper>
 							</Grid>
@@ -464,13 +464,13 @@ class HazardViewer extends Component {
 											</div>
 											<div className={classes.metadata}>
 												<Button color="primary" variant="contained"
-														className={classes.inlineButtons}
-														size="small"
-														onClick={this.exportJson}>Download Metadata</Button>
+													className={classes.inlineButtons}
+													size="small"
+													onClick={this.exportJson}>Download Metadata</Button>
 												<CopyToClipboard text={this.state.selectedHazard.id}>
 													<Button color="secondary" variant="contained"
-															className={classes.inlineButtons}
-															size="small">Copy ID</Button>
+														className={classes.inlineButtons}
+														size="small">Copy ID</Button>
 												</CopyToClipboard>
 											</div>
 											<div className={classes.metadata}>
@@ -480,7 +480,7 @@ class HazardViewer extends Component {
 											</div>
 										</div>
 										:
-										<div></div>
+										<div />
 									}
 								</Paper>
 							</Grid>
@@ -491,10 +491,10 @@ class HazardViewer extends Component {
 					{/* Preview */}
 					{this.state.selectedHazard ?
 						<Dialog open={this.state.preview} onClose={this.handlePreviewerClose} maxWidth="lg" fullWidth
-								scroll="paper">
+							scroll="paper">
 							<DialogContent className={classes.preview}>
 								<IconButton aria-label="Close" onClick={this.handlePreviewerClose}
-											className={classes.previewClose}>
+									className={classes.previewClose}>
 									<CloseIcon fontSize="small"/>
 								</IconButton>
 								<div>
@@ -505,7 +505,7 @@ class HazardViewer extends Component {
 							</DialogContent>
 						</Dialog>
 						:
-						<div></div>
+						<div />
 					}
 				</div>
 			);

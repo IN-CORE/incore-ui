@@ -2,15 +2,10 @@ import React, {Component} from "react";
 import {browserHistory} from "react-router";
 import {Avatar, Button, Divider, GridList, GridListTile, Paper, TextField, Typography} from "@material-ui/core";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import config from "../app.config";
 import Version from "./children/Version";
-import Cookies from 'universal-cookie';
+import Cookies from "universal-cookie";
 
 const cookies = new Cookies();
-
-type Props = {
-	name: string
-}
 
 class Login extends Component {
 	constructor(props) {
@@ -68,7 +63,7 @@ class Login extends Component {
 		}
 	}
 
-	async login(event: Object) {
+	async login() {
 		await this.props.login(this.state.username, this.state.password);
 		if (this.props.loginError) {
 			this.setState({

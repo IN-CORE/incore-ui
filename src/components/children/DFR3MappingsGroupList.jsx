@@ -1,7 +1,5 @@
 import * as React from "react";
 import {List, ListItem, ListItemIcon, ListItemText, Tooltip} from "@material-ui/core";
-import ShowChartIcon from "@material-ui/icons/ShowChart";
-import ThreeDRotationIcon from "@material-ui/icons/ThreeDRotation";
 import AccountTree from "@material-ui/icons/AccountTree";
 
 const DFR3MappingsGroupList = (props) => {

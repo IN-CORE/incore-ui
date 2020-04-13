@@ -8,7 +8,7 @@ import autoprefixer from "autoprefixer";
 import path from "path";
 import TerserPlugin from "terser-webpack-plugin";
 
-console.log("the current DEPLOY_ENV environment variable is " + process.env.DEPLOY_ENV);
+console.log(`the current DEPLOY_ENV environment variable is ${  process.env.DEPLOY_ENV}`);
 
 export default {
 	mode:"production",

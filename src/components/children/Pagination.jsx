@@ -14,7 +14,7 @@ class Pagination extends React.Component {
 			<div style={{textAlign: "center"}}>
 				<ButtonGroup color="primary" size="small">
 					<Button disabled={this.props.pageNumber === 1}
-							onClick={this.props.previous}>
+						onClick={this.props.previous}>
 						<PreviousIcon fontSize="small"/></Button>
 					<Button disabled={true}>{this.props.pageNumber}</Button>
 					<Button disabled={this.props.data.length < this.props.dataPerPage} onClick={this.props.next}>

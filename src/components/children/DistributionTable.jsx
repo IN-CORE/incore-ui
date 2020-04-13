@@ -1,4 +1,4 @@
-import React, {PropTypes} from "react";
+import React from "react";
 import {Table, TableBody, TableCell, TableHead, TableRow} from "@material-ui/core";
 
 class DistributionTable extends React.Component {
@@ -36,11 +36,11 @@ class DistributionTable extends React.Component {
 						<TableCell>Limit State</TableCell>
 						<TableCell>Alpha/
 							{
-							curves[0].alphaType?
-								curves[0].alphaType[0].toUpperCase()
+								curves[0].alphaType?
+									curves[0].alphaType[0].toUpperCase()
 								+ curves[0].alphaType.slice(1)
-								:
-								''
+									:
+									""
 							}</TableCell>
 						<TableCell>Beta</TableCell>
 					</TableRow>
@@ -60,8 +60,6 @@ class DistributionTable extends React.Component {
 		);
 	}
 
-	componentWillUnmount() {
-	}
 }
 
 DistributionTable.propTypes = {};

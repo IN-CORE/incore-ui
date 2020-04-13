@@ -1,7 +1,7 @@
 import {connect} from "react-redux";
 import AppComponent from "../components/App";
 import {logout} from "../actions";
-import Cookies from 'universal-cookie';
+import Cookies from "universal-cookie";
 
 const cookies = new Cookies();
 
