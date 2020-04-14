@@ -46,7 +46,7 @@ else if(process.env.DEPLOY_ENV === "test"){
 		webVersion:"0.4.2"
 	};
 }
-else { // if process.env.DEPLOY_ENV === "development"
+else { // default case that used dev environment
 	let apihost = "incore-dev-kube.ncsa.illinois.edu";
 	let apiurl = `${apiprotocol}://${apihost}`;
 	config = {
