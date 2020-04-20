@@ -736,13 +736,12 @@ class DFR3Viewer extends React.Component {
 												className={classes.previewClose}>
 												<CloseIcon fontSize="small"/>
 											</IconButton>
-											{this.state.selectedDFR3Curve.is3dPlot ?
+											{ is3dCurve(this.state.selectedDFR3Curve) ?
 												<div>
 													<Typography variant="h6">{this.state.plotData3d.title}</Typography>
 													<ThreeDimensionalPlot plotId="3dplot" data={this.state.plotData3d.data}
 														xLabel={this.state.selectedDFR3Curve.demandType}
 														yLabel="Y"
-														// zLabel={this.state.selectedDFR3Curve.fragilityCurves[0].description}
 														width="100%" height="350px" style="surface"/>
 												</div>
 												:
