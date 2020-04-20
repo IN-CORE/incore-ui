@@ -507,10 +507,7 @@ class DFR3Viewer extends React.Component {
 	}
 
 	exportMappingJson(){
-		// do not include added field is3dPlot
-		let {is3dPlot, ...metadataJson} = this.state.selectedMapping;
-
-		exportJson(metadataJson);
+		exportJson(this.state.selectedMapping);
 	}
 
 	exportCurveJson(){
