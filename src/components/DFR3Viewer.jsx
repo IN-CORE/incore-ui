@@ -38,8 +38,10 @@ import Cookies from "universal-cookie";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 
+import {exportJson, is3dCurve} from "../utils/common";
+
 const cookies = new Cookies();
-const redundant_prop = ["legacyId", "privileges", "creator", "is3dPlot"];
+const redundantProp = ["legacyId", "privileges", "creator"];
 
 const theme = createMuiTheme();
 const styles = {
@@ -301,7 +303,7 @@ class DFR3Viewer extends React.Component {
 	}
 
 	async onClickDFR3Curve(DFR3Curve) {
-		let is3dPlot = this.is3dCurve(DFR3Curve);
+		let is3dPlot = is3dCurve(DFR3Curve);
 		let plotData3d = {};
 		let plotConfig2d = {};
 		if (is3dPlot) {
@@ -479,32 +481,6 @@ class DFR3Viewer extends React.Component {
 		return {"data": plotData, "title": title};
 	}
 
-	is3dCurve(DFR3Curve) {
-		let curves;
-		if ("fragilityCurves" in DFR3Curve) {
-			curves = DFR3Curve.fragilityCurves;
-		}
-		else if ("repairCurves" in DFR3Curve) {
-			curves = DFR3Curve.repairCurves;
-		}
-		else if ("restorationCurves" in DFR3Curve) {
-			curves = DFR3Curve.restorationCurves;
-		}
-		else{
-			curves = [];
-		}
-
-		for (let i = 0; i < curves.length; i++) {
-			let curve = curves[i];
-
-			if (curve.className.includes("CustomExpression") && curve.expression.includes("y")) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
 	isCustomExpression(DFR3Curve){
 		let curves;
 		if ("fragilityCurves" in DFR3Curve) {
@@ -530,32 +506,12 @@ class DFR3Viewer extends React.Component {
 		return false;
 	}
 
-	//TODO: Create a common util and move this method there.
-	// Many such static methods are in this file that need to be moved
-	exportJson(json) {
-		let curveJSON = JSON.stringify(json, null, 4);
-		let blob = new Blob([curveJSON], {type: "application/json"});
-
-		const filename = `${json.id}.json`;
-
-		if (window.navigator.msSaveOrOpenBlob) {
-			window.navigator.msSaveBlob(blob, filename);
-		} else {
-			let anchor = window.document.createElement("a");
-			anchor.href = window.URL.createObjectURL(blob);
-			anchor.download = filename;
-			document.body.appendChild(anchor);
-			anchor.click();
-			document.body.removeChild(anchor);
-		}
-	}
-
 	exportMappingJson(){
-		this.exportJson(this.state.selectedMapping);
+		exportJson(this.state.selectedMapping);
 	}
 
 	exportCurveJson(){
-		this.exportJson(this.state.selectedDFR3Curve);
+		exportJson(this.state.selectedDFR3Curve);
 	}
 
 	preview() {
@@ -576,21 +532,14 @@ class DFR3Viewer extends React.Component {
 		let tabIndex = this.state.tabIndex;
 
 		// Curve list
-		let curve_list = this.props.dfr3Curves;
-		let curvesWithInfo = [];
-		if (curve_list.length > 0) {
-			curve_list.map((DFR3Curve) => {
-				DFR3Curve["is3dPlot"] = this.is3dCurve(DFR3Curve);
-				curvesWithInfo.push(DFR3Curve);
-			});
-		}
+		let curveList = this.props.dfr3Curves;
 
 		// selected Curves
-		let selected_curve_detail = {};
+		let selectedCurveDetail = {};
 		if (this.state.selectedDFR3Curve) {
 			for (let item in this.state.selectedDFR3Curve) {
-				if (redundant_prop.indexOf(item) === -1) {
-					selected_curve_detail[item] = this.state.selectedDFR3Curve[item];
+				if (redundantProp.indexOf(item) === -1) {
+					selectedCurveDetail[item] = this.state.selectedDFR3Curve[item];
 				}
 			}
 		}
@@ -607,7 +556,7 @@ class DFR3Viewer extends React.Component {
 		let selectedMappingDetails = {};
 		if (this.state.selectedMapping) {
 			for (let item in this.state.selectedMapping) {
-				if (redundant_prop.indexOf(item) === -1) {
+				if (redundantProp.indexOf(item) === -1) {
 					selectedMappingDetails[item] = this.state.selectedMapping[item];
 				}
 			}
@@ -730,13 +679,12 @@ class DFR3Viewer extends React.Component {
 										<div className={classes.paperHeader}>
 											<Typography variant="subtitle1">DFR3 Curves</Typography>
 										</div>
-										<DFR3CurvesGroupList id="DFR3Curve-list"
-																				 onClick={this.onClickDFR3Curve}
-																				 data={curvesWithInfo} displayField="author"
-																				 selectedDFR3Curve={this.state.selectedDFR3Curve}/>
+										<DFR3CurvesGroupList id="DFR3Curve-list" onClick={this.onClickDFR3Curve}
+															 data={curveList} displayField="author"
+															 selectedDFR3Curve={this.state.selectedDFR3Curve}/>
 										<div className={classes.paperFooter}>
 											<Pagination pageNumber={this.state.pageNumber}
-												data={curvesWithInfo}
+												data={curveList}
 												dataPerPage={this.state.dataPerPage}
 												previous={this.previous}
 												next={this.next}/>
@@ -746,7 +694,7 @@ class DFR3Viewer extends React.Component {
 								<Grid item lg={8} md={8} xl={8} xs={12}
 									className={this.state.selectedDFR3Curve ? null : classes.hide}>
 									<Paper variant="outlined" className={classes.main}>
-										{Object.keys(selected_curve_detail).length > 0 ?
+										{Object.keys(selectedCurveDetail).length > 0 ?
 											<div>
 												<div className={classes.paperHeader}>
 													<Typography variant="subtitle1">Metadata</Typography>
@@ -770,7 +718,7 @@ class DFR3Viewer extends React.Component {
 													</CopyToClipboard>
 												</div>
 												<div className={classes.metadata}>
-													<NestedInfoTable data={selected_curve_detail}/>
+													<NestedInfoTable data={selectedCurveDetail}/>
 												</div>
 											</div>
 											:
