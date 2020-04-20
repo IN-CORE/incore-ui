@@ -38,10 +38,10 @@ import Cookies from "universal-cookie";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 
-import {exportJson, is3dCurve} from "../utils/common";
+import {is3dCurve, exportJson} from "../utils/common";
 
 const cookies = new Cookies();
-const redundantProp = ["legacyId", "privileges", "creator"];
+const redundantProp = ["legacyId", "privileges", "creator", "is3dPlot"];
 
 const theme = createMuiTheme();
 const styles = {
@@ -303,10 +303,9 @@ class DFR3Viewer extends React.Component {
 	}
 
 	async onClickDFR3Curve(DFR3Curve) {
-		let is3dPlot = is3dCurve(DFR3Curve);
 		let plotData3d = {};
 		let plotConfig2d = {};
-		if (is3dPlot) {
+		if (DFR3Curve.is3dPlot) {
 			plotData3d = await this.generate3dPlotData(DFR3Curve);
 		} else {
 			plotConfig2d = this.generate2dPlotData(DFR3Curve);
@@ -319,7 +318,7 @@ class DFR3Viewer extends React.Component {
 		});
 	}
 
-	 onClickDFR3Mapping(DFR3Mapping) {
+	onClickDFR3Mapping(DFR3Mapping) {
 		this.setState({
 			selectedMapping: DFR3Mapping
 		});
@@ -481,6 +480,7 @@ class DFR3Viewer extends React.Component {
 		return {"data": plotData, "title": title};
 	}
 
+
 	isCustomExpression(DFR3Curve){
 		let curves;
 		if ("fragilityCurves" in DFR3Curve) {
@@ -507,11 +507,17 @@ class DFR3Viewer extends React.Component {
 	}
 
 	exportMappingJson(){
-		exportJson(this.state.selectedMapping);
+		// do not include added field is3dPlot
+		let {is3dPlot, ...metadataJson} = this.state.selectedMapping;
+
+		exportJson(metadataJson);
 	}
 
 	exportCurveJson(){
-		exportJson(this.state.selectedDFR3Curve);
+		// do not include added field is3dPlot
+		let {is3dPlot, ...metadataJson} = this.state.selectedDFR3Curve;
+
+		exportJson(metadataJson);
 	}
 
 	preview() {
@@ -533,6 +539,13 @@ class DFR3Viewer extends React.Component {
 
 		// Curve list
 		let curveList = this.props.dfr3Curves;
+		let curvesWithInfo = [];
+		if (curveList.length > 0) {
+			curveList.map((DFR3Curve) => {
+				DFR3Curve["is3dPlot"] = is3dCurve(DFR3Curve);
+				curvesWithInfo.push(DFR3Curve);
+			});
+		}
 
 		// selected Curves
 		let selectedCurveDetail = {};
@@ -581,7 +594,7 @@ class DFR3Viewer extends React.Component {
 									<div className={classes.selectDiv}>
 										<InputLabel>Curve Type</InputLabel>
 										<Select value={this.state.selectedDFR3Type} onChange={this.changeDFR3Type}
-											className={classes.select}>
+												className={classes.select}>
 											<MenuItem value="fragilities" key="fragilities"
 													  className={classes.denseStyle}>Fragility</MenuItem>
 											<MenuItem value="restorations" key="restorations"
@@ -595,7 +608,7 @@ class DFR3Viewer extends React.Component {
 									<div className={classes.selectDiv}>
 										<InputLabel>Hazard Type</InputLabel>
 										<Select value={this.state.selectedHazard} onChange={this.handleHazardSelection}
-											className={classes.select}>
+												className={classes.select}>
 											<MenuItem value="All" className={classes.denseStyle}>All</MenuItem>
 											<MenuItem value="earthquake"
 													  className={classes.denseStyle}>Earthquake</MenuItem>
@@ -607,8 +620,8 @@ class DFR3Viewer extends React.Component {
 									<div className={classes.selectDiv}>
 										<InputLabel>Inventory Type</InputLabel>
 										<Select value={this.state.selectedInventory}
-											onChange={this.handleInventorySelection}
-											className={classes.select}>
+												onChange={this.handleInventorySelection}
+												className={classes.select}>
 											<MenuItem value="All" className={classes.denseStyle}>All</MenuItem>
 											<MenuItem value="building"
 													  className={classes.denseStyle}>Building</MenuItem>
@@ -673,26 +686,27 @@ class DFR3Viewer extends React.Component {
 						{tabIndex === 0 ?
 							<Grid container spacing={4}>
 								<Grid item lg={this.state.selectedDFR3Curve ? 4 : 12}
-									md={this.state.selectedDFR3Curve ? 4 : 12}
-									xl={this.state.selectedDFR3Curve ? 4 : 12} xs={12}>
+									  md={this.state.selectedDFR3Curve ? 4 : 12}
+									  xl={this.state.selectedDFR3Curve ? 4 : 12} xs={12}>
 									<Paper variant="outlined" className={classes.main}>
 										<div className={classes.paperHeader}>
 											<Typography variant="subtitle1">DFR3 Curves</Typography>
 										</div>
-										<DFR3CurvesGroupList id="DFR3Curve-list" onClick={this.onClickDFR3Curve}
-															 data={curveList} displayField="author"
+										<DFR3CurvesGroupList id="DFR3Curve-list"
+															 onClick={this.onClickDFR3Curve}
+															 data={curvesWithInfo} displayField="author"
 															 selectedDFR3Curve={this.state.selectedDFR3Curve}/>
 										<div className={classes.paperFooter}>
 											<Pagination pageNumber={this.state.pageNumber}
-												data={curveList}
-												dataPerPage={this.state.dataPerPage}
-												previous={this.previous}
-												next={this.next}/>
+														data={curvesWithInfo}
+														dataPerPage={this.state.dataPerPage}
+														previous={this.previous}
+														next={this.next}/>
 										</div>
 									</Paper>
 								</Grid>
 								<Grid item lg={8} md={8} xl={8} xs={12}
-									className={this.state.selectedDFR3Curve ? null : classes.hide}>
+									  className={this.state.selectedDFR3Curve ? null : classes.hide}>
 									<Paper variant="outlined" className={classes.main}>
 										{Object.keys(selectedCurveDetail).length > 0 ?
 											<div>
@@ -701,20 +715,20 @@ class DFR3Viewer extends React.Component {
 												</div>
 												<div className={classes.metadata}>
 													<Button color="primary"
-														variant="contained"
-														className={classes.inlineButtons}
-														size="small"
-														onClick={this.exportCurveJson}>Download Metadata</Button>
+															variant="contained"
+															className={classes.inlineButtons}
+															size="small"
+															onClick={this.exportCurveJson}>Download Metadata</Button>
 													<Button color="primary"
-														variant="contained"
-														className={classes.inlineButtons}
-														size="small"
-														onClick={this.preview}>Preview</Button>
+															variant="contained"
+															className={classes.inlineButtons}
+															size="small"
+															onClick={this.preview}>Preview</Button>
 													<CopyToClipboard text={this.state.selectedDFR3Curve.id}>
 														<Button color="secondary" variant="contained"
-															className={classes.inlineButtons}
-															size="small">Copy
-																		ID</Button>
+																className={classes.inlineButtons}
+																size="small">Copy
+															ID</Button>
 													</CopyToClipboard>
 												</div>
 												<div className={classes.metadata}>
@@ -730,19 +744,19 @@ class DFR3Viewer extends React.Component {
 								{/* Preview */}
 								{this.state.selectedDFR3Curve ?
 									<Dialog open={this.state.preview} onClose={this.handlePreviewerClose} maxWidth="lg" fullWidth
-										scroll="paper">
+											scroll="paper">
 										<DialogContent className={classes.preview}>
 											<IconButton aria-label="Close" onClick={this.handlePreviewerClose}
-												className={classes.previewClose}>
+														className={classes.previewClose}>
 												<CloseIcon fontSize="small"/>
 											</IconButton>
-											{ is3dCurve(this.state.selectedDFR3Curve) ?
+											{this.state.selectedDFR3Curve.is3dPlot ?
 												<div>
 													<Typography variant="h6">{this.state.plotData3d.title}</Typography>
 													<ThreeDimensionalPlot plotId="3dplot" data={this.state.plotData3d.data}
-														xLabel={this.state.selectedDFR3Curve.demandType}
-														yLabel="Y"
-														width="100%" height="350px" style="surface"/>
+																		  xLabel={this.state.selectedDFR3Curve.demandType}
+																		  yLabel="Y"
+																		  width="100%" height="350px" style="surface"/>
 												</div>
 												:
 												<LineChart chartId="chart" configuration={this.state.chartConfig}/>}
@@ -764,28 +778,28 @@ class DFR3Viewer extends React.Component {
 						{tabIndex === 1 ?
 							<Grid container spacing={4}>
 								<Grid item lg={this.state.selectedMapping ? 4 : 12}
-									md={this.state.selectedMapping ? 4 : 12}
-									xl={this.state.selectedMapping ? 4 : 12} xs={12}>
+									  md={this.state.selectedMapping ? 4 : 12}
+									  xl={this.state.selectedMapping ? 4 : 12} xs={12}>
 									<Paper variant="outlined" className={classes.main}>
 										<div className={classes.paperHeader}>
 											<Typography variant="subtitle1">DFR3 Mappings</Typography>
 										</div>
 										<DFR3MappingsGroupList id="DFR3Mappings-list"
-																					 onClick={this.onClickDFR3Mapping}
-																					 data={mappingsWithInfo} displayField="name"
-																					 selectedMapping={this.state.selectedMapping}/>
+															   onClick={this.onClickDFR3Mapping}
+															   data={mappingsWithInfo} displayField="name"
+															   selectedMapping={this.state.selectedMapping}/>
 										<div className={classes.paperFooter}>
 											<Pagination pageNumber={this.state.pageNumberMappings}
-												data={mappingsWithInfo}
-												dataPerPage={this.state.dataPerPage}
-												previous={this.previousMappings}
-												next={this.nextMappings}/>
+														data={mappingsWithInfo}
+														dataPerPage={this.state.dataPerPage}
+														previous={this.previousMappings}
+														next={this.nextMappings}/>
 										</div>
 									</Paper>
 								</Grid>
 
 								<Grid item lg={8} md={8} xl={8} xs={12}
-									className={this.state.selectedMapping ? null : classes.hide}>
+									  className={this.state.selectedMapping ? null : classes.hide}>
 									<Paper variant="outlined" className={classes.main}>
 										{Object.keys(selectedMappingDetails).length > 0 ?
 											<div>
@@ -794,15 +808,15 @@ class DFR3Viewer extends React.Component {
 												</div>
 												<div className={classes.metadata}>
 													<Button color="primary"
-														variant="contained"
-														className={classes.inlineButtons}
-														size="small"
-														onClick={this.exportMappingJson}>Download Metadata</Button>
+															variant="contained"
+															className={classes.inlineButtons}
+															size="small"
+															onClick={this.exportMappingJson}>Download Metadata</Button>
 													<CopyToClipboard text={this.state.selectedMapping.id}>
 														<Button color="secondary" variant="contained"
-															className={classes.inlineButtons}
-															size="small">Copy
-																ID</Button>
+																className={classes.inlineButtons}
+																size="small">Copy
+															ID</Button>
 													</CopyToClipboard>
 												</div>
 												<div className={classes.metadata}>

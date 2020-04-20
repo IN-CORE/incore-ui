@@ -2,13 +2,12 @@ import * as React from "react";
 import {List, ListItem, ListItemIcon, ListItemText, Tooltip} from "@material-ui/core";
 import ShowChartIcon from "@material-ui/icons/ShowChart";
 import ThreeDRotationIcon from "@material-ui/icons/ThreeDRotation";
-import {is3dCurve} from "../../utils/common";
 
 const DFR3CurvesGroupList = (props) => {
 	return (
 		<List component="nav" id={props.id} style={{"overflowY": "auto"}}>
 			{props.data.map(function (dfr3Curve) {
-				if (is3dCurve(dfr3Curve)) {
+				if (dfr3Curve.is3dPlot) {
 					return (
 						<ListItem button
 								  onClick={() => props.onClick(dfr3Curve)}
