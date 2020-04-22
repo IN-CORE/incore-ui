@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.4.3] - 2020-04-22
+
+### Fixed
+- Point changelog to master branch for incore-lab in the landing page
 
 ## [0.4.2] - 2020-03-26
 
