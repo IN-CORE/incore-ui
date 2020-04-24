@@ -1,6 +1,14 @@
 // @flow
 
-import type {AnalysesMetadata, Analysis, Datasets, DFR3Curves, Hazards, Dispatch, DFR3Mappings} from "../utils/flowtype";
+import type {
+	AnalysesMetadata,
+	Analysis,
+	Datasets,
+	DFR3Curves,
+	DFR3Mappings,
+	Dispatch,
+	Hazards
+} from "../utils/flowtype";
 import Cookies from "universal-cookie";
 import config from "../app.config";
 
@@ -58,8 +66,8 @@ export function receiveHazards(type: string, json: Hazards) {
 
 export const RECEIVE_DFR3_CURVES = "RECEIVE_DFR3_CURVES";
 
-export function receiveDFR3Curves(type: string, json: DFR3Curves){
-	return (dispatch: Dispatch) =>{
+export function receiveDFR3Curves(type: string, json: DFR3Curves) {
+	return (dispatch: Dispatch) => {
 		dispatch({
 			type: type,
 			dfr3Curves: json,
@@ -70,8 +78,8 @@ export function receiveDFR3Curves(type: string, json: DFR3Curves){
 
 export const RECEIVE_DFR3_MAPPINGS = "RECEIVE_DFR3_MAPPINGS";
 
-export function receiveDFR3Mappings(type: string, json: DFR3Mappings){
-	return (dispatch: Dispatch) =>{
+export function receiveDFR3Mappings(type: string, json: DFR3Mappings) {
+	return (dispatch: Dispatch) => {
 		dispatch({
 			type: type,
 			dfr3Mappings: json,
@@ -99,10 +107,10 @@ export function fetchAnalyses() {
 		return fetch(endpoint, {
 			headers: getHeader()
 		})
-			.then(response => response.json())
-			.then(json =>
-				dispatch(receiveAnalyses(endpoint, json))
-			);
+		.then(response => response.json())
+		.then(json =>
+			dispatch(receiveAnalyses(endpoint, json))
+		);
 	};
 }
 
@@ -114,10 +122,10 @@ export function getAnalysisById(id: String) {
 		return fetch(endpoint, {
 			headers: getHeader()
 		})
-			.then(response => response.json())
-			.then(json =>
-				dispatch(receiveAnalysis(config.maestroService, json))
-			);
+		.then(response => response.json())
+		.then(json =>
+			dispatch(receiveAnalysis(config.maestroService, json))
+		);
 	};
 
 }
@@ -126,20 +134,20 @@ export function searchDatasets(keyword, limit, offset) {
 	let endpoint = `${config.dataService}/search?limit=${limit}&skip=${offset}&text=${keyword}`;
 	return (dispatch: Dispatch) => {
 		return fetch(endpoint, {mode: "cors", headers: getHeader()})
-			.then(response =>{
-				if (response.status === 200){
-					response.json().then(json =>{
-						dispatch(receiveDatasets(RECEIVE_DATASETS, json));
-					});
-				}
-				else if (response.status === 401){
-					cookies.remove("Authorization");
-					dispatch(receiveDatasets(LOGIN_ERROR, []));
-				}
-				else{
-					dispatch(receiveDatasets(RECEIVE_DATASETS, []));
-				}
-			});
+		.then(response => {
+			if (response.status === 200) {
+				response.json().then(json => {
+					dispatch(receiveDatasets(RECEIVE_DATASETS, json));
+				});
+			}
+			else if (response.status === 401) {
+				cookies.remove("Authorization");
+				dispatch(receiveDatasets(LOGIN_ERROR, []));
+			}
+			else {
+				dispatch(receiveDatasets(RECEIVE_DATASETS, []));
+			}
+		});
 	};
 }
 
@@ -148,25 +156,25 @@ export function fetchDatasets(dataType, space, limit, offset) {
 	if (dataType !== null && dataType !== "All") {
 		endpoint = `${endpoint}&type=${dataType}`;
 	}
-	if (space !== null && space !== "All"){
+	if (space !== null && space !== "All") {
 		endpoint = `${endpoint}&space=${space}`;
 	}
 	return (dispatch: Dispatch) => {
 		return fetch(endpoint, {mode: "cors", headers: getHeader()})
-			.then(response =>{
-				if (response.status === 200){
-					response.json().then(json =>{
-						dispatch(receiveDatasets(RECEIVE_DATASETS, json));
-					});
-				}
-				else if (response.status === 401){
-					cookies.remove("Authorization");
-					dispatch(receiveDatasets(LOGIN_ERROR, []));
-				}
-				else{
-					dispatch(receiveDatasets(RECEIVE_DATASETS, []));
-				}
-			});
+		.then(response => {
+			if (response.status === 200) {
+				response.json().then(json => {
+					dispatch(receiveDatasets(RECEIVE_DATASETS, json));
+				});
+			}
+			else if (response.status === 401) {
+				cookies.remove("Authorization");
+				dispatch(receiveDatasets(LOGIN_ERROR, []));
+			}
+			else {
+				dispatch(receiveDatasets(RECEIVE_DATASETS, []));
+			}
+		});
 	};
 }
 
@@ -174,127 +182,127 @@ export function fetchSpaces() {
 	const endpoint = config.spaceService;
 	return (dispatch: Dispatch) => {
 		return fetch(endpoint, {mode: "cors", headers: getHeader()})
-			.then(response =>{
-				if (response.status === 200){
-					response.json().then(json =>{
-						dispatch(receiveSpaces(RECEIVE_SPACES, json));
-					});
-				}
-				else if (response.status === 401){
-					cookies.remove("Authorization");
-					dispatch(receiveSpaces(LOGIN_ERROR, []));
-				}
-				else{
-					dispatch(receiveSpaces(RECEIVE_SPACES, []));
-				}
-			});
+		.then(response => {
+			if (response.status === 200) {
+				response.json().then(json => {
+					dispatch(receiveSpaces(RECEIVE_SPACES, json));
+				});
+			}
+			else if (response.status === 401) {
+				cookies.remove("Authorization");
+				dispatch(receiveSpaces(LOGIN_ERROR, []));
+			}
+			else {
+				dispatch(receiveSpaces(RECEIVE_SPACES, []));
+			}
+		});
 	};
 }
 
-export function searchDFR3Curves(dfr3_type, keyword, limit, offset){
+export function searchDFR3Curves(dfr3_type, keyword, limit, offset) {
 	let endpoint = `${config.dfr3Service}${dfr3_type}/search?limit=${limit}&skip=${offset}&text=${keyword}`;
 	return (dispatch: Dispatch) => {
 		return fetch(endpoint, {mode: "cors", headers: getHeader()})
-			.then(response =>{
-				if (response.status === 200){
-					response.json().then(json =>{
-						dispatch(receiveDFR3Curves(RECEIVE_DFR3_CURVES, json));
-					});
-				}
-				else if (response.status === 401){
-					cookies.remove("Authorization");
-					dispatch(receiveDFR3Curves(LOGIN_ERROR, []));
-				}
-				else{
-					dispatch(receiveDFR3Curves(RECEIVE_DFR3_CURVES, []));
-				}
-			});
+		.then(response => {
+			if (response.status === 200) {
+				response.json().then(json => {
+					dispatch(receiveDFR3Curves(RECEIVE_DFR3_CURVES, json));
+				});
+			}
+			else if (response.status === 401) {
+				cookies.remove("Authorization");
+				dispatch(receiveDFR3Curves(LOGIN_ERROR, []));
+			}
+			else {
+				dispatch(receiveDFR3Curves(RECEIVE_DFR3_CURVES, []));
+			}
+		});
 	};
 }
 
-export function fetchDFR3Curves(dfr3_type: string, space: string, inventory: string, hazard: string, limit, offset){
+export function fetchDFR3Curves(dfr3_type: string, space: string, inventory: string, hazard: string, limit, offset) {
 	let endpoint = `${config.dfr3Service}${dfr3_type}?limit=${limit}&skip=${offset}`;
-	if (space !== null && space !== "All"){
+	if (space !== null && space !== "All") {
 		endpoint = `${endpoint}&space=${space}`;
 	}
-	if (inventory !== null && inventory !== "All"){
+	if (inventory !== null && inventory !== "All") {
 		endpoint = `${endpoint}&inventory=${inventory}`;
 	}
-	if (hazard !== null && hazard !== "All"){
+	if (hazard !== null && hazard !== "All") {
 		endpoint = `${endpoint}&hazard=${hazard}`;
 	}
-	return (dispatch:Dispatch) => {
+	return (dispatch: Dispatch) => {
 		return fetch(endpoint, {mode: "cors", headers: getHeader()})
-			.then(response => {
-				if (response.status === 200){
-					response.json().then(json =>{
-						dispatch(receiveDFR3Curves(RECEIVE_DFR3_CURVES, json));
-					});
-				}
-				else if (response.status === 401){
-					cookies.remove("Authorization");
-					dispatch(receiveDFR3Curves(LOGIN_ERROR, []));
-				}
-				else{
-					dispatch(receiveDFR3Curves(RECEIVE_DFR3_CURVES, []));
-				}
-			});
+		.then(response => {
+			if (response.status === 200) {
+				response.json().then(json => {
+					dispatch(receiveDFR3Curves(RECEIVE_DFR3_CURVES, json));
+				});
+			}
+			else if (response.status === 401) {
+				cookies.remove("Authorization");
+				dispatch(receiveDFR3Curves(LOGIN_ERROR, []));
+			}
+			else {
+				dispatch(receiveDFR3Curves(RECEIVE_DFR3_CURVES, []));
+			}
+		});
 	};
 }
 
 //TODO: Move this to app.config?
-export function getMappingTypeFromDFR3Url(dfr3_type: string){
-	switch(dfr3_type.toLowerCase()){
-	case "fragilities":
-		return "fragility";
-	case "repairs":
-		return "repair";
-	case "restorations":
-		return "restoration";
+export function getMappingTypeFromDFR3Url(dfr3_type: string) {
+	switch (dfr3_type.toLowerCase()) {
+		case "fragilities":
+			return "fragility";
+		case "repairs":
+			return "repair";
+		case "restorations":
+			return "restoration";
 	}
 }
 
-export function fetchDFR3Mappings(dfr3_type: string, space: string, inventory: string, hazard: string, limit, offset){
+export function fetchDFR3Mappings(dfr3_type: string, space: string, inventory: string, hazard: string, limit, offset) {
 	let endpoint = `${config.dfr3Service}mappings?limit=${limit}&skip=${offset}`;
 
-	if (dfr3_type !== null && dfr3_type !== "All"){
+	if (dfr3_type !== null && dfr3_type !== "All") {
 		dfr3_type = getMappingTypeFromDFR3Url(dfr3_type);
 
 		endpoint = `${endpoint}&mappingType=${dfr3_type}`;
 	}
-	if (space !== null && space !== "All"){
+	if (space !== null && space !== "All") {
 		endpoint = `${endpoint}&space=${space}`;
 	}
-	if (inventory !== null && inventory !== "All"){
+	if (inventory !== null && inventory !== "All") {
 		endpoint = `${endpoint}&inventory=${inventory}`;
 	}
-	if (hazard !== null && hazard !== "All"){
+	if (hazard !== null && hazard !== "All") {
 		endpoint = `${endpoint}&hazard=${hazard}`;
 	}
 
-	return (dispatch:Dispatch) => {
+	return (dispatch: Dispatch) => {
 		return fetch(endpoint, {mode: "cors", headers: getHeader()})
-			.then(response => {
-				if (response.status === 200){
-					response.json().then(json =>{
-						dispatch(receiveDFR3Mappings(RECEIVE_DFR3_MAPPINGS, json));
-					});
-				}
-				else if (response.status === 401){
-					cookies.remove("Authorization");
-					dispatch(receiveDFR3Mappings(LOGIN_ERROR, []));
-				}
-				else{
-					dispatch(receiveDFR3Mappings(RECEIVE_DFR3_MAPPINGS, []));
-				}
-			});
+		.then(response => {
+			if (response.status === 200) {
+				response.json().then(json => {
+					dispatch(receiveDFR3Mappings(RECEIVE_DFR3_MAPPINGS, json));
+				});
+			}
+			else if (response.status === 401) {
+				cookies.remove("Authorization");
+				dispatch(receiveDFR3Mappings(LOGIN_ERROR, []));
+			}
+			else {
+				dispatch(receiveDFR3Mappings(RECEIVE_DFR3_MAPPINGS, []));
+			}
+		});
 	};
 }
 
-export function searchDFR3Mappings(dfr3_type, keyword, limit, offset){
+export function searchDFR3Mappings(dfr3_type, keyword, limit, offset) {
 	let endpoint = `${config.dfr3Service}mappings/search?limit=${limit}&skip=${offset}&text=${keyword}`;
 
-	if (dfr3_type !== null && dfr3_type !== "All"){
+	if (dfr3_type !== null && dfr3_type !== "All") {
 		dfr3_type = getMappingTypeFromDFR3Url(dfr3_type);
 
 		endpoint = `${endpoint}&mappingType=${dfr3_type}`;
@@ -302,20 +310,20 @@ export function searchDFR3Mappings(dfr3_type, keyword, limit, offset){
 
 	return (dispatch: Dispatch) => {
 		return fetch(endpoint, {mode: "cors", headers: getHeader()})
-			.then(response =>{
-				if (response.status === 200){
-					response.json().then(json =>{
-						dispatch(receiveDFR3Mappings(RECEIVE_DFR3_MAPPINGS, json));
-					});
-				}
-				else if (response.status === 401){
-					cookies.remove("Authorization");
-					dispatch(receiveDFR3Mappings(LOGIN_ERROR, []));
-				}
-				else{
-					dispatch(receiveDFR3Mappings(RECEIVE_DFR3_MAPPINGS, []));
-				}
-			});
+		.then(response => {
+			if (response.status === 200) {
+				response.json().then(json => {
+					dispatch(receiveDFR3Mappings(RECEIVE_DFR3_MAPPINGS, json));
+				});
+			}
+			else if (response.status === 401) {
+				cookies.remove("Authorization");
+				dispatch(receiveDFR3Mappings(LOGIN_ERROR, []));
+			}
+			else {
+				dispatch(receiveDFR3Mappings(RECEIVE_DFR3_MAPPINGS, []));
+			}
+		});
 	};
 }
 
@@ -324,44 +332,44 @@ export function searchHazards(hazard_type, keyword, limit, offset) {
 	let endpoint = `${config.hazardServiceBase}${hazard_type}/search?limit=${limit}&skip=${offset}&text=${keyword}`;
 	return (dispatch: Dispatch) => {
 		return fetch(endpoint, {mode: "cors", headers: getHeader()})
-			.then(response =>{
-				if (response.status === 200){
-					response.json().then(json =>{
-						dispatch(receiveHazards(RECEIVE_HAZARDS, json));
-					});
-				}
-				else if (response.status === 401){
-					cookies.remove("Authorization");
-					dispatch(receiveHazards(LOGIN_ERROR, []));
-				}
-				else{
-					dispatch(receiveHazards(RECEIVE_HAZARDS, []));
-				}
-			});
+		.then(response => {
+			if (response.status === 200) {
+				response.json().then(json => {
+					dispatch(receiveHazards(RECEIVE_HAZARDS, json));
+				});
+			}
+			else if (response.status === 401) {
+				cookies.remove("Authorization");
+				dispatch(receiveHazards(LOGIN_ERROR, []));
+			}
+			else {
+				dispatch(receiveHazards(RECEIVE_HAZARDS, []));
+			}
+		});
 	};
 }
 
 export function fetchHazards(hazard_type: string, space: string, limit, offset) {
 	let endpoint = `${config.hazardServiceBase}${hazard_type}?limit=${limit}&skip=${offset}`;
-	if (space !== null && space !== "All"){
+	if (space !== null && space !== "All") {
 		endpoint = `${endpoint}&space=${space}`;
 	}
 	return (dispatch: Dispatch) => {
 		return fetch(endpoint, {mode: "cors", headers: getHeader()})
-			.then(response =>{
-				if (response.status === 200){
-					response.json().then(json =>{
-						dispatch(receiveHazards(RECEIVE_HAZARDS, json));
-					});
-				}
-				else if (response.status === 401){
-					cookies.remove("Authorization");
-					dispatch(receiveHazards(LOGIN_ERROR, []));
-				}
-				else{
-					dispatch(receiveHazards(RECEIVE_HAZARDS, []));
-				}
-			});
+		.then(response => {
+			if (response.status === 200) {
+				response.json().then(json => {
+					dispatch(receiveHazards(RECEIVE_HAZARDS, json));
+				});
+			}
+			else if (response.status === 401) {
+				cookies.remove("Authorization");
+				dispatch(receiveHazards(LOGIN_ERROR, []));
+			}
+			else {
+				dispatch(receiveHazards(RECEIVE_HAZARDS, []));
+			}
+		});
 	};
 }
 
@@ -379,7 +387,7 @@ export async function loginHelper(username, password) {
 		headers: {
 			"Content-Type": "application/x-www-form-urlencoded"
 		},
-		body:formData.join("&"),
+		body: formData.join("&"),
 	});
 
 	const tokens = await tokenRequest.json();
@@ -394,7 +402,7 @@ export function login(username, password) {
 	return async (dispatch: Dispatch) => {
 		const json = await loginHelper(username, password);
 		if (json["access_token"] !== undefined) {
-			cookies.set("Authorization", `bearer ${json["access_token"]}`, { maxAge: json["expires_in"]});
+			cookies.set("Authorization", `bearer ${json["access_token"]}`, {maxAge: json["expires_in"]});
 			return dispatch({
 				type: SET_USER,
 				Authorization: `bearer ${json["access_token"]}`,
@@ -530,13 +538,21 @@ function getDatawolfHeader() {
 	return headers;
 }
 
-export async function getRepoVersion(repoName){
+export async function getRepoVersion(repoName) {
 
 	const endpoint = `https://api.github.com/repos/IN-CORE/${repoName}/tags`;
 	const versionRequest = await fetch(endpoint);
-	const version = await versionRequest.json();
-	const versionName = version[0].name;
 
-	return versionName;
+	try {
+		const version = await versionRequest.json();
+		const versionName = version[0].name;
+		return versionName;
+	}
+	catch (error) {
+		// if github tag API failed, just log the erorr and return null
+		console.log(error);
+		return null;
+	}
+
 
 }
