@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## Changed
 - Fixed all ESLint errors and some warnings. Mostly related to indentations, string notations etc. Some eslint warnnings still remain. [INCORE1-529](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-529)
 
+## Fixed
+- Fix the bug that landing page not showing components at all if github tag API is down [INCORE1-574](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-574)
+
 ## [0.4.2] - 2020-03-26
 
 ### Security
