@@ -200,7 +200,7 @@ class HomePage extends Component {
 				title: "IN-CORE Lab",
 				version: await getRepoVersion("incore-lab"),
 				options: {
-					"Change log": "https://github.com/IN-CORE/incore-lab/blob/develop/CHANGELOG.md",
+					"Change log": "https://github.com/IN-CORE/incore-lab/blob/master/CHANGELOG.md",
 					"GitHub": "https://github.com/IN-CORE/incore-lab"
 				}
 			},
