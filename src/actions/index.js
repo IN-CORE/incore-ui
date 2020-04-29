@@ -517,11 +517,18 @@ export function executeDatawolfWorkflow(workflowid, creatorid, title, descriptio
 }
 
 export function getHeader() {
-	const headers = new Headers({
-		"Authorization": cookies.get("Authorization"),
-	});
-	return headers;
+	if (process.env.DEPLOY_ENV === "local"){
+		const headers = new Headers({
+			"x-auth-userinfo": "{\"preferred_username\":\"incrtest\"}",
+		});
+	}
+	else{
+		const headers = new Headers({
+			"Authorization": cookies.get("Authorization"),
+		});
+	}
 }
+
 
 function getDatawolfHeader() {
 	const headers = new Headers({
