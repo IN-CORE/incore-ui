@@ -10,6 +10,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## Changed
 - Fixed all ESLint errors and some warnings. Mostly related to indentations, string notations etc. Some eslint warnnings still remain. [INCORE1-529](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-529)
 
+## [0.4.3] - 2020-04-22
+
+### Fixed
+- Point changelog to master branch for incore-lab in the landing page
+
 ## [0.4.2] - 2020-03-26
 
 ### Security
