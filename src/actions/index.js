@@ -521,11 +521,15 @@ export function getHeader() {
 		const headers = new Headers({
 			"x-auth-userinfo": "{\"preferred_username\":\"incrtest\"}",
 		});
+
+		return headers;
 	}
 	else{
 		const headers = new Headers({
 			"Authorization": cookies.get("Authorization"),
 		});
+
+		return headers;
 	}
 }
 

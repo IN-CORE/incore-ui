@@ -12,22 +12,22 @@ config["swaggerUrl"] = "/doc/api/";
 config["webVersion"] = "0.4.3";
 
 if (process.env.DEPLOY_ENV === "production"){
-	let apihost = "incore.ncsa.illinois.edu";
-	let apiurl = `${apiprotocol}://${apihost}`;
+	apihost = "incore.ncsa.illinois.edu";
+	apiurl = `${apiprotocol}://${apihost}`;
 	config = {
 		geoServer: "https://incore-geoserver.ncsa.illinois.edu/geoserver/incore/wms",
 	};
 }
 else if(process.env.DEPLOY_ENV === "test"){
-	let apihost = "incore-test-kube.ncsa.illinois.edu";
-	let apiurl = `${apiprotocol}://${apihost}`;
+	apihost = "incore-test-kube.ncsa.illinois.edu";
+	apiurl = `${apiprotocol}://${apihost}`;
 	config = {
 		geoServer: "https://incore-test-kube.ncsa.illinois.edu/geoserver/incore/wms",
 	};
 }
 else if (process.env.DEPLOY_ENV === "local"){
-	let apihost = "localhost:8080";
-	let apiurl = `http://${apihost}`;
+	apihost = "localhost:8080";
+	apiurl = `http://${apihost}`;
 	config = {
 		geoServer: "https://incore-test-kube.ncsa.illinois.edu/geoserver/incore/wms",
 	};
