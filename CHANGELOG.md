@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Added
+- Allow web app to connect to localhost incore services [INCORE1-531](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-531)
+
 ## Changed
 - Fixed all ESLint errors and some warnings. Mostly related to indentations, string notations etc. Some eslint warnnings still remain. [INCORE1-529](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-529)
 
