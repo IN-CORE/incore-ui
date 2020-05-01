@@ -4,13 +4,6 @@ let config = {};
 let apihost;
 let apiurl;
 
-config["semanticService"] = "";
-config["dataWolf"] = "https://incore2-datawolf.ncsa.illinois.edu/datawolf/";
-config["client_id"] = "react-auth";
-config["pyIncoreDocUrl"] = "/doc/pyincore/index.html";
-config["swaggerUrl"] = "/doc/api/";
-config["webVersion"] = "0.4.3";
-
 if (process.env.DEPLOY_ENV === "production"){
 	apihost = "incore.ncsa.illinois.edu";
 	apiurl = `${apiprotocol}://${apihost}`;
@@ -39,7 +32,12 @@ else { // default case that used dev environment
 		geoServer: "https://incore-dev-kube.ncsa.illinois.edu/geoserver/incore/wms",
 	};
 }
-
+config["semanticService"] = "";
+config["dataWolf"] = "https://incore2-datawolf.ncsa.illinois.edu/datawolf/";
+config["client_id"] = "react-auth";
+config["pyIncoreDocUrl"] = "/doc/pyincore/index.html";
+config["swaggerUrl"] = "/doc/api/";
+config["webVersion"] = "0.4.3";
 config["spaceService"] = `${apiurl}/space/api/spaces`;
 config["dfr3Service"] = `${apiurl}/dfr3/api/`;
 config["fragilityService"] = `${apiurl}/dfr3/api/fragilities`;
@@ -48,7 +46,6 @@ config["authService"] =  `${apiurl}/auth/realms/In-core/protocol/openid-connect/
 config["dataServiceBase"] = `${apiurl}/`;
 config["dataService"] =  `${apiurl}/data/api/datasets`;
 config["incoreLab"] = `${apiurl}/lab`;
-
 
 export default config;
 
