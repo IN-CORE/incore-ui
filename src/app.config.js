@@ -21,7 +21,7 @@ if (process.env.DEPLOY_ENV === "production"){
 		client_id: "react-auth",
 		pyIncoreDocUrl:"/doc/pyincore/index.html",
 		swaggerUrl:"/doc/api/",
-		webVersion:"0.4.2"
+		webVersion:"0.4.3"
 	};
 }
 else if(process.env.DEPLOY_ENV === "test"){
@@ -43,7 +43,7 @@ else if(process.env.DEPLOY_ENV === "test"){
 		client_id: "react-auth",
 		pyIncoreDocUrl:"/doc/pyincore/index.html",
 		swaggerUrl:"/doc/api/",
-		webVersion:"0.4.2"
+		webVersion:"0.4.3"
 	};
 }
 else { // default case that used dev environment
@@ -65,7 +65,7 @@ else { // default case that used dev environment
 		client_id: "react-auth",
 		pyIncoreDocUrl:"/doc/pyincore/index.html",
 		swaggerUrl:"/doc/api/",
-		webVersion:"0.4.2"
+		webVersion:"0.4.3"
 	};
 }
 
