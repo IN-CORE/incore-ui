@@ -107,10 +107,10 @@ export function fetchAnalyses() {
 		return fetch(endpoint, {
 			headers: getHeader()
 		})
-		.then(response => response.json())
-		.then(json =>
-			dispatch(receiveAnalyses(endpoint, json))
-		);
+			.then(response => response.json())
+			.then(json =>
+				dispatch(receiveAnalyses(endpoint, json))
+			);
 	};
 }
 
@@ -122,10 +122,10 @@ export function getAnalysisById(id: String) {
 		return fetch(endpoint, {
 			headers: getHeader()
 		})
-		.then(response => response.json())
-		.then(json =>
-			dispatch(receiveAnalysis(config.maestroService, json))
-		);
+			.then(response => response.json())
+			.then(json =>
+				dispatch(receiveAnalysis(config.maestroService, json))
+			);
 	};
 
 }
@@ -134,20 +134,20 @@ export function searchDatasets(keyword, limit, offset) {
 	let endpoint = `${config.dataService}/search?limit=${limit}&skip=${offset}&text=${keyword}`;
 	return (dispatch: Dispatch) => {
 		return fetch(endpoint, {mode: "cors", headers: getHeader()})
-		.then(response => {
-			if (response.status === 200) {
-				response.json().then(json => {
-					dispatch(receiveDatasets(RECEIVE_DATASETS, json));
-				});
-			}
-			else if (response.status === 401) {
-				cookies.remove("Authorization");
-				dispatch(receiveDatasets(LOGIN_ERROR, []));
-			}
-			else {
-				dispatch(receiveDatasets(RECEIVE_DATASETS, []));
-			}
-		});
+			.then(response => {
+				if (response.status === 200) {
+					response.json().then(json => {
+						dispatch(receiveDatasets(RECEIVE_DATASETS, json));
+					});
+				}
+				else if (response.status === 401) {
+					cookies.remove("Authorization");
+					dispatch(receiveDatasets(LOGIN_ERROR, []));
+				}
+				else {
+					dispatch(receiveDatasets(RECEIVE_DATASETS, []));
+				}
+			});
 	};
 }
 
@@ -161,20 +161,20 @@ export function fetchDatasets(dataType, space, limit, offset) {
 	}
 	return (dispatch: Dispatch) => {
 		return fetch(endpoint, {mode: "cors", headers: getHeader()})
-		.then(response => {
-			if (response.status === 200) {
-				response.json().then(json => {
-					dispatch(receiveDatasets(RECEIVE_DATASETS, json));
-				});
-			}
-			else if (response.status === 401) {
-				cookies.remove("Authorization");
-				dispatch(receiveDatasets(LOGIN_ERROR, []));
-			}
-			else {
-				dispatch(receiveDatasets(RECEIVE_DATASETS, []));
-			}
-		});
+			.then(response => {
+				if (response.status === 200) {
+					response.json().then(json => {
+						dispatch(receiveDatasets(RECEIVE_DATASETS, json));
+					});
+				}
+				else if (response.status === 401) {
+					cookies.remove("Authorization");
+					dispatch(receiveDatasets(LOGIN_ERROR, []));
+				}
+				else {
+					dispatch(receiveDatasets(RECEIVE_DATASETS, []));
+				}
+			});
 	};
 }
 
@@ -182,20 +182,20 @@ export function fetchSpaces() {
 	const endpoint = config.spaceService;
 	return (dispatch: Dispatch) => {
 		return fetch(endpoint, {mode: "cors", headers: getHeader()})
-		.then(response => {
-			if (response.status === 200) {
-				response.json().then(json => {
-					dispatch(receiveSpaces(RECEIVE_SPACES, json));
-				});
-			}
-			else if (response.status === 401) {
-				cookies.remove("Authorization");
-				dispatch(receiveSpaces(LOGIN_ERROR, []));
-			}
-			else {
-				dispatch(receiveSpaces(RECEIVE_SPACES, []));
-			}
-		});
+			.then(response => {
+				if (response.status === 200) {
+					response.json().then(json => {
+						dispatch(receiveSpaces(RECEIVE_SPACES, json));
+					});
+				}
+				else if (response.status === 401) {
+					cookies.remove("Authorization");
+					dispatch(receiveSpaces(LOGIN_ERROR, []));
+				}
+				else {
+					dispatch(receiveSpaces(RECEIVE_SPACES, []));
+				}
+			});
 	};
 }
 
@@ -203,20 +203,20 @@ export function searchDFR3Curves(dfr3_type, keyword, limit, offset) {
 	let endpoint = `${config.dfr3Service}${dfr3_type}/search?limit=${limit}&skip=${offset}&text=${keyword}`;
 	return (dispatch: Dispatch) => {
 		return fetch(endpoint, {mode: "cors", headers: getHeader()})
-		.then(response => {
-			if (response.status === 200) {
-				response.json().then(json => {
-					dispatch(receiveDFR3Curves(RECEIVE_DFR3_CURVES, json));
-				});
-			}
-			else if (response.status === 401) {
-				cookies.remove("Authorization");
-				dispatch(receiveDFR3Curves(LOGIN_ERROR, []));
-			}
-			else {
-				dispatch(receiveDFR3Curves(RECEIVE_DFR3_CURVES, []));
-			}
-		});
+			.then(response => {
+				if (response.status === 200) {
+					response.json().then(json => {
+						dispatch(receiveDFR3Curves(RECEIVE_DFR3_CURVES, json));
+					});
+				}
+				else if (response.status === 401) {
+					cookies.remove("Authorization");
+					dispatch(receiveDFR3Curves(LOGIN_ERROR, []));
+				}
+				else {
+					dispatch(receiveDFR3Curves(RECEIVE_DFR3_CURVES, []));
+				}
+			});
 	};
 }
 
@@ -233,32 +233,32 @@ export function fetchDFR3Curves(dfr3_type: string, space: string, inventory: str
 	}
 	return (dispatch: Dispatch) => {
 		return fetch(endpoint, {mode: "cors", headers: getHeader()})
-		.then(response => {
-			if (response.status === 200) {
-				response.json().then(json => {
-					dispatch(receiveDFR3Curves(RECEIVE_DFR3_CURVES, json));
-				});
-			}
-			else if (response.status === 401) {
-				cookies.remove("Authorization");
-				dispatch(receiveDFR3Curves(LOGIN_ERROR, []));
-			}
-			else {
-				dispatch(receiveDFR3Curves(RECEIVE_DFR3_CURVES, []));
-			}
-		});
+			.then(response => {
+				if (response.status === 200) {
+					response.json().then(json => {
+						dispatch(receiveDFR3Curves(RECEIVE_DFR3_CURVES, json));
+					});
+				}
+				else if (response.status === 401) {
+					cookies.remove("Authorization");
+					dispatch(receiveDFR3Curves(LOGIN_ERROR, []));
+				}
+				else {
+					dispatch(receiveDFR3Curves(RECEIVE_DFR3_CURVES, []));
+				}
+			});
 	};
 }
 
 //TODO: Move this to app.config?
 export function getMappingTypeFromDFR3Url(dfr3_type: string) {
 	switch (dfr3_type.toLowerCase()) {
-		case "fragilities":
-			return "fragility";
-		case "repairs":
-			return "repair";
-		case "restorations":
-			return "restoration";
+	case "fragilities":
+		return "fragility";
+	case "repairs":
+		return "repair";
+	case "restorations":
+		return "restoration";
 	}
 }
 
@@ -282,20 +282,20 @@ export function fetchDFR3Mappings(dfr3_type: string, space: string, inventory: s
 
 	return (dispatch: Dispatch) => {
 		return fetch(endpoint, {mode: "cors", headers: getHeader()})
-		.then(response => {
-			if (response.status === 200) {
-				response.json().then(json => {
-					dispatch(receiveDFR3Mappings(RECEIVE_DFR3_MAPPINGS, json));
-				});
-			}
-			else if (response.status === 401) {
-				cookies.remove("Authorization");
-				dispatch(receiveDFR3Mappings(LOGIN_ERROR, []));
-			}
-			else {
-				dispatch(receiveDFR3Mappings(RECEIVE_DFR3_MAPPINGS, []));
-			}
-		});
+			.then(response => {
+				if (response.status === 200) {
+					response.json().then(json => {
+						dispatch(receiveDFR3Mappings(RECEIVE_DFR3_MAPPINGS, json));
+					});
+				}
+				else if (response.status === 401) {
+					cookies.remove("Authorization");
+					dispatch(receiveDFR3Mappings(LOGIN_ERROR, []));
+				}
+				else {
+					dispatch(receiveDFR3Mappings(RECEIVE_DFR3_MAPPINGS, []));
+				}
+			});
 	};
 }
 
@@ -310,20 +310,20 @@ export function searchDFR3Mappings(dfr3_type, keyword, limit, offset) {
 
 	return (dispatch: Dispatch) => {
 		return fetch(endpoint, {mode: "cors", headers: getHeader()})
-		.then(response => {
-			if (response.status === 200) {
-				response.json().then(json => {
-					dispatch(receiveDFR3Mappings(RECEIVE_DFR3_MAPPINGS, json));
-				});
-			}
-			else if (response.status === 401) {
-				cookies.remove("Authorization");
-				dispatch(receiveDFR3Mappings(LOGIN_ERROR, []));
-			}
-			else {
-				dispatch(receiveDFR3Mappings(RECEIVE_DFR3_MAPPINGS, []));
-			}
-		});
+			.then(response => {
+				if (response.status === 200) {
+					response.json().then(json => {
+						dispatch(receiveDFR3Mappings(RECEIVE_DFR3_MAPPINGS, json));
+					});
+				}
+				else if (response.status === 401) {
+					cookies.remove("Authorization");
+					dispatch(receiveDFR3Mappings(LOGIN_ERROR, []));
+				}
+				else {
+					dispatch(receiveDFR3Mappings(RECEIVE_DFR3_MAPPINGS, []));
+				}
+			});
 	};
 }
 
@@ -332,20 +332,20 @@ export function searchHazards(hazard_type, keyword, limit, offset) {
 	let endpoint = `${config.hazardServiceBase}${hazard_type}/search?limit=${limit}&skip=${offset}&text=${keyword}`;
 	return (dispatch: Dispatch) => {
 		return fetch(endpoint, {mode: "cors", headers: getHeader()})
-		.then(response => {
-			if (response.status === 200) {
-				response.json().then(json => {
-					dispatch(receiveHazards(RECEIVE_HAZARDS, json));
-				});
-			}
-			else if (response.status === 401) {
-				cookies.remove("Authorization");
-				dispatch(receiveHazards(LOGIN_ERROR, []));
-			}
-			else {
-				dispatch(receiveHazards(RECEIVE_HAZARDS, []));
-			}
-		});
+			.then(response => {
+				if (response.status === 200) {
+					response.json().then(json => {
+						dispatch(receiveHazards(RECEIVE_HAZARDS, json));
+					});
+				}
+				else if (response.status === 401) {
+					cookies.remove("Authorization");
+					dispatch(receiveHazards(LOGIN_ERROR, []));
+				}
+				else {
+					dispatch(receiveHazards(RECEIVE_HAZARDS, []));
+				}
+			});
 	};
 }
 
@@ -356,20 +356,20 @@ export function fetchHazards(hazard_type: string, space: string, limit, offset) 
 	}
 	return (dispatch: Dispatch) => {
 		return fetch(endpoint, {mode: "cors", headers: getHeader()})
-		.then(response => {
-			if (response.status === 200) {
-				response.json().then(json => {
-					dispatch(receiveHazards(RECEIVE_HAZARDS, json));
-				});
-			}
-			else if (response.status === 401) {
-				cookies.remove("Authorization");
-				dispatch(receiveHazards(LOGIN_ERROR, []));
-			}
-			else {
-				dispatch(receiveHazards(RECEIVE_HAZARDS, []));
-			}
-		});
+			.then(response => {
+				if (response.status === 200) {
+					response.json().then(json => {
+						dispatch(receiveHazards(RECEIVE_HAZARDS, json));
+					});
+				}
+				else if (response.status === 401) {
+					cookies.remove("Authorization");
+					dispatch(receiveHazards(LOGIN_ERROR, []));
+				}
+				else {
+					dispatch(receiveHazards(RECEIVE_HAZARDS, []));
+				}
+			});
 	};
 }
 

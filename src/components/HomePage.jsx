@@ -290,20 +290,20 @@ class HomePage extends Component {
 							The <a href="https://www.nist.gov" className={classes.link} target="_blank">National
 							Institute of Standards and
 							Technology (NIST)</a> funded the multi-university five-year <a
-							href="http://resilience.colostate.edu" className={classes.link} target="_blank">Center of
+								href="http://resilience.colostate.edu" className={classes.link} target="_blank">Center of
 							Excellence
 							for Risk-Based Community Resilience Planning (CoE)</a>, headquartered at <a
-							href="https://www.colostate.edu" className={classes.link} target="_blank">
+								href="https://www.colostate.edu" className={classes.link} target="_blank">
 							Colorado State University</a>, to develop the measurement science to support community
 							resilience assessment.
 							Measurement science is implemented on a platform called <a
-							href="http://resilience.colostate.edu/in_core.shtml" className={classes.link}
-							target="_blank">
+								href="http://resilience.colostate.edu/in_core.shtml" className={classes.link}
+								target="_blank">
 							Interdependent Networked Community Resilience Modeling Environment (IN-CORE)</a>. On
 							IN-CORE,
 							users can run scientific analyses that model the impact of natural hazards and resiliency
 							against the impact on communities. The IN-CORE platform is built on a <a
-							href="https://kubernetes.io" className={classes.link} target="_blank">Kubernetes
+								href="https://kubernetes.io" className={classes.link} target="_blank">Kubernetes
 							cluster</a> with<a href="https://www.docker.com" className={classes.link}
 											   target="_blank"> Docker</a> container technology.
 						</Typography>
@@ -321,7 +321,7 @@ class HomePage extends Component {
 									color="secondary"
 									size="medium"
 									className={classes.releaseChip}
-									label={`IN-CORE IS RELEASED INCLUDING`}/>
+									label={"IN-CORE IS RELEASED INCLUDING"}/>
 						}
 
 						<div className={classes.versionSection}>
