@@ -139,7 +139,7 @@ class HazardViewer extends Component {
 		let authorization = cookies.get("Authorization");
 
 		// logged in
-		if (authorization !== undefined && authorization !== "" && authorization !== null) {
+		if (process.env.DEPLOY_ENV === "local" || (authorization !== undefined && authorization !== "" && authorization !== null)) {
 			this.setState({
 				authError: false
 			}, function () {
