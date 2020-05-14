@@ -519,7 +519,7 @@ export function executeDatawolfWorkflow(workflowid, creatorid, title, descriptio
 export function getHeader() {
 	if (process.env.DEPLOY_ENV === "local"){
 		const headers = new Headers({
-			"x-auth-userinfo": "{\"preferred_username\":\"incrtest\"}",
+			"x-auth-userinfo": `{"preferred_username":"${config.testUserInfo}"}`,
 		});
 
 		return headers;

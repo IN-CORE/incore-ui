@@ -46,6 +46,7 @@ config["authService"] =  `${apiurl}/auth/realms/In-core/protocol/openid-connect/
 config["dataServiceBase"] = `${apiurl}/`;
 config["dataService"] =  `${apiurl}/data/api/datasets`;
 config["incoreLab"] = `${apiurl}/lab`;
+config["testUserInfo"] = "incrtest";
 
 export default config;
 
