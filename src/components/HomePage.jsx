@@ -200,7 +200,7 @@ class HomePage extends Component {
 				title: "IN-CORE Lab",
 				version: await getRepoVersion("incore-lab"),
 				options: {
-					"Change log": "https://github.com/IN-CORE/incore-lab/blob/develop/CHANGELOG.md",
+					"Change log": "https://github.com/IN-CORE/incore-lab/blob/master/CHANGELOG.md",
 					"GitHub": "https://github.com/IN-CORE/incore-lab"
 				}
 			},
@@ -211,10 +211,10 @@ class HomePage extends Component {
 				titles: ["pyIncore", "pyIncore-viz"],
 				image: "/public/python-logo.png",
 				description: "pyIncore is a component of IN-CORE. It is a python package" +
-						" that allows users to apply various hazards to infrastructure in selected areas," +
-						" propagating the effect of physical infrastructure damage and loss of " +
-						"functionality to social and economic impacts. pyIncore-viz is a python " +
-						"package that provides visualization and other utilities for use with pyIncore."
+				" that allows users to apply various hazards to infrastructure in selected areas," +
+				" propagating the effect of physical infrastructure damage and loss of " +
+				"functionality to social and economic impacts. pyIncore-viz is a python " +
+				"package that provides visualization and other utilities for use with pyIncore."
 			},
 			{
 				titles: ["Web Service API"],
@@ -244,7 +244,7 @@ class HomePage extends Component {
 		resilience of those communities.";
 
 		// TODO: how to automatically update this field important!
-		const incoreVersion = `IN-CORE ${await getRepoVersion("incore-docs")} IS RELEASED INCLUDING`;
+		const incoreVersion = await getRepoVersion("incore-docs");
 
 		const footerLogos = [
 			{
@@ -307,19 +307,36 @@ class HomePage extends Component {
 							cluster</a> with<a href="https://www.docker.com" className={classes.link}
 											   target="_blank"> Docker</a> container technology.
 						</Typography>
-						<Chip
-							color="secondary"
-							size="medium"
-							className={classes.releaseChip}
-							label={this.state.incoreVersion} />
-						{/*display versions*/}
+
+						{/*if version exists, display version; otherwise just the text*/}
+						{
+							this.state.incoreVersion ?
+								<Chip
+									color="secondary"
+									size="medium"
+									className={classes.releaseChip}
+									label={`IN-CORE ${this.state.incoreVersion} IS RELEASED INCLUDING`}/>
+								:
+								<Chip
+									color="secondary"
+									size="medium"
+									className={classes.releaseChip}
+									label={"IN-CORE IS RELEASED INCLUDING"}/>
+						}
+
 						<div className={classes.versionSection}>
 							{this.state.versions.map((version) =>
 								<div className={classes.versionLine}>
 									<Typography variant="body1" className={classes.versioning}>
 										{version.title}
-										<Chip size="small" color="primary" label={version.version}
-											  className={classes.versioning}/>
+
+										{/*if version exists, display version; otherwise not displaying the chip*/}
+										{
+											version.version ?
+												<Chip size="small" color="primary" label={version.version}
+													  className={classes.versioning}/> : null
+										}
+
 										{Object.keys(version.options).map(
 											(option) =>
 												<Link color="primary" underline="always"
@@ -333,7 +350,7 @@ class HomePage extends Component {
 						<div className={classes.background}/>
 					</Container>
 				</section>
-				<section className={classes.sectionLight} />
+				<section className={classes.sectionLight}/>
 				{/*products*/}
 				<section className={classes.sectionDark}>
 					<Container className={classes.sectionContainers}>

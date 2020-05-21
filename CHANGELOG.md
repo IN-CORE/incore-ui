@@ -11,7 +11,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Fixed all ESLint errors and some warnings. Mostly related to indentations, string notations etc. Some eslint warnnings still remain. [INCORE1-529](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-529)
 
 ### Fixed
-- remove "is3dplot" field from downloaded metadata for fragility viewer [INCORE1-525](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-525)
+- Remove "is3dplot" field from downloaded metadata for fragility viewer [INCORE1-525](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-525)
+- Fix the bug that landing page not showing components at all if github tag API is down [INCORE1-574](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-574)
+
+### Added
+- Allow web app to connect to localhost incore services [INCORE1-531](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-531)
+
+
+## [0.4.3] - 2020-04-22
+
+### Fixed
+- Point changelog to master branch for incore-lab in the landing page
+
 
 ## [0.4.2] - 2020-03-26
 
