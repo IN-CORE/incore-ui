@@ -442,7 +442,13 @@ class DFR3Viewer extends React.Component {
 			if (curve.className.includes("CustomExpression")) {
 				plotData = chartSampler.computeExpressionSamples(0.001, 1.0, 1000, curve.expression);
 			} else if (curve.className.includes("Standard")) {
-				plotData = chartSampler.sample(0, 0.999, 1000, curve.alphaType, curve.alpha, curve.beta);
+				if (curve.className.includes("ConditionalStandard")) {
+					plotData = chartSampler.sampleConditional(0, 0.999, 1000, curve.alphaType,
+						curve.rules, curve.alpha, curve.beta);
+				}
+				else {
+					plotData = chartSampler.sample(0, 0.999, 1000, curve.alphaType, curve.alpha, curve.beta);
+				}
 			}
 
 			let series = {

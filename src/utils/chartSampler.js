@@ -60,6 +60,19 @@ export default class chartSampler {
 		return samples;
 	}
 
+	static sampleConditional(min, max, numberOfSamples, alphaType, rules, alpha, beta){
+		let samples = [];
+
+		if (alphaType === "median"){
+			samples = chartSampler.sampleLogNormalCdfConditional(min, max, numberOfSamples, rules, alpha.map(a => Math.log(a)), beta);
+		}
+		else if (alphaType === "lambda"){
+			samples = chartSampler.sampleLogNormalCdfConditional(min, max, numberOfSamples, rules, alpha, beta);
+		}
+
+		return samples;
+	}
+
 	static sampleNormalCdf(min, max, numberOfSamples, mean, std) {
 		let steps = ((max - min) / numberOfSamples);
 
@@ -87,6 +100,46 @@ export default class chartSampler {
 			let y = jStat.lognormal.inv(x, mean, std);
 
 			samples.push([y, x]);
+		}
+
+		return samples;
+
+	}
+
+	static sampleLogNormalCdfConditional(min, max, numberOfSamples, rules, mean_arr, std_arr) {
+		const knownOperator = {
+			"EQ": "==",
+			"EQUALS": "==",
+			"NEQUALS": "!=",
+			"GT": ">",
+			"GE": ">=",
+			"LT": "<",
+			"LE": "<=",
+		};
+
+		let steps = ((max - min) / numberOfSamples);
+
+		let samples = [];
+
+		for (let key in Object.keys(rules)){
+
+			let mean = mean_arr[parseInt(key)];
+			let std = std_arr[parseInt(key)];
+			let elements = rules[key][0].split(" ", 3);
+			let ruleOperator = elements[1];
+			let ruleValue = elements[2];
+			if (!(ruleOperator in knownOperator)){
+				// console.log( ruleOperator + " Unknown. Cannot parse the rules!");
+				return samples;
+			}
+
+			for (let i = 1; i <= numberOfSamples; i++) {
+				let x = steps * i;
+				let y = jStat.lognormal.inv(x, mean, std);
+				if (eval(y.toString() + knownOperator[ruleOperator] + ruleValue)){
+					samples.push([y, x]);
+				}
+			}
 		}
 
 		return samples;
