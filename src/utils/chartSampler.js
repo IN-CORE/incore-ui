@@ -136,6 +136,8 @@ export default class chartSampler {
 			for (let i = 1; i <= numberOfSamples; i++) {
 				let x = steps * i;
 				let y = jStat.lognormal.inv(x, mean, std);
+
+				// if match the rules, put that dot in the curve; otherwise disgard
 				if (eval(y.toString() + knownOperator[ruleOperator] + ruleValue)){
 					samples.push([y, x]);
 				}
