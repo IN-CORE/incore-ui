@@ -18,6 +18,37 @@ export default class chartSampler {
 		return samples;
 	}
 
+	static computeParametricSampes(min, max, numberOfSamples, curveType, parameters){
+		let steps = ((max - min) / numberOfSamples);
+		let samples = [];
+
+		if (curveType.toLowerCase() === "logit"){
+			for (let i = 1; i <= numberOfSamples; i++) {
+				let A1 = 1; // coefficient for demand (X)
+				let cumulateTerm = 0; // X * Theta'
+				for (let j = 0; j< parameters.length; j++){
+					let name = parameters[j]["name"].toLowerCase();
+					let interceptTermDefault = parameters[j]["interceptTermDefault"];
+					let coefficient = parameters[j]["coefficient"];
+
+					if (name === "demand"){
+						A1 = coefficient;
+					}
+					else{
+						cumulateTerm += interceptTermDefault * coefficient;
+					}
+				}
+
+				let y = steps * i;
+				let x = math.exp((math.log(y/(1-y)) - cumulateTerm) / A1);
+				samples.push([x, y]);
+			}
+		}
+		// TODO: else if other curve type
+
+		return samples;
+	}
+
 	static async computeExpressionSamples3d(minX, maxX, numberOfSamplesX, minY, maxY, numberOfSamplesY, expression) {
 		let stepsX = ((maxX - minX) / numberOfSamplesX);
 		let stepsY = ((maxY - minY) / numberOfSamplesY);
