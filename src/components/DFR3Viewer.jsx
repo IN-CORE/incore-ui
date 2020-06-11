@@ -441,7 +441,8 @@ class DFR3Viewer extends React.Component {
 
 			if (curve.className.includes("CustomExpression")) {
 				plotData = chartSampler.computeExpressionSamples(0.001, 1.0, 1000, curve.expression);
-			} else if (curve.className.includes("Standard")) {
+			}
+			else if (curve.className.includes("Standard")) {
 				if (curve.className.includes("ConditionalStandard")) {
 					plotData = chartSampler.sampleConditional(0, 0.999, 1000, curve.alphaType,
 						curve.rules, curve.alpha, curve.beta);
@@ -453,6 +454,8 @@ class DFR3Viewer extends React.Component {
 			else if (curve.className === "ParametricFragilityCurve"){
 				plotData = chartSampler.computeParametricSampes(0.001, 1, 1000, curve.curveType, curve.parameters);
 			}
+			// TODO if curve type none of the above
+			// TODO need to have a widget to display the error in a uniformed way
 
 			let series = {
 				name: curve.description,
