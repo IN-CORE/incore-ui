@@ -61,32 +61,45 @@ class DistributionTable extends React.Component {
 				</TableHead>
 				<TableBody displayRowCheckbox={false}>
 					{curves.map(function (curve) {
+						// display table for conditional standard fragility curve
 						if (curve.className === "ConditionalStandardFragilityCurve"){
-							// return (
-							// <TableRow>
-							// 	<TableCell>{curve.description}</TableCell>
-							// 	<TableCell>{curve.alpha.join("/ ")}</TableCell>
-							// 	<TableCell>{curve.beta.join("/ ")}</TableCell>
-							// 	Object.keys(curve.rules).map(key=>{
-							// 	return (
-							// 	<TableRow>
-							// 		<TableCell>
-							// 		{key}
-							// 		</TableCell>
-							// 		<TableCell>
-							// 		{JSON.stringify(
-							// 			this.props.data[key][key2][key3])}
-							// 		</TableCell>
-							// 		</TableRow>
-							//
-							// })
-							// 	{/*<TableCell>{curve.rules}</TableCell>*/}
-							// </TableRow>
-							// );
+							return (
+								<TableRow>
+									<TableCell>{curve.description}</TableCell>
+									<TableCell>
+										{
+											curve.alpha.map(a => {
+												return (<TableRow>{a}</TableRow>);
+											})
+										}
+									</TableCell>
+									<TableCell>
+										{
+											curve.beta.map(b => {
+												return (<TableRow>{b}</TableRow>);
+											})
+										}
+									</TableCell>
+									<TableCell>
+										{
+											curve.alpha.map((a, index) => {
+												return (
+													<TableRow>
+														{JSON.stringify(curve.rules[index.toString()])}
+													</TableRow>);
+											})
+										}
+									</TableCell>
+								</TableRow>
+							);
 						}
+
+						// parametric fragility curves
 						else if (curve.className === "ParametricFragilityCurve"){
 							return;
 						}
+
+						// Standard 2d curves
 						else{
 							return (
 								<TableRow>
