@@ -550,24 +550,17 @@ function getDatawolfHeader() {
 }
 
 export async function getRepoVersion(repoName) {
-	let request = new XMLHttpRequest();
-	request.open("GET", "./tags/pyincore.json", false);
-	request.send(null);
-	let jsonData = JSON.parse(request.responseText);
-	console.log(jsonData);
-	// const endpoint = `https://api.github.com/repos/IN-CORE/${repoName}/tags`;
-	// const versionRequest = await fetch(endpoint);
-	//
-	// try {
-	// 	const version = await versionRequest.json();
-	// 	const versionName = version[0].name;
-	// 	return versionName;
-	// }
-	// catch (error) {
-	// 	// if github tag API failed, just log the erorr and return null
-	// 	console.log(error);
-	// 	return null;
-	// }
+	const endpoint = `/public/tags/${repoName}.json`;
+	const versionRequest = await fetch(endpoint);
 
-
+	try {
+		const version = await versionRequest.json();
+		const versionName = version[0].name;
+		return versionName;
+	}
+	catch (error) {
+		// if fail just log the erorr and return null
+		console.log(error);
+		return null;
+	}
 }

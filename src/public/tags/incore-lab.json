@@ -1,0 +1,42 @@
+[
+  {
+    "name": "v0.3.2",
+    "zipball_url": "https://api.github.com/repos/IN-CORE/incore-lab/zipball/v0.3.2",
+    "tarball_url": "https://api.github.com/repos/IN-CORE/incore-lab/tarball/v0.3.2",
+    "commit": {
+      "sha": "656253ce45f28481dc69693b2f56d008665e9e44",
+      "url": "https://api.github.com/repos/IN-CORE/incore-lab/commits/656253ce45f28481dc69693b2f56d008665e9e44"
+    },
+    "node_id": "MDM6UmVmMjMyNDI3MTQ3OnJlZnMvdGFncy92MC4zLjI="
+  },
+  {
+    "name": "v0.3.1",
+    "zipball_url": "https://api.github.com/repos/IN-CORE/incore-lab/zipball/v0.3.1",
+    "tarball_url": "https://api.github.com/repos/IN-CORE/incore-lab/tarball/v0.3.1",
+    "commit": {
+      "sha": "7be475befd39c153a228256dd4d53e96f526b0aa",
+      "url": "https://api.github.com/repos/IN-CORE/incore-lab/commits/7be475befd39c153a228256dd4d53e96f526b0aa"
+    },
+    "node_id": "MDM6UmVmMjMyNDI3MTQ3OnJlZnMvdGFncy92MC4zLjE="
+  },
+  {
+    "name": "v0.3.0",
+    "zipball_url": "https://api.github.com/repos/IN-CORE/incore-lab/zipball/v0.3.0",
+    "tarball_url": "https://api.github.com/repos/IN-CORE/incore-lab/tarball/v0.3.0",
+    "commit": {
+      "sha": "603d25de4cadabcff296251dcdddf9aa2b4d6cd5",
+      "url": "https://api.github.com/repos/IN-CORE/incore-lab/commits/603d25de4cadabcff296251dcdddf9aa2b4d6cd5"
+    },
+    "node_id": "MDM6UmVmMjMyNDI3MTQ3OnJlZnMvdGFncy92MC4zLjA="
+  },
+  {
+    "name": "v0.2.0",
+    "zipball_url": "https://api.github.com/repos/IN-CORE/incore-lab/zipball/v0.2.0",
+    "tarball_url": "https://api.github.com/repos/IN-CORE/incore-lab/tarball/v0.2.0",
+    "commit": {
+      "sha": "e411753022d04f717cddb309f1b7e26e9fc69615",
+      "url": "https://api.github.com/repos/IN-CORE/incore-lab/commits/e411753022d04f717cddb309f1b7e26e9fc69615"
+    },
+    "node_id": "MDM6UmVmMjMyNDI3MTQ3OnJlZnMvdGFncy92MC4yLjA="
+  }
+]

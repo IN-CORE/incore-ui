@@ -1,0 +1,42 @@
+[
+  {
+    "name": "v0.2.1",
+    "zipball_url": "https://api.github.com/repos/IN-CORE/pyincore-viz/zipball/v0.2.1",
+    "tarball_url": "https://api.github.com/repos/IN-CORE/pyincore-viz/tarball/v0.2.1",
+    "commit": {
+      "sha": "4f2adac80220a766f117f5cbacd1824c17df3703",
+      "url": "https://api.github.com/repos/IN-CORE/pyincore-viz/commits/4f2adac80220a766f117f5cbacd1824c17df3703"
+    },
+    "node_id": "MDM6UmVmMjI5MDcwNDA4OnJlZnMvdGFncy92MC4yLjE="
+  },
+  {
+    "name": "v0.2.0",
+    "zipball_url": "https://api.github.com/repos/IN-CORE/pyincore-viz/zipball/v0.2.0",
+    "tarball_url": "https://api.github.com/repos/IN-CORE/pyincore-viz/tarball/v0.2.0",
+    "commit": {
+      "sha": "229da16406981db5109b3be49a6f5bebdf41870f",
+      "url": "https://api.github.com/repos/IN-CORE/pyincore-viz/commits/229da16406981db5109b3be49a6f5bebdf41870f"
+    },
+    "node_id": "MDM6UmVmMjI5MDcwNDA4OnJlZnMvdGFncy92MC4yLjA="
+  },
+  {
+    "name": "v0.1.1",
+    "zipball_url": "https://api.github.com/repos/IN-CORE/pyincore-viz/zipball/v0.1.1",
+    "tarball_url": "https://api.github.com/repos/IN-CORE/pyincore-viz/tarball/v0.1.1",
+    "commit": {
+      "sha": "432b3fd8b607472c19a13b4e9d686cafc334e497",
+      "url": "https://api.github.com/repos/IN-CORE/pyincore-viz/commits/432b3fd8b607472c19a13b4e9d686cafc334e497"
+    },
+    "node_id": "MDM6UmVmMjI5MDcwNDA4OnJlZnMvdGFncy92MC4xLjE="
+  },
+  {
+    "name": "v0.1.0",
+    "zipball_url": "https://api.github.com/repos/IN-CORE/pyincore-viz/zipball/v0.1.0",
+    "tarball_url": "https://api.github.com/repos/IN-CORE/pyincore-viz/tarball/v0.1.0",
+    "commit": {
+      "sha": "11f19d33d3504a9c3eb80322d913feb13b22923f",
+      "url": "https://api.github.com/repos/IN-CORE/pyincore-viz/commits/11f19d33d3504a9c3eb80322d913feb13b22923f"
+    },
+    "node_id": "MDM6UmVmMjI5MDcwNDA4OnJlZnMvdGFncy92MC4xLjA="
+  }
+]
