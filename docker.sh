@@ -24,4 +24,3 @@ fi
 
 # Build docker image
 $DEBUG docker build -t hub.ncsa.illinois.edu/incore/frontend$VERSION:latest .
-
