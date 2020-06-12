@@ -202,107 +202,57 @@ class App extends Component {
 			</Menu>
 		);
 
-		let sideList;
-		if (this.props.Authorization !== "" && this.props.Authorization !== undefined) {
-			sideList = (
-				<List subheader={
-					<ListSubheader component="div" color="inherit">
+		let sideList = (
+			<List subheader={
+				<ListSubheader component="div" color="inherit">
 						Navigation
-					</ListSubheader>
-				}>
-					<ListItem button component="a" key="about" href="/doc/incore/index.html" target="_blank">
-						<ListItemAvatar><Avatar src="/public/resilience-logo-icon.png"/></ListItemAvatar>
-						<ListItemText primary="IN-CORE Manual"/>
-					</ListItem>
-					<ListItem button component="a" key="pyIncore"
+				</ListSubheader>
+			}>
+				<ListItem button component="a" key="about" href="/doc/incore/index.html" target="_blank">
+					<ListItemAvatar><Avatar src="/public/resilience-logo-icon.png"/></ListItemAvatar>
+					<ListItemText primary="IN-CORE Manual"/>
+				</ListItem>
+				<ListItem button component="a" key="pyIncore"
 							  href={config.pyIncoreDocUrl} target="_blank">
-						<ListItemAvatar><Avatar src="/public/python-logo.png"/></ListItemAvatar>
-						<ListItemText primary="pyIncore Reference"/>
-					</ListItem>
-					<ListItem button component="a" key="services" href={config.swaggerUrl}
+					<ListItemAvatar><Avatar src="/public/python-logo.png"/></ListItemAvatar>
+					<ListItemText primary="pyIncore Reference"/>
+				</ListItem>
+				<ListItem button component="a" key="services" href={config.swaggerUrl}
 							  target="_blank">
-						<ListItemAvatar><Avatar src="/public/swagger-logo.png"/></ListItemAvatar>
-						<ListItemText primary="IN-CORE Web Service API"/>
-					</ListItem>
-					<ListItem button component="a" key="lab" href={config.incoreLab}
+					<ListItemAvatar><Avatar src="/public/swagger-logo.png"/></ListItemAvatar>
+					<ListItemText primary="IN-CORE Web Service API"/>
+				</ListItem>
+				<ListItem button component="a" key="lab" href={config.incoreLab}
 							  target="_blank">
-						<ListItemAvatar><Avatar src="/public/jupyter-logo.png"/></ListItemAvatar>
-						<ListItemText primary="IN-CORE lab"/>
-					</ListItem>
-					<ListItem button key="webapp" onClick={this.handleCollapse}>
-						<ListItemAvatar><Avatar src="/public/webapp-logo.png"/></ListItemAvatar>
-						<ListItemText primary="IN-CORE Web Tools"/>
-						{this.state.collapseOpen ? <ExpandLess/> : <ExpandMore/>}
-					</ListItem>
-					<Collapse in={this.state.collapseOpen} timeout="auto" unmountOnExit>
-						<List component="div" disablePadding>
-							<ListItem button component="a" href={"/DFR3Viewer"}
+					<ListItemAvatar><Avatar src="/public/jupyter-logo.png"/></ListItemAvatar>
+					<ListItemText primary="IN-CORE lab"/>
+				</ListItem>
+				<ListItem button key="webapp" onClick={this.handleCollapse}>
+					<ListItemAvatar><Avatar src="/public/webapp-logo.png"/></ListItemAvatar>
+					<ListItemText primary="IN-CORE Web Tools"/>
+					{this.state.collapseOpen ? <ExpandLess/> : <ExpandMore/>}
+				</ListItem>
+				<Collapse in={this.state.collapseOpen} timeout="auto" unmountOnExit>
+					<List component="div" disablePadding>
+						<ListItem button component="a" href={"/DFR3Viewer"}
 									  className={classes.nested}>
-								<ListItemIcon><DFR3ViewerIcon/></ListItemIcon>
-								<ListItemText primary="DFR3 Viewer"/>
-							</ListItem>
-							<ListItem button component="a" href={"/DataViewer"}
+							<ListItemIcon><DFR3ViewerIcon/></ListItemIcon>
+							<ListItemText primary="DFR3 Viewer"/>
+						</ListItem>
+						<ListItem button component="a" href={"/DataViewer"}
 									  className={classes.nested}>
-								<ListItemIcon><DataViewerIcon/></ListItemIcon>
-								<ListItemText primary="Data Viewer"/>
-							</ListItem>
-							<ListItem button component="a" href={"/HazardViewer"}
+							<ListItemIcon><DataViewerIcon/></ListItemIcon>
+							<ListItemText primary="Data Viewer"/>
+						</ListItem>
+						<ListItem button component="a" href={"/HazardViewer"}
 									  className={classes.nested}>
-								<ListItemIcon><HazardViewerIcon/></ListItemIcon>
-								<ListItemText primary="Hazard Viewer"/>
-							</ListItem>
-						</List>
-					</Collapse>
-				</List>
-			);
-		}else{
-			sideList = (
-				<List subheader={
-					<ListSubheader component="div" color="inherit">
-						Navigation
-					</ListSubheader>
-				}>
-					<ListItem button component="a" key="about" href="/doc/incore/index.html" target="_blank">
-						<ListItemAvatar><Avatar src="/public/resilience-logo-icon.png"/></ListItemAvatar>
-						<ListItemText primary="IN-CORE Manual"/>
-					</ListItem>
-					<ListItem button component="a" key="pyIncore"
-							  href={config.pyIncoreDocUrl} target="_blank">
-						<ListItemAvatar><Avatar src="/public/python-logo.png"/></ListItemAvatar>
-						<ListItemText primary="pyIncore Reference"/>
-					</ListItem>
-					<ListItem button component="a" key="services" href={config.swaggerUrl}
-							  target="_blank">
-						<ListItemAvatar><Avatar src="/public/swagger-logo.png"/></ListItemAvatar>
-						<ListItemText primary="IN-CORE Web Service API"/>
-					</ListItem>
-					<ListItem button key="webapp" onClick={this.handleCollapse}>
-						<ListItemAvatar><Avatar src="/public/webapp-logo.png"/></ListItemAvatar>
-						<ListItemText primary="IN-CORE Web Tools"/>
-						{this.state.collapseOpen ? <ExpandLess/> : <ExpandMore/>}
-					</ListItem>
-					<Collapse in={this.state.collapseOpen} timeout="auto" unmountOnExit>
-						<List component="div" disablePadding>
-							<ListItem button component="a" href={"/DFR3Viewer"}
-									  className={classes.nested}>
-								<ListItemIcon><DFR3ViewerIcon/></ListItemIcon>
-								<ListItemText primary="DFR3 Viewer"/>
-							</ListItem>
-							<ListItem button component="a" href={"/DataViewer"}
-									  className={classes.nested}>
-								<ListItemIcon><DataViewerIcon/></ListItemIcon>
-								<ListItemText primary="Data Viewer"/>
-							</ListItem>
-							<ListItem button component="a" href={"/HazardViewer"}
-									  className={classes.nested}>
-								<ListItemIcon><HazardViewerIcon/></ListItemIcon>
-								<ListItemText primary="Hazard Viewer"/>
-							</ListItem>
-						</List>
-					</Collapse>
-				</List>
-			);
-		}
+							<ListItemIcon><HazardViewerIcon/></ListItemIcon>
+							<ListItemText primary="Hazard Viewer"/>
+						</ListItem>
+					</List>
+				</Collapse>
+			</List>
+		);
 
 		return (
 			<MuiThemeProvider theme={theme}>
