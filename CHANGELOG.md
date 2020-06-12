@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+
+### Added
+- Version tags now read from local json file which is updated periodically using cronjob, and later that will be volume mounted to /usr/share/nginx/html/public folder to ensure dynamic updates.[INCORE1-638](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-638)
+
 ## [0.4.4] - 2020-05-27
 
 ### Changed
