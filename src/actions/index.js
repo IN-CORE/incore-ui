@@ -549,14 +549,12 @@ function getDatawolfHeader() {
 	return headers;
 }
 
-export async function getRepoVersion(repoName) {
-	const endpoint = `/public/tags/${repoName}.json`;
-	const versionRequest = await fetch(endpoint);
+export async function getRepoVersion() {
+	const versionRequest = await fetch("tags/github.json");
 
 	try {
-		const version = await versionRequest.json();
-		const versionName = version[0].name;
-		return versionName;
+		const githubVersions = await versionRequest.json();
+		return githubVersions;
 	}
 	catch (error) {
 		// if fail just log the erorr and return null
