@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased]
+## [0.4.5] - 2020-06-17
 
 ### Added
 - Preview parametric and conditional fragility curves [INCORE1-508](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-508)
