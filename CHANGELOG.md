@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Preview parametric and conditional fragility curves [INCORE1-508](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-508)
 
+### Changed
+- No need to hide incore-lab from the sidebar when user not logged in [INCORE1-619](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-619)
+
+
 ## [0.4.4] - 2020-05-27
 
 ### Changed
