@@ -4,6 +4,7 @@ import {Avatar, Button, Divider, GridList, GridListTile, Paper, TextField, Typog
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Version from "./children/Version";
 import Cookies from "universal-cookie";
+import ErrorMessage from "./children/ErrorMessage";
 
 const cookies = new Cookies();
 
@@ -105,6 +106,7 @@ class Login extends Component {
 								Sign in
 							</Typography>
 							<Divider/>
+							<ErrorMessage error="This user does not belongs to incore-jupyter group"/>
 							<GridList cols={1} cellHeight="auto">
 								<GridListTile>
 									<p style={{color: "red"}}>{this.state.loginErrorText} </p>
