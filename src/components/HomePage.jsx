@@ -3,6 +3,7 @@ import {Chip, Container, Grid, Link, Typography} from "@material-ui/core";
 import {withStyles} from "@material-ui/core/styles";
 import Version from "./children/Version";
 import {getRepoVersion} from "../actions/index";
+import ErrorMessage from "./children/ErrorMessage";
 
 
 const styles = theme => ({
@@ -157,6 +158,7 @@ class HomePage extends Component {
 			subTitle: "",
 			incoreVersion: "",
 			footerLogos: [],
+			errorMessage:""
 		};
 	}
 
@@ -270,7 +272,8 @@ class HomePage extends Component {
 			versions: versions,
 			subTitle: subTitle,
 			incoreVersion: incoreVersion,
-			footerLogos: footerLogos
+			footerLogos: footerLogos,
+			errorMessage: this.props.location.query.error
 		});
 	}
 
@@ -279,6 +282,11 @@ class HomePage extends Component {
 
 		return (
 			<div>
+				{/*error message */}
+				{
+					this.state.errorMessage ?
+						<ErrorMessage error={this.state.errorMessage}/> : null
+				}
 				{/*header*/}
 				<section className={classes.root}>
 					<Container className={classes.container}>

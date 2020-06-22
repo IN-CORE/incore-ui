@@ -18,13 +18,20 @@ class Login extends Component {
 			passwordErrorText: "",
 			loginErrorText: "",
 			error: false,
-			origin: props.location.query["origin"]
+			origin: props.location.query["origin"],
+			errorMessage:""
 		};
 
 		this.changeUsername = this.changeUsername.bind(this);
 		this.changePassword = this.changePassword.bind(this);
 		this.login = this.login.bind(this);
 		this.handleKeyPressed = this.handleKeyPressed.bind(this);
+	}
+
+	componentWillMount(){
+		this.setState({
+			errorMessage: this.props.location.query.error
+		});
 	}
 
 	handleKeyPressed(event: Object) {
@@ -84,7 +91,6 @@ class Login extends Component {
 	}
 
 	render() {
-
 		// if already login, redirect to homepage
 		let Authorization = cookies.get("Authorization");
 		if (Authorization !== undefined && Authorization !== "" && Authorization !== null) {
@@ -96,6 +102,11 @@ class Login extends Component {
 		else {
 			return (
 				<div>
+					{/*error message */}
+					{
+						this.state.errorMessage ?
+							<ErrorMessage error={this.state.errorMessage}/> : null
+					}
 					<div className="center"
 						 style={{display: "block", margin: "auto", width: "500px", paddingTop: "10%"}}>
 						<Paper style={{padding: 40}}>
@@ -106,10 +117,6 @@ class Login extends Component {
 								Sign in
 							</Typography>
 							<Divider/>
-							{
-								this.props.location.query.error ?
-									<ErrorMessage error={this.props.location.query.error}/> : null
-							}
 							<GridList cols={1} cellHeight="auto">
 								<GridListTile>
 									<p style={{color: "red"}}>{this.state.loginErrorText} </p>
