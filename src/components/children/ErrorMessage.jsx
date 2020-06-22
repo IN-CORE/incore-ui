@@ -9,7 +9,7 @@ class ErrorMessage extends Component {
 
 	render() {
 		return (
-			<Alert serverity="error" onClose={()=>{}}>{this.props.error}</Alert>
+			<Alert severity="error">{this.props.error}</Alert>
 		);
 	}
 }

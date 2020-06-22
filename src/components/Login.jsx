@@ -106,7 +106,10 @@ class Login extends Component {
 								Sign in
 							</Typography>
 							<Divider/>
-							<ErrorMessage error="This user does not belongs to incore-jupyter group"/>
+							{
+								this.props.location.query.error ?
+									<ErrorMessage error={this.props.location.query.error}/> : null
+							}
 							<GridList cols={1} cellHeight="auto">
 								<GridListTile>
 									<p style={{color: "red"}}>{this.state.loginErrorText} </p>
