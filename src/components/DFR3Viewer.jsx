@@ -441,9 +441,21 @@ class DFR3Viewer extends React.Component {
 
 			if (curve.className.includes("CustomExpression")) {
 				plotData = chartSampler.computeExpressionSamples(0.001, 1.0, 1000, curve.expression);
-			} else if (curve.className.includes("Standard")) {
-				plotData = chartSampler.sample(0, 0.999, 1000, curve.alphaType, curve.alpha, curve.beta);
 			}
+			else if (curve.className.includes("Standard")) {
+				if (curve.className.includes("ConditionalStandard")) {
+					plotData = chartSampler.sampleConditional(0, 0.999, 1000, curve.alphaType,
+						curve.rules, curve.alpha, curve.beta);
+				}
+				else {
+					plotData = chartSampler.sample(0, 0.999, 1000, curve.alphaType, curve.alpha, curve.beta);
+				}
+			}
+			else if (curve.className === "ParametricFragilityCurve"){
+				plotData = chartSampler.computeParametricSampes(0.001, 1, 1000, curve.curveType, curve.parameters);
+			}
+			// TODO if curve type none of the above
+			// TODO need to have a widget to display the error in a uniformed way
 
 			let series = {
 				name: curve.description,
@@ -591,7 +603,7 @@ class DFR3Viewer extends React.Component {
 									<div className={classes.selectDiv}>
 										<InputLabel>Curve Type</InputLabel>
 										<Select value={this.state.selectedDFR3Type} onChange={this.changeDFR3Type}
-												className={classes.select}>
+											className={classes.select}>
 											<MenuItem value="fragilities" key="fragilities"
 													  className={classes.denseStyle}>Fragility</MenuItem>
 											<MenuItem value="restorations" key="restorations"
@@ -605,7 +617,7 @@ class DFR3Viewer extends React.Component {
 									<div className={classes.selectDiv}>
 										<InputLabel>Hazard Type</InputLabel>
 										<Select value={this.state.selectedHazard} onChange={this.handleHazardSelection}
-												className={classes.select}>
+											className={classes.select}>
 											<MenuItem value="All" className={classes.denseStyle}>All</MenuItem>
 											<MenuItem value="earthquake"
 													  className={classes.denseStyle}>Earthquake</MenuItem>
@@ -617,8 +629,8 @@ class DFR3Viewer extends React.Component {
 									<div className={classes.selectDiv}>
 										<InputLabel>Inventory Type</InputLabel>
 										<Select value={this.state.selectedInventory}
-												onChange={this.handleInventorySelection}
-												className={classes.select}>
+											onChange={this.handleInventorySelection}
+											className={classes.select}>
 											<MenuItem value="All" className={classes.denseStyle}>All</MenuItem>
 											<MenuItem value="building"
 													  className={classes.denseStyle}>Building</MenuItem>
@@ -695,10 +707,10 @@ class DFR3Viewer extends React.Component {
 															 selectedDFR3Curve={this.state.selectedDFR3Curve}/>
 										<div className={classes.paperFooter}>
 											<Pagination pageNumber={this.state.pageNumber}
-														data={curvesWithInfo}
-														dataPerPage={this.state.dataPerPage}
-														previous={this.previous}
-														next={this.next}/>
+												data={curvesWithInfo}
+												dataPerPage={this.state.dataPerPage}
+												previous={this.previous}
+												next={this.next}/>
 										</div>
 									</Paper>
 								</Grid>
@@ -712,19 +724,19 @@ class DFR3Viewer extends React.Component {
 												</div>
 												<div className={classes.metadata}>
 													<Button color="primary"
-															variant="contained"
-															className={classes.inlineButtons}
-															size="small"
-															onClick={this.exportCurveJson}>Download Metadata</Button>
+														variant="contained"
+														className={classes.inlineButtons}
+														size="small"
+														onClick={this.exportCurveJson}>Download Metadata</Button>
 													<Button color="primary"
-															variant="contained"
-															className={classes.inlineButtons}
-															size="small"
-															onClick={this.preview}>Preview</Button>
+														variant="contained"
+														className={classes.inlineButtons}
+														size="small"
+														onClick={this.preview}>Preview</Button>
 													<CopyToClipboard text={this.state.selectedDFR3Curve.id}>
 														<Button color="secondary" variant="contained"
-																className={classes.inlineButtons}
-																size="small">Copy
+															className={classes.inlineButtons}
+															size="small">Copy
 															ID</Button>
 													</CopyToClipboard>
 												</div>
@@ -741,10 +753,10 @@ class DFR3Viewer extends React.Component {
 								{/* Preview */}
 								{this.state.selectedDFR3Curve ?
 									<Dialog open={this.state.preview} onClose={this.handlePreviewerClose} maxWidth="lg" fullWidth
-											scroll="paper">
+										scroll="paper">
 										<DialogContent className={classes.preview}>
 											<IconButton aria-label="Close" onClick={this.handlePreviewerClose}
-														className={classes.previewClose}>
+												className={classes.previewClose}>
 												<CloseIcon fontSize="small"/>
 											</IconButton>
 											{this.state.selectedDFR3Curve.is3dPlot ?
@@ -787,10 +799,10 @@ class DFR3Viewer extends React.Component {
 															   selectedMapping={this.state.selectedMapping}/>
 										<div className={classes.paperFooter}>
 											<Pagination pageNumber={this.state.pageNumberMappings}
-														data={mappingsWithInfo}
-														dataPerPage={this.state.dataPerPage}
-														previous={this.previousMappings}
-														next={this.nextMappings}/>
+												data={mappingsWithInfo}
+												dataPerPage={this.state.dataPerPage}
+												previous={this.previousMappings}
+												next={this.nextMappings}/>
 										</div>
 									</Paper>
 								</Grid>
@@ -805,14 +817,14 @@ class DFR3Viewer extends React.Component {
 												</div>
 												<div className={classes.metadata}>
 													<Button color="primary"
-															variant="contained"
-															className={classes.inlineButtons}
-															size="small"
-															onClick={this.exportMappingJson}>Download Metadata</Button>
+														variant="contained"
+														className={classes.inlineButtons}
+														size="small"
+														onClick={this.exportMappingJson}>Download Metadata</Button>
 													<CopyToClipboard text={this.state.selectedMapping.id}>
 														<Button color="secondary" variant="contained"
-																className={classes.inlineButtons}
-																size="small">Copy
+															className={classes.inlineButtons}
+															size="small">Copy
 															ID</Button>
 													</CopyToClipboard>
 												</div>

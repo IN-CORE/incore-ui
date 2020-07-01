@@ -10,6 +10,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Version tags now read from local json file which is updated periodically using cronjob, and later that will be volume mounted to /usr/share/nginx/html/public folder to ensure dynamic updates.[INCORE1-638](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-638)
 
+
+## [0.4.5] - 2020-06-17
+
+### Added
+- Preview parametric and conditional fragility curves [INCORE1-508](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-508)
+
+### Changed
+- No need to hide incore-lab from the sidebar when user not logged in [INCORE1-619](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-619)
+
+
 ## [0.4.4] - 2020-05-27
 
 ### Changed
