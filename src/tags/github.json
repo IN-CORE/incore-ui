@@ -1,8 +1,8 @@
 {
-	"pyincore":"default",
-	"pyincore-viz":"default",
-	"incore-ui":"default",
-	"incore-services":"default",
-	"incore-lab":"default",
-	"incore-docs":"default"
+	"pyincore":"NA",
+	"pyincore-viz":"NA",
+	"incore-ui":"NA",
+	"incore-services":"NA",
+	"incore-lab":"NA",
+	"incore-docs":"NA"
 }
