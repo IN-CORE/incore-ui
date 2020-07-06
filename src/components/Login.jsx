@@ -94,7 +94,8 @@ class Login extends Component {
 		// if already login, redirect to homepage
 		let Authorization = cookies.get("Authorization");
 		if (Authorization !== undefined && Authorization !== "" && Authorization !== null) {
-			browserHistory.push("/");
+			this.state.errorMessage ? browserHistory.push(`/?error=${this.state.errorMessage}`)
+				: browserHistory.push("/");
 			return null;
 		}
 
