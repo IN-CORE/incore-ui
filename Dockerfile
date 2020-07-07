@@ -3,6 +3,7 @@ FROM nginx
 RUN apt-get -qq update && \
   apt-get -qq -y install curl && \
   apt-get install -qq -y npm && \
+  apt-get install -qq -y jq && \
   npm cache clean -f && \
   npm install -g npm && \
   npm install -g n && n latest  # curl is being used in here
