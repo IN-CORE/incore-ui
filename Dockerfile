@@ -1,29 +1,32 @@
-FROM nginx
+FROM node:12 AS builder
 
-RUN apt-get -qq update && \
-  apt-get -qq -y install curl && \
-  apt-get install -qq -y npm && \
-  npm cache clean -f && \
-  npm install -g npm && \
-  npm install -g n && n latest  # curl is being used in here
+WORKDIR /usr/src/app
 
-# the following line make the new installation of updated nodejs path
-RUN PATH="$PATH"
+# development or production
+ARG DEPLOY_ENV="development"
+ENV DEPLOY_ENV="${DEPLOY_ENV:-development}"
 
-COPY *.* /usr/share/nginx/html/incore-ui/
-COPY src /usr/share/nginx/html/incore-ui/src/
-COPY test/components /usr/share/nginx/html/incore-ui/test/components/
-COPY tools /usr/share/nginx/html/incore-ui/tools/
+# copy only package for caching purposes
+COPY package*.json /usr/src/app/
+COPY tools/ /usr/src/app/tools/
+RUN npm install
 
-WORKDIR /usr/share/nginx/html/incore-ui
+# copy rest of application
+COPY .babelrc .eslintrc .istanbul.yml *.js /usr/src/app/
+COPY test /usr/src/app/test/
+COPY src /usr/src/app/src/
 
-ENV DEPLOY_ENV="development"
+# build application
+RUN npm run build
 
-RUN npm install && \
-  npm run build
+FROM nginx:alpine
 
-RUN cp -R dist/* /usr/share/nginx/html/. && \
-  cp -R src/public /usr/share/nginx/html/public && \
-  chmod -R 777 /usr/share/nginx/html/public
+RUN apk add --no-cache jq
 
-COPY landing.conf /etc/nginx/conf.d/default.conf
+
+COPY --from=builder /usr/src/app/dist/ /usr/share/nginx/html/
+COPY src/public /usr/share/nginx/html/public/
+COPY src/tags /usr/share/nginx/html/tags/
+COPY getVersionTags.sh /
+
+WORKDIR /usr/share/nginx/html/tags
