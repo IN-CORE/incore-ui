@@ -46,7 +46,9 @@ function getTitle(dfr3Curve) {
 		title += ` (${dfr3Curve.paperReference.yearPublished})`;
 	}
 
-	title += ` - ${dfr3Curve.legacyId}`;
+	if (dfr3Curve.legacyId !== null) {
+		title += ` - ${dfr3Curve.legacyId}`;
+	}
 
 	return title;
 }
