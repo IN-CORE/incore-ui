@@ -8,7 +8,7 @@ incoreServices=$(curl -s 'https://api.github.com/repos/IN-CORE/incore-services/t
 incoreLab=$(curl -s 'https://api.github.com/repos/IN-CORE/incore-lab/tags' | jq '.[0].name')
 incoreDocs=$(curl -s 'https://api.github.com/repos/IN-CORE/incore-docs/tags' | jq '.[0].name')
 
-if [[ -z "$pyincore" || -z "$pyincoreViz" || -z "$incoreUI" || -z "$incoreServices" || -z "$incoreLab" || -z "$incoreDocs" ]]
+if [ -z "$pyincore" ] || [ -z "$pyincoreViz" ] || [ -z "$incoreUI" ] || [ -z "$incoreServices" ] || [ -z "$incoreLab" ] || [ -z "$incoreDocs" ]
 then
 	echo "Abort. Failed to get the latest tag from github."
 else
