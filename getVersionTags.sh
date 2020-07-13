@@ -13,7 +13,7 @@ then
 	echo "Abort. Failed to get the latest tag from github."
 else
 	echo {\"pyincore\":$pyincore, \"pyincore-viz\":$pyincoreViz, \"incore-ui\":$incoreUI, \"incore-services\":$incoreServices, \
-\"incore-lab\":$incoreLab, \"incore-docs\":$incoreDocs} > github.json
+\"incore-lab\":$incoreLab, \"incore-docs\":$incoreDocs} > /usr/share/nginx/html/tags/github.json
 fi
 
 
