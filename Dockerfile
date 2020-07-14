@@ -1,30 +1,40 @@
-FROM nginx
+# ----------------------------------------------------------------------
+# First stage, compile application
+# ----------------------------------------------------------------------
 
-RUN apt-get -qq update && \
-  apt-get -qq -y install curl && \
-  apt-get install -qq -y npm && \
-  apt-get install -qq -y jq && \
-  npm cache clean -f && \
-  npm install -g npm && \
-  npm install -g n && n latest  # curl is being used in here
+FROM node:12 AS builder
 
-# the following line make the new installation of updated nodejs path
-RUN PATH="$PATH"
+WORKDIR /usr/src/app
 
-COPY *.* /usr/share/nginx/html/incore-ui/
-COPY src /usr/share/nginx/html/incore-ui/src/
-COPY test/components /usr/share/nginx/html/incore-ui/test/components/
-COPY tools /usr/share/nginx/html/incore-ui/tools/
+# development or production
+ARG DEPLOY_ENV="development"
+ENV DEPLOY_ENV="${DEPLOY_ENV:-development}"
 
-WORKDIR /usr/share/nginx/html/incore-ui
+# copy only package for caching purposes
+COPY package*.json /usr/src/app/
+COPY tools/ /usr/src/app/tools/
+RUN npm install
 
-ENV DEPLOY_ENV="development"
+# copy rest of application
+COPY .babelrc .eslintrc .istanbul.yml *.js /usr/src/app/
+COPY test /usr/src/app/test/
+COPY src /usr/src/app/src/
 
-RUN npm install && \
-  npm run build
+# build application
+RUN npm run build
 
-RUN cp -R dist/* /usr/share/nginx/html/. && \
-  cp -R src/public /usr/share/nginx/html/public && \
-  chmod -R 777 /usr/share/nginx/html/public
+# ----------------------------------------------------------------------
+# Second stage, final image
+# ----------------------------------------------------------------------
 
+FROM nginx:alpine
+
+RUN apk add --no-cache jq
+
+COPY --from=builder /usr/src/app/dist/ /usr/share/nginx/html/
+COPY src/public /usr/share/nginx/html/public/
+COPY src/tags /usr/share/nginx/html/tags/
+COPY getVersionTags.sh /
 COPY landing.conf /etc/nginx/conf.d/default.conf
+
+WORKDIR /usr/share/nginx/html/tags
