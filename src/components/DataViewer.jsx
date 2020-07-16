@@ -445,7 +445,8 @@ class DataViewer extends Component {
 						<ListItemText primary={`${dataset.title  } - ${  dataset.creator.capitalize()}`}/>
 					</ListItem>);
 				}
-				else if (dataset.format === "shapefile" || dataset.format === "raster") {
+				else if (dataset.format.toLowerCase() === "shapefile" || dataset.format.toLowerCase() === "raster"
+					|| dataset.format.toLowerCase().includes("geotif")) {
 					return (<ListItem button
 									  onClick={() => this.onClickDataset(dataset.id)}
 									  selected={dataset.id === this.state.selectedDataset.id}>
@@ -548,7 +549,9 @@ class DataViewer extends Component {
 				);
 			}
 			// right column
-			if (this.state.selectedDatasetFormat === "shapefile" || this.state.selectedDatasetFormat === "raster") {
+			if (this.state.selectedDatasetFormat.toLowerCase() === "shapefile"
+				|| this.state.selectedDatasetFormat.toLowerCase() === "raster"
+				|| this.state.selectedDatasetFormat.toLowerCase().includes("geotif")) {
 				right_column =
 					(<div>
 						<Typography variant="h6">Map</Typography>
