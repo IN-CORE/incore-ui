@@ -445,7 +445,7 @@ class DataViewer extends Component {
 						<ListItemText primary={`${dataset.title  } - ${  dataset.creator.capitalize()}`}/>
 					</ListItem>);
 				}
-				else if (dataset.format === "shapefile") {
+				else if (dataset.format.includes("shapefile") || dataset.format.includes("raster")) {
 					return (<ListItem button
 									  onClick={() => this.onClickDataset(dataset.id)}
 									  selected={dataset.id === this.state.selectedDataset.id}>
@@ -548,7 +548,7 @@ class DataViewer extends Component {
 				);
 			}
 			// right column
-			if (this.state.selectedDatasetFormat === "shapefile") {
+			if (this.state.selectedDatasetFormat.includes("shapefile") || this.state.selectedDatasetFormat.includes("raster")) {
 				right_column =
 					(<div>
 						<Typography variant="h6">Map</Typography>
