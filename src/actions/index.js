@@ -549,21 +549,16 @@ function getDatawolfHeader() {
 	return headers;
 }
 
-export async function getRepoVersion(repoName) {
-
-	const endpoint = `https://api.github.com/repos/IN-CORE/${repoName}/tags`;
-	const versionRequest = await fetch(endpoint);
+export async function getRepoVersion() {
+	const versionRequest = await fetch("tags/github.json");
 
 	try {
-		const version = await versionRequest.json();
-		const versionName = version[0].name;
-		return versionName;
+		const githubVersions = await versionRequest.json();
+		return githubVersions;
 	}
 	catch (error) {
-		// if github tag API failed, just log the erorr and return null
+		// if fail just log the erorr and return null
 		console.log(error);
 		return null;
 	}
-
-
 }
