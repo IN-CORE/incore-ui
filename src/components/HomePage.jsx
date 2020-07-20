@@ -154,19 +154,19 @@ class HomePage extends Component {
 
 		this.state = {
 			sections: [],
-			versions: [],
+			repos: [],
 			subTitle: "",
-			incoreVersion: "",
+			githubVersions:{},
 			footerLogos: [],
 			errorMessage:""
 		};
 	}
 
 	async componentDidMount() {
-		let versions = [
+		let repos = [
 			{
 				title: "pyIncore",
-				version: await getRepoVersion("pyincore"),
+				repoName: "pyincore",
 				options: {
 					"Change log": "https://github.com/IN-CORE/pyincore/blob/master/CHANGELOG.md",
 					"GitHub": "https://github.com/IN-CORE/pyincore",
@@ -175,7 +175,7 @@ class HomePage extends Component {
 			},
 			{
 				title: "pyIncore-viz",
-				version: await getRepoVersion("pyincore-viz"),
+				repoName: "pyincore-viz",
 				options: {
 					"Change log": "https://github.com/IN-CORE/pyincore-viz/blob/master/CHANGELOG.md",
 					"GitHub": "https://github.com/IN-CORE/pyincore-viz",
@@ -184,7 +184,7 @@ class HomePage extends Component {
 			},
 			{
 				title: "Web Services",
-				version: await getRepoVersion("incore-services"),
+				repoName:"incore-services",
 				options: {
 					"Change log": "https://github.com/IN-CORE/incore-services/blob/master/CHANGELOG.md",
 					"GitHub": "https://github.com/IN-CORE/incore-services"
@@ -192,7 +192,7 @@ class HomePage extends Component {
 			},
 			{
 				title: "Web Tools",
-				version: await getRepoVersion("incore-ui"),
+				repoName: "incore-ui",
 				options: {
 					"Change log": "https://github.com/IN-CORE/incore-ui/blob/master/CHANGELOG.md",
 					"GitHub": "https://github.com/IN-CORE/incore-ui"
@@ -200,7 +200,7 @@ class HomePage extends Component {
 			},
 			{
 				title: "IN-CORE Lab",
-				version: await getRepoVersion("incore-lab"),
+				repoName: "incore-lab",
 				options: {
 					"Change log": "https://github.com/IN-CORE/incore-lab/blob/master/CHANGELOG.md",
 					"GitHub": "https://github.com/IN-CORE/incore-lab"
@@ -246,7 +246,7 @@ class HomePage extends Component {
 		resilience of those communities.";
 
 		// TODO: how to automatically update this field important!
-		const incoreVersion = await getRepoVersion("incore-docs");
+		const githubVersions = await getRepoVersion();
 
 		const footerLogos = [
 			{
@@ -269,9 +269,9 @@ class HomePage extends Component {
 
 		this.setState({
 			sections: sections,
-			versions: versions,
+			repos: repos,
 			subTitle: subTitle,
-			incoreVersion: incoreVersion,
+			githubVersions: githubVersions,
 			footerLogos: footerLogos,
 			errorMessage: this.props.location.query.error
 		});
@@ -318,12 +318,12 @@ class HomePage extends Component {
 
 						{/*if version exists, display version; otherwise just the text*/}
 						{
-							this.state.incoreVersion ?
+							this.state.githubVersions && this.state.githubVersions["incore-docs"] ?
 								<Chip
 									color="secondary"
 									size="medium"
 									className={classes.releaseChip}
-									label={`IN-CORE ${this.state.incoreVersion} IS RELEASED INCLUDING`}/>
+									label={`IN-CORE ${this.state.githubVersions["incore-docs"]} IS RELEASED INCLUDING`}/>
 								:
 								<Chip
 									color="secondary"
@@ -333,22 +333,22 @@ class HomePage extends Component {
 						}
 
 						<div className={classes.versionSection}>
-							{this.state.versions.map((version) =>
+							{this.state.repos.map((repo) =>
 								<div className={classes.versionLine}>
 									<Typography variant="body1" className={classes.versioning}>
-										{version.title}
+										{repo.title}
 
 										{/*if version exists, display version; otherwise not displaying the chip*/}
 										{
-											version.version ?
-												<Chip size="small" color="primary" label={version.version}
+											this.state.githubVersions && this.state.githubVersions[repo.repoName] ?
+												<Chip size="small" color="primary" label={this.state.githubVersions[repo.repoName]}
 													  className={classes.versioning}/> : null
 										}
 
-										{Object.keys(version.options).map(
+										{Object.keys(repo.options).map(
 											(option) =>
 												<Link color="primary" underline="always"
-													  className={classes.versioning} href={version.options[option]}
+													  className={classes.versioning} href={repo.options[option]}
 													  target="_blank">{option}</Link>)
 										}
 									</Typography>
