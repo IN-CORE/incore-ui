@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
 ## [Unreleased]
+### Fixed
+- Remove null legacyID text in the list of DFR3 curves in DFR3 viewer [INCORE1-541](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-541)
+
 ### Added
 - In Hazard Viewer, rename dropdown selection hurricane to hurricane windfield, add new option hurricane to view Hurricanes [INCORE1-699](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-699)
 - Version tags now read from local json file which is updated periodically using cronjob, and later that will be volume mounted to /usr/share/nginx/html/public folder to ensure dynamic updates.[INCORE1-638](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-638)
