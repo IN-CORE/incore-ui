@@ -29,6 +29,7 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 import CloseIcon from "@material-ui/icons/Close";
 import {browserHistory} from "react-router";
 import config from "../app.config";
+import ErrorMessage from "./children/ErrorMessage";
 
 
 global.__base = `${__dirname  }/`;
@@ -131,13 +132,21 @@ class App extends Component {
 			drawerOpen: false,
 			collapseOpen: true,
 			profileMenuOpen: false,
-			anchorEl: null
+			anchorEl: null,
+			errorMessage:""
 		};
 		this.logout = this.logout.bind(this);
 		this.toggleDrawer = this.toggleDrawer.bind(this);
 		this.handleCollapse = this.handleCollapse.bind(this);
 		this.handleProfileMenuOpen = this.handleProfileMenuOpen.bind(this);
 		this.handleProfileMenuClose = this.handleProfileMenuClose.bind(this);
+	}
+
+	componentWillMount() {
+		// set error message
+		this.setState({
+			errorMessage: this.props.location.query.error
+		});
 	}
 
 	logout() {
@@ -269,6 +278,11 @@ class App extends Component {
 						{profileMenu}
 					</Toolbar>
 				</AppBar>
+				{/*error message */}
+				{
+					this.state.errorMessage ?
+						<ErrorMessage error={this.state.errorMessage}/> : null
+				}
 				<Drawer variant="persistent" open={this.state.drawerOpen} onClose={this.toggleDrawer}
 					classes={{paper: classes.drawerPaper}}>
 					{sideList}

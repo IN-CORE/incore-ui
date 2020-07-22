@@ -30,7 +30,6 @@ import Version from "./children/Version";
 import {CopyToClipboard} from "react-copy-to-clipboard";
 import {createMuiTheme, withStyles} from "@material-ui/core/styles/index";
 import Cookies from "universal-cookie";
-import ErrorMessage from "./children/ErrorMessage";
 
 const cookies = new Cookies();
 
@@ -120,7 +119,6 @@ class HazardViewer extends Component {
 			pageNumber: 1,
 			dataPerPage: 50,
 			preview: false,
-			errorMessage:""
 		};
 		this.changeHazardType = this.changeHazardType.bind(this);
 		this.onClickHazard = this.onClickHazard.bind(this);
@@ -155,11 +153,6 @@ class HazardViewer extends Component {
 				authError: true,
 			});
 		}
-
-		// set error message
-		this.setState({
-			errorMessage: this.props.location.query.error
-		});
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -384,11 +377,6 @@ class HazardViewer extends Component {
 		else {
 			return (
 				<div>
-					{/*error message */}
-					{
-						this.state.errorMessage ?
-							<ErrorMessage error={this.state.errorMessage}/> : null
-					}
 					<div className={classes.root}>
 						<Grid container spacing={4}>
 							{/*filters*/}

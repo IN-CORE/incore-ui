@@ -4,7 +4,6 @@ import {Avatar, Button, Divider, GridList, GridListTile, Paper, TextField, Typog
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Version from "./children/Version";
 import Cookies from "universal-cookie";
-import ErrorMessage from "./children/ErrorMessage";
 
 const cookies = new Cookies();
 
@@ -19,19 +18,12 @@ class Login extends Component {
 			loginErrorText: "",
 			error: false,
 			origin: props.location.query["origin"],
-			errorMessage:""
 		};
 
 		this.changeUsername = this.changeUsername.bind(this);
 		this.changePassword = this.changePassword.bind(this);
 		this.login = this.login.bind(this);
 		this.handleKeyPressed = this.handleKeyPressed.bind(this);
-	}
-
-	componentWillMount(){
-		this.setState({
-			errorMessage: this.props.location.query.error
-		});
 	}
 
 	handleKeyPressed(event: Object) {
@@ -94,8 +86,7 @@ class Login extends Component {
 		// if already login, redirect to homepage
 		let Authorization = cookies.get("Authorization");
 		if (Authorization !== undefined && Authorization !== "" && Authorization !== null) {
-			this.state.errorMessage ? browserHistory.push(`/?error=${this.state.errorMessage}`)
-				: browserHistory.push("/");
+			browserHistory.push("/");
 			return null;
 		}
 

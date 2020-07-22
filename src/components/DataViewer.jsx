@@ -42,7 +42,6 @@ import Version from "./children/Version";
 import {CopyToClipboard} from "react-copy-to-clipboard";
 import {createMuiTheme, withStyles} from "@material-ui/core/styles/index";
 import Cookies from "universal-cookie";
-import ErrorMessage from "./children/ErrorMessage";
 
 const cookies = new Cookies();
 const redundant_prop = ["deleted", "privileges", "spaces"];
@@ -135,7 +134,6 @@ class DataViewer extends Component {
 			offset: 0,
 			pageNumber: 1,
 			dataPerPage: 50,
-			errorMessage:""
 		};
 
 		this.changeDatasetType = this.changeDatasetType.bind(this);
@@ -177,12 +175,6 @@ class DataViewer extends Component {
 				authError: true,
 			});
 		}
-
-		// set error message
-		this.setState({
-			errorMessage: this.props.location.query.error
-		});
-
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -579,11 +571,6 @@ class DataViewer extends Component {
 		else {
 			return (
 				<div>
-					{/*error message */}
-					{
-						this.state.errorMessage ?
-							<ErrorMessage error={this.state.errorMessage}/> : null
-					}
 					<div className={classes.root}>
 						<Grid container spacing={4}>
 							{/*filters*/}

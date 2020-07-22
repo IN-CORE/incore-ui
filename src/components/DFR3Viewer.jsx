@@ -39,7 +39,6 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 
 import {is3dCurve, exportJson} from "../utils/common";
-import ErrorMessage from "./children/ErrorMessage";
 
 const cookies = new Cookies();
 const redundantProp = ["legacyId", "privileges", "creator", "is3dPlot"];
@@ -136,7 +135,6 @@ class DFR3Viewer extends React.Component {
 			pageNumberMappings: 1,
 			urlPrefix: config.urlPrefix,
 			tabIndex: 0,
-			errorMessage:""
 		};
 
 		this.changeDFR3Type = this.changeDFR3Type.bind(this);
@@ -181,11 +179,6 @@ class DFR3Viewer extends React.Component {
 				authError: true,
 			});
 		}
-
-		// set error message
-		this.setState({
-			errorMessage: this.props.location.query.error
-		});
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -600,11 +593,6 @@ class DFR3Viewer extends React.Component {
 		else {
 			return (
 				<div>
-					{/*error message */}
-					{
-						this.state.errorMessage ?
-							<ErrorMessage error={this.state.errorMessage}/> : null
-					}
 					<div className={classes.root}>
 						<Grid container spacing={4}>
 							{/*filters*/}
