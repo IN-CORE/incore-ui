@@ -392,9 +392,12 @@ class HazardViewer extends Component {
 													  className={classes.denseStyle}>Earthquake</MenuItem>
 											<MenuItem value="tornadoes" key="tornadoes"
 													  className={classes.denseStyle}>Tornado</MenuItem>
+											<MenuItem value="hurricanes"
+													  key="hurricanes"
+													  className={classes.denseStyle}>Hurricane</MenuItem>
 											<MenuItem value="hurricaneWindfields"
 													  key="hurricaneWindfields"
-													  className={classes.denseStyle}>Hurricane</MenuItem>
+													  className={classes.denseStyle}>Hurricane Windfield</MenuItem>
 											<MenuItem value="tsunamis" key="tsunamis"
 													  className={classes.denseStyle}>Tsunami</MenuItem>
 										</Select>
