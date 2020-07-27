@@ -18,19 +18,12 @@ class Login extends Component {
 			loginErrorText: "",
 			error: false,
 			origin: props.location.query["origin"],
-			errorMessage:""
 		};
 
 		this.changeUsername = this.changeUsername.bind(this);
 		this.changePassword = this.changePassword.bind(this);
 		this.login = this.login.bind(this);
 		this.handleKeyPressed = this.handleKeyPressed.bind(this);
-	}
-
-	componentWillMount(){
-		this.setState({
-			errorMessage: this.props.location.query.error
-		});
 	}
 
 	handleKeyPressed(event: Object) {
