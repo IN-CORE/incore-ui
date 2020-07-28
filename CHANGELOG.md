@@ -6,13 +6,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [0.5.0] - 2020-07-28
-### Added
-- Add widget that display custom error message parsed from query parameter "error" in the URL [INCORE1-620](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-620)
 
 ### Fixed
 - Remove null legacyID text in the list of DFR3 curves in DFR3 viewer [INCORE1-541](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-541)
 
 ### Added
+- Add widget that display custom error message parsed from query parameter "error" in the URL [INCORE1-620](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-620)
 - In Hazard Viewer, rename dropdown selection hurricane to hurricane windfield, add new option hurricane to view Hurricanes [INCORE1-699](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-699)
 - Version tags now read from local json file which is updated periodically using cronjob, and later that will be volume mounted to /usr/share/nginx/html/public folder to ensure dynamic updates.[INCORE1-638](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-638)
 
