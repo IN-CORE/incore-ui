@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [0.5.0]
+## [0.5.0] - 2020-07-28
 ### Added
 - Add widget that display custom error message parsed from query parameter "error" in the URL [INCORE1-620](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-620)
 
