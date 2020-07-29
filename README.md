@@ -19,7 +19,7 @@ Docker
 To build the container you can use either of these
 
 ```
-# development 
+# development
 docker build -t incore/frontend:develop .
 # production
 docker build -t incore/frontend:latest --build-arg DEPLOY_ENV=production .
@@ -36,5 +36,5 @@ Now you can connect using the browser at http://localhost:8888/
 To update the tags:
 
 ```
-docker exec frontend /getVersions.sh
+docker exec frontend /getVersionTags.sh
 ```
