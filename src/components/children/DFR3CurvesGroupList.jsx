@@ -42,11 +42,12 @@ const DFR3CurvesGroupList = (props) => {
 function getTitle(dfr3Curve) {
 	let title = dfr3Curve.authors.join(", ");
 
-	if (dfr3Curve.paperReference !== null) {
+	if (dfr3Curve.paperReference !== null && dfr3Curve.paperReference !== undefined
+		&& dfr3Curve.paperReference.yearPublished !== undefined) {
 		title += ` (${dfr3Curve.paperReference.yearPublished})`;
 	}
 
-	if (dfr3Curve.legacyId !== null) {
+	if (dfr3Curve.legacyId !== null && dfr3Curve.legacyId !== undefined) {
 		title += ` - ${dfr3Curve.legacyId}`;
 	}
 
