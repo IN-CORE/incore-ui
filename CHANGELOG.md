@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+
+### Added
+- Close button on the error message alert [INCORE1-714](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-714)
+
+
 ## [0.5.1] - 2020-08-04
 
 ### Security
