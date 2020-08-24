@@ -120,6 +120,26 @@ export default class chartSampler {
 		return samples;
 	}
 
+	static computePeriodBuildingSamples(min, max, numberOfSamples, a11_param, a12_param, a13_param, a14_param,
+		a21_param, a22_param)
+	{
+		let cutoff_period = 0.87;
+		let period = 0;
+		let multiplier = cutoff_period - period;
+
+		let steps = ((max - min) / numberOfSamples);
+		let samples = [];
+		for (let i = 1; i <= numberOfSamples; i++) {
+			let hazard = steps * i;
+			let y = jStat.normal.cdf(
+				(math.log(hazard) - (cutoff_period * a12_param + a11_param)) / (a13_param + a14_param * cutoff_period)
+				+ multiplier * (math.log(hazard) - a21_param) / a22_param, 0, 1);
+			samples.push([hazard, y]);
+		}
+
+		return samples;
+	}
+
 	static sampleLogNormalCdf(min, max, numberOfSamples, mean, std) {
 		let steps = ((max - min) / numberOfSamples);
 

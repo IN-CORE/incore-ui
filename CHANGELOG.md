@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Close button on the error message alert [INCORE1-714](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-714)
 
+### Fixed
+- Preview period building fragility curves [INCORE1-744](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-744)
+
 
 ## [0.5.1] - 2020-08-04
 
