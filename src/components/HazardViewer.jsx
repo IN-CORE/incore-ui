@@ -400,6 +400,9 @@ class HazardViewer extends Component {
 													  className={classes.denseStyle}>Hurricane Windfield</MenuItem>
 											<MenuItem value="tsunamis" key="tsunamis"
 													  className={classes.denseStyle}>Tsunami</MenuItem>
+											<MenuItem value="floods"
+													  key="floods"
+													  className={classes.denseStyle}>Flood</MenuItem>
 										</Select>
 									</div>
 									{/*spaces*/}
