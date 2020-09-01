@@ -36,6 +36,7 @@ config["semanticService"] = "";
 config["dataWolf"] = "https://incore2-datawolf.ncsa.illinois.edu/datawolf/";
 config["client_id"] = "react-auth";
 config["pyIncoreDocUrl"] = "/doc/pyincore/index.html";
+config["pyIncoreVizDocUrl"] = "/doc/pyincore_viz/index.html";
 config["swaggerUrl"] = "/doc/api/";
 config["webVersion"] = "0.5.1";
 config["spaceService"] = `${apiurl}/space/api/spaces`;

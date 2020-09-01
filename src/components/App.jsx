@@ -226,6 +226,11 @@ class App extends Component {
 					<ListItemAvatar><Avatar src="/public/python-logo.png"/></ListItemAvatar>
 					<ListItemText primary="pyIncore Reference"/>
 				</ListItem>
+				<ListItem button component="a" key="pyIncore_viz"
+						  href={config.pyIncoreVizDocUrl} target="_blank">
+					<ListItemAvatar><Avatar src="/public/python-logo.png"/></ListItemAvatar>
+					<ListItemText primary="pyIncore_viz Reference"/>
+				</ListItem>
 				<ListItem button component="a" key="services" href={config.swaggerUrl}
 							  target="_blank">
 					<ListItemAvatar><Avatar src="/public/swagger-logo.png"/></ListItemAvatar>

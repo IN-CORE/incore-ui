@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - In Hazard Viewer add new option floods [INCORE1-751](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-751)
 - Close button on the error message alert [INCORE1-714](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-714)
+- Link of pyincore-viz documentation [INCORE1-756](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-756)
 
 ### Fixed
 - Preview period building fragility curves [INCORE1-744](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-744)
