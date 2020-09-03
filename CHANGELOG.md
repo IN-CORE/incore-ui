@@ -6,7 +6,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
-## [Unreleased]
+## [0.6.0] - 2020-09-03
+
 ### Added
 - In Hazard Viewer add new option floods [INCORE1-751](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-751)
 - Close button on the error message alert [INCORE1-714](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-714)
