@@ -7,8 +7,8 @@ FROM node:14 AS builder
 WORKDIR /usr/src/app
 
 # development or production
-ARG DEPLOY_ENV="development"
-ENV DEPLOY_ENV="${DEPLOY_ENV:-development}"
+ARG DEPLOY_ENV=""
+ENV DEPLOY_ENV="${DEPLOY_ENV:-}"
 
 # copy only package for caching purposes
 COPY package*.json /usr/src/app/

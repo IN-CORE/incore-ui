@@ -25,11 +25,18 @@ else if (process.env.DEPLOY_ENV === "local"){
 		geoServer: "https://incore-test-kube.ncsa.illinois.edu/geoserver/incore/wms",
 	};
 }
-else { // default case that used dev environment
+else if (process.env.DEPLOY_ENV === "develop"){
 	apihost = "incore-dev-kube.ncsa.illinois.edu";
 	apiurl = `${apiprotocol}://${apihost}`;
 	config = {
 		geoServer: "https://incore-dev-kube.ncsa.illinois.edu/geoserver/incore/wms",
+	};
+}
+else { // default case that used dev environment
+	apihost = "";
+	apiurl = "";
+	config = {
+		geoServer: "/geoserver/incore/wms",
 	};
 }
 config["semanticService"] = "";
