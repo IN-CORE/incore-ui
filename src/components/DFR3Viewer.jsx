@@ -626,7 +626,10 @@ class DFR3Viewer extends React.Component {
 											<MenuItem value="earthquake"
 													  className={classes.denseStyle}>Earthquake</MenuItem>
 											<MenuItem value="tornado" className={classes.denseStyle}>Tornado</MenuItem>
+											<MenuItem value="hurricane" className={classes.denseStyle}>Hurricane</MenuItem>
+											<MenuItem value="hurricaneWindfield" className={classes.denseStyle}>Hurricane Windfield</MenuItem>
 											<MenuItem value="tsunami" className={classes.denseStyle}>Tsunami</MenuItem>
+											<MenuItem value="flood" className={classes.denseStyle}>Flood</MenuItem>
 										</Select>
 									</div>
 									{/* Inventory Type */}
