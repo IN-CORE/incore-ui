@@ -55,6 +55,7 @@ config["testUserInfo"] = "incrtest";
 export default config;
 
 export const uniqueDataType = [
+	"All",
 	"ergo:buildingDisruptionCost",
 	"ergo:buildingIndoorDeathFractions",
 	"ergo:buildingIndoorInjuryFractions",
