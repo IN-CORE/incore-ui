@@ -4,35 +4,31 @@ let config = {};
 let apihost;
 let apiurl;
 
-if (process.env.DEPLOY_ENV === "production"){
+if (process.env.DEPLOY_ENV === "production") {
 	apihost = "incore.ncsa.illinois.edu";
 	apiurl = `${apiprotocol}://${apihost}`;
 	config = {
 		geoServer: "https://incore-geoserver.ncsa.illinois.edu/geoserver/incore/wms",
 	};
-}
-else if(process.env.DEPLOY_ENV === "test"){
+} else if (process.env.DEPLOY_ENV === "test") {
 	apihost = "incore-test-kube.ncsa.illinois.edu";
 	apiurl = `${apiprotocol}://${apihost}`;
 	config = {
 		geoServer: "https://incore-test-kube.ncsa.illinois.edu/geoserver/incore/wms",
 	};
-}
-else if (process.env.DEPLOY_ENV === "local"){
+} else if (process.env.DEPLOY_ENV === "local") {
 	apihost = "localhost:8080";
 	apiurl = `http://${apihost}`;
 	config = {
 		geoServer: "https://incore-test-kube.ncsa.illinois.edu/geoserver/incore/wms",
 	};
-}
-else if (process.env.DEPLOY_ENV === "develop"){
+} else if (process.env.DEPLOY_ENV === "develop") {
 	apihost = "incore-dev-kube.ncsa.illinois.edu";
 	apiurl = `${apiprotocol}://${apihost}`;
 	config = {
 		geoServer: "https://incore-dev-kube.ncsa.illinois.edu/geoserver/incore/wms",
 	};
-}
-else { // default case that used dev environment
+} else { // default case that used dev environment
 	apihost = "";
 	apiurl = "";
 	config = {
@@ -50,16 +46,15 @@ config["spaceService"] = `${apiurl}/space/api/spaces`;
 config["dfr3Service"] = `${apiurl}/dfr3/api/`;
 config["fragilityService"] = `${apiurl}/dfr3/api/fragilities`;
 config["hazardServiceBase"] = `${apiurl}/hazard/api/`;
-config["authService"] =  `${apiurl}/auth/realms/In-core/protocol/openid-connect/token`;
+config["authService"] = `${apiurl}/auth/realms/In-core/protocol/openid-connect/token`;
 config["dataServiceBase"] = `${apiurl}/`;
-config["dataService"] =  `${apiurl}/data/api/datasets`;
+config["dataService"] = `${apiurl}/data/api/datasets`;
 config["incoreLab"] = `${apiurl}/lab`;
 config["testUserInfo"] = "incrtest";
 
 export default config;
 
 export const uniqueDataType = [
-	"All",
 	"ergo:buildingDisruptionCost",
 	"ergo:buildingIndoorDeathFractions",
 	"ergo:buildingIndoorInjuryFractions",
@@ -105,6 +100,11 @@ export const uniqueDataType = [
 	"ergo:lifelineWaterInventory",
 	"ergo:lifelineWaterTankFragilityMapping",
 	"ergo:pipelineFragilities",
+	"incore:hurricaneGridSnapshot",
+	"incore:tornadoWindfield",
+	"incore:housingUnitInventory",
+	"incore:addressPoints",
+	"ergo:buildingInventory",
 	"ergo:powerFacilityTopo",
 	"ergo:powerLineTopo",
 	"ergo:waterFacilityTopo",
@@ -180,45 +180,74 @@ export const uniqueDataType = [
 	"ergo:anonymousPolygon",
 	"ergo:defaultset",
 	"ergo:demSlopeRaster",
-	"http://localhost:8080/semantics/edu.illinois.ncsa.ergo.eq.schemas.buildingDamageVer4.v1.0",
 	"Unknown",
-	"http://localhost:8080/semantics/edu.illinois.ncsa.ergo.eq.schemas.deterministicHazardRaster.v1.0",
-	"http://localhost:8080/semantics/edu.illinois.ncsa.incore.tornado.hazard.schemas.tornadohazard.v1.0",
-	"edu.illinois.ncsa.ergo.eq.schemas.deterministicHazardRaster.v1.0",
-	"edu.illinois.ncsa.ergo.eq.schemas.censustract.v1.0",
 	"incore:epnNodeVer1",
 	"incore:epnLinkeVer1",
-	"tornadowindfield",
-	"deterministicHazardRaster",
+	"ergo:deterministicEarthquakeRaster",
 	"incore:TornadoEpnDamageVer1",
 	"boundary",
-	"probabilisticHazardRaster",
+	"ergo:probabilisticEarthquakeRaster",
 	"incore:EPNRecoveryVer1",
-	"probabilisticTsunamiRaster",
-	"HurricaneDataset",
+	"incore:probabilisticTsunamiRaster",
 	"ergo:PopAllocation",
-	"ergo:blockGroupData",
-	"ergo:censusBlockPopulation",
-	"ergo:addressPoints",
-	"ergo:buildingInventory",
+	"incore:blockGroupData",
+	"incore:housingUnitAllocation",
+	"ergo:pipeline",
 	"incore:waternodeBuildingRelations",
+	"incore:ADT",
+	"incore:bridgeDamageValue",
+	"incore:unrepairedBridge",
+	"incore:NBR",
 	"incore:waterNetworkDemand",
 	"incore:waterNetworkEpanetInp",
 	"ergo:pipelineDamage",
 	"ergo:pumpDamage",
 	"ergo:lifelineWaterTankInventoryDamage",
 	"incore:pipeZoning",
-	"incore:waterFacility",
-	"incore:waterPipeline",
-	"incore:ADT",
-	"incore:bridgeDamageValue",
-	"incore:unrepairedBridge",
-	"incore:NBR",
-	"incore:portfolioBuildingInventory",
-	"incore:portfolioOccupancyMapping",
-	"incore:portfolioBuildingDamage",
-	"incore:portfolioDamageRatios",
-	"incore:portfolioUtilityAvailability",
-	"incore:portfolioCoefficients",
 	"pytest - edu.illinois.ncsa.ergo.eq.schemas.censustract.v1.0",
-	"ergo:test"];
+	"ergo: PopAllocation ",
+	"given.data.type",
+	"incore:JoplinCGEsam",
+	"incore:JoplinCGEbb",
+	"incore:JoplinCGEemploy",
+	"incore:JoplinCGEigtd",
+	"incore:JoplinCGEiout",
+	"incore:JoplinCGEjobcr",
+	"incore:JoplinCGElandcap",
+	"incore:JoplinCGEmisc",
+	"incore:JoplinCGEmisch",
+	"incore:JoplinCGEoutcr",
+	"incore:JoplinCGEtpc",
+	"incore:JoplinCGEtauff",
+	"networkDataset",
+	"incore:waternetwork",
+	"incore:bridgesseasidev1",
+	"incore:network",
+	"incore:epf",
+	"ergo:roadDamageRatios",
+	"incore:JoplinCGEshocks",
+	"incore:buildingInterdependencyDict",
+	"incore:valuLossParam",
+	"ergo:buildingInventoryVer6",
+	"incore:buildingsInventoryVer5",
+	"incore:roads",
+	"incore:sampleFailureState",
+	"incore:deterministicHurricaneRaster",
+	"incore:distanceToShore",
+	"incore:capitalShocks",
+	"incore:buildingsToSectors",
+	"incore:failureProbability",
+	"incore:consumerPriceIndexUS",
+	"incore:buildingOccupancyMultiplier",
+	"incore:deterministicFloodRaster",
+	"ergo:buildingDamage",
+	"ergo:buildingEconomicLoss",
+	"ergo:meanDamage",
+	"incore:SeasideCGEshocks",
+	"incore:SeasideCGEsam",
+	"incore:SeasideCGEbb",
+	"incore:SeasideCGEemploy",
+	"incore:SeasideCGEjobcr",
+	"incore:SeasideCGEhhtable",
+	"incore:SeasideCGEsim"
+];
