@@ -11,14 +11,11 @@ import {
 	Grid,
 	IconButton,
 	InputAdornment,
-	InputLabel,
 	List,
 	ListItem,
 	ListItemIcon,
 	ListItemText,
-	MenuItem,
 	Paper,
-	Select,
 	TextField,
 	Typography,
 	Tooltip
@@ -42,6 +39,7 @@ import Version from "./children/Version";
 import {CopyToClipboard} from "react-copy-to-clipboard";
 import {createMuiTheme, withStyles} from "@material-ui/core/styles/index";
 import Cookies from "universal-cookie";
+import Datatype from "./children/Datatype";
 
 const cookies = new Cookies();
 const redundant_prop = ["deleted", "privileges", "spaces"];
@@ -413,11 +411,6 @@ class DataViewer extends Component {
 
 	render() {
 		const {classes} = this.props;
-		const type_menu_items = uniqueDataType.map((type) => <MenuItem value={type} key={type}
-																	   className={classes.denseStyle}>{type}</MenuItem>);
-		let dataset_types = (<Select value={this.state.selectedDataType}
-									 onChange={this.changeDatasetType}
-									 className={classes.select}>{type_menu_items}</Select>);
 
 		// list items
 		let list_items = "";
@@ -579,10 +572,10 @@ class DataViewer extends Component {
 							{/*filters*/}
 							<Grid item lg={8} sm={8} xl={8} xs={12}>
 								<Paper variant="outlined" className={classes.filter}>
-									<Typography variant="h6">Filters</Typography>
 									<div className={classes.selectDiv}>
-										<InputLabel>Dataset Type</InputLabel>
-										{dataset_types}
+										<Datatype selectedDataType={this.state.selectedDataType}
+											   datatypes={this.props.datatypes}
+											   handleDatatypeSelection={this.changeDatasetType}/>
 									</div>
 									<div className={classes.selectDiv}>
 										<Space selectedSpace={this.state.selectedSpace}

@@ -28,7 +28,7 @@ class Datatype extends React.Component {
 			return (
 				<div>
 					<InputLabel>Dataset Type</InputLabel>
-					<Select value={this.props.selectedDatatype} onChange={this.props.changeDatasetType}
+					<Select value={this.props.selectedDataType} onChange={this.props.handleDatatypeSelection}
 						className={classes.select}>
 						<MenuItem key="All" value="All" className={classes.denseStyle}>All</MenuItem>
 						{this.props.datatypes.map((datatype, index) =>
