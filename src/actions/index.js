@@ -100,6 +100,18 @@ export function receiveSpaces(type: string, json) {
 	};
 }
 
+export const RECEIVE_DATATYPES = "RECEIVE_DATATYPES";
+
+export function receiveDatatypes(type:string, json){
+	return (dispatch: Dispatch) => {
+		dispatch({
+			type: type,
+			datatypes: json,
+			receivedAt: Date.now(),
+		});
+	};
+}
+
 export function fetchAnalyses() {
 	const endpoint = `${ config.maestroService }/api/analyses?full=false`;
 
@@ -194,6 +206,30 @@ export function fetchSpaces() {
 				}
 				else {
 					dispatch(receiveSpaces(RECEIVE_SPACES, []));
+				}
+			});
+	};
+}
+
+export function fetchUniqueDatatypes(space: string){
+	let endpoint = `${config.dataServiceBase}/data/api/datatypes`;
+	if (space !== null && space !== "All") {
+		endpoint = `${endpoint}?space=${space}`;
+	}
+	return (dispatch: Dispatch) => {
+		return fetch(endpoint, {mode: "cors", headers: getHeader()})
+			.then(response => {
+				if (response.status === 200) {
+					response.json().then(json => {
+						dispatch(receiveDatatypes(RECEIVE_DATATYPES, json));
+					});
+				}
+				else if (response.status === 401) {
+					cookies.remove("Authorization");
+					dispatch(receiveDatatypes(LOGIN_ERROR, []));
+				}
+				else {
+					dispatch(receiveDatatypes(RECEIVE_DATATYPES, []));
 				}
 			});
 	};

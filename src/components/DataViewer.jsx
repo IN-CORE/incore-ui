@@ -32,7 +32,7 @@ import ChartIcon from "@material-ui/icons/ShowChart";
 import NetworkIcon from "@material-ui/icons/DeviceHub";
 import UnknownIcon from "@material-ui/icons/ContactSupport";
 import CloseIcon from "@material-ui/icons/Close";
-import config, {uniqueDataType} from "../app.config";
+import config from "../app.config";
 import {getHeader} from "../actions";
 import {browserHistory} from "react-router";
 import Pagination from "./children/Pagination";
