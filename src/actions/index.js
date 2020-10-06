@@ -211,11 +211,8 @@ export function fetchSpaces() {
 	};
 }
 
-export function fetchUniqueDatatypes(space: string){
-	let endpoint = `${config.dataServiceBase}/data/api/datatypes`;
-	if (space !== null && space !== "All") {
-		endpoint = `${endpoint}?space=${space}`;
-	}
+export function fetchUniqueDatatypes(){
+	let endpoint = `${config.dataServiceBase}data/api/datatypes`;
 	return (dispatch: Dispatch) => {
 		return fetch(endpoint, {mode: "cors", headers: getHeader()})
 			.then(response => {

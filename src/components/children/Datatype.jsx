@@ -32,9 +32,9 @@ class Datatype extends React.Component {
 						className={classes.select}>
 						<MenuItem key="All" value="All" className={classes.denseStyle}>All</MenuItem>
 						{this.props.datatypes.map((datatype, index) =>
-							(<MenuItem label={datatype.datatype} value={datatype.datatype} name={datatype.datatype}
-									  key={datatype.datatype} className={classes.denseStyle}>
-								{datatype.datatype}</MenuItem>))}
+							(<MenuItem label={datatype.dataType} value={datatype.dataType} name={datatype.dataType}
+									  key={datatype.dataType} className={classes.denseStyle}>
+								{datatype.dataType}</MenuItem>))}
 					</Select>
 				</div>);
 		}

@@ -17,8 +17,8 @@ const mapDispatchToProps = (dispatch) => {
 		getAllSpaces: () => {
 			dispatch(fetchSpaces());
 		},
-		getUniqueDatatypes: (space) => {
-			dispatch(fetchUniqueDatatypes(space));
+		getUniqueDatatypes: () => {
+			dispatch(fetchUniqueDatatypes());
 		},
 		getAllDatasets: (dataType, space, limit, offset) => {
 			dispatch(fetchDatasets(dataType, space, limit, offset));
