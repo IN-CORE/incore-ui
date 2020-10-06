@@ -164,6 +164,7 @@ class DataViewer extends Component {
 			}, function () {
 				this.props.getAllDatasets(this.state.selectedDataType, this.state.selectedSpace, this.state.dataPerPage, this.state.offset);
 				this.props.getAllSpaces();
+				this.props.getUniqueDatatypes();
 			});
 		}
 
