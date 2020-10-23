@@ -6,6 +6,7 @@ import dfr3Curves from "./dfr3Curves";
 import dfr3Mappings from "./dfr3Mappings";
 import user from "./user";
 import spaces from "./spaces";
+import datatypes from "./datatypes";
 
 const rootReducer = combineReducers({
 	routing: routerReducer,
@@ -14,7 +15,8 @@ const rootReducer = combineReducers({
 	hazard: hazards,
 	dfr3Curve: dfr3Curves,
 	dfr3Mapping: dfr3Mappings,
-	space: spaces
+	space: spaces,
+	datatype: datatypes,
 });
 
 export default rootReducer;
