@@ -410,12 +410,9 @@ class DFR3Viewer extends React.Component {
 	generate2dPlotData(DFR3Curve) {
 		let updatedChartConfig = Object.assign({}, chartConfig.DFR3Config);
 
-		let demandType = DFR3Curve.demandType !== null ? DFR3Curve.demandType : "";
-		let demandUnit = DFR3Curve.demandUnits !== null ? DFR3Curve.demandUnits : "";
+
 		let description = DFR3Curve.description !== null ? DFR3Curve.description : "";
 		let authors = DFR3Curve.authors.join(", ");
-
-		updatedChartConfig.xAxis.title.text = `${demandType} (${demandUnit})`;
 		updatedChartConfig.title.text = `${description} [${authors}]`;
 
 		updatedChartConfig.series = [];
@@ -423,12 +420,21 @@ class DFR3Viewer extends React.Component {
 		let curves;
 		if ("fragilityCurves" in DFR3Curve) {
 			curves = DFR3Curve.fragilityCurves;
+			let demandType = DFR3Curve.demandType !== null ? DFR3Curve.demandType : "";
+			let demandUnit = DFR3Curve.demandUnits !== null ? DFR3Curve.demandUnits : "";
+			updatedChartConfig.xAxis.title.text = `${demandType} (${demandUnit})`;
 		}
 		else if ("repairCurves" in DFR3Curve) {
 			curves = DFR3Curve.repairCurves;
+			let timeType = "time";
+			let timeUnit = DFR3Curve.timeUnits !== null ? DFR3Curve.timeUnits : "";
+			updatedChartConfig.xAxis.title.text = `${timeType} (${timeUnit})`;
 		}
 		else if ("restorationCurves" in DFR3Curve) {
 			curves = DFR3Curve.restorationCurves;
+			let timeType = "time";
+			let timeUnit = DFR3Curve.timeUnits !== null ? DFR3Curve.timeUnits : "";
+			updatedChartConfig.xAxis.title.text = `${timeType} (${timeUnit})`;
 		}
 		else{
 			curves = [];
@@ -456,7 +462,7 @@ class DFR3Viewer extends React.Component {
 			}
 			else if (curve.className === "PeriodBuildingFragilityCurve"){
 				plotData = chartSampler.computePeriodBuildingSamples(0, 5, 1000, curve.fsParam0, curve.fsParam1,
-					curve.fsParam2, curve.fsParam3, curve.fsParam4, curve.fsParam5)
+					curve.fsParam2, curve.fsParam3, curve.fsParam4, curve.fsParam5);
 			}
 			// TODO if curve type none of the above
 			// TODO need to have a widget to display the error in a uniformed way
