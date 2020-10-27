@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.7.0] - 2020-10-27
+
+### Changed
+- Dynamically querying service API to update data type filter in DataViewer
+- Update hazard fitler in DFR3Viewer
+- Use relative path in configuration file
+
+### Fixed
+- Fix the x-axis title in repair and restoration curve in DFR3Viewer
+
 
 ## [0.6.0] - 2020-09-03
 
