@@ -1,32 +1,8 @@
 import React, {Component} from "react";
-import {
-	AppBar,
-	Avatar,
-	Button,
-	Collapse,
-	Drawer,
-	IconButton,
-	List,
-	ListItem,
-	ListItemAvatar,
-	ListItemIcon,
-	ListItemText,
-	ListSubheader,
-	Menu,
-	MenuItem,
-	Toolbar,
-	Typography
-} from "@material-ui/core";
+import {AppBar, Button, IconButton, Link, Menu, MenuItem, Toolbar, Typography,} from "@material-ui/core";
 import {createMuiTheme, MuiThemeProvider, withStyles} from "@material-ui/core/styles";
-import MenuIcon from "@material-ui/icons/Menu";
-import HomeIcon from "@material-ui/icons/Home";
-import ExpandLess from "@material-ui/icons/ExpandLess";
-import ExpandMore from "@material-ui/icons/ExpandMore";
-import DFR3ViewerIcon from "@material-ui/icons/ShowChart";
-import DataViewerIcon from "@material-ui/icons/Folder";
-import HazardViewerIcon from "@material-ui/icons/Warning";
 import AccountCircle from "@material-ui/icons/AccountCircle";
-import CloseIcon from "@material-ui/icons/Close";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import {browserHistory} from "react-router";
 import config from "../app.config";
 import ErrorMessage from "./children/ErrorMessage";
@@ -79,7 +55,6 @@ const theme = createMuiTheme({
 	},
 });
 
-const drawerWidth = 350;
 const styles = {
 	appBar: {
 		width: "100%",
@@ -88,39 +63,23 @@ const styles = {
 			duration: theme.transitions.duration.leavingScreen,
 		}),
 	},
-	appBarShift: {
-		marginLeft: drawerWidth,
-		width: `calc(100% - ${drawerWidth}px)`,
-		transition: theme.transitions.create(["margin", "width"], {
-			easing: theme.transitions.easing.easeOut,
-			duration: theme.transitions.duration.enteringScreen,
-		}),
-	},
 	toolBar: {
-		minHeight: "48px"
-	},
-	menuButton: {
-		padding: "6px"
+		minHeight: "48px",
+		display:"flex",
+		justifyContent:"flex-start",
 	},
 	smallButton: {
 		padding: "6px"
-	},
-	hide: {
-		display: "none",
-	},
-	drawerPaper: {
-		backgroundColor: "#ffffff",
-		width: drawerWidth,
-		flexShrink: 0,
-	},
-	nested: {
-		paddingLeft: theme.spacing(4),
 	},
 	denseStyle: {
 		minHeight: "10px",
 		lineHeight: "30px",
 		fontSize: "12px",
 	},
+	toolBarItem:{
+		margin:"auto 20px",
+		cursor:"pointer"
+	}
 };
 
 class App extends Component {
@@ -129,17 +88,19 @@ class App extends Component {
 		super(props);
 		this.state = {
 			authError: false,
-			drawerOpen: false,
-			collapseOpen: true,
 			profileMenuOpen: false,
+			viewerMenuOpen:false,
+			helpMenuOpen:false,
 			anchorEl: null,
 			errorMessage:""
 		};
 		this.logout = this.logout.bind(this);
-		this.toggleDrawer = this.toggleDrawer.bind(this);
-		this.handleCollapse = this.handleCollapse.bind(this);
 		this.handleProfileMenuOpen = this.handleProfileMenuOpen.bind(this);
+		this.handleViewerMenuOpen = this.handleViewerMenuOpen.bind(this);
+		this.handleHelpMenuOpen = this.handleHelpMenuOpen.bind(this);
 		this.handleProfileMenuClose = this.handleProfileMenuClose.bind(this);
+		this.handleViewerMenuClose = this.handleViewerMenuClose.bind(this);
+		this.handleHelpMenuClose = this.handleHelpMenuClose.bind(this);
 	}
 
 	componentWillMount() {
@@ -157,21 +118,23 @@ class App extends Component {
 		});
 	}
 
-	toggleDrawer() {
-		this.setState(prevState => ({
-			drawerOpen: !prevState.drawerOpen
-		}));
-	}
-
-	handleCollapse() {
-		this.setState(prevState => ({
-			collapseOpen: !prevState.collapseOpen
-		}));
-	}
-
 	handleProfileMenuOpen(event) {
 		this.setState({
 			profileMenuOpen: true,
+			anchorEl: event.currentTarget
+		});
+	}
+
+	handleViewerMenuOpen(event){
+		this.setState({
+			viewerMenuOpen: true,
+			anchorEl:event.currentTarget
+		});
+	}
+
+	handleHelpMenuOpen(event){
+		this.setState({
+			helpMenuOpen:true,
 			anchorEl: event.currentTarget
 		});
 	}
@@ -182,15 +145,22 @@ class App extends Component {
 		});
 	}
 
+	handleViewerMenuClose(event){
+		this.setState({
+			viewerMenuOpen: false,
+		});
+	}
+
+	handleHelpMenuClose(event){
+		this.setState({
+			helpMenuOpen:false,
+		});
+	}
 
 	render() {
 		const {classes} = this.props;
 
-		let home = (<IconButton color="inherit" className={classes.smallButton} href="/">
-			<HomeIcon fontSize="small"/></IconButton>);
-
 		let contents = <Button color="inherit" href={"login"} className={classes.smallButton}>Login</Button>;
-
 		if (process.env.DEPLOY_ENV === "local" || (this.props.Authorization !== "" && this.props.Authorization !== undefined)) {
 			contents = (<IconButton color="inherit" className={classes.smallButton} onClick={this.handleProfileMenuOpen}>
 				<AccountCircle fontSize="small"/></IconButton>);
@@ -200,84 +170,90 @@ class App extends Component {
 		let profileMenu = (
 			<Menu
 				anchorEl = {this.state.anchorEl}
-				anchorOrigin={{ vertical: "top", horizontal: "right" }}
+				anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
 				keepMounted
-				transformOrigin={{ vertical: "top", horizontal: "right" }}
+				transformOrigin={{ vertical: "top", horizontal: "center" }}
 				open={this.state.profileMenuOpen}
 				onClose={this.handleProfileMenuClose}
+				getContentAnchorEl={null}
 			>
 				{/*<MenuItem className={classes.denseStyle}>My account</MenuItem>*/}
 				<MenuItem className={classes.denseStyle} onClick={this.logout}>Log Out</MenuItem>
 			</Menu>
 		);
 
-		let sideList = (
-			<List subheader={
-				<ListSubheader component="div" color="inherit">
-						Navigation
-				</ListSubheader>
-			}>
-				<ListItem button component="a" key="about" href="/doc/incore/index.html" target="_blank">
-					<ListItemAvatar><Avatar src="/public/resilience-logo-icon.png"/></ListItemAvatar>
-					<ListItemText primary="IN-CORE Manual"/>
-				</ListItem>
-				<ListItem button component="a" key="pyIncore"
-							  href={config.pyIncoreDocUrl} target="_blank">
-					<ListItemAvatar><Avatar src="/public/python-logo.png"/></ListItemAvatar>
-					<ListItemText primary="pyIncore Reference"/>
-				</ListItem>
-				<ListItem button component="a" key="pyIncore_viz"
-						  href={config.pyIncoreVizDocUrl} target="_blank">
-					<ListItemAvatar><Avatar src="/public/python-logo.png"/></ListItemAvatar>
-					<ListItemText primary="pyIncore_viz Reference"/>
-				</ListItem>
-				<ListItem button component="a" key="services" href={config.swaggerUrl}
-							  target="_blank">
-					<ListItemAvatar><Avatar src="/public/swagger-logo.png"/></ListItemAvatar>
-					<ListItemText primary="IN-CORE Web Service API"/>
-				</ListItem>
-				<ListItem button component="a" key="lab" href={config.incoreLab}
-							  target="_blank">
-					<ListItemAvatar><Avatar src="/public/jupyter-logo.png"/></ListItemAvatar>
-					<ListItemText primary="IN-CORE lab"/>
-				</ListItem>
-				<ListItem button key="webapp" onClick={this.handleCollapse}>
-					<ListItemAvatar><Avatar src="/public/webapp-logo.png"/></ListItemAvatar>
-					<ListItemText primary="IN-CORE Web Tools"/>
-					{this.state.collapseOpen ? <ExpandLess/> : <ExpandMore/>}
-				</ListItem>
-				<Collapse in={this.state.collapseOpen} timeout="auto" unmountOnExit>
-					<List component="div" disablePadding>
-						<ListItem button component="a" href={"/DFR3Viewer"}
-									  className={classes.nested}>
-							<ListItemIcon><DFR3ViewerIcon/></ListItemIcon>
-							<ListItemText primary="DFR3 Viewer"/>
-						</ListItem>
-						<ListItem button component="a" href={"/DataViewer"}
-									  className={classes.nested}>
-							<ListItemIcon><DataViewerIcon/></ListItemIcon>
-							<ListItemText primary="Data Viewer"/>
-						</ListItem>
-						<ListItem button component="a" href={"/HazardViewer"}
-									  className={classes.nested}>
-							<ListItemIcon><HazardViewerIcon/></ListItemIcon>
-							<ListItemText primary="Hazard Viewer"/>
-						</ListItem>
-					</List>
-				</Collapse>
-			</List>
+		let viewerMenu = (
+			<Menu
+				anchorEl = {this.state.anchorEl}
+				anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+				keepMounted
+				transformOrigin={{ vertical: "top", horizontal: "center" }}
+				open={this.state.viewerMenuOpen}
+				onClose={this.handleViewerMenuClose}
+				getContentAnchorEl={null}
+			>
+				<MenuItem className={classes.denseStyle}
+						  onClick={()=>{browserHistory.push("/DFR3Viewer");}}>DFR3 Viewer</MenuItem>
+				<MenuItem className={classes.denseStyle}
+						  onClick={()=>{browserHistory.push("/DataViewer");}}>Data Viewer</MenuItem>
+				<MenuItem className={classes.denseStyle}
+						  onClick={()=>{browserHistory.push("/HazardViewer");}}>Hazard Viewer</MenuItem>
+			</Menu>
+		);
+
+		let helpMenu = (
+			<Menu
+				anchorEl = {this.state.anchorEl}
+				anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+				keepMounted
+				transformOrigin={{ vertical: "top", horizontal: "center" }}
+				open={this.state.helpMenuOpen}
+				onClose={this.handleHelpMenuClose}
+				getContentAnchorEl={null}
+			>
+				<MenuItem className={classes.denseStyle}>
+					<Link href="/doc/incore/index.html" target="_blank" style={{textDecoration:"none"}}>
+						IN-CORE Manual
+					</Link>
+				</MenuItem>
+				<MenuItem className={classes.denseStyle}>
+					<Link href={config.pyIncoreDocUrl} target="_blank" style={{textDecoration:"none"}}>
+						pyIncore Reference
+					</Link>
+				</MenuItem>
+				<MenuItem className={classes.denseStyle}>
+					<Link href={config.pyIncoreVizDocUrl} target="_blank" style={{textDecoration:"none"}}>
+						pyIncore-viz Reference
+					</Link>
+				</MenuItem>
+				<MenuItem className={classes.denseStyle}>
+					<Link href={config.swaggerUrl} target="_blank" style={{textDecoration:"none"}}>
+						Web Service API
+					</Link>
+				</MenuItem>
+			</Menu>
 		);
 
 		return (
 			<MuiThemeProvider theme={theme}>
+				{/*TODO add auto collapse to hamburger once screen is small*/}
 				<AppBar position="static"
-					className={this.state.drawerOpen ? classes.appBarShift : classes.appBar}>
+					className={classes.appBar}>
 					<Toolbar className={classes.toolBar}>
-						<IconButton edge="start" color="inherit" aria-label="Open drawer"
-							onClick={this.toggleDrawer} className={classes.menuButton}>
-							{this.state.drawerOpen ? <CloseIcon fontSize="small"/> : <MenuIcon fontSize="small"/>}
-						</IconButton>
-						{home}
+						<Typography className={classes.toolBarItem}>
+							<Link href="/" style={{color:"#ffffff", textDecoration:"none"}}>HOME</Link></Typography>
+						<Typography onClick={this.handleHelpMenuOpen} className={classes.toolBarItem}
+							style={{verticalAlign: "middle", display:"inline-flex"}}>
+							User Guides<ExpandMoreIcon fontSize="small"/></Typography>
+						{helpMenu}
+						<Typography className={classes.toolBarItem}>
+							<Link href={config.incoreLab} target="_blank" style={{color:"#ffffff", textDecoration:"none"}}>
+								IN-CORE lab</Link></Typography>
+						<Typography onClick={this.handleViewerMenuOpen} className={classes.toolBarItem}
+							style={{verticalAlign: "middle", display:"inline-flex"}}>
+							Web Tools<ExpandMoreIcon fontSize="small"/></Typography>
+						{viewerMenu}
+
 						<Typography variant="body1" style={{flex: 1}} />
 						{contents}
 						{profileMenu}
@@ -288,11 +264,7 @@ class App extends Component {
 					this.state.errorMessage ?
 						<ErrorMessage error={this.state.errorMessage}/> : null
 				}
-				<Drawer variant="persistent" open={this.state.drawerOpen} onClose={this.toggleDrawer}
-					classes={{paper: classes.drawerPaper}}>
-					{sideList}
-				</Drawer>
-				<div className={this.state.drawerOpen ? classes.appBarShift : classes.appBar}>
+				<div className={classes.appBar}>
 					{this.props.children}
 				</div>
 			</MuiThemeProvider>
