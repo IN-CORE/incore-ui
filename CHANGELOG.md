@@ -5,15 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+
+## [0.8.0] - 2020-12-15
+
+### Changed
+- Move the side menu to the top and reorganize the structure of side menu items [INCORE1-860](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-860)
+
+
 ## [0.7.0] - 2020-10-27
 
 ### Changed
-- Dynamically querying service API to update data type filter in DataViewer
-- Update hazard fitler in DFR3Viewer
-- Use relative path in configuration file
+- Dynamically querying service API to update data type filter in DataViewer [INCORE1-554](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-554)
+- Update hazard fitler in DFR3Viewer [INCORE1-775](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-775)
+- Use relative path in configuration file [INCORE1-782](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-782)
 
 ### Fixed
-- Fix the x-axis title in repair and restoration curve in DFR3Viewer
+- Fix the x-axis title in repair and restoration curve in DFR3Viewer [INCORE1-829](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-829)
 
 
 ## [0.6.0] - 2020-09-03
