@@ -8,7 +8,7 @@ import config from "../app.config";
 import ErrorMessage from "./children/ErrorMessage";
 
 
-global.__base = `${__dirname  }/`;
+global.__base = `${__dirname}/`;
 
 const theme = createMuiTheme({
 	palette: {
@@ -65,8 +65,8 @@ const styles = {
 	},
 	toolBar: {
 		minHeight: "48px",
-		display:"flex",
-		justifyContent:"flex-start",
+		display: "flex",
+		justifyContent: "flex-start",
 	},
 	smallButton: {
 		padding: "6px"
@@ -76,9 +76,9 @@ const styles = {
 		lineHeight: "30px",
 		fontSize: "12px",
 	},
-	toolBarItem:{
-		margin:"auto 20px",
-		cursor:"pointer"
+	toolBarItem: {
+		margin: "auto 20px",
+		cursor: "pointer"
 	}
 };
 
@@ -89,10 +89,10 @@ class App extends Component {
 		this.state = {
 			authError: false,
 			profileMenuOpen: false,
-			viewerMenuOpen:false,
-			helpMenuOpen:false,
+			viewerMenuOpen: false,
+			helpMenuOpen: false,
 			anchorEl: null,
-			errorMessage:""
+			errorMessage: ""
 		};
 		this.logout = this.logout.bind(this);
 		this.handleProfileMenuOpen = this.handleProfileMenuOpen.bind(this);
@@ -114,7 +114,7 @@ class App extends Component {
 		this.props.logout();
 		browserHistory.push("/");
 		this.setState({
-			profileMenuOpen:false,
+			profileMenuOpen: false,
 		});
 	}
 
@@ -125,35 +125,35 @@ class App extends Component {
 		});
 	}
 
-	handleViewerMenuOpen(event){
+	handleViewerMenuOpen(event) {
 		this.setState({
 			viewerMenuOpen: true,
-			anchorEl:event.currentTarget
+			anchorEl: event.currentTarget
 		});
 	}
 
-	handleHelpMenuOpen(event){
+	handleHelpMenuOpen(event) {
 		this.setState({
-			helpMenuOpen:true,
+			helpMenuOpen: true,
 			anchorEl: event.currentTarget
 		});
 	}
 
 	handleProfileMenuClose() {
 		this.setState({
-			profileMenuOpen:false,
+			profileMenuOpen: false,
 		});
 	}
 
-	handleViewerMenuClose(event){
+	handleViewerMenuClose(event) {
 		this.setState({
 			viewerMenuOpen: false,
 		});
 	}
 
-	handleHelpMenuClose(event){
+	handleHelpMenuClose(event) {
 		this.setState({
-			helpMenuOpen:false,
+			helpMenuOpen: false,
 		});
 	}
 
@@ -162,72 +162,85 @@ class App extends Component {
 
 		let contents = <Button color="inherit" href={"login"} className={classes.smallButton}>Login</Button>;
 		if (process.env.DEPLOY_ENV === "local" || (this.props.Authorization !== "" && this.props.Authorization !== undefined)) {
-			contents = (<IconButton color="inherit" className={classes.smallButton} onClick={this.handleProfileMenuOpen}>
-				<AccountCircle fontSize="small"/></IconButton>);
+			contents = (
+				<IconButton color="inherit" className={classes.smallButton} onClick={this.handleProfileMenuOpen}>
+					<AccountCircle fontSize="small"/></IconButton>);
 		}
 
 		//TODO: My account is a placeholder for now
 		let profileMenu = (
 			<Menu
-				anchorEl = {this.state.anchorEl}
-				anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+				anchorEl={this.state.anchorEl}
+				anchorOrigin={{vertical: "bottom", horizontal: "left"}}
 				keepMounted
-				transformOrigin={{ vertical: "top", horizontal: "center" }}
+				transformOrigin={{vertical: "top", horizontal: "center"}}
 				open={this.state.profileMenuOpen}
 				onClose={this.handleProfileMenuClose}
 				getContentAnchorEl={null}
 			>
 				{/*<MenuItem className={classes.denseStyle}>My account</MenuItem>*/}
-				<MenuItem className={classes.denseStyle} onClick={this.logout}>Log Out</MenuItem>
+				<MenuItem className={classes.denseStyle} onClick={() => {
+					this.handleProfileMenuClose();
+					this.logout();
+				}}>Log Out</MenuItem>
 			</Menu>
 		);
 
 		let viewerMenu = (
 			<Menu
-				anchorEl = {this.state.anchorEl}
-				anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+				anchorEl={this.state.anchorEl}
+				anchorOrigin={{vertical: "bottom", horizontal: "center"}}
 				keepMounted
-				transformOrigin={{ vertical: "top", horizontal: "center" }}
+				transformOrigin={{vertical: "top", horizontal: "center"}}
 				open={this.state.viewerMenuOpen}
 				onClose={this.handleViewerMenuClose}
 				getContentAnchorEl={null}
 			>
 				<MenuItem className={classes.denseStyle}
-						  onClick={()=>{browserHistory.push("/DFR3Viewer");}}>DFR3 Viewer</MenuItem>
+						  onClick={() => {
+							  this.handleViewerMenuClose();
+							  browserHistory.push("/DFR3Viewer");
+						  }}>DFR3 Viewer</MenuItem>
 				<MenuItem className={classes.denseStyle}
-						  onClick={()=>{browserHistory.push("/DataViewer");}}>Data Viewer</MenuItem>
+						  onClick={() => {
+							  this.handleViewerMenuClose();
+							  browserHistory.push("/DataViewer");
+						  }}>Data Viewer</MenuItem>
 				<MenuItem className={classes.denseStyle}
-						  onClick={()=>{browserHistory.push("/HazardViewer");}}>Hazard Viewer</MenuItem>
+						  onClick={() => {
+							  this.handleViewerMenuClose();
+							  browserHistory.push("/HazardViewer");
+						  }}>Hazard Viewer</MenuItem>
 			</Menu>
 		);
 
 		let helpMenu = (
 			<Menu
-				anchorEl = {this.state.anchorEl}
-				anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+				anchorEl={this.state.anchorEl}
+				anchorOrigin={{vertical: "bottom", horizontal: "center"}}
 				keepMounted
-				transformOrigin={{ vertical: "top", horizontal: "center" }}
+				transformOrigin={{vertical: "top", horizontal: "center"}}
 				open={this.state.helpMenuOpen}
 				onClose={this.handleHelpMenuClose}
 				getContentAnchorEl={null}
 			>
-				<MenuItem className={classes.denseStyle}>
-					<Link href="/doc/incore/index.html" target="_blank" style={{textDecoration:"none"}}>
+				<MenuItem className={classes.denseStyle} onClick={this.handleHelpMenuClose}>
+					<Link href="/doc/incore/index.html" target="_blank" style={{textDecoration: "none"}}>
 						IN-CORE Manual
 					</Link>
 				</MenuItem>
-				<MenuItem className={classes.denseStyle}>
-					<Link href={config.pyIncoreDocUrl} target="_blank" style={{textDecoration:"none"}}>
+				<MenuItem className={classes.denseStyle} onClick={this.handleHelpMenuClose}>
+					<Link href={config.pyIncoreDocUrl} target="_blank" style={{textDecoration: "none"}}>
 						pyIncore Reference
 					</Link>
 				</MenuItem>
-				<MenuItem className={classes.denseStyle}>
-					<Link href={config.pyIncoreVizDocUrl} target="_blank" style={{textDecoration:"none"}}>
+				<MenuItem className={classes.denseStyle} onClick={this.handleHelpMenuClose}>
+					<Link href={config.pyIncoreVizDocUrl} target="_blank" style={{textDecoration: "none"}}>
 						pyIncore-viz Reference
 					</Link>
 				</MenuItem>
-				<MenuItem className={classes.denseStyle}>
-					<Link href={config.swaggerUrl} target="_blank" style={{textDecoration:"none"}}>
+				<MenuItem className={classes.denseStyle} onClick={this.handleHelpMenuClose}>
+					<Link href={config.swaggerUrl} target="_blank" style={{textDecoration: "none"}}>
 						Web Service API
 					</Link>
 				</MenuItem>
@@ -238,23 +251,24 @@ class App extends Component {
 			<MuiThemeProvider theme={theme}>
 				{/*TODO add auto collapse to hamburger once screen is small*/}
 				<AppBar position="static"
-					className={classes.appBar}>
+						className={classes.appBar}>
 					<Toolbar className={classes.toolBar}>
 						<Typography className={classes.toolBarItem}>
-							<Link href="/" style={{color:"#ffffff", textDecoration:"none"}}>HOME</Link></Typography>
+							<Link href="/" style={{color: "#ffffff", textDecoration: "none"}}>HOME</Link></Typography>
 						<Typography onClick={this.handleHelpMenuOpen} className={classes.toolBarItem}
-							style={{verticalAlign: "middle", display:"inline-flex"}}>
+									style={{verticalAlign: "middle", display: "inline-flex"}}>
 							User Guides<ExpandMoreIcon fontSize="small"/></Typography>
 						{helpMenu}
 						<Typography className={classes.toolBarItem}>
-							<Link href={config.incoreLab} target="_blank" style={{color:"#ffffff", textDecoration:"none"}}>
+							<Link href={config.incoreLab} target="_blank"
+								  style={{color: "#ffffff", textDecoration: "none"}}>
 								IN-CORE lab</Link></Typography>
 						<Typography onClick={this.handleViewerMenuOpen} className={classes.toolBarItem}
-							style={{verticalAlign: "middle", display:"inline-flex"}}>
+									style={{verticalAlign: "middle", display: "inline-flex"}}>
 							Web Tools<ExpandMoreIcon fontSize="small"/></Typography>
 						{viewerMenu}
 
-						<Typography variant="body1" style={{flex: 1}} />
+						<Typography variant="body1" style={{flex: 1}}/>
 						{contents}
 						{profileMenu}
 					</Toolbar>
