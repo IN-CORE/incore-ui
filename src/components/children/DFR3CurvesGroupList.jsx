@@ -2,8 +2,10 @@ import * as React from "react";
 import {List, ListItem, ListItemIcon, ListItemText, Tooltip} from "@material-ui/core";
 import ShowChartIcon from "@material-ui/icons/ShowChart";
 import ThreeDRotationIcon from "@material-ui/icons/ThreeDRotation";
+import SpaceChip from "./SpaceChip";
 
 const DFR3CurvesGroupList = (props) => {
+
 	return (
 		<List component="nav" id={props.id} style={{"overflowY": "auto"}}>
 			{props.data.map(function (dfr3Curve) {
@@ -18,6 +20,7 @@ const DFR3CurvesGroupList = (props) => {
 								<ListItemIcon><ThreeDRotationIcon fontSize="small"/></ListItemIcon>
 							</Tooltip>
 							<ListItemText primary={getTitle(dfr3Curve)}/>
+							<SpaceChip item={dfr3Curve} selectedItem={props.selectedDFR3Curve} />
 						</ListItem>);
 
 				}
@@ -32,6 +35,7 @@ const DFR3CurvesGroupList = (props) => {
 								<ListItemIcon><ShowChartIcon fontSize="small"/></ListItemIcon>
 							</Tooltip>
 							<ListItemText primary={getTitle(dfr3Curve)}/>
+							<SpaceChip item={dfr3Curve} selectedItem={props.selectedDFR3Curve}/>
 						</ListItem>);
 				}
 			})}

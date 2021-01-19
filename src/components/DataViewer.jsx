@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import FileContentTable from "./children/FileContentTable";
 import NestedInfoTable from "./children/NestedInfoTable";
 import Map from "./children/Map";
+import SpaceChip from "./children/SpaceChip";
 import {
 	Button,
 	Card,
@@ -17,8 +18,8 @@ import {
 	ListItemText,
 	Paper,
 	TextField,
-	Typography,
-	Tooltip
+	Tooltip,
+	Typography
 } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 import TableIcon from "@material-ui/icons/TableChart";
@@ -42,7 +43,7 @@ import Cookies from "universal-cookie";
 import Datatype from "./children/Datatype";
 
 const cookies = new Cookies();
-const redundant_prop = ["deleted", "privileges", "spaces"];
+const redundantProp = ["deleted", "privileges", "spaces"];
 const theme = createMuiTheme();
 const styles = {
 	root: {
@@ -426,6 +427,7 @@ class DataViewer extends Component {
 								<ListItemIcon><TableIcon fontSize="small"/></ListItemIcon>
 							</Tooltip>
 							<ListItemText primary={`${dataset.title  } - ${  dataset.creator.capitalize()}`}/>
+							<SpaceChip item={dataset} selectedItem={this.state.selectedDataset} />
 						</ListItem>);
 				}
 				else if (dataset.format === "textFiles") {
@@ -436,6 +438,7 @@ class DataViewer extends Component {
 							<ListItemIcon><TextIcon fontSize="small"/></ListItemIcon>
 						</Tooltip>
 						<ListItemText primary={`${dataset.title  } - ${  dataset.creator.capitalize()}`}/>
+						<SpaceChip item={dataset} selectedItem={this.state.selectedDataset} />
 					</ListItem>);
 				}
 				else if (dataset.format.toLowerCase() === "shapefile" || dataset.format.toLowerCase() === "raster"
@@ -447,6 +450,7 @@ class DataViewer extends Component {
 							<ListItemIcon><MapIcon fontSize="small"/></ListItemIcon>
 						</Tooltip>
 						<ListItemText primary={`${dataset.title  } - ${  dataset.creator.capitalize()}`}/>
+						<SpaceChip item={dataset} selectedItem={this.state.selectedDataset} />
 					</ListItem>);
 				}
 				else if (dataset.format === "mapping") {
@@ -457,6 +461,7 @@ class DataViewer extends Component {
 							<ListItemIcon><MappingIcon fontSize="small"/></ListItemIcon>
 						</Tooltip>
 						<ListItemText primary={`${dataset.title  } - ${  dataset.creator.capitalize()}`}/>
+						<SpaceChip item={dataset} selectedItem={this.state.selectedDataset} />
 					</ListItem>);
 				}
 				else if (dataset.format === "fragility") {
@@ -467,6 +472,7 @@ class DataViewer extends Component {
 							<ListItemIcon><ChartIcon fontSize="small"/></ListItemIcon>
 						</Tooltip>
 						<ListItemText primary={`${dataset.title  } - ${  dataset.creator.capitalize()}`}/>
+						<SpaceChip item={dataset} selectedItem={this.state.selectedDataset}/>
 					</ListItem>);
 				}
 				else if (dataset.format === "Network") {
@@ -477,6 +483,7 @@ class DataViewer extends Component {
 							<ListItemIcon><NetworkIcon fontSize="small"/></ListItemIcon>
 						</Tooltip>
 						<ListItemText primary={`${dataset.title  } - ${  dataset.creator.capitalize()}`}/>
+						<SpaceChip item={dataset} selectedItem={this.state.selectedDataset} />
 					</ListItem>);
 				}
 				else {
@@ -487,6 +494,7 @@ class DataViewer extends Component {
 							<ListItemIcon><UnknownIcon fontSize="small"/></ListItemIcon>
 						</Tooltip>
 						<ListItemText primary={`${dataset.title  } - ${  dataset.creator.capitalize()}`}/>
+						<SpaceChip item={dataset} selectedItem={this.state.selectedDataset} />
 					</ListItem>);
 				}
 			});
@@ -496,7 +504,7 @@ class DataViewer extends Component {
 		let selected_dataset_detail = {};
 		if (this.state.selectedDataset) {
 			for (let item in this.state.selectedDataset) {
-				if (redundant_prop.indexOf(item) === -1) {
+				if (redundantProp.indexOf(item) === -1) {
 					selected_dataset_detail[item] = this.state.selectedDataset[item];
 				}
 			}
@@ -510,12 +518,12 @@ class DataViewer extends Component {
 			// file list
 			file_list =
 				this.state.selectedDataset.fileDescriptors.map(file_descriptor =>
-					<ListItem button
+					(<ListItem button
 							  onClick={() => this.onClickFileDescriptor(this.state.selectedDataset.id, file_descriptor.id,
 								  file_descriptor.filename)}
 							  key={file_descriptor.id}>
 						<ListItemText>{file_descriptor.filename}</ListItemText>
-					</ListItem>
+					</ListItem>)
 				);
 			// file contents
 			if (this.state.fileExtension && this.state.fileData && this.state.fileExtension === "csv") {

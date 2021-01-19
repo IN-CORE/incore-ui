@@ -30,10 +30,11 @@ import Version from "./children/Version";
 import {CopyToClipboard} from "react-copy-to-clipboard";
 import {createMuiTheme, withStyles} from "@material-ui/core/styles/index";
 import Cookies from "universal-cookie";
+import SpaceChip from "./children/SpaceChip";
 
 const cookies = new Cookies();
 
-const redundant_prop = ["privileges", "times"];
+const redundantProp = ["privileges", "times", "spaces"];
 
 const theme = createMuiTheme();
 const styles = {
@@ -354,6 +355,7 @@ class HazardViewer extends Component {
 								<ListItem button onClick={() => this.onClickHazard(hazard.id)} key={hazard.id}
 										  selected={hazard.id === this.state.selectedHazard.id}>
 									<ListItemText>{(hazard.name) ? `${hazard.name }` : `${hazard.id}`}</ListItemText>
+									<SpaceChip item={hazard} selectedItem={this.state.selectedHazard} />
 								</ListItem>);
 						})
 					}
@@ -364,7 +366,7 @@ class HazardViewer extends Component {
 		let selected_hazard_detail = {};
 		if (this.state.selectedHazard) {
 			for (let item in this.state.selectedHazard) {
-				if (redundant_prop.indexOf(item) === -1) {
+				if (redundantProp.indexOf(item) === -1) {
 					selected_hazard_detail[item] = this.state.selectedHazard[item];
 				}
 			}

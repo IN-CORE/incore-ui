@@ -1,6 +1,7 @@
 import * as React from "react";
 import {List, ListItem, ListItemIcon, ListItemText, Tooltip} from "@material-ui/core";
 import AccountTree from "@material-ui/icons/AccountTree";
+import SpaceChip from "./SpaceChip";
 
 const DFR3MappingsGroupList = (props) => {
 	// console.log(props);
@@ -17,6 +18,7 @@ const DFR3MappingsGroupList = (props) => {
 							<ListItemIcon><AccountTree fontSize="small"/></ListItemIcon>
 						</Tooltip>
 						<ListItemText primary={getTitle(dfr3Mapping)}/>
+						<SpaceChip item={dfr3Mapping} selectedItem={props.selectedMapping} />
 					</ListItem>);
 			})}
 		</List>

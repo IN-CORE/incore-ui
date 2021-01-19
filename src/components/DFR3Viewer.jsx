@@ -41,7 +41,7 @@ import Tab from "@material-ui/core/Tab";
 import {is3dCurve, exportJson} from "../utils/common";
 
 const cookies = new Cookies();
-const redundantProp = ["legacyId", "privileges", "creator", "is3dPlot"];
+const redundantProp = ["legacyId", "privileges", "creator", "is3dPlot", "spaces"];
 
 const theme = createMuiTheme();
 const styles = {
