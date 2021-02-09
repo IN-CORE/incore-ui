@@ -140,7 +140,7 @@ class HazardViewer extends Component {
 		let authorization = cookies.get("Authorization");
 
 		// logged in
-		if (process.env.DEPLOY_ENV === "local" || (authorization !== undefined && authorization !== "" && authorization !== null)) {
+		if (process.env.HOSTNAME.includes("localhost") || (authorization !== undefined && authorization !== "" && authorization !== null)) {
 			this.setState({
 				authError: false
 			}, function () {
@@ -303,7 +303,7 @@ class HazardViewer extends Component {
 		// query data services to:
 		// 1. verify that dataset exists
 		// 2. get the bounding box information
-		const url = `${config.dataServiceBase}data/api/datasets/${hazardDatasetId}`;
+		const url = `${config.dataServiceBase}datasets/${hazardDatasetId}`;
 		let response = await fetch(url, {method: "GET", mode: "cors", headers: getHeader()});
 		if (response.ok) {
 			let selectedHazardDataset = await response.json();

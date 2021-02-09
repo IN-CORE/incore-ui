@@ -8,8 +8,6 @@ import autoprefixer from "autoprefixer";
 import path from "path";
 import TerserPlugin from "terser-webpack-plugin";
 
-console.log(`the current DEPLOY_ENV environment variable is ${  process.env.DEPLOY_ENV}`);
-
 export default {
 	mode:"production",
 	resolve: {
@@ -37,7 +35,7 @@ export default {
 		new webpack.DefinePlugin({
 			"process.env": {
 				"NODE_ENV": JSON.stringify("production"),
-				"DEPLOY_ENV": JSON.stringify(process.env.DEPLOY_ENV)
+				"HOSTNAME": JSON.stringify(process.env.HOSTNAME)
 			},
 			__DEV__: false
 		}),

@@ -159,7 +159,7 @@ class DataViewer extends Component {
 		let authorization = cookies.get("Authorization");
 
 		// logged in
-		if (process.env.DEPLOY_ENV === "local" || (authorization !== undefined && authorization !== "" && authorization !== null)) {
+		if (process.env.HOSTNAME.includes("localhost") || (authorization !== undefined && authorization !== "" && authorization !== null)) {
 			this.setState({
 				authError: false
 			}, function () {
@@ -256,7 +256,7 @@ class DataViewer extends Component {
 	}
 
 	async onClickFileDescriptor(selected_dataset_id, file_descriptor_id, file_name) {
-		const url = `${config.dataServiceBase }data/api/files/${  file_descriptor_id  }/blob`;
+		const url = `${config.dataServiceBase }files/${  file_descriptor_id  }/blob`;
 
 		let response = await fetch(url, {method: "GET", mode: "cors", headers: getHeader()});
 
