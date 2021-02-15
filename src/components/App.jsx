@@ -161,7 +161,7 @@ class App extends Component {
 		const {classes} = this.props;
 
 		let contents = <Button color="inherit" href={"login"} className={classes.smallButton}>Login</Button>;
-		if (process.env.DEPLOY_ENV === "local" || (this.props.Authorization !== "" && this.props.Authorization !== undefined)) {
+		if (process.env.HOSTNAME.includes("localhost") || (this.props.Authorization !== "" && this.props.Authorization !== undefined)) {
 			contents = (
 				<IconButton color="inherit" className={classes.smallButton} onClick={this.handleProfileMenuOpen}>
 					<AccountCircle fontSize="small"/></IconButton>);

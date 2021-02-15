@@ -212,7 +212,7 @@ export function fetchSpaces() {
 }
 
 export function fetchUniqueDatatypes(){
-	let endpoint = `${config.dataServiceBase}data/api/datatypes`;
+	let endpoint = `${config.dataServiceBase}datatypes`;
 	return (dispatch: Dispatch) => {
 		return fetch(endpoint, {mode: "cors", headers: getHeader()})
 			.then(response => {
@@ -496,7 +496,7 @@ async function getOutputDatasetHelper(executionId: String) {
 	const outputDataset = await output_dataset.json();
 	const fileId = outputDataset.fileDescriptors[0].id;
 
-	const fileDownloadUrl = `${ config.dataServiceBase }data/api/files/${ fileId }/blob`;
+	const fileDownloadUrl = `${ config.dataServiceBase }files/${ fileId }/blob`;
 	const fileBlob = await fetch(fileDownloadUrl, {method: "GET", mode: "CORS", headers: getHeader()});
 
 	const fileText = await fileBlob.text();
@@ -558,7 +558,7 @@ export function executeDatawolfWorkflow(workflowid, creatorid, title, descriptio
 }
 
 export function getHeader() {
-	if (process.env.DEPLOY_ENV === "local"){
+	if (process.env.HOSTNAME.includes("localhost")){
 		const headers = new Headers({
 			"x-auth-userinfo": `{"preferred_username":"${config.testUserInfo}"}`,
 		});
