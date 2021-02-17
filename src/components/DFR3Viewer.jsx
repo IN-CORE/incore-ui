@@ -744,11 +744,17 @@ class DFR3Viewer extends React.Component {
 														className={classes.inlineButtons}
 														size="small"
 														onClick={this.exportCurveJson}>Download Metadata</Button>
-													<Button color="primary"
-														variant="contained"
-														className={classes.inlineButtons}
-														size="small"
-														onClick={this.preview}>Preview</Button>
+													{
+														this.state.selectedDFR3Curve.fragilityCurves[0].className === "RefactoredFragilityCurve" ?
+															null
+															:
+															<Button color="primary"
+																variant="contained"
+																className={classes.inlineButtons}
+																size="small"
+																onClick={this.preview}>Preview</Button>
+
+													}
 													<CopyToClipboard text={this.state.selectedDFR3Curve.id}>
 														<Button color="secondary" variant="contained"
 															className={classes.inlineButtons}
