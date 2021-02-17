@@ -1,6 +1,7 @@
 let config = {};
 let hostname = process.env.HOSTNAME || "";
 
+config["hostname"] = hostname;
 config["semanticService"] = "";
 config["dataWolf"] = `${hostname}/datawolf/`;
 config["client_id"] = "react-auth";

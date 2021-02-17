@@ -162,7 +162,7 @@ class DFR3Viewer extends React.Component {
 		let authorization = cookies.get("Authorization");
 
 		// logged in
-		if (process.env.HOSTNAME.includes("localhost") || (authorization !== undefined && authorization !== "" && authorization !== null)) {
+		if (config.hostname.includes("localhost") || (authorization !== undefined && authorization !== "" && authorization !== null)) {
 			this.setState({
 				authError: false
 			}, function () {
@@ -463,6 +463,9 @@ class DFR3Viewer extends React.Component {
 			else if (curve.className === "PeriodBuildingFragilityCurve"){
 				plotData = chartSampler.computePeriodBuildingSamples(0, 5, 1000, curve.fsParam0, curve.fsParam1,
 					curve.fsParam2, curve.fsParam3, curve.fsParam4, curve.fsParam5);
+			}
+			else if (curve.className === "RefactoredFragilityCurve"){
+				plotData = [];
 			}
 			// TODO if curve type none of the above
 			// TODO need to have a widget to display the error in a uniformed way
