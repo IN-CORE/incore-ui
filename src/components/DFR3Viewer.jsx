@@ -464,18 +464,21 @@ class DFR3Viewer extends React.Component {
 				plotData = chartSampler.computePeriodBuildingSamples(0, 5, 1000, curve.fsParam0, curve.fsParam1,
 					curve.fsParam2, curve.fsParam3, curve.fsParam4, curve.fsParam5);
 			}
-			else if (curve.className === "RefactoredFragilityCurve"){
-				plotData = [];
+			else if (curve.className === "FragilityCurveRefactored"){
+				plotData = null;
 			}
-			// TODO if curve type none of the above
-			// TODO need to have a widget to display the error in a uniformed way
+			else{
+				plotData = null;
+			}
 
-			let series = {
-				name: curve.description,
-				data: plotData
-			};
+			if (plotData === null){
+				let series = {
+					name: curve.description,
+					data: plotData
+				};
 
-			updatedChartConfig.series.push(series);
+				updatedChartConfig.series.push(series);
+			}
 		}
 
 		return updatedChartConfig;
@@ -745,7 +748,7 @@ class DFR3Viewer extends React.Component {
 														size="small"
 														onClick={this.exportCurveJson}>Download Metadata</Button>
 													{
-														this.state.selectedDFR3Curve.fragilityCurves[0].className === "RefactoredFragilityCurve" ?
+														this.state.selectedDFR3Curve.fragilityCurves[0].className.includes("FragilityCurveRefactored") ?
 															null
 															:
 															<Button color="primary"
