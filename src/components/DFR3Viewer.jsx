@@ -471,7 +471,7 @@ class DFR3Viewer extends React.Component {
 				plotData = null;
 			}
 
-			if (plotData === null){
+			if (plotData !== null){
 				let series = {
 					name: curve.description,
 					data: plotData
