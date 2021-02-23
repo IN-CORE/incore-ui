@@ -251,12 +251,12 @@ class App extends Component {
 			<MuiThemeProvider theme={theme}>
 				{/*TODO add auto collapse to hamburger once screen is small*/}
 				<AppBar position="static"
-						className={classes.appBar}>
+					className={classes.appBar}>
 					<Toolbar className={classes.toolBar}>
 						<Typography className={classes.toolBarItem}>
 							<Link href="/" style={{color: "#ffffff", textDecoration: "none"}}>HOME</Link></Typography>
 						<Typography onClick={this.handleHelpMenuOpen} className={classes.toolBarItem}
-									style={{verticalAlign: "middle", display: "inline-flex"}}>
+							style={{verticalAlign: "middle", display: "inline-flex"}}>
 							User Guides<ExpandMoreIcon fontSize="small"/></Typography>
 						{helpMenu}
 						<Typography className={classes.toolBarItem}>
@@ -264,10 +264,9 @@ class App extends Component {
 								  style={{color: "#ffffff", textDecoration: "none"}}>
 								IN-CORE lab</Link></Typography>
 						<Typography onClick={this.handleViewerMenuOpen} className={classes.toolBarItem}
-									style={{verticalAlign: "middle", display: "inline-flex"}}>
+							style={{verticalAlign: "middle", display: "inline-flex"}}>
 							Web Tools<ExpandMoreIcon fontSize="small"/></Typography>
 						{viewerMenu}
-
 						<Typography variant="body1" style={{flex: 1}}/>
 						{contents}
 						{profileMenu}
