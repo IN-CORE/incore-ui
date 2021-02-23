@@ -6,6 +6,21 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## [0.9.0] - 2021-02-23
+
+### Added
+- For each DFR3, dataset, and hazard item, display the spaces it belongs to [INCORE1-509](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-509)
+
+### Changed
+- Use relative URL in frontend configuration [INCORE1-888](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-888)
+- Temporarily disable previewing equation based refactored fragility curves until figuring out future solution [INCORE1-935](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-935)
+- Setting hostname instead of deploy_env through environment variables [INCORE1-947](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-947)
+
+### Fixed
+- When clicking, close dropdown menu on top bar [INCORE1-927](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-927)
+- Deamnd type and units as X-axis in fragililty previewing [INCORE1-965](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-965)
+
+
 ## [0.8.0] - 2020-12-15
 
 ### Changed
