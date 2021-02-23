@@ -18,7 +18,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 - When clicking, close dropdown menu on top bar [INCORE1-927](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-927)
-- Deamnd type and units as X-axis in fragililty previewing [INCORE1-965](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-965)
+- Demand types and units as X-axis in fragililty previewing [INCORE1-965](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-965)
 
 
 ## [0.8.0] - 2020-12-15
