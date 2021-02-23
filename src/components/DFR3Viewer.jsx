@@ -749,7 +749,12 @@ class DFR3Viewer extends React.Component {
 														onClick={this.exportCurveJson}>Download Metadata</Button>
 													{
 														this.state.selectedDFR3Curve.fragilityCurves[0].className.includes("FragilityCurveRefactored") ?
-															null
+															<Button color="primary"
+																variant="contained"
+																className={classes.inlineButtons}
+																size="small"
+																onClick={this.preview}
+																disabled>Preview N/A</Button>
 															:
 															<Button color="primary"
 																variant="contained"
