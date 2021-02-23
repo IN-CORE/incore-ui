@@ -420,9 +420,9 @@ class DFR3Viewer extends React.Component {
 		let curves;
 		if ("fragilityCurves" in DFR3Curve) {
 			curves = DFR3Curve.fragilityCurves;
-			let demandType = DFR3Curve.demandType !== null ? DFR3Curve.demandType : "";
-			let demandUnit = DFR3Curve.demandUnits !== null ? DFR3Curve.demandUnits : "";
-			updatedChartConfig.xAxis.title.text = `${demandType} (${demandUnit})`;
+			let demandTypes = DFR3Curve.demandTypes.length > 0 ? DFR3Curve.demandTypes.join(", ") : "";
+			let demandUnits = DFR3Curve.demandUnits.length > 0 ? DFR3Curve.demandUnits.join(", ") : "";
+			updatedChartConfig.xAxis.title.text = `${demandTypes} (${demandUnits})`;
 		}
 		else if ("repairCurves" in DFR3Curve) {
 			curves = DFR3Curve.repairCurves;
@@ -788,7 +788,7 @@ class DFR3Viewer extends React.Component {
 												<div>
 													<Typography variant="h6">{this.state.plotData3d.title}</Typography>
 													<ThreeDimensionalPlot plotId="3dplot" data={this.state.plotData3d.data}
-																		  xLabel={this.state.selectedDFR3Curve.demandType}
+																		  xLabel={this.state.selectedDFR3Curve.demandTypes.join(", ")}
 																		  yLabel="Y"
 																		  width="100%" height="350px" style="surface"/>
 												</div>
