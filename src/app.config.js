@@ -1,5 +1,5 @@
 let config = {};
-let hostname = process.env.HOSTNAME || "";
+let hostname = process.env.INCORE_REMOTE_HOSTNAME || "";
 
 config["hostname"] = hostname;
 config["semanticService"] = "";
