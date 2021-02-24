@@ -19,4 +19,4 @@ else
 fi
 
 # Build docker image
-$DEBUG docker build --build-arg -t hub.ncsa.illinois.edu/incore/frontend:$VERSION .
+$DEBUG docker build -t hub.ncsa.illinois.edu/incore/frontend:$VERSION .
