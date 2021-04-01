@@ -10,6 +10,15 @@ const styles = {
 		display: "inline-block",
 		margin: "auto 5px"
 	},
+	rowHeaderCell:{
+		minWidth: "30%",
+		fontWeight: "bold",
+		backgroundColor: "#eee"
+	},
+	rowSubHeaderCell:{
+		minWidth: "30%",
+		fontWeight:"bold"
+	}
 };
 
 class NestedInfoTable extends React.Component {
@@ -32,7 +41,7 @@ class NestedInfoTable extends React.Component {
 						if (key === "hazardDatasets" && this.props.data[key].length > 0) {
 							return (
 								<TableRow>
-									<TableCell style={{width: "30%", fontWeight: "bold", backgroundColor: "#eee"}}>
+									<TableCell className={classes.rowHeaderCell}>
 										{key}
 									</TableCell>
 									<TableCell>
@@ -61,7 +70,7 @@ class NestedInfoTable extends React.Component {
 						else if (key === "datasetId" && this.props.data[key]) {
 							return (
 								<TableRow>
-									<TableCell style={{width: "30%", fontWeight: "bold", backgroundColor: "#eee"}}>
+									<TableCell className={classes.rowHeaderCell}>
 										{key}
 									</TableCell>
 									<TableCell>
@@ -85,13 +94,13 @@ class NestedInfoTable extends React.Component {
 										key === "creator" ?
 											(<Tooltip title="The person who created the resource">
 												<TableCell
-													style={{width: "30%", fontWeight: "bold", backgroundColor: "#eee"}}>
+													className={classes.rowHeaderCell}>
 													{key}
 												</TableCell>
 											</Tooltip>)
 											:
 											(<TableCell
-												style={{width: "30%", fontWeight: "bold", backgroundColor: "#eee"}}>
+												className={classes.rowHeaderCell}>
 												{key}
 											</TableCell>)
 									}
@@ -101,7 +110,7 @@ class NestedInfoTable extends React.Component {
 											return (
 												// second level
 												<TableRow>
-													<TableCell style={{width: "30%", fontWeight: "bold"}}>
+													<TableCell className={classes.rowSubHeaderCell}>
 														{key2}
 													</TableCell>
 
@@ -112,11 +121,7 @@ class NestedInfoTable extends React.Component {
 																	return (
 																	// third level
 																		<TableRow>
-																			<TableCell
-																				style={{
-																					width: "30%",
-																					fontWeight: "bold"
-																				}}>
+																			<TableCell className={classes.rowSubHeaderCell}>
 																				{key3}
 																			</TableCell>
 																			<TableCell>

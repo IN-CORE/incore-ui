@@ -24,6 +24,12 @@ class Datatype extends React.Component {
 	render() {
 		const {classes} = this.props;
 
+		let sortedDatatypes = [];
+		this.props.datatypes.map((datatype) =>{
+			sortedDatatypes.push(datatype.dataType);
+		});
+		sortedDatatypes = sortedDatatypes.sort();
+
 		if (this.props.datatypes.length > 0) {
 			return (
 				<div>
@@ -31,10 +37,10 @@ class Datatype extends React.Component {
 					<Select value={this.props.selectedDataType} onChange={this.props.handleDatatypeSelection}
 						className={classes.select}>
 						<MenuItem key="All" value="All" className={classes.denseStyle}>All</MenuItem>
-						{this.props.datatypes.map((datatype, index) =>
-							(<MenuItem label={datatype.dataType} value={datatype.dataType} name={datatype.dataType}
-									  key={datatype.dataType} className={classes.denseStyle}>
-								{datatype.dataType}</MenuItem>))}
+						{sortedDatatypes.map((datatype, index) =>
+							(<MenuItem label={datatype} value={datatype} name={datatype}
+									  key={datatype} className={classes.denseStyle}>
+								{datatype}</MenuItem>))}
 					</Select>
 				</div>);
 		}
