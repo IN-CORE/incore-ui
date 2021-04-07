@@ -41,6 +41,7 @@ import {CopyToClipboard} from "react-copy-to-clipboard";
 import {createMuiTheme, withStyles} from "@material-ui/core/styles/index";
 import Cookies from "universal-cookie";
 import Datatype from "./children/Datatype";
+import LoadingOverlay from "react-loading-overlay";
 
 const cookies = new Cookies();
 const redundantProp = ["deleted", "privileges", "spaces"];
@@ -133,6 +134,7 @@ class DataViewer extends Component {
 			offset: 0,
 			pageNumber: 1,
 			dataPerPage: 50,
+			loading: false
 		};
 
 		this.changeDatasetType = this.changeDatasetType.bind(this);
@@ -180,6 +182,7 @@ class DataViewer extends Component {
 	componentWillReceiveProps(nextProps) {
 		this.setState({
 			authError: nextProps.authError,
+			loading: nextProps.loading
 		});
 	}
 
@@ -413,6 +416,7 @@ class DataViewer extends Component {
 
 	render() {
 		const {classes} = this.props;
+		console.log(this.state.loading);
 
 		// list items
 		let list_items = "";
@@ -620,24 +624,31 @@ class DataViewer extends Component {
 							</Grid>
 
 							{/*lists*/}
+
 							<Grid item lg={this.state.selectedDataset ? 4 : 12} md={this.state.selectedDataset ? 4 : 12}
-								  xl={this.state.selectedDataset ? 4 : 12} xs={12}>
-								<Paper variant="outlined" className={classes.main}>
-									<div className={classes.paperHeader}>
-										<Typography variant="subtitle1">Dataset</Typography>
-									</div>
-									<List component="nav">
-										{list_items}
-									</List>
-									<div className={classes.paperFooter}>
-										<Pagination pageNumber={this.state.pageNumber}
-											data={list_items}
-											dataPerPage={this.state.dataPerPage}
-											previous={this.previous}
-											next={this.next}/>
-									</div>
-								</Paper>
+								xl={this.state.selectedDataset ? 4 : 12} xs={12}>
+								<LoadingOverlay
+									active={this.state.loading}
+									spinner
+									text="Loading ...">
+									<Paper variant="outlined" className={classes.main}>
+										<div className={classes.paperHeader}>
+											<Typography variant="subtitle1">Dataset</Typography>
+										</div>
+										<List component="nav">
+											{list_items}
+										</List>
+										<div className={classes.paperFooter}>
+											<Pagination pageNumber={this.state.pageNumber}
+												data={list_items}
+												dataPerPage={this.state.dataPerPage}
+												previous={this.previous}
+												next={this.next}/>
+										</div>
+									</Paper>
+								</LoadingOverlay>
 							</Grid>
+
 
 							{/*metadata*/}
 							<Grid item lg={8} md={8} xl={8} xs={12}

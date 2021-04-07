@@ -31,6 +31,7 @@ import {CopyToClipboard} from "react-copy-to-clipboard";
 import {createMuiTheme, withStyles} from "@material-ui/core/styles/index";
 import Cookies from "universal-cookie";
 import SpaceChip from "./children/SpaceChip";
+import LoadingOverlay from "react-loading-overlay";
 
 const cookies = new Cookies();
 
@@ -120,6 +121,7 @@ class HazardViewer extends Component {
 			pageNumber: 1,
 			dataPerPage: 50,
 			preview: false,
+			loading: false
 		};
 		this.changeHazardType = this.changeHazardType.bind(this);
 		this.onClickHazard = this.onClickHazard.bind(this);
@@ -159,6 +161,7 @@ class HazardViewer extends Component {
 	componentWillReceiveProps(nextProps) {
 		this.setState({
 			authError: nextProps.authError,
+			loading: nextProps.loading
 		});
 	}
 
@@ -446,19 +449,24 @@ class HazardViewer extends Component {
 							<Grid item lg={this.state.selectedHazard ? 4 : 12}
 								  md={this.state.selectedHazard ? 4 : 12}
 								  xl={this.state.selectedHazard ? 4 : 12} xs={12}>
-								<Paper variant="outlined" className={classes.main}>
-									<div className={classes.paperHeader}>
-										<Typography variant="subtitle1">Hazards</Typography>
-									</div>
-									{hazards_list_display}
-									<div className={classes.paperFooter}>
-										<Pagination pageNumber={this.state.pageNumber}
-											data={hazards_list_display}
-											dataPerPage={this.state.dataPerPage}
-											previous={this.previous}
-											next={this.next}/>
-									</div>
-								</Paper>
+								<LoadingOverlay
+									active={this.state.loading}
+									spinner
+									text="Loading ...">
+									<Paper variant="outlined" className={classes.main}>
+										<div className={classes.paperHeader}>
+											<Typography variant="subtitle1">Hazards</Typography>
+										</div>
+										{hazards_list_display}
+										<div className={classes.paperFooter}>
+											<Pagination pageNumber={this.state.pageNumber}
+												data={hazards_list_display}
+												dataPerPage={this.state.dataPerPage}
+												previous={this.previous}
+												next={this.next}/>
+										</div>
+									</Paper>
+								</LoadingOverlay>
 							</Grid>
 
 							{/* Metadata */}

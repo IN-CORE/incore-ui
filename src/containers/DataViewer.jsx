@@ -9,6 +9,7 @@ const mapStateToProps = (state) => {
 		spaces: state.space.spaces,
 		datatypes: state.datatype.datatypes,
 		authError: state.user.loginError,
+		loading: state.data.loading
 	};
 };
 

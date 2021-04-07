@@ -145,8 +145,10 @@ export function getAnalysisById(id: String) {
 export function searchDatasets(keyword, limit, offset) {
 	let endpoint = `${config.dataService}/search?limit=${limit}&skip=${offset}&text=${keyword}`;
 	return (dispatch: Dispatch) => {
+		dispatch(loading(DATA_LOADING));
 		return fetch(endpoint, {mode: "cors", headers: getHeader()})
 			.then(response => {
+				dispatch(loadComplete(DATA_LOAD_COMPLETE));
 				if (response.status === 200) {
 					response.json().then(json => {
 						dispatch(receiveDatasets(RECEIVE_DATASETS, json));
@@ -171,9 +173,12 @@ export function fetchDatasets(dataType, space, limit, offset) {
 	if (space !== null && space !== "All") {
 		endpoint = `${endpoint}&space=${space}`;
 	}
+
 	return (dispatch: Dispatch) => {
+		dispatch(loading(DATA_LOADING));
 		return fetch(endpoint, {mode: "cors", headers: getHeader()})
 			.then(response => {
+				dispatch(loadComplete(DATA_LOAD_COMPLETE));
 				if (response.status === 200) {
 					response.json().then(json => {
 						dispatch(receiveDatasets(RECEIVE_DATASETS, json));
@@ -235,8 +240,10 @@ export function fetchUniqueDatatypes(){
 export function searchDFR3Curves(dfr3_type, keyword, limit, offset) {
 	let endpoint = `${config.dfr3Service}${dfr3_type}/search?limit=${limit}&skip=${offset}&text=${keyword}`;
 	return (dispatch: Dispatch) => {
+		dispatch(loading(DFR3CURVE_LOADING));
 		return fetch(endpoint, {mode: "cors", headers: getHeader()})
 			.then(response => {
+				dispatch(loadComplete(DFR3CURVE_LOAD_COMPLETE));
 				if (response.status === 200) {
 					response.json().then(json => {
 						dispatch(receiveDFR3Curves(RECEIVE_DFR3_CURVES, json));
@@ -265,8 +272,10 @@ export function fetchDFR3Curves(dfr3_type: string, space: string, inventory: str
 		endpoint = `${endpoint}&hazard=${hazard}`;
 	}
 	return (dispatch: Dispatch) => {
+		dispatch(loading(DFR3CURVE_LOADING));
 		return fetch(endpoint, {mode: "cors", headers: getHeader()})
 			.then(response => {
+				dispatch(loadComplete(DFR3CURVE_LOAD_COMPLETE));
 				if (response.status === 200) {
 					response.json().then(json => {
 						dispatch(receiveDFR3Curves(RECEIVE_DFR3_CURVES, json));
@@ -314,8 +323,10 @@ export function fetchDFR3Mappings(dfr3_type: string, space: string, inventory: s
 	}
 
 	return (dispatch: Dispatch) => {
+		dispatch(loading(DFR3MAPPING_LOADING));
 		return fetch(endpoint, {mode: "cors", headers: getHeader()})
 			.then(response => {
+				dispatch(loadComplete(DFR3MAPPING_LOAD_COMPLETE));
 				if (response.status === 200) {
 					response.json().then(json => {
 						dispatch(receiveDFR3Mappings(RECEIVE_DFR3_MAPPINGS, json));
@@ -342,8 +353,10 @@ export function searchDFR3Mappings(dfr3_type, keyword, limit, offset) {
 	}
 
 	return (dispatch: Dispatch) => {
+		dispatch(loading(DFR3MAPPING_LOADING));
 		return fetch(endpoint, {mode: "cors", headers: getHeader()})
 			.then(response => {
+				dispatch(loadComplete(DFR3MAPPING_LOAD_COMPLETE));
 				if (response.status === 200) {
 					response.json().then(json => {
 						dispatch(receiveDFR3Mappings(RECEIVE_DFR3_MAPPINGS, json));
@@ -364,8 +377,10 @@ export function searchDFR3Mappings(dfr3_type, keyword, limit, offset) {
 export function searchHazards(hazard_type, keyword, limit, offset) {
 	let endpoint = `${config.hazardServiceBase}${hazard_type}/search?limit=${limit}&skip=${offset}&text=${keyword}`;
 	return (dispatch: Dispatch) => {
+		dispatch(loading(HAZARD_LOADING));
 		return fetch(endpoint, {mode: "cors", headers: getHeader()})
 			.then(response => {
+				dispatch(loadComplete(HAZARD_LOAD_COMPLETE));
 				if (response.status === 200) {
 					response.json().then(json => {
 						dispatch(receiveHazards(RECEIVE_HAZARDS, json));
@@ -388,8 +403,10 @@ export function fetchHazards(hazard_type: string, space: string, limit, offset) 
 		endpoint = `${endpoint}&space=${space}`;
 	}
 	return (dispatch: Dispatch) => {
+		dispatch(loading(HAZARD_LOADING));
 		return fetch(endpoint, {mode: "cors", headers: getHeader()})
 			.then(response => {
+				dispatch(loadComplete(HAZARD_LOAD_COMPLETE));
 				if (response.status === 200) {
 					response.json().then(json => {
 						dispatch(receiveHazards(RECEIVE_HAZARDS, json));
@@ -456,6 +473,31 @@ export function logout() {
 		cookies.remove("Authorization");
 		return dispatch({
 			type: LOGOUT
+		});
+	};
+}
+
+export const DATA_LOADING = "DATA_LOADING";
+export const DATA_LOAD_COMPLETE = "DATA_LOAD_COMPLETE";
+export const HAZARD_LOADING = "HAZARD_LOADING";
+export const HAZARD_LOAD_COMPLETE = "HAZARD_LOAD_COMPLETE";
+export const DFR3CURVE_LOADING = "DFR3CURVE_LOADING";
+export const DFR3CURVE_LOAD_COMPLETE = "DFR3CURVE_LOAD_COMPLETE";
+export const DFR3MAPPING_LOADING = "DFR3MAPPING_LOADING";
+export const DFR3MAPPING_LOAD_COMPLETE = "DFR3MAPPING_LOAD_COMPLETE";
+
+export function loading(component) {
+	return (dispatch: Dispatch) => {
+		return dispatch({
+			type: component
+		});
+	};
+}
+
+export function loadComplete(component) {
+	return (dispatch: Dispatch) => {
+		return dispatch({
+			type: component
 		});
 	};
 }

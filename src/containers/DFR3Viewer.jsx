@@ -8,6 +8,8 @@ const mapStateToProps = (state) => {
 		dfr3Mappings: state.dfr3Mapping.dfr3Mappings,
 		spaces: state.space.spaces,
 		authError: state.user.loginError,
+		curvesLoading: state.dfr3Curve.loading,
+		mappingsLoading: state.dfr3Mapping.loading
 	};
 };
 

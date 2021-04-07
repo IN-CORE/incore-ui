@@ -7,6 +7,7 @@ const mapStateToProps = (state) => {
 		hazards: state.hazard.hazards,
 		spaces: state.space.spaces,
 		authError: state.user.loginError,
+		loading: state.hazard.loading
 	};
 };
 

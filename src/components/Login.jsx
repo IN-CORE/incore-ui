@@ -96,6 +96,7 @@ class Login extends Component {
 				<div>
 					<div className="center"
 						 style={{display: "block", margin: "auto", width: "500px", paddingTop: "10%"}}>
+						{/*TODO: Add loading spinner here*/}
 						<Paper style={{padding: 40}}>
 							<Avatar style={{margin: "auto"}}>
 								<LockOutlinedIcon/>

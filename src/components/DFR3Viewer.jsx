@@ -39,6 +39,7 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 
 import {is3dCurve, exportJson} from "../utils/common";
+import LoadingOverlay from "react-loading-overlay";
 
 const cookies = new Cookies();
 const redundantProp = ["legacyId", "privileges", "creator", "is3dPlot", "spaces"];
@@ -135,6 +136,8 @@ class DFR3Viewer extends React.Component {
 			pageNumberMappings: 1,
 			urlPrefix: config.urlPrefix,
 			tabIndex: 0,
+			curvesLoading: false,
+			mappingsLoading: false
 		};
 
 		this.changeDFR3Type = this.changeDFR3Type.bind(this);
@@ -184,6 +187,9 @@ class DFR3Viewer extends React.Component {
 	componentWillReceiveProps(nextProps) {
 		this.setState({
 			authError: nextProps.authError,
+			curvesLoading: nextProps.curvesLoading,
+			mappingsLoading: nextProps.mappingsLoading
+
 		});
 	}
 
@@ -716,22 +722,27 @@ class DFR3Viewer extends React.Component {
 								<Grid item lg={this.state.selectedDFR3Curve ? 4 : 12}
 									  md={this.state.selectedDFR3Curve ? 4 : 12}
 									  xl={this.state.selectedDFR3Curve ? 4 : 12} xs={12}>
-									<Paper variant="outlined" className={classes.main}>
-										<div className={classes.paperHeader}>
-											<Typography variant="subtitle1">DFR3 Curves</Typography>
-										</div>
-										<DFR3CurvesGroupList id="DFR3Curve-list"
+									<LoadingOverlay
+										active={this.state.curvesLoading}
+										spinner
+										text="Loading ...">
+										<Paper variant="outlined" className={classes.main}>
+											<div className={classes.paperHeader}>
+												<Typography variant="subtitle1">DFR3 Curves</Typography>
+											</div>
+											<DFR3CurvesGroupList id="DFR3Curve-list"
 															 onClick={this.onClickDFR3Curve}
 															 data={curvesWithInfo} displayField="author"
 															 selectedDFR3Curve={this.state.selectedDFR3Curve}/>
-										<div className={classes.paperFooter}>
-											<Pagination pageNumber={this.state.pageNumber}
-												data={curvesWithInfo}
-												dataPerPage={this.state.dataPerPage}
-												previous={this.previous}
-												next={this.next}/>
-										</div>
-									</Paper>
+											<div className={classes.paperFooter}>
+												<Pagination pageNumber={this.state.pageNumber}
+													data={curvesWithInfo}
+													dataPerPage={this.state.dataPerPage}
+													previous={this.previous}
+													next={this.next}/>
+											</div>
+										</Paper>
+									</LoadingOverlay>
 								</Grid>
 								<Grid item lg={8} md={8} xl={8} xs={12}
 									  className={this.state.selectedDFR3Curve ? null : classes.hide}>
@@ -819,22 +830,27 @@ class DFR3Viewer extends React.Component {
 								<Grid item lg={this.state.selectedMapping ? 4 : 12}
 									  md={this.state.selectedMapping ? 4 : 12}
 									  xl={this.state.selectedMapping ? 4 : 12} xs={12}>
-									<Paper variant="outlined" className={classes.main}>
-										<div className={classes.paperHeader}>
-											<Typography variant="subtitle1">DFR3 Mappings</Typography>
-										</div>
-										<DFR3MappingsGroupList id="DFR3Mappings-list"
+									<LoadingOverlay
+										active={this.state.mappingsLoading}
+										spinner
+										text="Loading ...">
+										<Paper variant="outlined" className={classes.main}>
+											<div className={classes.paperHeader}>
+												<Typography variant="subtitle1">DFR3 Mappings</Typography>
+											</div>
+											<DFR3MappingsGroupList id="DFR3Mappings-list"
 															   onClick={this.onClickDFR3Mapping}
 															   data={mappingsWithInfo} displayField="name"
 															   selectedMapping={this.state.selectedMapping}/>
-										<div className={classes.paperFooter}>
-											<Pagination pageNumber={this.state.pageNumberMappings}
-												data={mappingsWithInfo}
-												dataPerPage={this.state.dataPerPage}
-												previous={this.previousMappings}
-												next={this.nextMappings}/>
-										</div>
-									</Paper>
+											<div className={classes.paperFooter}>
+												<Pagination pageNumber={this.state.pageNumberMappings}
+													data={mappingsWithInfo}
+													dataPerPage={this.state.dataPerPage}
+													previous={this.previousMappings}
+													next={this.nextMappings}/>
+											</div>
+										</Paper>
+									</LoadingOverlay>
 								</Grid>
 
 								<Grid item lg={8} md={8} xl={8} xs={12}
