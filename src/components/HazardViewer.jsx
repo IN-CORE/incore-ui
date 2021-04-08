@@ -30,7 +30,9 @@ import Version from "./children/Version";
 import {CopyToClipboard} from "react-copy-to-clipboard";
 import {createMuiTheme, withStyles} from "@material-ui/core/styles/index";
 import Cookies from "universal-cookie";
+import ErrorMessage from "./children/ErrorMessage";
 import SpaceChip from "./children/SpaceChip";
+import Confirmation from "./children/Confirmation";
 import LoadingOverlay from "react-loading-overlay";
 
 const cookies = new Cookies();
@@ -62,8 +64,8 @@ const styles = {
 		fontSize: "12px"
 	},
 	search: {
-		width:"100%",
-		fontSize:"12px",
+		width: "100%",
+		fontSize: "12px",
 	},
 	denseStyle: {
 		minHeight: "10px",
@@ -121,10 +123,16 @@ class HazardViewer extends Component {
 			pageNumber: 1,
 			dataPerPage: 50,
 			preview: false,
+			messageOpen: false,
+			confirmOpen: false,
 			loading: false
 		};
 		this.changeHazardType = this.changeHazardType.bind(this);
 		this.onClickHazard = this.onClickHazard.bind(this);
+		this.onClickDelete = this.onClickDelete.bind(this);
+		this.handleConfirmed = this.handleConfirmed.bind(this);
+		this.handleCanceled = this.handleCanceled.bind(this);
+		this.closeErrorMessage = this.closeErrorMessage.bind(this);
 		this.setSearchState = this.setSearchState.bind(this);
 		this.handleKeyPressed = this.handleKeyPressed.bind(this);
 		this.clickSearch = this.clickSearch.bind(this);
@@ -158,11 +166,25 @@ class HazardViewer extends Component {
 		}
 	}
 
+	componentDidMount() {
+		// reset delete error
+		this.props.resetError();
+	}
+
 	componentWillReceiveProps(nextProps) {
 		this.setState({
 			authError: nextProps.authError,
 			loading: nextProps.loading
 		});
+	}
+
+	// TODO set state inside component did up date is bad practice!!
+	componentDidUpdate(prevProps, prevState) {
+		if (this.props.deleteError && !prevState.messageOpen) {
+			this.setState({messageOpen: true});
+		} else if (!this.props.deleteError && prevState.messageOpen) {
+			this.setState({messageOpen: false});
+		}
 	}
 
 	changeHazardType(event) {
@@ -199,6 +221,35 @@ class HazardViewer extends Component {
 	onClickHazard(hazardId) {
 		const hazard = this.props.hazards.find(hazard => hazard.id === hazardId);
 		this.setState({selectedHazard: hazard, selectedHazardDatasetId: ""});
+	}
+
+
+	onClickDelete() {
+		this.setState({
+			confirmOpen: true
+		});
+	}
+
+	handleConfirmed(){
+		this.props.deleteItemById(this.state.selectedHazardType, this.state.selectedHazard.id);
+		this.setState({
+			selectedHazard: "",
+			selectedHazardDatasetId: "",
+			confirmOpen: false,
+		});
+	}
+
+	handleCanceled(){
+		this.setState({
+			confirmOpen: false
+		});
+	}
+
+	closeErrorMessage() {
+		this.props.resetError();
+		this.setState({
+			messageOpen: false
+		});
 	}
 
 	async setSearchState() {
@@ -258,8 +309,7 @@ class HazardViewer extends Component {
 			if (this.state.registeredSearchText !== "" && this.state.searching) {
 				this.props.searchAllHazards(this.state.selectedHazardType, this.state.registeredSearchText,
 					this.state.dataPerPage, this.state.offset);
-			}
-			else {
+			} else {
 				this.props.getAllHazards(this.state.selectedHazardType, this.state.selectedSpace, this.state.dataPerPage, this.state.offset);
 			}
 		});
@@ -276,8 +326,7 @@ class HazardViewer extends Component {
 			if (this.state.registeredSearchText !== "" && this.state.searching) {
 				this.props.searchAllHazards(this.state.selectedHazardType, this.state.registeredSearchText,
 					this.state.dataPerPage, this.state.offset);
-			}
-			else {
+			} else {
 				this.props.getAllHazards(this.state.selectedHazardType, this.state.selectedSpace, this.state.dataPerPage, this.state.offset);
 			}
 		});
@@ -295,8 +344,7 @@ class HazardViewer extends Component {
 			if (this.state.registeredSearchText !== "" && this.state.searching) {
 				this.props.searchAllHazards(this.state.selectedHazardType, this.state.registeredSearchText,
 					this.state.dataPerPage, this.state.offset);
-			}
-			else {
+			} else {
 				this.props.getAllHazards(this.state.selectedHazardType, this.state.selectedSpace, this.state.dataPerPage, this.state.offset);
 			}
 		});
@@ -316,8 +364,7 @@ class HazardViewer extends Component {
 				authError: false,
 				preview: true
 			});
-		}
-		else if (response.status === 401) {
+		} else if (response.status === 401) {
 			cookies.remove("Authorization");
 			this.setState({
 				selectedHazardDatasetId: "",
@@ -325,8 +372,7 @@ class HazardViewer extends Component {
 				authError: true,
 				preview: false
 			});
-		}
-		else {
+		} else {
 			this.setState({
 				selectedHazardDatasetId: "",
 				boundingBox: [],
@@ -357,8 +403,8 @@ class HazardViewer extends Component {
 							return (
 								<ListItem button onClick={() => this.onClickHazard(hazard.id)} key={hazard.id}
 										  selected={hazard.id === this.state.selectedHazard.id}>
-									<ListItemText>{(hazard.name) ? `${hazard.name }` : `${hazard.id}`}</ListItemText>
-									<SpaceChip item={hazard} selectedItem={this.state.selectedHazard} />
+									<ListItemText>{(hazard.name) ? `${hazard.name}` : `${hazard.id}`}</ListItemText>
+									<SpaceChip item={hazard} selectedItem={this.state.selectedHazard}/>
 								</ListItem>);
 						})
 					}
@@ -378,10 +424,18 @@ class HazardViewer extends Component {
 		if (this.state.authError) {
 			browserHistory.push("/login?origin=HazardViewer");
 			return null;
-		}
-		else {
+		} else {
 			return (
 				<div>
+					{/*error message display inside viewer*/}
+					<ErrorMessage error="You do not have the privilege to delete this item."
+								  messageOpen={this.state.messageOpen}
+								  closeErrorMessage={this.closeErrorMessage}/>
+					<Confirmation confirmOpen={this.state.confirmOpen}
+								  actionBtnName="Delete"
+								  actionText="Once deleted, you won't be able to revert this!"
+								  handleConfirmed={this.handleConfirmed}
+								  handleCanceled={this.handleCanceled} />
 					<div className={classes.root}>
 						<Grid container spacing={4}>
 							{/*filters*/}
@@ -435,7 +489,8 @@ class HazardViewer extends Component {
 											   InputProps={{
 												   endAdornment: (<InputAdornment position="end">
 													   <IconButton
-														   onClick={this.clickSearch}><SearchIcon fontSize="small"/></IconButton>
+														   onClick={this.clickSearch}><SearchIcon
+														   fontSize="small"/></IconButton>
 												   </InputAdornment>),
 												   style: {fontSize: "12px"}
 											   }}
@@ -488,6 +543,13 @@ class HazardViewer extends Component {
 														className={classes.inlineButtons}
 														size="small">Copy ID</Button>
 												</CopyToClipboard>
+												<Button color="secondary"
+													variant="contained"
+													className={classes.inlineButtons}
+													size="small"
+													onClick={this.onClickDelete}>
+													DELETE
+												</Button>
 											</div>
 											<div className={classes.metadata}>
 												<NestedInfoTable data={selected_hazard_detail}
@@ -496,7 +558,7 @@ class HazardViewer extends Component {
 											</div>
 										</div>
 										:
-										<div />
+										<div/>
 									}
 								</Paper>
 							</Grid>
@@ -521,7 +583,7 @@ class HazardViewer extends Component {
 							</DialogContent>
 						</Dialog>
 						:
-						<div />
+						<div/>
 					}
 				</div>
 			);

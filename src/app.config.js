@@ -19,5 +19,18 @@ config["dataService"] = `${hostname}/data/api/datasets`;
 config["incoreLab"] = `${hostname}/hub/`;
 config["geoServer"] = `${hostname}/geoserver/incore/wms`;
 config["testUserInfo"] = "incrtest";
+config["hazardDatasetTypes"] = [
+	"ergo:probabilisticEarthquakeRaster",
+	"ergo:deterministicEarthquakeRaster",
+	"incore:probabilisticTsunamiRaster",
+	"incore:deterministicTsunamiRaster",
+	"incore:probabilisticHurricaneRaster",
+	"incore:deterministicHurricaneRaster",
+	"incore:hurricaneGridSnapshot",
+	"incore:tornadoWindfield",
+	"incore:deterministicFloodRaster",
+	"incore:probabilisticFloodRaster",
+	"ergo:hazardRaster"
+];
 
 export default config;

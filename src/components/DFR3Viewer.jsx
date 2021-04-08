@@ -39,6 +39,8 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 
 import {is3dCurve, exportJson} from "../utils/common";
+import ErrorMessage from "./children/ErrorMessage";
+import Confirmation from "./children/Confirmation";
 import LoadingOverlay from "react-loading-overlay";
 
 const cookies = new Cookies();
@@ -136,6 +138,9 @@ class DFR3Viewer extends React.Component {
 			pageNumberMappings: 1,
 			urlPrefix: config.urlPrefix,
 			tabIndex: 0,
+			messageOpen: false,
+			confirmOpen: false,
+			deleteType: "curve", // or mapping
 			curvesLoading: false,
 			mappingsLoading: false
 		};
@@ -143,6 +148,11 @@ class DFR3Viewer extends React.Component {
 		this.changeDFR3Type = this.changeDFR3Type.bind(this);
 		this.onClickDFR3Curve = this.onClickDFR3Curve.bind(this);
 		this.onClickDFR3Mapping = this.onClickDFR3Mapping.bind(this);
+		this.onClickDelete = this.onClickDelete.bind(this);
+		this.deleteCurveConfirmed = this.deleteCurveConfirmed.bind(this);
+		this.deleteMappingConfirmed = this.deleteMappingConfirmed.bind(this);
+		this.handleCanceled = this.handleCanceled.bind(this);
+		this.closeErrorMessage = this.closeErrorMessage.bind(this);
 		this.handleInventorySelection = this.handleInventorySelection.bind(this);
 		this.handleHazardSelection = this.handleHazardSelection.bind(this);
 		this.setSearchState = this.setSearchState.bind(this);
@@ -184,6 +194,11 @@ class DFR3Viewer extends React.Component {
 		}
 	}
 
+	componentDidMount() {
+		// reset delete error
+		this.props.resetError();
+	}
+
 	componentWillReceiveProps(nextProps) {
 		this.setState({
 			authError: nextProps.authError,
@@ -191,6 +206,16 @@ class DFR3Viewer extends React.Component {
 			mappingsLoading: nextProps.mappingsLoading
 
 		});
+	}
+
+	// TODO set state inside component did up date is bad practice!!
+	componentDidUpdate(prevProps, prevState) {
+		if (this.props.deleteError && !prevState.messageOpen){
+			this.setState({ messageOpen: true });
+		}
+		else if (!this.props.deleteError && prevState.messageOpen){
+			this.setState({ messageOpen: false});
+		}
 	}
 
 	changeDFR3Type(event) {
@@ -327,6 +352,42 @@ class DFR3Viewer extends React.Component {
 	onClickDFR3Mapping(DFR3Mapping) {
 		this.setState({
 			selectedMapping: DFR3Mapping
+		});
+	}
+
+	onClickDelete(deleteType) {
+		this.setState({
+			confirmOpen: true,
+			deleteType: deleteType
+		});
+	}
+
+	deleteMappingConfirmed(){
+		this.props.deleteMappingItemById(this.state.selectedMapping.id);
+		this.setState({
+			selectedMapping: "",
+			confirmOpen: false,
+		});
+	}
+
+	deleteCurveConfirmed(){
+		this.props.deleteCurveItemById(this.state.selectedDFR3Type, this.state.selectedDFR3Curve.id);
+		this.setState({
+			selectedDFR3Curve: "",
+			confirmOpen: false,
+		});
+	}
+
+	handleCanceled(){
+		this.setState({
+			confirmOpen: false
+		});
+	}
+
+	closeErrorMessage(){
+		this.props.resetError();
+		this.setState({
+			messageOpen: false
 		});
 	}
 
@@ -606,8 +667,6 @@ class DFR3Viewer extends React.Component {
 			}
 		}
 
-
-
 		if (this.state.authError) {
 			browserHistory.push("/login?origin=DFR3Viewer");
 			return null;
@@ -615,6 +674,24 @@ class DFR3Viewer extends React.Component {
 		else {
 			return (
 				<div>
+					{/*error message display inside viewer*/}
+					<ErrorMessage error="You do not have the privilege to delete this item."
+								  messageOpen={this.state.messageOpen}
+								  closeErrorMessage={this.closeErrorMessage}/>
+					{this.state.deleteType === "curve" ?
+						<Confirmation confirmOpen={this.state.confirmOpen}
+									  actionBtnName="Delete"
+									  actionText="Once deleted, you won't be able to revert this!"
+									  handleConfirmed={this.deleteCurveConfirmed}
+									  handleCanceled={this.handleCanceled} />
+									  :
+						<Confirmation confirmOpen={this.state.confirmOpen}
+									  actionBtnName="Delete"
+									  actionText="Once deleted, you won't be able to revert this!"
+									  handleConfirmed={this.deleteMappingConfirmed}
+									  handleCanceled={this.handleCanceled} />
+					}
+
 					<div className={classes.root}>
 						<Grid container spacing={4}>
 							{/*filters*/}
@@ -780,6 +857,13 @@ class DFR3Viewer extends React.Component {
 															size="small">Copy
 															ID</Button>
 													</CopyToClipboard>
+													<Button color="secondary"
+														variant="contained"
+														className={classes.inlineButtons}
+														size="small"
+														onClick={()=>{this.onClickDelete("curve");}}>
+														DELETE
+													</Button>
 												</div>
 												<div className={classes.metadata}>
 													<NestedInfoTable data={selectedCurveDetail}/>
@@ -873,6 +957,13 @@ class DFR3Viewer extends React.Component {
 															size="small">Copy
 															ID</Button>
 													</CopyToClipboard>
+													<Button color="secondary"
+														variant="contained"
+														className={classes.inlineButtons}
+														size="small"
+														onClick={()=>{this.onClickDelete("mapping");}}>
+														DELETE
+													</Button>
 												</div>
 												<div className={classes.metadata}>
 													<NestedInfoTable data={selectedMappingDetails}/>

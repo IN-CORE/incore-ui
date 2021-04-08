@@ -18,6 +18,13 @@ export const GET_ANALYSES = "GET_ANALYSES";
 
 export const RECEIVE_ANALYSES = "RECEIVE_ANALYSES";
 
+export const DELETE_ITEM = "DELETE_ITEM";
+export const DELETE_ERROR = "DELETE_ERROR";
+export const RESET_ERROR = "RESET_ERROR";
+export const resetError = {
+	type: RESET_ERROR,
+};
+
 export function receiveAnalyses(api: string, json: AnalysesMetadata) {
 	return (dispatch: Dispatch) => {
 		dispatch({
@@ -49,6 +56,48 @@ export function receiveDatasets(type: string, json: Datasets) {
 			datasets: json,
 			receivedAt: Date.now(),
 		});
+	};
+}
+
+export function deleteItem(type: string, json){
+	return (dispatch: Dispatch) => {
+		dispatch({
+			type: type,
+			item: json,
+			receivedAt: Date.now(),
+		});
+	};
+}
+
+export function deleteItemById(resourceType, id) {
+	let endpoint = "";
+	if (resourceType === "datasets") {
+		endpoint = `${config.dataService}/${id}`;
+	}
+	else if (resourceType === "mappings" || resourceType === "fragilities" || resourceType === "restorations"
+		|| resourceType === "repairs") {
+		endpoint = `${config.dfr3Service}${resourceType}/${id}`;
+	}
+	else if (resourceType === "earthquakes" || resourceType === "tsunamis" || resourceType === "floods"
+		|| resourceType === "tornadoes" || resourceType === "hurricanes" || resourceType === "hurricaneWindfields") {
+		endpoint = `${config.hazardServiceBase}${resourceType}/${id}`;
+	}
+	return (dispatch: Dispatch) => {
+		return fetch(endpoint, {mode: "cors", method:"DELETE", headers: getHeader()})
+			.then(response => {
+				if (response.status === 200) {
+					response.json().then(json => {
+						dispatch(deleteItem(DELETE_ITEM, json));
+					});
+				}
+				else if (response.status === 401) {
+					cookies.remove("Authorization");
+					dispatch(deleteItem(LOGIN_ERROR, []));
+				}
+				else {
+					dispatch(deleteItem(DELETE_ERROR, null));
+				}
+			});
 	};
 }
 

@@ -1,10 +1,11 @@
 import {connect} from "react-redux";
 import HazardViewerComponent from "../components/HazardViewer";
-import {fetchHazards, fetchSpaces, searchHazards} from "../actions";
+import {fetchHazards, fetchSpaces, searchHazards, deleteItemById, resetError} from "../actions";
 
 const mapStateToProps = (state) => {
 	return {
 		hazards: state.hazard.hazards,
+		deleteError: state.hazard.deleteError,
 		spaces: state.space.spaces,
 		authError: state.user.loginError,
 		loading: state.hazard.loading
@@ -21,6 +22,12 @@ const mapDispatchToProps = (dispatch) => {
 		},
 		searchAllHazards: (hazard_type, keyword, limit, offset) => {
 			dispatch(searchHazards(hazard_type, keyword, limit, offset));
+		},
+		deleteItemById: (hazard_type, id) => {
+			dispatch(deleteItemById(hazard_type, id));
+		},
+		resetError: () => {
+			dispatch(resetError);
 		}
 	};
 };

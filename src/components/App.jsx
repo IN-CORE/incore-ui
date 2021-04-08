@@ -92,13 +92,15 @@ class App extends Component {
 			viewerMenuOpen: false,
 			helpMenuOpen: false,
 			anchorEl: null,
-			errorMessage: ""
+			errorMessage:"",
+			messageOpen: true,
 		};
 		this.logout = this.logout.bind(this);
 		this.handleProfileMenuOpen = this.handleProfileMenuOpen.bind(this);
 		this.handleViewerMenuOpen = this.handleViewerMenuOpen.bind(this);
 		this.handleHelpMenuOpen = this.handleHelpMenuOpen.bind(this);
 		this.handleProfileMenuClose = this.handleProfileMenuClose.bind(this);
+		this.closeErrorMessage = this.closeErrorMessage.bind(this);
 		this.handleViewerMenuClose = this.handleViewerMenuClose.bind(this);
 		this.handleHelpMenuClose = this.handleHelpMenuClose.bind(this);
 	}
@@ -142,6 +144,12 @@ class App extends Component {
 	handleProfileMenuClose() {
 		this.setState({
 			profileMenuOpen: false,
+		});
+	}
+
+	closeErrorMessage() {
+		this.setState({
+			messageOpen: false
 		});
 	}
 
@@ -275,7 +283,7 @@ class App extends Component {
 				{/*error message */}
 				{
 					this.state.errorMessage ?
-						<ErrorMessage error={this.state.errorMessage}/> : null
+						<ErrorMessage error={this.state.errorMessage} messageOpen={this.state.messageOpen} closeErrorMessage={this.closeErrorMessage}/> : null
 				}
 				<div className={classes.appBar}>
 					{this.props.children}

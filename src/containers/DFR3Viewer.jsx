@@ -1,10 +1,12 @@
 import {connect} from "react-redux";
 import DFR3ViewerComponent from "../components/DFR3Viewer";
-import {fetchDFR3Curves, fetchDFR3Mappings, fetchSpaces, searchDFR3Curves, searchDFR3Mappings} from "../actions";
+import {fetchDFR3Curves, fetchDFR3Mappings, fetchSpaces, searchDFR3Curves, searchDFR3Mappings,
+	deleteItemById, resetError} from "../actions";
 
 const mapStateToProps = (state) => {
 	return {
 		dfr3Curves: state.dfr3Curve.dfr3Curves,
+		deleteError: state.dfr3Curve.deleteError || state.dfr3Mapping.deleteError,
 		dfr3Mappings: state.dfr3Mapping.dfr3Mappings,
 		spaces: state.space.spaces,
 		authError: state.user.loginError,
@@ -29,6 +31,15 @@ const mapDispatchToProps = (dispatch) => {
 		},
 		searchAllDFR3Mappings: (dfr3_type, keyword, limit, offset) => {
 			dispatch(searchDFR3Mappings(dfr3_type, keyword, limit, offset));
+		},
+		deleteCurveItemById: (dfr3_type, id) => {
+			dispatch(deleteItemById(dfr3_type, id));
+		},
+		deleteMappingItemById: (id) => {
+			dispatch(deleteItemById("mappings", id));
+		},
+		resetError: () => {
+			dispatch(resetError);
 		}
 	};
 };

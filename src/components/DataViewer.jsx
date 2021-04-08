@@ -41,6 +41,8 @@ import {CopyToClipboard} from "react-copy-to-clipboard";
 import {createMuiTheme, withStyles} from "@material-ui/core/styles/index";
 import Cookies from "universal-cookie";
 import Datatype from "./children/Datatype";
+import ErrorMessage from "./children/ErrorMessage";
+import Confirmation from "./children/Confirmation";
 import LoadingOverlay from "react-loading-overlay";
 
 const cookies = new Cookies();
@@ -134,11 +136,17 @@ class DataViewer extends Component {
 			offset: 0,
 			pageNumber: 1,
 			dataPerPage: 50,
+			messageOpen: false,
+			confirmOpen: false,
 			loading: false
 		};
 
 		this.changeDatasetType = this.changeDatasetType.bind(this);
 		this.onClickDataset = this.onClickDataset.bind(this);
+		this.onClickDelete = this.onClickDelete.bind(this);
+		this.handleConfirmed = this.handleConfirmed.bind(this);
+		this.handleCanceled = this.handleCanceled.bind(this);
+		this.closeErrorMessage = this.closeErrorMessage.bind(this);
 		this.setSearchState = this.setSearchState.bind(this);
 		this.handleKeyPressed = this.handleKeyPressed.bind(this);
 		this.clickSearch = this.clickSearch.bind(this);
@@ -179,11 +187,25 @@ class DataViewer extends Component {
 		}
 	}
 
+	componentDidMount() {
+		// reset delete error
+		this.props.resetError();
+	}
+
 	componentWillReceiveProps(nextProps) {
 		this.setState({
 			authError: nextProps.authError,
 			loading: nextProps.loading
 		});
+	}
+
+	componentDidUpdate(prevProps, prevState) {
+		if (this.props.deleteError && !prevState.messageOpen){
+			this.setState({ messageOpen: true });
+		}
+		else if (!this.props.deleteError && prevState.messageOpen){
+			this.setState({ messageOpen: false});
+		}
 	}
 
 	changeDatasetType(event) {
@@ -227,6 +249,37 @@ class DataViewer extends Component {
 			selectedDatasetFormat: dataset.format,
 			fileData: "",
 			fileExtension: ""
+		});
+	}
+
+	onClickDelete() {
+		this.setState({
+			confirmOpen: true
+		});
+
+	}
+
+	handleCanceled(){
+		this.setState({
+			confirmOpen: false
+		});
+	}
+
+	handleConfirmed(){
+		this.props.deleteItemById(this.state.selectedDataset.id);
+		this.setState({
+			selectedDataset: "",
+			selectedDatasetFormat: "",
+			fileData: "",
+			fileExtension: "",
+			confirmOpen: false
+		});
+	}
+
+	closeErrorMessage(){
+		this.props.resetError();
+		this.setState({
+			messageOpen: false
 		});
 	}
 
@@ -580,6 +633,15 @@ class DataViewer extends Component {
 		else {
 			return (
 				<div>
+					{/*error message display inside viewer*/}
+					<ErrorMessage error="You do not have the privilege to delete this item."
+								  messageOpen={this.state.messageOpen}
+								  closeErrorMessage={this.closeErrorMessage}/>
+					<Confirmation confirmOpen={this.state.confirmOpen}
+								  actionBtnName="Delete"
+								  actionText="Once deleted, you won't be able to revert this!"
+								  handleConfirmed={this.handleConfirmed}
+								  handleCanceled={this.handleCanceled} />
 					<div className={classes.root}>
 						<Grid container spacing={4}>
 							{/*filters*/}
@@ -680,6 +742,13 @@ class DataViewer extends Component {
 														className={classes.inlineButtons}
 														size="small">Copy ID</Button>
 												</CopyToClipboard>
+												<Button color="secondary"
+													variant="contained"
+													className={classes.inlineButtons}
+													size="small"
+													onClick={this.onClickDelete}>
+													DELETE
+												</Button>
 											</div>
 											<div className={classes.metadata}>
 												<NestedInfoTable data={selected_dataset_detail}/>

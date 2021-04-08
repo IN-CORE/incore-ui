@@ -7,27 +7,17 @@ class ErrorMessage extends Component {
 
 	constructor(props) {
 		super(props);
-		this.state = {
-			messageOpen: true
-		};
-		this.toggleErrorMessage = this.toggleErrorMessage.bind(this);
-	}
-
-	toggleErrorMessage(){
-		this.setState(prevState => ({
-			messageOpen: !prevState.messageOpen
-		}));
 	}
 
 	render() {
 		return (
-			<Collapse in={this.state.messageOpen}>
+			<Collapse in={this.props.messageOpen}>
 				<Alert severity="error" action={
 					<IconButton
 						aria-label="close"
 						color="inherit"
 						size="small"
-						onClick={this.toggleErrorMessage}
+						onClick={this.props.closeErrorMessage}
 					>
 						<CloseIcon fontSize="inherit"/>
 					</IconButton>

@@ -1,6 +1,7 @@
 import * as React from "react";
 import {InputLabel, MenuItem, Select} from "@material-ui/core";
 import {withStyles} from "@material-ui/core/styles/index";
+import config from "../../app.config";
 
 
 const styles = {
@@ -26,7 +27,9 @@ class Datatype extends React.Component {
 
 		let sortedDatatypes = [];
 		this.props.datatypes.map((datatype) =>{
-			sortedDatatypes.push(datatype.dataType);
+			if (!config.hazardDatasetTypes.includes(datatype)){
+				sortedDatatypes.push(datatype.dataType);
+			}
 		});
 		sortedDatatypes = sortedDatatypes.sort();
 
