@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.9.1] - 2021-04-08
+
+### Added
+- Capability of delete items on Data Viewer, DFR3 Viewer and Hazard Viewer [INCORE1-868](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-868)
+- Loading spinner on Viewers [INCORE1-931](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-931)
+
+### Fixed
+- table row alignment on the DFR3 fragility tab [INCORE1-994](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-994)
+
 
 ## [0.9.0] - 2021-02-23
 
