@@ -469,7 +469,6 @@ class DataViewer extends Component {
 
 	render() {
 		const {classes} = this.props;
-		console.log(this.state.loading);
 
 		// list items
 		let list_items = "";
