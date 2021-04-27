@@ -32,5 +32,7 @@ config["hazardDatasetTypes"] = [
 	"incore:probabilisticFloodRaster",
 	"ergo:hazardRaster"
 ];
+config["signUpURL"] = "https://identity.ncsa.illinois.edu/register/BSKC2UKQPU";
+config["resetPwURL"] = "https://identity.ncsa.illinois.edu/reset";
 
 export default config;

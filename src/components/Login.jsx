@@ -1,11 +1,30 @@
 import React, {Component} from "react";
 import {browserHistory} from "react-router";
-import {Avatar, Button, Divider, GridList, GridListTile, Paper, TextField, Typography} from "@material-ui/core";
+import {Avatar, Button, Divider, GridList, GridListTile, Paper, TextField, Typography, Link} from "@material-ui/core";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Version from "./children/Version";
 import Cookies from "universal-cookie";
+import {withStyles} from "@material-ui/core/styles";
+import config from "../app.config";
 
 const cookies = new Cookies();
+const styles = theme => ({
+	resetPW:{
+		display:"block",
+		textAlign:"right",
+		margin: "0 auto 10px auto",
+		fontFamily: theme.typography.body1.fontFamily
+	},
+	signUp:{
+		fontWeight: 500,
+		fontSize:"15px",
+		fontFamily: theme.typography.body1.fontFamily,
+		display:"block",
+		margin:"10px auto 5px auto"
+	}
+});
+
+
 
 class Login extends Component {
 	constructor(props) {
@@ -83,6 +102,9 @@ class Login extends Component {
 	}
 
 	render() {
+
+		const {classes} = this.props;
+
 		// if already login, redirect to homepage
 		let Authorization = cookies.get("Authorization");
 		if (Authorization !== undefined && Authorization !== "" && Authorization !== null) {
@@ -137,6 +159,7 @@ class Login extends Component {
 										onChange={this.changePassword}
 										onKeyPress={this.handleKeyPressed}
 									/>
+									<Link href={config.resetPwURL} className={classes.resetPW}>Forgot password?</Link>
 									<Button
 										type="submit"
 										fullWidth
@@ -144,6 +167,7 @@ class Login extends Component {
 										color="primary"
 										onClick={this.login}
 									>Sign In</Button>
+									<Link href={config.signUpURL} className={classes.signUp}>Don't have an account? Sign up.</Link>
 								</GridListTile>
 							</GridList>
 						</Paper>
@@ -155,4 +179,4 @@ class Login extends Component {
 	}
 }
 
-export default Login;
+export default withStyles(styles)(Login);
