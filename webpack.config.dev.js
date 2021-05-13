@@ -66,11 +66,11 @@ export default {
 			{test: /\.(jpe?g|png|gif)$/i, loader: "file-loader?name=[name].[ext]"},
 			{test: /\.ico$/, loader: "file-loader?name=[name].[ext]"},
 			{
-				test: /(\.css|\.scss)$/,
+				test: /(\.css|\.scss)$/i,
 				use:[
-					{ loader: "style-loader", options: { sourceMap: true } },
-					{ loader: "css-loader", options: { sourceMap: true } },
-					{ loader: "postcss-loader", options: { plugins: () => [require("autoprefixer")] } },
+					"style-loader",
+					"css-loader",
+					{ loader: "postcss-loader", options: { postcssOptions: { plugins: ["autoprefixer"] }}},
 					{ loader: "sass-loader", options: { sourceMap: true } }
 				]
 			},

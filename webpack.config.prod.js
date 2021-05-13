@@ -41,7 +41,7 @@ export default {
 		}),
 
 		// Generate an external css file with a hash in the filename
-		new MiniCssExtractPlugin("[name].[contenthash].css"),
+		new MiniCssExtractPlugin({filename: "[name].[contenthash].css"}),
 
 		// Generate HTML file that contains references to generated bundles. See here for how this works: https://github.com/ampedandwired/html-webpack-plugin#basic-usage
 		new HtmlWebpackPlugin({
@@ -99,9 +99,9 @@ export default {
 				test: /(\.css|\.scss)$/,
 				use: [
 					MiniCssExtractPlugin.loader,
-					{ loader: "css-loader", options: { sourceMap: true } },
-					{ loader: "postcss-loader", options: { plugins: () => [require("autoprefixer")] } },
-					{ loader: "sass-loader", options: { sourceMap: true } }
+					"css-loader",
+					{ loader: "postcss-loader", options: { postcssOptions: { plugins: ["autoprefixer"] }}},
+					"sass-loader"
 				]
 			},
 			{test: /\.json$/, loader: "json-loader"}
@@ -109,7 +109,6 @@ export default {
 	},
 	optimization:{
 		minimizer: [new TerserPlugin({
-			sourceMap: true,
 			terserOptions: {
 				ecma:8,
 				compress: {

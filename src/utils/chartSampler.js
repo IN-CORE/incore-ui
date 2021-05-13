@@ -1,17 +1,17 @@
-import math from "mathjs";
+import {log, exp, parser} from "mathjs";
 import { jStat } from "jstat";
 
 export default class chartSampler {
 
 	static computeExpressionSamples(min, max, numberOfSamples, expression) {
 		let steps = ((max - min) / numberOfSamples);
-		let parser = math.parser();
+		let mathParser = parser();
 		let samples = [];
 
 		for (let i = 1; i <= numberOfSamples; i++) {
 			let x = steps * i;
-			parser.set("x", x);
-			let y = parser.eval(`${expression}`);
+			mathParser.set("x", x);
+			let y = mathParser.evaluate(`${expression}`);
 			samples.push([x, y]);
 		}
 
@@ -40,7 +40,7 @@ export default class chartSampler {
 				}
 
 				let y = steps * i;
-				let x = math.exp((math.log(y/(1-y)) - cumulateTerm) / A1);
+				let x = exp((log(y/(1-y)) - cumulateTerm) / A1);
 				samples.push([x, y]);
 			}
 		}
@@ -53,9 +53,9 @@ export default class chartSampler {
 		let stepsX = ((maxX - minX) / numberOfSamplesX);
 		let stepsY = ((maxY - minY) / numberOfSamplesY);
 
-		let parser = math.parser();
+		let mathParser = parser();
 
-		parser.eval(`f(x,y) = ${expression}`);
+		mathParser.evaluate(`f(x,y) = ${expression}`);
 
 		let promises = [];
 
@@ -65,7 +65,7 @@ export default class chartSampler {
 			for (let j = 1; j <= numberOfSamplesY; j++) {
 				let y = stepsY * j;
 
-				promises.push(this.calculate(x, y, parser));
+				promises.push(this.calculate(x, y, mathParser));
 			}
 		}
 
@@ -74,15 +74,15 @@ export default class chartSampler {
 		return samples;
 	}
 
-	static async calculate(x, y, parser) {
-		return new Promise(resolve => resolve([x, y, parser.eval(`f(${  x  }, ${  y  })`)]));
+	static async calculate(x, y, mathParser) {
+		return new Promise(resolve => resolve([x, y, mathParser.evaluate(`f(${  x  }, ${  y  })`)]));
 	}
 
 	static sample(min, max, numberOfSamples, alphaType, alpha, beta){
 		let samples = [];
 
 		if (alphaType === "median"){
-			samples = chartSampler.sampleLogNormalCdf(min, max, numberOfSamples, Math.log(alpha), beta);
+			samples = chartSampler.sampleLogNormalCdf(min, max, numberOfSamples, log(alpha), beta);
 		}
 		else if (alphaType === "lambda"){
 			samples = chartSampler.sampleLogNormalCdf(min, max, numberOfSamples, alpha, beta);
@@ -95,7 +95,7 @@ export default class chartSampler {
 		let samples = [];
 
 		if (alphaType === "median"){
-			samples = chartSampler.sampleLogNormalCdfConditional(min, max, numberOfSamples, rules, alpha.map(a => Math.log(a)), beta);
+			samples = chartSampler.sampleLogNormalCdfConditional(min, max, numberOfSamples, rules, alpha.map(a => log(a)), beta);
 		}
 		else if (alphaType === "lambda"){
 			samples = chartSampler.sampleLogNormalCdfConditional(min, max, numberOfSamples, rules, alpha, beta);
@@ -132,8 +132,8 @@ export default class chartSampler {
 		for (let i = 1; i <= numberOfSamples; i++) {
 			let hazard = steps * i;
 			let y = jStat.normal.cdf(
-				(math.log(hazard) - (cutoff_period * a12_param + a11_param)) / (a13_param + a14_param * cutoff_period)
-				+ multiplier * (math.log(hazard) - a21_param) / a22_param, 0, 1);
+				(log(hazard) - (cutoff_period * a12_param + a11_param)) / (a13_param + a14_param * cutoff_period)
+				+ multiplier * (log(hazard) - a21_param) / a22_param, 0, 1);
 			samples.push([hazard, y]);
 		}
 
