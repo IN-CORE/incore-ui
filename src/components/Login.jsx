@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {browserHistory} from "react-router";
-import {Avatar, Button, Divider, GridList, GridListTile, Paper, TextField, Typography, Link} from "@material-ui/core";
+import {Avatar, Box, Button, Divider, GridList, GridListTile, Paper, TextField, Typography, Link} from "@material-ui/core";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Version from "./children/Version";
 import Cookies from "universal-cookie";
@@ -14,6 +14,11 @@ const styles = theme => ({
 		textAlign:"right",
 		margin: "0 auto 10px auto",
 		fontFamily: theme.typography.body1.fontFamily
+	},
+	tos:{
+		fontSize: "12px",
+		fontFamily: theme.typography.body2.fontFamily,
+		margin:"20px auto 10px auto"
 	},
 	signUp:{
 		fontWeight: 500,
@@ -160,6 +165,10 @@ class Login extends Component {
 										onKeyPress={this.handleKeyPressed}
 									/>
 									<Link href={config.resetPwURL} className={classes.resetPW}>Forgot password?</Link>
+									<Box className={classes.tos}>
+										<Typography variant="body2" style={{"display":"inline"}}>By continuing, you agree to our </Typography>
+										<Link href={config.tosURL} style={{"display":"inline"}}>Terms of Service</Link>
+									</Box>
 									<Button
 										type="submit"
 										fullWidth
