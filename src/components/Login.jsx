@@ -164,10 +164,10 @@ class Login extends Component {
 										onChange={this.changePassword}
 										onKeyPress={this.handleKeyPressed}
 									/>
-									<Link href={config.resetPwURL} className={classes.resetPW}>Forgot password?</Link>
+									<Link href={config.resetPwURL} className={classes.resetPW} target="_blank">Forgot password?</Link>
 									<Box className={classes.tos}>
 										<Typography variant="body2" style={{"display":"inline"}}>By continuing, you agree to our </Typography>
-										<Link href={config.tosURL} style={{"display":"inline"}}>Terms of Service</Link>
+										<Link href={config.tosURL} style={{"display":"inline"}} target="_blank">Terms of Service</Link>
 									</Box>
 									<Button
 										type="submit"
@@ -176,7 +176,7 @@ class Login extends Component {
 										color="primary"
 										onClick={this.login}
 									>Sign In</Button>
-									<Link href={config.signUpURL} className={classes.signUp}>Don't have an account? Sign up.</Link>
+									<Link href={config.signUpURL} className={classes.signUp} target="_blank">Don't have an account? Sign up.</Link>
 								</GridListTile>
 							</GridList>
 						</Paper>
