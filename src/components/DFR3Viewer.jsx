@@ -836,6 +836,9 @@ class DFR3Viewer extends React.Component {
 														size="small"
 														onClick={this.exportCurveJson}>Download Metadata</Button>
 													{
+														// TODO: This should be updated with conditions for repair and restoration
+														//  curves when they are refactored to new equation based format
+														this.state.selectedDFR3Curve.fragilityCurves &&
 														this.state.selectedDFR3Curve.fragilityCurves[0].className.includes("FragilityCurveRefactored") ?
 															<Button color="primary"
 																variant="contained"
