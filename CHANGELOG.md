@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.9.4] - 2021-06-16
+
+### Fixed
+- Repair and Restoration curves selection [INCORE1-1227](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-1227)
+
+
 ## [0.9.3] - 2021-05-26
 
 ### Added
