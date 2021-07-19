@@ -243,6 +243,11 @@ class App extends Component {
 					</Link>
 				</MenuItem>
 				<MenuItem className={classes.denseStyle} onClick={this.handleHelpMenuClose}>
+					<Link href={config.pyIncoreDataDocUrl} target="_blank" style={{textDecoration: "none"}}>
+						pyIncore-data Reference
+					</Link>
+				</MenuItem>
+				<MenuItem className={classes.denseStyle} onClick={this.handleHelpMenuClose}>
 					<Link href={config.pyIncoreVizDocUrl} target="_blank" style={{textDecoration: "none"}}>
 						pyIncore-viz Reference
 					</Link>

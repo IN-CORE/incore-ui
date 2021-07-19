@@ -7,6 +7,7 @@ config["dataWolf"] = `${hostname}/datawolf/`;
 config["client_id"] = "react-auth";
 config["pyIncoreDocUrl"] = `${hostname}/doc/pyincore/index.html`;
 config["pyIncoreVizDocUrl"] = `${hostname}/doc/pyincore_viz/index.html`;
+config["pyIncoreDataDocUrl"] = `${hostname}/doc/pyincore_data/index.html`;
 config["swaggerUrl"] = `${hostname}/doc/api/`;
 config["webVersion"] = "0.9.4";
 config["spaceService"] = `${hostname}/space/api/spaces`;
