@@ -43,3 +43,12 @@ export function exportJson(json) {
 		document.body.removeChild(anchor);
 	}
 }
+
+// can be used to sort array of jsons alpbetically by a key
+export function compareStrings(a, b) {
+	// case-insensitive comparison
+	a = a.toLowerCase();
+	b = b.toLowerCase();
+
+	return (a < b) ? -1 : (a > b) ? 1 : 0;
+}
