@@ -1,7 +1,7 @@
 import React from "react";
 import DFR3CurvesGroupList from "./children/DFR3CurvesGroupList";
 import DFR3MappingsGroupList from "./children/DFR3MappingsGroupList";
-import LineChart from "./children/LineChart";
+import CustomHighChart from "./children/CustomHighChart";
 import NestedInfoTable from "./children/NestedInfoTable";
 import ThreeDimensionalPlot from "./children/ThreeDimensionalPlot";
 import "whatwg-fetch";
@@ -896,7 +896,8 @@ class DFR3Viewer extends React.Component {
 																		  width="100%" height="350px" style="surface"/>
 												</div>
 												:
-												<LineChart chartId="chart" configuration={this.state.chartConfig}/>}
+												<CustomHighChart chartId="chart" configuration={this.state.chartConfig}
+																 customClassName="linecharts-container"/>}
 											{this.isCustomExpression(this.state.selectedDFR3Curve) ?
 												<CustomExpressionTable dfr3Curve={this.state.selectedDFR3Curve}/>
 												:
