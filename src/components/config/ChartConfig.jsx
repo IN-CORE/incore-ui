@@ -33,4 +33,78 @@ let DFR3Config = {
 	series: []
 };
 
-export default {DFR3Config};
+let pieChartConfig = {
+	credits: false,
+	chart: {
+		plotBackgroundColor: null,
+		plotBorderWidth: null,
+		plotShadow: false,
+		type: "pie",
+		height:250,
+		// width:250,
+		// margin: [0, 40, 0, 40]
+	},
+	title: {
+		text: "",
+		verticalAlign: "bottom",
+		y: -10,
+		style: {
+			fontFamily:"'Work Sans',sans-serif",
+			fontSize: "14px",
+			fontWeight:"normal",
+		}
+	},
+	subtitle:{
+		text:"",
+		verticalAlign:"bottom",
+		style:{
+			fontFamily:"'Work Sans',sans-serif",
+			fontSize: "12px",
+			fontWeight:"normal",
+		}
+	},
+	tooltip: {
+		pointFormat: "{series.name}: <b>{point.percentage:.1f}%</b>"
+	},
+	accessibility: {
+		point: {
+			valueSuffix: "%"
+		}
+	},
+	plotOptions: {
+		pie: {
+			// allowPointSelect: true,
+			cursor: "pointer",
+			dataLabels: {
+				enabled: false,
+				// format: "<b>{point.name}</b>: {point.percentage:.1f} %"
+			},
+			colors: [
+				"#dadada",
+				"#18381b"
+			],
+			states:{
+				hover:{
+					halo:null
+				},
+			}
+		},
+	},
+	series: [{
+		name: "",
+		colorByPoint: true,
+		data: [
+			{
+				name: "Available",
+				y: 100
+			},
+			{
+				name: "Used",
+				y: 0
+			}
+		]
+	}]
+};
+
+
+export default {DFR3Config, pieChartConfig};

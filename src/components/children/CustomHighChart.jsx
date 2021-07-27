@@ -1,7 +1,7 @@
-import React, { PropTypes } from "react";
+import React from "react";
 import HighCharts from "highcharts";
 
-class LineChart extends React.Component {
+class CustomHighChart extends React.Component {
 	constructor(props) {
 		super(props);
 	}
@@ -21,6 +21,4 @@ class LineChart extends React.Component {
 	}
 }
 
-LineChart.propTypes = {};
-
-export default LineChart;
+export default CustomHighChart;

@@ -59,6 +59,19 @@ export function receiveDatasets(type: string, json: Datasets) {
 	};
 }
 
+export const RECEIVE_DATASET_USAGE = "RECEIVE_DATASET_USAGE";
+export const RECEIVE_HAZARD_USAGE = "RECEIVE_HAZARD_USAGE";
+export const RECEIVE_LAB_USAGE = "RECEIVE_LAB_USAGE";
+export function receieveUsage(type, json){
+	return (dispatch: Dispatch) => {
+		dispatch({
+			type: type,
+			usage: json,
+			receivedAt: Date.now(),
+		});
+	};
+}
+
 export function deleteItem(type: string, json){
 	return (dispatch: Dispatch) => {
 		dispatch({
@@ -241,6 +254,61 @@ export function fetchDatasets(dataType, space, limit, offset) {
 					dispatch(receiveDatasets(RECEIVE_DATASETS, []));
 				}
 			});
+	};
+}
+
+export function fetchDatasetUsage() {
+	let endpoint = `${config.dataServiceBase}status/usage/datasets`;
+	return (dispatch: Dispatch) => {
+		return fetch(endpoint, {mode: "cors", headers: getHeader()})
+			.then(response => {
+				if (response.status === 200) {
+					response.json().then(json => {
+						dispatch(receieveUsage(RECEIVE_DATASET_USAGE, json));
+					});
+				}
+				else if (response.status === 401) {
+					cookies.remove("Authorization");
+					dispatch(receieveUsage(LOGIN_ERROR, {}));
+				}
+				else {
+					dispatch(receieveUsage(RECEIVE_DATASET_USAGE, {}));
+				}
+			});
+	};
+}
+
+export function fetchHazardUsage() {
+	let endpoint = `${config.dataServiceBase}status/usage/hazards`;
+	return (dispatch: Dispatch) => {
+		return fetch(endpoint, {mode: "cors", headers: getHeader()})
+			.then(response => {
+				if (response.status === 200) {
+					response.json().then(json => {
+						dispatch(receieveUsage(RECEIVE_HAZARD_USAGE, json));
+					});
+				}
+				else if (response.status === 401) {
+					cookies.remove("Authorization");
+					dispatch(receieveUsage(LOGIN_ERROR, {}));
+				}
+				else {
+					dispatch(receieveUsage(RECEIVE_HAZARD_USAGE, {}));
+				}
+			});
+	};
+}
+
+export function fetchLabUsage(){
+	// TODO implment
+	return (dispatch: Dispatch) =>{
+		let json = {
+			"user":"commresilience",
+			"total_number_of_datasets":50,
+			"total_file_size":"800MB",
+			"total_file_size_byte":800*1024*8
+		};
+		dispatch(receieveUsage(RECEIVE_LAB_USAGE, json));
 	};
 }
 

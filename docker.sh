@@ -6,17 +6,10 @@ set -e
 # use DEBUG=echo ./docker.sh to print all commands
 export DEBUG=${DEBUG:-""}
 
-# Find out what branch we are on
-BRANCH=${BRANCH:-"$(git rev-parse --abbrev-ref HEAD)"}
+# Specify IN-CORE service to use, default is relative for deployment
+export INCORE_REMOTE_HOSTNAME=${INCORE_REMOTE_HOSTNAME:-""}
 
-# Find out the version
-if [ "$BRANCH" = "master" ]; then
-    VERSION="latest"
-elif [ "${BRANCH}" = "develop" ]; then
-    VERSION="develop"
-else
-    exit 0
-fi
+echo "Building frontend for $INCORE_REMOTE_HOSTNAME"
 
 # Build docker image
-$DEBUG docker build -t hub.ncsa.illinois.edu/incore/frontend:$VERSION .
+$DEBUG docker build --build-arg INCORE_REMOTE_HOSTNAME="${INCORE_REMOTE_HOSTNAME}" -t incore/frontend .
