@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.9.5] - 2021-07-31
+
+### Added
+- Create a profile component to display user info and quota [INCORE1-1148](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-1148)
+- Link for pyincore data in the dropdown [ICNORE1-1297](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-1297)
+
+### Changed
+- Update versioning and tagging of web tool docker images [INCORE1-1261](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-1261)
+- Sort "spaces" dropdown on viewers alphabetically [INCORE1-1312](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-1312)
+
+
 ## [0.9.4] - 2021-06-16
 
 ### Fixed
