@@ -7,28 +7,32 @@ const cookies = new Cookies();
 /* place to hold common utility function. Gradually adding... */
 
 export function is3dCurve(DFR3Curve) {
-	let curves;
-	if ("fragilityCurves" in DFR3Curve) {
-		curves = DFR3Curve.fragilityCurves;
-	}
-	else if ("repairCurves" in DFR3Curve) {
-		curves = DFR3Curve.repairCurves;
-	}
-	else if ("restorationCurves" in DFR3Curve) {
-		curves = DFR3Curve.restorationCurves;
-	}
+	if (DFR3Curve.demandTypes.length > 1) return true;
 	else{
-		curves = [];
-	}
-
-	for (let i = 0; i < curves.length; i++) {
-		let curve = curves[i];
-
-		if (curve.className.includes("CustomExpression") && curve.expression.includes("y")) {
-			return true;
+		// TODO once complete refactored those need to go away
+		let curves;
+		if ("fragilityCurves" in DFR3Curve) {
+			curves = DFR3Curve.fragilityCurves;
 		}
-	}
+		else if ("repairCurves" in DFR3Curve) {
+			curves = DFR3Curve.repairCurves;
+		}
+		else if ("restorationCurves" in DFR3Curve) {
+			curves = DFR3Curve.restorationCurves;
+		}
+		else{
+			curves = [];
+		}
 
+		for (let i = 0; i < curves.length; i++) {
+			let curve = curves[i];
+
+			if (curve.className.includes("CustomExpression") && curve.expression.includes("y")) {
+				return true;
+			}
+		}
+
+	}
 	return false;
 }
 

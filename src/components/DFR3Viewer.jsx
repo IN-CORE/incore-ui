@@ -3,7 +3,7 @@ import DFR3CurvesGroupList from "./children/DFR3CurvesGroupList";
 import DFR3MappingsGroupList from "./children/DFR3MappingsGroupList";
 import CustomHighChart from "./children/CustomHighChart";
 import NestedInfoTable from "./children/NestedInfoTable";
-import ThreeDimensionalPlot from "./children/ThreeDimensionalPlot";
+// import ThreeDimensionalPlot from "./children/ThreeDimensionalPlot";
 import "whatwg-fetch";
 import {
 	Button,
@@ -25,8 +25,6 @@ import CloseIcon from "@material-ui/icons/Close";
 import chartSampler from "../utils/chartSampler";
 import chartConfig from "./config/ChartConfig";
 import config from "../app.config";
-import DistributionTable from "./children/DistributionTable";
-import CustomExpressionTable from "./children/CustomExpressionTable";
 import {browserHistory} from "react-router";
 import Pagination from "./children/Pagination";
 import DataPerPage from "./children/DataPerPage";
@@ -38,10 +36,12 @@ import Cookies from "universal-cookie";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 
-import {is3dCurve, exportJson} from "../utils/common";
+import {exportJson, is3dCurve} from "../utils/common";
 import ErrorMessage from "./children/ErrorMessage";
 import Confirmation from "./children/Confirmation";
 import LoadingOverlay from "react-loading-overlay";
+
+import {fetchPlot} from "../actions/plotting";
 
 const cookies = new Cookies();
 const redundantProp = ["legacyId", "privileges", "creator", "is3dPlot", "spaces"];
@@ -210,11 +210,10 @@ class DFR3Viewer extends React.Component {
 
 	// TODO set state inside component did up date is bad practice!!
 	componentDidUpdate(prevProps, prevState) {
-		if (this.props.deleteError && !prevState.messageOpen){
-			this.setState({ messageOpen: true });
-		}
-		else if (!this.props.deleteError && prevState.messageOpen){
-			this.setState({ messageOpen: false});
+		if (this.props.deleteError && !prevState.messageOpen) {
+			this.setState({messageOpen: true});
+		} else if (!this.props.deleteError && prevState.messageOpen) {
+			this.setState({messageOpen: false});
 		}
 	}
 
@@ -336,10 +335,16 @@ class DFR3Viewer extends React.Component {
 	async onClickDFR3Curve(DFR3Curve) {
 		let plotData3d = {};
 		let plotConfig2d = {};
-		if (DFR3Curve.is3dPlot) {
-			plotData3d = await this.generate3dPlotData(DFR3Curve);
-		} else {
-			plotConfig2d = this.generate2dPlotData(DFR3Curve);
+
+		// TODO add 3d plot
+		// if (DFR3Curve.is3dPlot) {
+		// 	plotData3d = await this.generate3dPlotData(DFR3Curve);
+		// } else {
+
+		if (
+			DFR3Curve.fragilityCurves && !DFR3Curve.is3dPlot
+		){
+			plotConfig2d = await this.generate2dPlotData(DFR3Curve);
 		}
 
 		this.setState({
@@ -362,7 +367,7 @@ class DFR3Viewer extends React.Component {
 		});
 	}
 
-	deleteMappingConfirmed(){
+	deleteMappingConfirmed() {
 		this.props.deleteMappingItemById(this.state.selectedMapping.id);
 		this.setState({
 			selectedMapping: "",
@@ -370,7 +375,7 @@ class DFR3Viewer extends React.Component {
 		});
 	}
 
-	deleteCurveConfirmed(){
+	deleteCurveConfirmed() {
 		this.props.deleteCurveItemById(this.state.selectedDFR3Type, this.state.selectedDFR3Curve.id);
 		this.setState({
 			selectedDFR3Curve: "",
@@ -378,13 +383,13 @@ class DFR3Viewer extends React.Component {
 		});
 	}
 
-	handleCanceled(){
+	handleCanceled() {
 		this.setState({
 			confirmOpen: false
 		});
 	}
 
-	closeErrorMessage(){
+	closeErrorMessage() {
 		this.props.resetError();
 		this.setState({
 			messageOpen: false
@@ -399,8 +404,7 @@ class DFR3Viewer extends React.Component {
 		}, function () {
 			if (this.state.registeredSearchText !== "" && this.state.searching) {
 				this.props.searchAllDFR3Curves(this.state.selectedDFR3Type, this.state.registeredSearchText, this.state.dataPerPage, this.state.offset);
-			}
-			else {
+			} else {
 				this.props.getAllDFR3Curves(this.state.selectedDFR3Type, this.state.selectedSpace, this.state.selectedInventory,
 					this.state.selectedHazard, this.state.dataPerPage, this.state.offset);
 			}
@@ -415,8 +419,7 @@ class DFR3Viewer extends React.Component {
 		}, function () {
 			if (this.state.registeredSearchText !== "" && this.state.searching) {
 				this.props.searchAllDFR3Curves(this.state.selectedDFR3Type, this.state.registeredSearchText, this.state.dataPerPage, this.state.offset);
-			}
-			else {
+			} else {
 				this.props.getAllDFR3Curves(this.state.selectedDFR3Type, this.state.selectedSpace, this.state.selectedInventory,
 					this.state.selectedHazard, this.state.dataPerPage, this.state.offset);
 			}
@@ -450,8 +453,7 @@ class DFR3Viewer extends React.Component {
 		}, function () {
 			if (this.state.registeredSearchText !== "" && this.state.searching) {
 				this.props.searchAllDFR3Mappings(this.state.selectedDFR3Type, this.state.registeredSearchText, this.state.dataPerPage, this.state.offsetMappings);
-			}
-			else {
+			} else {
 				this.props.getAllDFR3Mappings(this.state.selectedDFR3Type, this.state.selectedSpace, this.state.selectedInventory,
 					this.state.selectedHazard, this.state.dataPerPage, this.state.offsetMappings);
 			}
@@ -466,15 +468,14 @@ class DFR3Viewer extends React.Component {
 		}, function () {
 			if (this.state.registeredSearchText !== "" && this.state.searching) {
 				this.props.searchAllDFR3Mappings(this.state.selectedDFR3Type, this.state.registeredSearchText, this.state.dataPerPage, this.state.offsetMappings);
-			}
-			else {
+			} else {
 				this.props.getAllDFR3Mappings(this.state.selectedDFR3Type, this.state.selectedSpace, this.state.selectedInventory,
 					this.state.selectedHazard, this.state.dataPerPage, this.state.offsetMappings);
 			}
 		});
 	}
 
-	generate2dPlotData(DFR3Curve) {
+	async generate2dPlotData(DFR3Curve) {
 		let updatedChartConfig = Object.assign({}, chartConfig.DFR3Config);
 
 
@@ -484,29 +485,48 @@ class DFR3Viewer extends React.Component {
 
 		updatedChartConfig.series = [];
 
-		let curves;
+		// fragility curve using plotting services
 		if ("fragilityCurves" in DFR3Curve) {
-			curves = DFR3Curve.fragilityCurves;
 			let demandTypes = DFR3Curve.demandTypes.length > 0 ? DFR3Curve.demandTypes.join(", ") : "";
 			let demandUnits = DFR3Curve.demandUnits.length > 0 ? DFR3Curve.demandUnits.join(", ") : "";
 			updatedChartConfig.xAxis.title.text = `${demandTypes} (${demandUnits})`;
-		}
-		else if ("repairCurves" in DFR3Curve) {
-			curves = DFR3Curve.repairCurves;
-			let timeType = "time";
-			let timeUnit = DFR3Curve.timeUnits !== null ? DFR3Curve.timeUnits : "";
-			updatedChartConfig.xAxis.title.text = `${timeType} (${timeUnit})`;
-		}
-		else if ("restorationCurves" in DFR3Curve) {
-			curves = DFR3Curve.restorationCurves;
-			let timeType = "time";
-			let timeUnit = DFR3Curve.timeUnits !== null ? DFR3Curve.timeUnits : "";
-			updatedChartConfig.xAxis.title.text = `${timeType} (${timeUnit})`;
-		}
-		else{
-			curves = [];
-		}
 
+			if (DFR3Curve.fragilityCurves[0].className.includes("FragilityCurveRefactored")){
+				let plotData = await fetchPlot(DFR3Curve);
+				Object.keys(plotData).map(key => {
+					let series = {
+						name: key,
+						data: plotData[key]
+					};
+					updatedChartConfig.series.push(series);
+				});
+				return updatedChartConfig;
+			}
+			else{
+				return this._legacyGenerate2DChartConfig(updatedChartConfig, DFR3Curve.fragilityCurves);
+			}
+		}
+		// repair/restoration curve still using legacy code
+		else {
+			let curves;
+			if ("repairCurves" in DFR3Curve) {
+				curves = DFR3Curve.repairCurves;
+				let timeType = "time";
+				let timeUnit = DFR3Curve.timeUnits !== null ? DFR3Curve.timeUnits : "";
+				updatedChartConfig.xAxis.title.text = `${timeType} (${timeUnit})`;
+			} else if ("restorationCurves" in DFR3Curve) {
+				curves = DFR3Curve.restorationCurves;
+				let timeType = "time";
+				let timeUnit = DFR3Curve.timeUnits !== null ? DFR3Curve.timeUnits : "";
+				updatedChartConfig.xAxis.title.text = `${timeType} (${timeUnit})`;
+			} else {
+				curves = [];
+			}
+			this._legacyGenerate2DChartConfig(updatedChartConfig, curves);
+		}
+	}
+
+	_legacyGenerate2DChartConfig(updatedChartConfig, curves){
 		for (let i = 0; i < curves.length; i++) {
 			let curve = curves[i];
 
@@ -514,31 +534,25 @@ class DFR3Viewer extends React.Component {
 
 			if (curve.className.includes("CustomExpression")) {
 				plotData = chartSampler.computeExpressionSamples(0.001, 1.0, 1000, curve.expression);
-			}
-			else if (curve.className.includes("Standard")) {
+			} else if (curve.className.includes("Standard")) {
 				if (curve.className.includes("ConditionalStandard")) {
 					plotData = chartSampler.sampleConditional(0, 0.999, 1000, curve.alphaType,
 						curve.rules, curve.alpha, curve.beta);
-				}
-				else {
+				} else {
 					plotData = chartSampler.sample(0, 0.999, 1000, curve.alphaType, curve.alpha, curve.beta);
 				}
-			}
-			else if (curve.className === "ParametricFragilityCurve"){
+			} else if (curve.className === "ParametricFragilityCurve") {
 				plotData = chartSampler.computeParametricSampes(0.001, 1, 1000, curve.curveType, curve.parameters);
-			}
-			else if (curve.className === "PeriodBuildingFragilityCurve"){
+			} else if (curve.className === "PeriodBuildingFragilityCurve") {
 				plotData = chartSampler.computePeriodBuildingSamples(0, 5, 1000, curve.fsParam0, curve.fsParam1,
 					curve.fsParam2, curve.fsParam3, curve.fsParam4, curve.fsParam5);
-			}
-			else if (curve.className === "FragilityCurveRefactored"){
+			} else if (curve.className === "FragilityCurveRefactored") {
 				plotData = null;
-			}
-			else{
+			} else {
 				plotData = null;
 			}
 
-			if (plotData !== null){
+			if (plotData !== null) {
 				let series = {
 					name: curve.description,
 					data: plotData
@@ -547,7 +561,6 @@ class DFR3Viewer extends React.Component {
 				updatedChartConfig.series.push(series);
 			}
 		}
-
 		return updatedChartConfig;
 	}
 
@@ -555,14 +568,11 @@ class DFR3Viewer extends React.Component {
 		let curves;
 		if ("fragilityCurves" in DFR3Curve) {
 			curves = DFR3Curve.fragilityCurves;
-		}
-		else if ("repairCurves" in DFR3Curve) {
+		} else if ("repairCurves" in DFR3Curve) {
 			curves = DFR3Curve.repairCurves;
-		}
-		else if ("restorationCurves" in DFR3Curve) {
+		} else if ("restorationCurves" in DFR3Curve) {
 			curves = DFR3Curve.restorationCurves;
-		}
-		else{
+		} else {
 			curves = [];
 		}
 		let curve = curves[0];
@@ -576,18 +586,15 @@ class DFR3Viewer extends React.Component {
 	}
 
 
-	isCustomExpression(DFR3Curve){
+	isCustomExpression(DFR3Curve) {
 		let curves;
 		if ("fragilityCurves" in DFR3Curve) {
 			curves = DFR3Curve.fragilityCurves;
-		}
-		else if ("repairCurves" in DFR3Curve) {
+		} else if ("repairCurves" in DFR3Curve) {
 			curves = DFR3Curve.repairCurves;
-		}
-		else if ("restorationCurves" in DFR3Curve) {
+		} else if ("restorationCurves" in DFR3Curve) {
 			curves = DFR3Curve.restorationCurves;
-		}
-		else{
+		} else {
 			curves = [];
 		}
 		for (let i = 0; i < curves.length; i++) {
@@ -601,11 +608,11 @@ class DFR3Viewer extends React.Component {
 		return false;
 	}
 
-	exportMappingJson(){
+	exportMappingJson() {
 		exportJson(this.state.selectedMapping);
 	}
 
-	exportCurveJson(){
+	exportCurveJson() {
 		// do not include added field is3dPlot
 		let {is3dPlot, ...metadataJson} = this.state.selectedDFR3Curve;
 
@@ -614,13 +621,13 @@ class DFR3Viewer extends React.Component {
 
 	preview() {
 		this.setState({
-			preview: true
+			preview: true,
 		});
 	}
 
 	handlePreviewerClose() {
 		this.setState({
-			preview: false
+			preview: false,
 		});
 	}
 
@@ -670,8 +677,7 @@ class DFR3Viewer extends React.Component {
 		if (this.state.authError) {
 			browserHistory.push("/login?origin=DFR3Viewer");
 			return null;
-		}
-		else {
+		} else {
 			return (
 				<div>
 					{/*error message display inside viewer*/}
@@ -683,13 +689,13 @@ class DFR3Viewer extends React.Component {
 									  actionBtnName="Delete"
 									  actionText="Once deleted, you won't be able to revert this!"
 									  handleConfirmed={this.deleteCurveConfirmed}
-									  handleCanceled={this.handleCanceled} />
-									  :
+									  handleCanceled={this.handleCanceled}/>
+						:
 						<Confirmation confirmOpen={this.state.confirmOpen}
 									  actionBtnName="Delete"
 									  actionText="Once deleted, you won't be able to revert this!"
 									  handleConfirmed={this.deleteMappingConfirmed}
-									  handleCanceled={this.handleCanceled} />
+									  handleCanceled={this.handleCanceled}/>
 					}
 
 					<div className={classes.root}>
@@ -721,8 +727,10 @@ class DFR3Viewer extends React.Component {
 											<MenuItem value="earthquake"
 													  className={classes.denseStyle}>Earthquake</MenuItem>
 											<MenuItem value="tornado" className={classes.denseStyle}>Tornado</MenuItem>
-											<MenuItem value="hurricane" className={classes.denseStyle}>Hurricane</MenuItem>
-											<MenuItem value="hurricaneWindfield" className={classes.denseStyle}>Hurricane Windfield</MenuItem>
+											<MenuItem value="hurricane"
+													  className={classes.denseStyle}>Hurricane</MenuItem>
+											<MenuItem value="hurricaneWindfield" className={classes.denseStyle}>Hurricane
+												Windfield</MenuItem>
 											<MenuItem value="tsunami" className={classes.denseStyle}>Tsunami</MenuItem>
 											<MenuItem value="flood" className={classes.denseStyle}>Flood</MenuItem>
 										</Select>
@@ -767,7 +775,8 @@ class DFR3Viewer extends React.Component {
 							</Grid>
 							<Grid item lg={4} sm={4} xl={4} xs={12}>
 								<Paper variant="outlined" className={classes.filter}>
-									<Typography variant="h6">Search all {this.state.selectedDFR3Type} & mappings</Typography>
+									<Typography variant="h6">Search all {this.state.selectedDFR3Type} &
+										mappings</Typography>
 									<TextField variant="outlined" label="Search"
 											   onKeyPress={this.handleKeyPressed}
 											   value={this.state.searchText}
@@ -789,8 +798,8 @@ class DFR3Viewer extends React.Component {
 						</Grid>
 
 						<Tabs value={tabIndex} onChange={this.handleTabChange}>
-							<Tab label="DFR3 Curves" />
-							<Tab label="DFR3 Mappings" />
+							<Tab label="DFR3 Curves"/>
+							<Tab label="DFR3 Mappings"/>
 						</Tabs>
 
 						{/*lists*/}
@@ -808,9 +817,9 @@ class DFR3Viewer extends React.Component {
 												<Typography variant="subtitle1">DFR3 Curves</Typography>
 											</div>
 											<DFR3CurvesGroupList id="DFR3Curve-list"
-															 onClick={this.onClickDFR3Curve}
-															 data={curvesWithInfo} displayField="author"
-															 selectedDFR3Curve={this.state.selectedDFR3Curve}/>
+																 onClick={this.onClickDFR3Curve}
+																 data={curvesWithInfo} displayField="author"
+																 selectedDFR3Curve={this.state.selectedDFR3Curve}/>
 											<div className={classes.paperFooter}>
 												<Pagination pageNumber={this.state.pageNumber}
 													data={curvesWithInfo}
@@ -838,20 +847,22 @@ class DFR3Viewer extends React.Component {
 													{
 														// TODO: This should be updated with conditions for repair and restoration
 														//  curves when they are refactored to new equation based format
-														this.state.selectedDFR3Curve.fragilityCurves &&
-														this.state.selectedDFR3Curve.fragilityCurves[0].className.includes("FragilityCurveRefactored") ?
-															<Button color="primary"
-																variant="contained"
-																className={classes.inlineButtons}
-																size="small"
-																onClick={this.preview}
-																disabled>Preview N/A</Button>
-															:
+														// 	cannot plot 3d refactored fragility curves yet
+														this.state.selectedDFR3Curve.fragilityCurves
+														&& ! this.state.selectedDFR3Curve.is3dPlot
+														&& this.state.chartConfig.series.length > 0
+															?
 															<Button color="primary"
 																variant="contained"
 																className={classes.inlineButtons}
 																size="small"
 																onClick={this.preview}>Preview</Button>
+															:
+															<Button color="primary"
+																variant="contained"
+																className={classes.inlineButtons}
+																size="small"
+																disabled>Preview N/A</Button>
 
 													}
 													<CopyToClipboard text={this.state.selectedDFR3Curve.id}>
@@ -864,7 +875,7 @@ class DFR3Viewer extends React.Component {
 														variant="contained"
 														className={classes.inlineButtons}
 														size="small"
-														onClick={()=>{this.onClickDelete("curve");}}>
+														onClick={() => {this.onClickDelete("curve");}}>
 														DELETE
 													</Button>
 												</div>
@@ -873,14 +884,15 @@ class DFR3Viewer extends React.Component {
 												</div>
 											</div>
 											:
-											<div />
+											<div/>
 										}
 									</Paper>
 								</Grid>
 
 								{/* Preview */}
 								{this.state.selectedDFR3Curve ?
-									<Dialog open={this.state.preview} onClose={this.handlePreviewerClose} maxWidth="lg" fullWidth
+									<Dialog open={this.state.preview} onClose={this.handlePreviewerClose} maxWidth="lg"
+										fullWidth
 										scroll="paper">
 										<DialogContent className={classes.preview}>
 											<IconButton aria-label="Close" onClick={this.handlePreviewerClose}
@@ -889,23 +901,21 @@ class DFR3Viewer extends React.Component {
 											</IconButton>
 											{this.state.selectedDFR3Curve.is3dPlot ?
 												<div>
-													<Typography variant="h6">{this.state.plotData3d.title}</Typography>
-													<ThreeDimensionalPlot plotId="3dplot" data={this.state.plotData3d.data}
-																		  xLabel={this.state.selectedDFR3Curve.demandTypes.join(", ")}
-																		  yLabel="Y"
-																		  width="100%" height="350px" style="surface"/>
+													{/*TODO 3D*/}
+													{/*<Typography variant="h6">{this.state.plotData3d.title}</Typography>*/}
+													{/*<ThreeDimensionalPlot plotId="3dplot"*/}
+													{/*					  data={this.state.plotData3d.data}*/}
+													{/*					  xLabel={this.state.selectedDFR3Curve.demandTypes.join(", ")}*/}
+													{/*					  yLabel="Y"*/}
+													{/*					  width="100%" height="350px" style="surface"/>*/}
 												</div>
 												:
 												<CustomHighChart chartId="chart" configuration={this.state.chartConfig}
 																 customClassName="linecharts-container"/>}
-											{this.isCustomExpression(this.state.selectedDFR3Curve) ?
-												<CustomExpressionTable dfr3Curve={this.state.selectedDFR3Curve}/>
-												:
-												<DistributionTable dfr3Curve={this.state.selectedDFR3Curve}/>}
 										</DialogContent>
 									</Dialog>
 									:
-									<div />
+									<div/>
 								}
 
 							</Grid>
@@ -927,9 +937,9 @@ class DFR3Viewer extends React.Component {
 												<Typography variant="subtitle1">DFR3 Mappings</Typography>
 											</div>
 											<DFR3MappingsGroupList id="DFR3Mappings-list"
-															   onClick={this.onClickDFR3Mapping}
-															   data={mappingsWithInfo} displayField="name"
-															   selectedMapping={this.state.selectedMapping}/>
+																   onClick={this.onClickDFR3Mapping}
+																   data={mappingsWithInfo} displayField="name"
+																   selectedMapping={this.state.selectedMapping}/>
 											<div className={classes.paperFooter}>
 												<Pagination pageNumber={this.state.pageNumberMappings}
 													data={mappingsWithInfo}
@@ -965,7 +975,7 @@ class DFR3Viewer extends React.Component {
 														variant="contained"
 														className={classes.inlineButtons}
 														size="small"
-														onClick={()=>{this.onClickDelete("mapping");}}>
+														onClick={() => {this.onClickDelete("mapping");}}>
 														DELETE
 													</Button>
 												</div>
@@ -974,7 +984,7 @@ class DFR3Viewer extends React.Component {
 												</div>
 											</div>
 											:
-											<div />
+											<div/>
 										}
 									</Paper>
 								</Grid>

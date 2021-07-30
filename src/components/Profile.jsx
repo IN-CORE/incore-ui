@@ -204,9 +204,9 @@ export default function Profile(props) {
 								}
 								{
 									userInfo["email"] !== undefined ?
-										<Link href="mailto:" className={classes.profileLink} target="_blank">
-											<MailOutlineIcon fontSize="small" className={classes.profileLinkIcon}/>
-											{userInfo["email"]}</Link> : null
+										<Typography className={classes.profileLink}>
+											{/*<MailOutlineIcon fontSize="small" className={classes.profileLinkIcon}/>*/}
+											{userInfo["email"]}</Typography> : null
 								}
 								<Link href={config.resetPwURL} className={classes.profileLink} target="_blank">
 									<LockOpenIcon fontSize="small" className={classes.profileLinkIcon}/>

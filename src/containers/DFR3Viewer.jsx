@@ -11,7 +11,7 @@ const mapStateToProps = (state) => {
 		spaces: state.space.spaces,
 		authError: state.user.loginError,
 		curvesLoading: state.dfr3Curve.loading,
-		mappingsLoading: state.dfr3Mapping.loading
+		mappingsLoading: state.dfr3Mapping.loading,
 	};
 };
 

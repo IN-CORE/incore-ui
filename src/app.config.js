@@ -19,6 +19,8 @@ config["dataServiceBase"] = `${hostname}/data/api/`;
 config["dataService"] = `${hostname}/data/api/datasets`;
 config["incoreLab"] = `${hostname}/hub/`;
 config["geoServer"] = `${hostname}/geoserver/incore/wms`;
+config["plottingService"] = `${hostname}/plotting/api/samples`;
+
 config["testUserInfo"] = "incrtest";
 config["hazardDatasetTypes"] = [
 	"ergo:probabilisticEarthquakeRaster",
