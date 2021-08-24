@@ -1,21 +1,36 @@
 import React, {useEffect, useState} from "react";
 import {createMuiTheme, makeStyles} from "@material-ui/core/styles";
-import {Box, Chip, Divider, Grid, Link, Paper, Typography, List, ListItem, ListItemText, ListItemIcon} from "@material-ui/core";
+import {
+	Box,
+	Chip,
+	Divider,
+	Grid,
+	Link,
+	Paper,
+	Typography,
+	List,
+	ListItem,
+	ListItemText,
+	ListItemIcon,
+	Button
+} from "@material-ui/core";
 import Gravatar from "react-gravatar";
 
-import MailOutlineIcon from "@material-ui/icons/MailOutline";
 import LockOpenIcon from "@material-ui/icons/LockOpen";
 import EditIcon from "@material-ui/icons/Edit";
 import ComputerIcon from "@material-ui/icons/Computer";
 import MemoryIcon from "@material-ui/icons/Memory";
 import StorageIcon from "@material-ui/icons/Storage";
+import FileCopyOutlinedIcon from "@material-ui/icons/FileCopyOutlined";
 
-import {getCurrUserInfo, determineUserGroup} from "../utils/common";
+import {getCurrUserToken, getCurrUserInfo, determineUserGroup} from "../utils/common";
 import config from "../app.config";
 import CustomHighChart from "./children/CustomHighChart";
 import chartConfig from "./config/ChartConfig";
 import Cookies from "universal-cookie";
 import {browserHistory} from "react-router";
+
+import {CopyToClipboard} from "react-copy-to-clipboard";
 
 const cookies = new Cookies();
 
@@ -79,6 +94,17 @@ const useStyles = makeStyles({
 		display: "inline-block",
 		overflow: "auto",
 		textAlign: "center",
+	},
+	copyButton: {
+		margin: "5px auto",
+		// color:"#FFFFFF"
+	},
+	note:{
+		padding: "10px",
+		background: "rgb(232, 232, 232)",
+		color:"#333333",
+		borderRadius: "5px",
+		fontSize: "10px"
 	}
 });
 
@@ -236,13 +262,26 @@ export default function Profile(props) {
 							</Box>
 							<Divider orientation="horizontal"/>
 							<Box className={classes.profileSection}>
-								<Typography variant="h6">Token Valid Till</Typography>
+								<Typography variant="h6">Access Token</Typography>
 								{
 									userInfo["exp"] !== undefined ?
-										<Typography
-											variant="body1">{new Date(userInfo["exp"] * 1000).toString()}</Typography> : null
+										<Box>
+											<CopyToClipboard text={getCurrUserToken()}>
+												<Button color="primary" variant="outlined"
+													className={classes.copyButton}
+													size="small" fullWidth>
+													<FileCopyOutlinedIcon style={{margin:"auto 5px", fontSize:"14px"}}/>Copy Token to Clipboard
+												</Button>
+											</CopyToClipboard>
+											<Typography variant="body1" className={classes.note}>
+												Your access token is valid till: {new Date(userInfo["exp"] * 1000).toString()}
+											</Typography>
+										</Box>
+										:
+										null
 								}
 							</Box>
+
 						</Paper>
 					</Grid>
 					{/*quota*/}

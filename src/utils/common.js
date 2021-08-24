@@ -53,6 +53,14 @@ export function exportJson(json) {
 		document.body.removeChild(anchor);
 	}
 }
+// get user token
+export function getCurrUserToken(){
+	if (!config.hostname.includes("localhost")){
+		let cookie = cookies.get("Authorization");
+		return decodeURI(cookie);
+	}
+	return "";
+}
 
 // get current user's info from jwt token
 export function getCurrUserInfo(){
