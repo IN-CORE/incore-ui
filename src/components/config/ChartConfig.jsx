@@ -22,7 +22,9 @@ let DFR3Config = {
 		}]
 	},
 	tooltip: {
-		valueSuffix: ""
+		formatter: function() {
+			return `<b>x</b>: ${this.x}<br><b>y</b>: ${this.y}`;
+		}
 	},
 	legend: {
 		layout: "vertical",
@@ -30,7 +32,7 @@ let DFR3Config = {
 		verticalAlign: "middle",
 		borderWidth: 0
 	},
-	series: []
+	series: [],
 };
 
 let pieChartConfig = {

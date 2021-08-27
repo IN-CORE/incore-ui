@@ -7,7 +7,7 @@ const cookies = new Cookies();
 /* place to hold common utility function. Gradually adding... */
 
 export function is3dCurve(DFR3Curve) {
-	if (DFR3Curve.demandTypes.length > 1) return true;
+	if (DFR3Curve.demandTypes !== undefined && DFR3Curve.demandTypes.length > 1) return true;
 	else{
 		// TODO once complete refactored those need to go away
 		let curves;
@@ -31,7 +31,6 @@ export function is3dCurve(DFR3Curve) {
 				return true;
 			}
 		}
-
 	}
 	return false;
 }

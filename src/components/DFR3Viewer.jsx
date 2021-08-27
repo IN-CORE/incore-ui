@@ -108,6 +108,10 @@ const styles = {
 	previewClose: {
 		display: "inline",
 		float: "right"
+	},
+	previewTable:{
+		width: "80%",
+		margin: "50px auto"
 	}
 };
 
@@ -495,6 +499,9 @@ class DFR3Viewer extends React.Component {
 				let plotData = await fetchPlot(DFR3Curve);
 				Object.keys(plotData).map(key => {
 					let series = {
+						marker: {
+							enabled: false
+						},
 						name: key,
 						data: plotData[key]
 					};
@@ -554,6 +561,9 @@ class DFR3Viewer extends React.Component {
 
 			if (plotData !== null) {
 				let series = {
+					marker: {
+						enabled: false
+					},
 					name: curve.description,
 					data: plotData
 				};
@@ -584,7 +594,6 @@ class DFR3Viewer extends React.Component {
 
 		return {"data": plotData, "title": title};
 	}
-
 
 	isCustomExpression(DFR3Curve) {
 		let curves;
@@ -629,6 +638,28 @@ class DFR3Viewer extends React.Component {
 		this.setState({
 			preview: false,
 		});
+	}
+
+	extractCurveInfoTable(DFR3Curve){
+		let curveInfo = {};
+		if (DFR3Curve["fragilityCurves"] !== undefined){
+			DFR3Curve["fragilityCurves"].map((curve) => {
+				curveInfo[curve["returnType"]["description"]]= curve["rules"];
+			});
+		}
+		return curveInfo;
+	}
+
+	extractParamTable(DFR3Curve){
+		let params = {};
+		if (DFR3Curve["fragilityCurveParameters"] !== undefined ){
+			DFR3Curve["fragilityCurveParameters"].map((curveParam) => {
+				params[curveParam["name"]] = {};
+				params[curveParam["name"]]["expression"] = curveParam["expression"];
+				params[curveParam["name"]]["description"] = curveParam["description"];
+			});
+		}
+		return params;
 	}
 
 	render() {
@@ -911,8 +942,18 @@ class DFR3Viewer extends React.Component {
 												</div>
 												:
 												<CustomHighChart chartId="chart" configuration={this.state.chartConfig}
-																 customClassName="linecharts-container"/>}
+																 customClassName="linecharts-container"/>
+											}
+											<div className={classes.previewTable}>
+												<Typography variant="body1">Table 1. Curve Information</Typography>
+												<NestedInfoTable data={this.extractCurveInfoTable(this.state.selectedDFR3Curve)}/>
+											</div>
+											<div className={classes.previewTable}>
+												<Typography variant="body1">Table 2. Default Curve Parameters</Typography>
+												<NestedInfoTable data={this.extractParamTable(this.state.selectedDFR3Curve)}/>
+											</div>
 										</DialogContent>
+										}
 									</Dialog>
 									:
 									<div/>
