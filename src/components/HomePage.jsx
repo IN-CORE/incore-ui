@@ -181,6 +181,14 @@ class HomePage extends Component {
 				}
 			},
 			{
+				title: "pyIncore-data",
+				repoName: "pyincore-data",
+				options: {
+					"Change log": "https://github.com/IN-CORE/pyincore-data/blob/master/CHANGELOG.md",
+					"GitHub": "https://github.com/IN-CORE/pyincore-data"
+				}
+			},
+			{
 				title: "Web Services",
 				repoName:"incore-services",
 				options: {
