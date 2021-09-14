@@ -185,7 +185,8 @@ class HomePage extends Component {
 				repoName: "pyincore-data",
 				options: {
 					"Change log": "https://github.com/IN-CORE/pyincore-data/blob/master/CHANGELOG.md",
-					"GitHub": "https://github.com/IN-CORE/pyincore-data"
+					"GitHub": "https://github.com/IN-CORE/pyincore-data",
+					"Conda package": "https://anaconda.org/in-core/pyincore-data",
 				}
 			},
 			{
