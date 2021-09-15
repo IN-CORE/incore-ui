@@ -5,7 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.9.7] -2021-09-01
+
+### Added
+- Create a button in profile page allowing access token copy [INCORE1-1314](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-1314)
+- Display more information in the fragility preview popup [INCORE1-1338](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-1338)
+
+
 ## [0.9.6] - 2021-08-04
+
 ### Fixed
 - Disable link on Email on the profile page [INCORE1-1329](https://opensource.ncsa.illinois.edu/jira/browse/INCORE1-1329)
 
