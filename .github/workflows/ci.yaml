@@ -1,0 +1,67 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+      - develop
+
+    tags:
+      - '*'
+
+  pull_request:
+
+jobs:
+
+  # ----------------------------------------------------------------------
+  # NODE BUILD
+  # ----------------------------------------------------------------------
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        node:
+          - "12"
+          - "14"
+          - "16"
+
+    steps:
+    # checkout source code
+    - uses: actions/checkout@v2
+
+    # setup node
+    - uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node }}
+
+    # install dependencies
+    - name: install dependencies
+      run: npm install
+
+    # compile UI
+    - name: build
+      run: npm run build
+
+  # ----------------------------------------------------------------------
+  # DOCKER BUILD
+  # ----------------------------------------------------------------------
+  docker:
+    runs-on: ubuntu-latest
+
+    steps:
+    # checkout source code
+    - uses: actions/checkout@v2
+
+    # get tag information
+
+    # build image
+    - name: Build image
+      uses: elgohr/Publish-Docker-Github-Action@3.04
+      with:
+        #registry: hub.ncsa.illinois.edu
+        name: incore/frontend
+        #username: ${{ secrets.HUB_USERNAME }}
+        #password: ${{ secrets.HUB_PASSWORD }}
+        no_push: true
