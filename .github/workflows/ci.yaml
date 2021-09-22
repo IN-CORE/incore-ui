@@ -12,7 +12,7 @@ on:
   pull_request:
 
 env:
-  MAIN_REPO: incore/incore-ui
+  MAIN_REPO: IN-CORE/incore-ui
 
 jobs:
 
@@ -60,6 +60,7 @@ jobs:
    # calculate some variables that are used later
     - name: version information
       run: |
+        echo "${{ github.repository }}"
         if [ "${{ github.event.release.target_commitish }}" != "" ]; then
           BRANCH="${{ github.event.release.target_commitish }}"
         else
