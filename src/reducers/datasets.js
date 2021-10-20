@@ -22,7 +22,7 @@ const defaultState = {datasets: [], loading: false};
 const datasets = (state:DatasetState = defaultState, action:DatasetAction) => {
 	switch(action.type) {
 	case RECEIVE_DATASETS:
-		return Object.assign({}, state, {datasets: state.datasets});
+		return Object.assign({}, state, {datasets: action.datasets});
 	case DELETE_ITEM:
 		return Object.assign({}, state, {
 			datasets: state.datasets.filter(dataset => dataset.id !== action.item.id),
