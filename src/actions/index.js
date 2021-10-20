@@ -205,7 +205,7 @@ export function getAnalysisById(id: String) {
 }
 
 export function searchDatasets(keyword, limit, offset) {
-	let endpoint = `${config.dataService}/search?limit=${limit}&skip=${offset}&text=${keyword}`;
+	let endpoint = `${config.dataService}/search?excludeHazard=true&limit=${limit}&skip=${offset}&text=${keyword}`;
 	return (dispatch: Dispatch) => {
 		dispatch(loading(DATA_LOADING));
 		return fetch(endpoint, {mode: "cors", headers: getHeader()})
@@ -228,7 +228,7 @@ export function searchDatasets(keyword, limit, offset) {
 }
 
 export function fetchDatasets(dataType, space, limit, offset) {
-	let endpoint = `${config.dataService}?limit=${limit}&skip=${offset}`;
+	let endpoint = `${config.dataService}?excludeHazard=true&limit=${limit}&skip=${offset}`;
 	if (dataType !== null && dataType !== "All") {
 		endpoint = `${endpoint}&type=${dataType}`;
 	}

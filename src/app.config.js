@@ -22,19 +22,6 @@ config["geoServer"] = `${hostname}/geoserver/incore/wms`;
 config["plottingService"] = `${hostname}/plotting/api/samples`;
 
 config["testUserInfo"] = "incrtest";
-config["hazardDatasetTypes"] = [
-	"ergo:probabilisticEarthquakeRaster",
-	"ergo:deterministicEarthquakeRaster",
-	"incore:probabilisticTsunamiRaster",
-	"incore:deterministicTsunamiRaster",
-	"incore:probabilisticHurricaneRaster",
-	"incore:deterministicHurricaneRaster",
-	"incore:hurricaneGridSnapshot",
-	"incore:tornadoWindfield",
-	"incore:deterministicFloodRaster",
-	"incore:probabilisticFloodRaster",
-	"ergo:hazardRaster"
-];
 config["signUpURL"] = "https://identity.ncsa.illinois.edu/register/BSKC2UKQPU";
 config["resetPwURL"] = "https://identity.ncsa.illinois.edu/reset";
 config["setGravatarURL"] = "https://en.gravatar.com/support/activating-your-account/";

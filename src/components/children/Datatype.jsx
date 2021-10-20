@@ -27,9 +27,7 @@ class Datatype extends React.Component {
 
 		let sortedDatatypes = [];
 		this.props.datatypes.map((datatype) =>{
-			if (!config.hazardDatasetTypes.includes(datatype)){
-				sortedDatatypes.push(datatype.dataType);
-			}
+			sortedDatatypes.push(datatype.dataType);
 		});
 		sortedDatatypes = sortedDatatypes.sort();
 
