@@ -42,6 +42,7 @@ import Confirmation from "./children/Confirmation";
 import LoadingOverlay from "react-loading-overlay";
 
 import {fetchPlot} from "../actions/plotting";
+import ThreeDimensionalPlot from "./children/ThreeDimensionalPlot";
 
 const cookies = new Cookies();
 const redundantProp = ["legacyId", "privileges", "creator", "is3dPlot", "spaces"];
@@ -125,7 +126,7 @@ class DFR3Viewer extends React.Component {
 			selectedInventory: "All",
 			selectedHazard: "All",
 			selectedSpace: "All",
-			selectedDFR3Curve: "",
+			selectedDFR3Curve: null,
 			selectedMapping: "",
 			searchText: "",
 			registeredSearchText: "",
@@ -226,7 +227,7 @@ class DFR3Viewer extends React.Component {
 			searching: false,
 			searchText: "",
 			registeredSearchText: "",
-			selectedDFR3Curve: "",
+			selectedDFR3Curve: null,
 			selectedDFR3Type: event.target.value,
 			pageNumber: 1,
 			offset: 0,
@@ -250,7 +251,7 @@ class DFR3Viewer extends React.Component {
 			searching: false,
 			searchText: "",
 			registeredSearchText: "",
-			selectedDFR3Curve: "",
+			selectedDFR3Curve: null,
 			selectedInventory: event.target.value,
 			pageNumber: 1,
 			offset: 0,
@@ -271,7 +272,7 @@ class DFR3Viewer extends React.Component {
 			searching: false,
 			searchText: "",
 			registeredSearchText: "",
-			selectedDFR3Curve: "",
+			selectedDFR3Curve: null,
 			pageNumber: 1,
 			offset: 0,
 			pageNumberMappings: 1,
@@ -290,7 +291,7 @@ class DFR3Viewer extends React.Component {
 			searching: false,
 			searchText: "",
 			registeredSearchText: "",
-			selectedDFR3Curve: "",
+			selectedDFR3Curve: null,
 			selectedHazard: event.target.value,
 			pageNumber: 1,
 			offset: 0,
@@ -317,7 +318,7 @@ class DFR3Viewer extends React.Component {
 			selectedInventory: "All",
 			selectedHazard: "All",
 			selectedSpace: "All",
-			selectedDFR3Curve: ""
+			selectedDFR3Curve: null
 		});
 	}
 
@@ -340,14 +341,10 @@ class DFR3Viewer extends React.Component {
 		let plotData3d = {};
 		let plotConfig2d = {};
 
-		// TODO add 3d plot
-		// if (DFR3Curve.is3dPlot) {
-		// 	plotData3d = await this.generate3dPlotData(DFR3Curve);
-		// } else {
-
-		if (
-			DFR3Curve.fragilityCurves && !DFR3Curve.is3dPlot
-		){
+		if (DFR3Curve.fragilityCurves && DFR3Curve.is3dPlot) {
+			plotData3d = await this.generate3dPlotData(DFR3Curve);
+		}
+		else if (DFR3Curve.fragilityCurves && !DFR3Curve.is3dPlot) {
 			plotConfig2d = await this.generate2dPlotData(DFR3Curve);
 		}
 
@@ -495,23 +492,18 @@ class DFR3Viewer extends React.Component {
 			let demandUnits = DFR3Curve.demandUnits.length > 0 ? DFR3Curve.demandUnits.join(", ") : "";
 			updatedChartConfig.xAxis.title.text = `${demandTypes} (${demandUnits})`;
 
-			if (DFR3Curve.fragilityCurves[0].className.includes("FragilityCurveRefactored")){
-				let plotData = await fetchPlot(DFR3Curve);
-				Object.keys(plotData).map(key => {
-					let series = {
-						marker: {
-							enabled: false
-						},
-						name: key,
-						data: plotData[key]
-					};
-					updatedChartConfig.series.push(series);
-				});
-				return updatedChartConfig;
-			}
-			else{
-				return this._legacyGenerate2DChartConfig(updatedChartConfig, DFR3Curve.fragilityCurves);
-			}
+			let plotData = await fetchPlot(DFR3Curve);
+			Object.keys(plotData).map(key => {
+				let series = {
+					marker: {
+						enabled: false
+					},
+					name: key,
+					data: plotData[key]
+				};
+				updatedChartConfig.series.push(series);
+			});
+			return updatedChartConfig;
 		}
 		// repair/restoration curve still using legacy code
 		else {
@@ -575,46 +567,15 @@ class DFR3Viewer extends React.Component {
 	}
 
 	async generate3dPlotData(DFR3Curve) {
-		let curves;
-		if ("fragilityCurves" in DFR3Curve) {
-			curves = DFR3Curve.fragilityCurves;
-		} else if ("repairCurves" in DFR3Curve) {
-			curves = DFR3Curve.repairCurves;
-		} else if ("restorationCurves" in DFR3Curve) {
-			curves = DFR3Curve.restorationCurves;
-		} else {
-			curves = [];
-		}
-		let curve = curves[0];
-		let plotData = await chartSampler.computeExpressionSamples3d(0.001, 1.0, 50, 0.001, 1.0, 50, curve.expression);
+		let plotData = await fetchPlot(DFR3Curve);
 
+		let limitState = Object.keys(plotData)[0];
 		let description = DFR3Curve.description !== null ? DFR3Curve.description : "";
 		let authors = DFR3Curve.authors.join(", ");
-		let title = `${description} [${authors}]`;
+		let title = `${description} [${authors}] - ${limitState}`;
 
-		return {"data": plotData, "title": title};
-	}
-
-	isCustomExpression(DFR3Curve) {
-		let curves;
-		if ("fragilityCurves" in DFR3Curve) {
-			curves = DFR3Curve.fragilityCurves;
-		} else if ("repairCurves" in DFR3Curve) {
-			curves = DFR3Curve.repairCurves;
-		} else if ("restorationCurves" in DFR3Curve) {
-			curves = DFR3Curve.restorationCurves;
-		} else {
-			curves = [];
-		}
-		for (let i = 0; i < curves.length; i++) {
-			let curve = curves[i];
-
-			if (curve.className.includes("CustomExpression")) {
-				return true;
-			}
-		}
-
-		return false;
+		//TODO For now only plot the first limit state; but in the future may add tabs to plot all states
+		return {"data": plotData[limitState], "title": title};
 	}
 
 	exportMappingJson() {
@@ -879,22 +840,40 @@ class DFR3Viewer extends React.Component {
 														// TODO: This should be updated with conditions for repair and restoration
 														//  curves when they are refactored to new equation based format
 														// 	cannot plot 3d refactored fragility curves yet
-														this.state.selectedDFR3Curve.fragilityCurves
-														&& ! this.state.selectedDFR3Curve.is3dPlot
-														&& this.state.chartConfig.series.length > 0
-															?
-															<Button color="primary"
-																variant="contained"
-																className={classes.inlineButtons}
-																size="small"
-																onClick={this.preview}>Preview</Button>
-															:
-															<Button color="primary"
-																variant="contained"
-																className={classes.inlineButtons}
-																size="small"
-																disabled>Preview N/A</Button>
 
+														(() => {
+															if (this.state.selectedDFR3Curve.fragilityCurves){
+																if (this.state.selectedDFR3Curve.is3dPlot && this.state.plotData3d.data.length > 0){
+																	return (<Button color="primary"
+																		variant="contained"
+																		className={classes.inlineButtons}
+																		size="small"
+																		onClick={this.preview}>Preview</Button>);
+																}
+																else if(!this.state.selectedDFR3Curve.is3dPlot && this.state.chartConfig.series.length > 0){
+																	return (<Button color="primary"
+																				   variant="contained"
+																				   className={classes.inlineButtons}
+																				   size="small"
+																				   onClick={this.preview}>Preview</Button>);
+																}
+																else{
+																	return (<Button color="primary"
+																		variant="contained"
+																		className={classes.inlineButtons}
+																		size="small"
+																		disabled>Preview N/A</Button>);
+																}
+															}
+															else{
+																return (<Button color="primary"
+																	variant="contained"
+																	className={classes.inlineButtons}
+																	size="small"
+																	disabled>Preview N/A</Button>);
+															}
+
+														})()
 													}
 													<CopyToClipboard text={this.state.selectedDFR3Curve.id}>
 														<Button color="secondary" variant="contained"
@@ -932,13 +911,12 @@ class DFR3Viewer extends React.Component {
 											</IconButton>
 											{this.state.selectedDFR3Curve.is3dPlot ?
 												<div>
-													{/*TODO 3D*/}
-													{/*<Typography variant="h6">{this.state.plotData3d.title}</Typography>*/}
-													{/*<ThreeDimensionalPlot plotId="3dplot"*/}
-													{/*					  data={this.state.plotData3d.data}*/}
-													{/*					  xLabel={this.state.selectedDFR3Curve.demandTypes.join(", ")}*/}
-													{/*					  yLabel="Y"*/}
-													{/*					  width="100%" height="350px" style="surface"/>*/}
+													<Typography variant="h6">{this.state.plotData3d.title}</Typography>
+													<ThreeDimensionalPlot plotId="3dplot"
+																		  data={this.state.plotData3d.data}
+																		  xLabel={this.state.selectedDFR3Curve.demandTypes.join(", ")}
+																		  yLabel="Y"
+																		  width="100%" height="350px" style="surface"/>
 												</div>
 												:
 												<CustomHighChart chartId="chart" configuration={this.state.chartConfig}
