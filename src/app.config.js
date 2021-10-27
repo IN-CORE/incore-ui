@@ -9,7 +9,7 @@ config["pyIncoreDocUrl"] = `${hostname}/doc/pyincore/index.html`;
 config["pyIncoreVizDocUrl"] = `${hostname}/doc/pyincore_viz/index.html`;
 config["pyIncoreDataDocUrl"] = `${hostname}/doc/pyincore_data/index.html`;
 config["swaggerUrl"] = `${hostname}/doc/api/`;
-config["webVersion"] = "0.9.7";
+config["webVersion"] = "0.9.8";
 config["spaceService"] = `${hostname}/space/api/spaces`;
 config["dfr3Service"] = `${hostname}/dfr3/api/`;
 config["fragilityService"] = `${hostname}/dfr3/api/fragilities`;
@@ -22,19 +22,6 @@ config["geoServer"] = `${hostname}/geoserver/incore/wms`;
 config["plottingService"] = `${hostname}/plotting/api/samples`;
 
 config["testUserInfo"] = "incrtest";
-config["hazardDatasetTypes"] = [
-	"ergo:probabilisticEarthquakeRaster",
-	"ergo:deterministicEarthquakeRaster",
-	"incore:probabilisticTsunamiRaster",
-	"incore:deterministicTsunamiRaster",
-	"incore:probabilisticHurricaneRaster",
-	"incore:deterministicHurricaneRaster",
-	"incore:hurricaneGridSnapshot",
-	"incore:tornadoWindfield",
-	"incore:deterministicFloodRaster",
-	"incore:probabilisticFloodRaster",
-	"ergo:hazardRaster"
-];
 config["signUpURL"] = "https://identity.ncsa.illinois.edu/register/BSKC2UKQPU";
 config["resetPwURL"] = "https://identity.ncsa.illinois.edu/reset";
 config["setGravatarURL"] = "https://en.gravatar.com/support/activating-your-account/";

@@ -22,10 +22,7 @@ const defaultState = {datasets: [], loading: false};
 const datasets = (state:DatasetState = defaultState, action:DatasetAction) => {
 	switch(action.type) {
 	case RECEIVE_DATASETS:
-		// do not display datasets belong to the hazard dataset types
-		return Object.assign({}, state, {
-			datasets: action.datasets.filter(dataset => !(config.hazardDatasetTypes.includes(dataset.dataType)))
-		});
+		return Object.assign({}, state, {datasets: action.datasets});
 	case DELETE_ITEM:
 		return Object.assign({}, state, {
 			datasets: state.datasets.filter(dataset => dataset.id !== action.item.id),
