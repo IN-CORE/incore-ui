@@ -5,17 +5,6 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [0.9.8] -2021-09-01
-
-### Addded
-- Preview 3D fragility curves [#21](https://github.com/IN-CORE/incore-ui/issues/21)
-- Add Github action to build docker images [#32](https://github.com/IN-CORE/incore-ui/issues/32)
-- Add version and changelog for pyincore-data package on the landing page [#20](https://github.com/IN-CORE/incore-ui/issues/20)
-
-### Fixed
-- Shift filtering out hazard dataset based on dataset types from frontend to backend [#23](https://github.com/IN-CORE/incore-ui/issues/23)
-
-
 ## [0.9.7] -2021-09-01
 
 ### Added

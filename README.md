@@ -1,4 +1,4 @@
-Incore Service UI 
+Ingestion Service UI -
 ==================================
 
 **Work in Progress**
