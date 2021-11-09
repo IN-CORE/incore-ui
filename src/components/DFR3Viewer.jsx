@@ -215,9 +215,13 @@ class DFR3Viewer extends React.Component {
 	}
 
 	// TODO set state inside componentDidUpdate is bad practice!!
+	// DELETE error
 	componentDidUpdate(prevProps, prevState) {
 		if (this.props.deleteError && !prevState.messageOpen) {
-			this.setState({messageOpen: true});
+			this.setState({
+				message: "You do not have the privilege to delete this item.",
+				messageOpen: true
+			});
 		} else if (!this.props.deleteError && prevState.messageOpen) {
 			this.setState({messageOpen: false});
 		}
@@ -354,7 +358,8 @@ class DFR3Viewer extends React.Component {
 			chartConfig: plotConfig2d,
 			plotData3d: plotData3d,
 			selectedDFR3Curve: DFR3Curve,
-			message: message
+			message: message,
+			messageOpen:true,
 		});
 	}
 
@@ -396,6 +401,7 @@ class DFR3Viewer extends React.Component {
 	closeErrorMessage() {
 		this.props.resetError();
 		this.setState({
+			message:"",
 			messageOpen: false
 		});
 	}
@@ -690,7 +696,7 @@ class DFR3Viewer extends React.Component {
 			return (
 				<div>
 					{/*error message display inside viewer*/}
-					<ErrorMessage error="You do not have the privilege to delete this item."
+					<ErrorMessage message={this.state.message}
 								  messageOpen={this.state.messageOpen}
 								  closeErrorMessage={this.closeErrorMessage}/>
 					{this.state.deleteType === "curve" ?
