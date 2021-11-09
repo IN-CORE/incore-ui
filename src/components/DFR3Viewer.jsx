@@ -359,7 +359,7 @@ class DFR3Viewer extends React.Component {
 			plotData3d: plotData3d,
 			selectedDFR3Curve: DFR3Curve,
 			message: message,
-			messageOpen:true,
+			messageOpen: message !== "",
 		});
 	}
 
@@ -516,7 +516,7 @@ class DFR3Viewer extends React.Component {
 				});
 			}
 			else{
-				message = JSON.stringify(response);
+				message = response;
 			}
 		}
 		// repair/restoration curve still using legacy code
@@ -596,7 +596,7 @@ class DFR3Viewer extends React.Component {
 			return [{"data": response[limitState], "title": title} , message];
 		}
 		else{
-			message = JSON.stringify(response);
+			message = response;
 			return [{"data": null, "title": null}, message];
 		}
 	}
@@ -696,7 +696,7 @@ class DFR3Viewer extends React.Component {
 			return (
 				<div>
 					{/*error message display inside viewer*/}
-					<ErrorMessage message={this.state.message}
+					<ErrorMessage error={this.state.message}
 								  messageOpen={this.state.messageOpen}
 								  closeErrorMessage={this.closeErrorMessage}/>
 					{this.state.deleteType === "curve" ?
