@@ -143,6 +143,7 @@ class DFR3Viewer extends React.Component {
 			pageNumberMappings: 1,
 			urlPrefix: config.urlPrefix,
 			tabIndex: 0,
+			message: "",
 			messageOpen: false,
 			confirmOpen: false,
 			deleteType: "curve", // or mapping
@@ -213,7 +214,7 @@ class DFR3Viewer extends React.Component {
 		});
 	}
 
-	// TODO set state inside component did up date is bad practice!!
+	// TODO set state inside componentDidUpdate is bad practice!!
 	componentDidUpdate(prevProps, prevState) {
 		if (this.props.deleteError && !prevState.messageOpen) {
 			this.setState({messageOpen: true});
@@ -340,18 +341,20 @@ class DFR3Viewer extends React.Component {
 	async onClickDFR3Curve(DFR3Curve) {
 		let plotData3d = {};
 		let plotConfig2d = {};
+		let message = "";
 
 		if (DFR3Curve.fragilityCurves && DFR3Curve.is3dPlot) {
-			plotData3d = await this.generate3dPlotData(DFR3Curve);
+			[plotData3d, message] = await this.generate3dPlotData(DFR3Curve);
 		}
 		else if (DFR3Curve.fragilityCurves && !DFR3Curve.is3dPlot) {
-			plotConfig2d = await this.generate2dPlotData(DFR3Curve);
+			[plotConfig2d, message] = await this.generate2dPlotData(DFR3Curve);
 		}
 
 		this.setState({
 			chartConfig: plotConfig2d,
 			plotData3d: plotData3d,
-			selectedDFR3Curve: DFR3Curve
+			selectedDFR3Curve: DFR3Curve,
+			message: message
 		});
 	}
 
@@ -479,6 +482,7 @@ class DFR3Viewer extends React.Component {
 	async generate2dPlotData(DFR3Curve) {
 		let updatedChartConfig = Object.assign({}, chartConfig.DFR3Config);
 
+		let message = "";
 
 		let description = DFR3Curve.description !== null ? DFR3Curve.description : "";
 		let authors = DFR3Curve.authors.join(", ");
@@ -492,18 +496,22 @@ class DFR3Viewer extends React.Component {
 			let demandUnits = DFR3Curve.demandUnits.length > 0 ? DFR3Curve.demandUnits.join(", ") : "";
 			updatedChartConfig.xAxis.title.text = `${demandTypes} (${demandUnits})`;
 
-			let plotData = await fetchPlot(DFR3Curve);
-			Object.keys(plotData).map(key => {
-				let series = {
-					marker: {
-						enabled: false
-					},
-					name: key,
-					data: plotData[key]
-				};
-				updatedChartConfig.series.push(series);
-			});
-			return updatedChartConfig;
+			let [requestStatus, response] = await fetchPlot(DFR3Curve);
+			if (requestStatus === 200){
+				Object.keys(response).map(key => {
+					let series = {
+						marker: {
+							enabled: false
+						},
+						name: key,
+						data: response[key]
+					};
+					updatedChartConfig.series.push(series);
+				});
+			}
+			else{
+				message = JSON.stringify(response);
+			}
 		}
 		// repair/restoration curve still using legacy code
 		else {
@@ -521,8 +529,10 @@ class DFR3Viewer extends React.Component {
 			} else {
 				curves = [];
 			}
-			this._legacyGenerate2DChartConfig(updatedChartConfig, curves);
+			updatedChartConfig = this._legacyGenerate2DChartConfig(updatedChartConfig, curves);
 		}
+
+		return [updatedChartConfig,  message];
 	}
 
 	_legacyGenerate2DChartConfig(updatedChartConfig, curves){
@@ -567,15 +577,22 @@ class DFR3Viewer extends React.Component {
 	}
 
 	async generate3dPlotData(DFR3Curve) {
-		let plotData = await fetchPlot(DFR3Curve);
+		let [requestStatus, response] = await fetchPlot(DFR3Curve);
+		let message = "";
 
-		let limitState = Object.keys(plotData)[0];
-		let description = DFR3Curve.description !== null ? DFR3Curve.description : "";
-		let authors = DFR3Curve.authors.join(", ");
-		let title = `${description} [${authors}] - ${limitState}`;
+		if (requestStatus === 200){
+			let limitState = Object.keys(response)[0];
+			let description = DFR3Curve.description !== null ? DFR3Curve.description : "";
+			let authors = DFR3Curve.authors.join(", ");
+			let title = `${description} [${authors}] - ${limitState}`;
 
-		//TODO For now only plot the first limit state; but in the future may add tabs to plot all states
-		return {"data": plotData[limitState], "title": title};
+			//TODO For now only plot the first limit state; but in the future may add tabs to plot all states
+			return [{"data": response[limitState], "title": title} , message];
+		}
+		else{
+			message = JSON.stringify(response);
+			return [{"data": null, "title": null}, message];
+		}
 	}
 
 	exportMappingJson() {
