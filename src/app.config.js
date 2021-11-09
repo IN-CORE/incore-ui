@@ -51,4 +51,6 @@ config["maxUsage"] = {
 	}
 };
 
+config["mailingList"] = "";
+
 export default config;
