@@ -295,7 +295,7 @@ class App extends Component {
 							  }}>
 						Profile</MenuItem>
 					<MenuItem className={classes.denseStyle} onClick={() => {this.handleProfileMenuClose();}}>
-						<Link href="mailto:incore-dev@lists.illinois.edu" target="_blank"
+						<Link href={`mailto:${config.mailingList}`} target="_blank"
 							  style={{textDecoration: "none"}}>
 							Contact Us
 						</Link>

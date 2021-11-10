@@ -143,6 +143,7 @@ class DFR3Viewer extends React.Component {
 			pageNumberMappings: 1,
 			urlPrefix: config.urlPrefix,
 			tabIndex: 0,
+			error: "",
 			message: "",
 			messageOpen: false,
 			confirmOpen: false,
@@ -220,6 +221,7 @@ class DFR3Viewer extends React.Component {
 		if (this.props.deleteError && !prevState.messageOpen) {
 			this.setState({
 				message: "You do not have the privilege to delete this item.",
+				error: "You do not have the privilege to delete this item.",
 				messageOpen: true
 			});
 		} else if (!this.props.deleteError && prevState.messageOpen) {
@@ -346,19 +348,21 @@ class DFR3Viewer extends React.Component {
 		let plotData3d = {};
 		let plotConfig2d = {};
 		let message = "";
+		let error = "";
 
 		if (DFR3Curve.fragilityCurves && DFR3Curve.is3dPlot) {
-			[plotData3d, message] = await this.generate3dPlotData(DFR3Curve);
+			[plotData3d, error] = await this.generate3dPlotData(DFR3Curve);
 		}
 		else if (DFR3Curve.fragilityCurves && !DFR3Curve.is3dPlot) {
-			[plotConfig2d, message] = await this.generate2dPlotData(DFR3Curve);
+			[plotConfig2d, error] = await this.generate2dPlotData(DFR3Curve);
 		}
 
 		this.setState({
 			chartConfig: plotConfig2d,
 			plotData3d: plotData3d,
 			selectedDFR3Curve: DFR3Curve,
-			message: message,
+			error: error,
+			message: "Something is wrong with this DFR3 Curve definition. We cannot display its preview.",
 			messageOpen: message !== "",
 		});
 	}
@@ -402,6 +406,7 @@ class DFR3Viewer extends React.Component {
 		this.props.resetError();
 		this.setState({
 			message:"",
+			error:"",
 			messageOpen: false
 		});
 	}
@@ -488,7 +493,7 @@ class DFR3Viewer extends React.Component {
 	async generate2dPlotData(DFR3Curve) {
 		let updatedChartConfig = Object.assign({}, chartConfig.DFR3Config);
 
-		let message = "";
+		let error = "";
 
 		let description = DFR3Curve.description !== null ? DFR3Curve.description : "";
 		let authors = DFR3Curve.authors.join(", ");
@@ -516,7 +521,7 @@ class DFR3Viewer extends React.Component {
 				});
 			}
 			else{
-				message = response;
+				error = response;
 			}
 		}
 		// repair/restoration curve still using legacy code
@@ -538,7 +543,7 @@ class DFR3Viewer extends React.Component {
 			updatedChartConfig = this._legacyGenerate2DChartConfig(updatedChartConfig, curves);
 		}
 
-		return [updatedChartConfig,  message];
+		return [updatedChartConfig, error];
 	}
 
 	_legacyGenerate2DChartConfig(updatedChartConfig, curves){
@@ -584,7 +589,7 @@ class DFR3Viewer extends React.Component {
 
 	async generate3dPlotData(DFR3Curve) {
 		let [requestStatus, response] = await fetchPlot(DFR3Curve);
-		let message = "";
+		let error = "";
 
 		if (requestStatus === 200){
 			let limitState = Object.keys(response)[0];
@@ -593,11 +598,11 @@ class DFR3Viewer extends React.Component {
 			let title = `${description} [${authors}] - ${limitState}`;
 
 			//TODO For now only plot the first limit state; but in the future may add tabs to plot all states
-			return [{"data": response[limitState], "title": title} , message];
+			return [{"data": response[limitState], "title": title} , error];
 		}
 		else{
-			message = response;
-			return [{"data": null, "title": null}, message];
+			error = response;
+			return [{"data": null, "title": null}, error];
 		}
 	}
 
@@ -696,7 +701,7 @@ class DFR3Viewer extends React.Component {
 			return (
 				<div>
 					{/*error message display inside viewer*/}
-					<ErrorMessage error={this.state.message}
+					<ErrorMessage error={this.state.error} message={this.state.message}
 								  messageOpen={this.state.messageOpen}
 								  closeErrorMessage={this.closeErrorMessage}/>
 					{this.state.deleteType === "curve" ?

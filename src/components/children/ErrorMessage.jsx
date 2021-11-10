@@ -15,6 +15,7 @@ class ErrorMessage extends Component {
 			<Collapse in={this.props.messageOpen}>
 				<Alert severity="error" action={
 					<>
+						{/*TODO need a template for body that includes the reporter's user name and the id of the reported item*/}
 						<Link href={`mailto:${config.mailingList}?subject=Bug%20Report&body=${this.props.error}`}>
 							Report
 						</Link>
@@ -28,7 +29,7 @@ class ErrorMessage extends Component {
 						</IconButton>
 					</>
 				}
-				>{this.props.error}</Alert>
+				>{this.props.message}</Alert>
 			</Collapse>
 		);
 	}
