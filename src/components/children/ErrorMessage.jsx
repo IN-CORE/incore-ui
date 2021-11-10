@@ -16,17 +16,25 @@ class ErrorMessage extends Component {
 				<Alert severity="error" action={
 					<>
 						{/*TODO need a template for body that includes the reporter's user name and the id of the reported item*/}
-						<Link href={`mailto:${config.mailingList}?subject=Bug%20Report&body=${this.props.error}`}>
-							Report
-						</Link>
-						<IconButton
-							aria-label="close"
-							color="inherit"
-							size="small"
-							onClick={this.props.closeErrorMessage}
-						>
-							<CloseIcon fontSize="inherit"/>
-						</IconButton>
+						{
+							this.props.error !== ""
+								?
+								<Link
+									href={`mailto:${config.mailingList}?subject=Bug%20Report&body=${this.props.error}`}>
+									Report
+								</Link>
+								:
+								<IconButton
+									aria-label="close"
+									color="inherit"
+									size="small"
+									onClick={this.props.closeErrorMessage}
+								>
+									<CloseIcon fontSize="inherit"/>
+								</IconButton>
+
+						}
+
 					</>
 				}
 				>{this.props.message}</Alert>

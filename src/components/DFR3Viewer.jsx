@@ -221,7 +221,7 @@ class DFR3Viewer extends React.Component {
 		if (this.props.deleteError && !prevState.messageOpen) {
 			this.setState({
 				message: "You do not have the privilege to delete this item.",
-				error: "You do not have the privilege to delete this item.",
+				error: "",
 				messageOpen: true
 			});
 		} else if (!this.props.deleteError && prevState.messageOpen) {
@@ -347,7 +347,7 @@ class DFR3Viewer extends React.Component {
 	async onClickDFR3Curve(DFR3Curve) {
 		let plotData3d = {};
 		let plotConfig2d = {};
-		let message = "";
+		let message = "Something is wrong with this DFR3 Curve definition. We cannot display its preview.";
 		let error = "";
 
 		if (DFR3Curve.fragilityCurves && DFR3Curve.is3dPlot) {
@@ -361,9 +361,9 @@ class DFR3Viewer extends React.Component {
 			chartConfig: plotConfig2d,
 			plotData3d: plotData3d,
 			selectedDFR3Curve: DFR3Curve,
-			error: error,
-			message: "Something is wrong with this DFR3 Curve definition. We cannot display its preview.",
-			messageOpen: message !== "",
+			error: `DFR3 Curve ID:${DFR3Curve.id}%0D%0A%0D%0A${error}`, // line break %0D%0A
+			message: message,
+			messageOpen: error !== "",
 		});
 	}
 
@@ -701,7 +701,8 @@ class DFR3Viewer extends React.Component {
 			return (
 				<div>
 					{/*error message display inside viewer*/}
-					<ErrorMessage error={this.state.error} message={this.state.message}
+					<ErrorMessage error={this.state.error}
+								  message={this.state.message}
 								  messageOpen={this.state.messageOpen}
 								  closeErrorMessage={this.closeErrorMessage}/>
 					{this.state.deleteType === "curve" ?

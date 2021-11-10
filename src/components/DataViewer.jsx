@@ -633,7 +633,8 @@ class DataViewer extends Component {
 			return (
 				<div>
 					{/*error message display inside viewer*/}
-					<ErrorMessage error="You do not have the privilege to delete this item."
+					<ErrorMessage error=""
+								  message="You do not have the privilege to delete this item."
 								  messageOpen={this.state.messageOpen}
 								  closeErrorMessage={this.closeErrorMessage}/>
 					<Confirmation confirmOpen={this.state.confirmOpen}
