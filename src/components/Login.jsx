@@ -170,7 +170,7 @@ class Login extends Component {
 										<Link href={config.privacyURL} style={{"display":"inline"}} target="_blank">Web Privacy Notice</Link>
 									</Box>
 									<Button
-										type="submit"Web Privacy Notice
+										type="submit"
 										fullWidth
 										variant="contained"
 										color="primary"
