@@ -167,10 +167,10 @@ class Login extends Component {
 									<Link href={config.resetPwURL} className={classes.resetPW} target="_blank">Forgot password?</Link>
 									<Box className={classes.tos}>
 										<Typography variant="body2" style={{"display":"inline"}}>By continuing, you agree to our </Typography>
-										<Link href={config.tosURL} style={{"display":"inline"}} target="_blank">Terms of Service</Link>
+										<Link href={config.privacyURL} style={{"display":"inline"}} target="_blank">Web Privacy Notice</Link>
 									</Box>
 									<Button
-										type="submit"
+										type="submit"Web Privacy Notice
 										fullWidth
 										variant="contained"
 										color="primary"

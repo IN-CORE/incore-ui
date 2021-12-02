@@ -301,8 +301,8 @@ class App extends Component {
 						</Link>
 					</MenuItem>
 					<MenuItem className={classes.denseStyle} onClick={() => {this.handleProfileMenuClose();}}>
-						<Link href={config.tosURL} target="_blank" style={{textDecoration:"none"}}>
-							Terms of Service
+						<Link href={config.privacyURL} target="_blank" style={{textDecoration:"none"}}>
+							Web Privacy Notice
 						</Link>
 					</MenuItem>
 					<Divider orientation="horizontal"/>
