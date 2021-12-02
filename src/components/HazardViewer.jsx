@@ -102,8 +102,8 @@ const styles = {
 		display: "inline",
 		float: "right"
 	},
-	metadataCloseButton:{
-		float:"right",
+	metadataCloseButton: {
+		float: "right",
 	}
 };
 
@@ -239,7 +239,7 @@ class HazardViewer extends Component {
 		});
 	}
 
-	handleConfirmed(){
+	handleConfirmed() {
 		this.props.deleteItemById(this.state.selectedHazardType, this.state.selectedHazard.id);
 		this.setState({
 			selectedHazard: "",
@@ -248,7 +248,7 @@ class HazardViewer extends Component {
 		});
 	}
 
-	handleCanceled(){
+	handleCanceled() {
 		this.setState({
 			confirmOpen: false
 		});
@@ -397,7 +397,7 @@ class HazardViewer extends Component {
 		});
 	}
 
-	closeMetadata(){
+	closeMetadata() {
 		this.setState({
 			metadataClosed: true
 		});
@@ -450,7 +450,7 @@ class HazardViewer extends Component {
 								  actionBtnName="Delete"
 								  actionText="Once deleted, you won't be able to revert this!"
 								  handleConfirmed={this.handleConfirmed}
-								  handleCanceled={this.handleCanceled} />
+								  handleCanceled={this.handleCanceled}/>
 					<div className={classes.root}>
 						<Grid container spacing={4}>
 							{/*filters*/}
@@ -461,7 +461,7 @@ class HazardViewer extends Component {
 									<div className={classes.selectDiv}>
 										<InputLabel>Hazard Type</InputLabel>
 										<Select value={this.state.selectedHazardType} onChange={this.changeHazardType}
-											className={classes.select}>
+												className={classes.select}>
 											<MenuItem value="earthquakes" key="earthquakes"
 													  className={classes.denseStyle}>Earthquake</MenuItem>
 											<MenuItem value="tornadoes" key="tornadoes"
@@ -516,9 +516,9 @@ class HazardViewer extends Component {
 							</Grid>
 
 							{/*lists*/}
-							<Grid item lg={this.state.selectedHazard && !this.state.metadataClosed? 4 : 12}
-								  md={this.state.selectedHazard && !this.state.metadataClosed? 4 : 12}
-								  xl={this.state.selectedHazard && !this.state.metadataClosed? 4 : 12}
+							<Grid item lg={this.state.selectedHazard && !this.state.metadataClosed ? 4 : 12}
+								  md={this.state.selectedHazard && !this.state.metadataClosed ? 4 : 12}
+								  xl={this.state.selectedHazard && !this.state.metadataClosed ? 4 : 12}
 								  xs={12}>
 								<LoadingOverlay
 									active={this.state.loading}
@@ -531,10 +531,10 @@ class HazardViewer extends Component {
 										{hazards_list_display}
 										<div className={classes.paperFooter}>
 											<Pagination pageNumber={this.state.pageNumber}
-												data={hazards_list_display}
-												dataPerPage={this.state.dataPerPage}
-												previous={this.previous}
-												next={this.next}/>
+														data={hazards_list_display}
+														dataPerPage={this.state.dataPerPage}
+														previous={this.previous}
+														next={this.next}/>
 										</div>
 									</Paper>
 								</LoadingOverlay>
@@ -545,7 +545,7 @@ class HazardViewer extends Component {
 								  className={this.state.selectedHazard ? null : classes.hide}>
 								<Paper variant="outlined" className={classes.main}>
 									<IconButton aria-label="Close" onClick={this.closeMetadata}
-										className={classes.metadataCloseButton}>
+												className={classes.metadataCloseButton}>
 										<CloseIcon fontSize="small"/>
 									</IconButton>
 									{Object.keys(selected_hazard_detail).length > 0 ?
@@ -555,19 +555,19 @@ class HazardViewer extends Component {
 											</div>
 											<div className={classes.metadata}>
 												<Button color="primary" variant="contained"
-													className={classes.inlineButtons}
-													size="small"
-													onClick={this.exportJson}>Download Metadata</Button>
+														className={classes.inlineButtons}
+														size="small"
+														onClick={this.exportJson}>Download Metadata</Button>
 												<CopyToClipboard text={this.state.selectedHazard.id}>
 													<Button color="secondary" variant="contained"
-														className={classes.inlineButtons}
-														size="small">Copy ID</Button>
+															className={classes.inlineButtons}
+															size="small">Copy ID</Button>
 												</CopyToClipboard>
 												<Button color="secondary"
-													variant="contained"
-													className={classes.inlineButtons}
-													size="small"
-													onClick={this.onClickDelete}>
+														variant="contained"
+														className={classes.inlineButtons}
+														size="small"
+														onClick={this.onClickDelete}>
 													DELETE
 												</Button>
 											</div>
@@ -589,10 +589,10 @@ class HazardViewer extends Component {
 					{/* Preview */}
 					{this.state.selectedHazard ?
 						<Dialog open={this.state.preview} onClose={this.handlePreviewerClose} maxWidth="lg" fullWidth
-							scroll="paper">
+								scroll="paper">
 							<DialogContent className={classes.preview}>
 								<IconButton aria-label="Close" onClick={this.handlePreviewerClose}
-									className={classes.previewClose}>
+											className={classes.previewClose}>
 									<CloseIcon fontSize="small"/>
 								</IconButton>
 								<div>

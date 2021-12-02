@@ -115,7 +115,7 @@ const styles = {
 		margin: "50px auto"
 	},
 	metadataCloseButton:{
-		float:"right",
+		float: "right",
 	}
 };
 

@@ -111,7 +111,7 @@ const styles = {
 		float: "right"
 	},
 	metadataCloseButton:{
-		float:"right",
+		float: "right",
 	}
 };
 
