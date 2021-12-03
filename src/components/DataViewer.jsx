@@ -109,6 +109,9 @@ const styles = {
 	previewClose: {
 		display: "inline",
 		float: "right"
+	},
+	metadataCloseButton:{
+		float: "right",
 	}
 };
 
@@ -138,7 +141,8 @@ class DataViewer extends Component {
 			dataPerPage: 50,
 			messageOpen: false,
 			confirmOpen: false,
-			loading: false
+			loading: false,
+			metadataClosed: true,
 		};
 
 		this.changeDatasetType = this.changeDatasetType.bind(this);
@@ -159,6 +163,7 @@ class DataViewer extends Component {
 		this.changeDataPerPage = this.changeDataPerPage.bind(this);
 		this.preview = this.preview.bind(this);
 		this.handlePreviewerClose = this.handlePreviewerClose.bind(this);
+		this.closeMetadata = this.closeMetadata.bind(this);
 	}
 
 	//TODO auto select the first item in the list
@@ -248,7 +253,8 @@ class DataViewer extends Component {
 			selectedDataset: dataset,
 			selectedDatasetFormat: dataset.format,
 			fileData: "",
-			fileExtension: ""
+			fileExtension: "",
+			metadataClosed: false,
 		});
 	}
 
@@ -464,6 +470,12 @@ class DataViewer extends Component {
 	handlePreviewerClose() {
 		this.setState({
 			preview: false
+		});
+	}
+
+	closeMetadata(){
+		this.setState({
+			metadataClosed: true
 		});
 	}
 
@@ -686,8 +698,10 @@ class DataViewer extends Component {
 
 							{/*lists*/}
 
-							<Grid item lg={this.state.selectedDataset ? 4 : 12} md={this.state.selectedDataset ? 4 : 12}
-								xl={this.state.selectedDataset ? 4 : 12} xs={12}>
+							<Grid item lg={this.state.selectedDataset && !this.state.metadataClosed? 4 : 12}
+								  md={this.state.selectedDataset && !this.state.metadataClosed? 4 : 12}
+								  xl={this.state.selectedDataset && !this.state.metadataClosed? 4 : 12}
+								  xs={12}>
 								<LoadingOverlay
 									active={this.state.loading}
 									spinner
@@ -715,6 +729,10 @@ class DataViewer extends Component {
 							<Grid item lg={8} md={8} xl={8} xs={12}
 								  className={this.state.selectedDataset ? null : classes.hide}>
 								<Paper variant="outlined" className={classes.main}>
+									<IconButton aria-label="Close" onClick={this.closeMetadata}
+										className={classes.metadataCloseButton}>
+										<CloseIcon fontSize="small"/>
+									</IconButton>
 									{Object.keys(selected_dataset_detail).length > 0 ?
 										<div>
 											<div className={classes.paperHeader}>

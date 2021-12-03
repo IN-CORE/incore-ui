@@ -101,6 +101,9 @@ const styles = {
 	previewClose: {
 		display: "inline",
 		float: "right"
+	},
+	metadataCloseButton: {
+		float: "right",
 	}
 };
 
@@ -125,7 +128,8 @@ class HazardViewer extends Component {
 			preview: false,
 			messageOpen: false,
 			confirmOpen: false,
-			loading: false
+			loading: false,
+			metadataClosed: true,
 		};
 		this.changeHazardType = this.changeHazardType.bind(this);
 		this.onClickHazard = this.onClickHazard.bind(this);
@@ -143,6 +147,7 @@ class HazardViewer extends Component {
 		this.changeDataPerPage = this.changeDataPerPage.bind(this);
 		this.preview = this.preview.bind(this);
 		this.handlePreviewerClose = this.handlePreviewerClose.bind(this);
+		this.closeMetadata = this.closeMetadata.bind(this);
 	}
 
 	componentWillMount() {
@@ -220,7 +225,11 @@ class HazardViewer extends Component {
 
 	onClickHazard(hazardId) {
 		const hazard = this.props.hazards.find(hazard => hazard.id === hazardId);
-		this.setState({selectedHazard: hazard, selectedHazardDatasetId: ""});
+		this.setState({
+			selectedHazard: hazard,
+			selectedHazardDatasetId: "",
+			metadataClosed: false,
+		});
 	}
 
 
@@ -230,7 +239,7 @@ class HazardViewer extends Component {
 		});
 	}
 
-	handleConfirmed(){
+	handleConfirmed() {
 		this.props.deleteItemById(this.state.selectedHazardType, this.state.selectedHazard.id);
 		this.setState({
 			selectedHazard: "",
@@ -239,7 +248,7 @@ class HazardViewer extends Component {
 		});
 	}
 
-	handleCanceled(){
+	handleCanceled() {
 		this.setState({
 			confirmOpen: false
 		});
@@ -388,6 +397,12 @@ class HazardViewer extends Component {
 		});
 	}
 
+	closeMetadata() {
+		this.setState({
+			metadataClosed: true
+		});
+	}
+
 	render() {
 
 		const {classes} = this.props;
@@ -435,7 +450,7 @@ class HazardViewer extends Component {
 								  actionBtnName="Delete"
 								  actionText="Once deleted, you won't be able to revert this!"
 								  handleConfirmed={this.handleConfirmed}
-								  handleCanceled={this.handleCanceled} />
+								  handleCanceled={this.handleCanceled}/>
 					<div className={classes.root}>
 						<Grid container spacing={4}>
 							{/*filters*/}
@@ -501,9 +516,10 @@ class HazardViewer extends Component {
 							</Grid>
 
 							{/*lists*/}
-							<Grid item lg={this.state.selectedHazard ? 4 : 12}
-								  md={this.state.selectedHazard ? 4 : 12}
-								  xl={this.state.selectedHazard ? 4 : 12} xs={12}>
+							<Grid item lg={this.state.selectedHazard && !this.state.metadataClosed ? 4 : 12}
+								  md={this.state.selectedHazard && !this.state.metadataClosed ? 4 : 12}
+								  xl={this.state.selectedHazard && !this.state.metadataClosed ? 4 : 12}
+								  xs={12}>
 								<LoadingOverlay
 									active={this.state.loading}
 									spinner
@@ -528,6 +544,10 @@ class HazardViewer extends Component {
 							<Grid item lg={8} md={8} xl={8} xs={12}
 								  className={this.state.selectedHazard ? null : classes.hide}>
 								<Paper variant="outlined" className={classes.main}>
+									<IconButton aria-label="Close" onClick={this.closeMetadata}
+										className={classes.metadataCloseButton}>
+										<CloseIcon fontSize="small"/>
+									</IconButton>
 									{Object.keys(selected_hazard_detail).length > 0 ?
 										<div>
 											<div className={classes.paperHeader}>

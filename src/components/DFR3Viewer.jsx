@@ -113,6 +113,9 @@ const styles = {
 	previewTable:{
 		width: "80%",
 		margin: "50px auto"
+	},
+	metadataCloseButton:{
+		float: "right",
 	}
 };
 
@@ -147,7 +150,8 @@ class DFR3Viewer extends React.Component {
 			confirmOpen: false,
 			deleteType: "curve", // or mapping
 			curvesLoading: false,
-			mappingsLoading: false
+			mappingsLoading: false,
+			metadataClosed: true,
 		};
 
 		this.changeDFR3Type = this.changeDFR3Type.bind(this);
@@ -173,6 +177,7 @@ class DFR3Viewer extends React.Component {
 		this.handlePreviewerClose = this.handlePreviewerClose.bind(this);
 		this.changeDataPerPage = this.changeDataPerPage.bind(this);
 		this.handleSpaceSelection = this.handleSpaceSelection.bind(this);
+		this.closeMetadata = this.closeMetadata.bind(this);
 	}
 
 	async componentWillMount() {
@@ -233,7 +238,8 @@ class DFR3Viewer extends React.Component {
 			offset: 0,
 			pageNumberMappings: 1,
 			offsetMappings: 0,
-			selectedMapping: ""
+			selectedMapping: "",
+			metadataClosed: false,
 		}, function () {
 			this.props.getAllDFR3Curves(this.state.selectedDFR3Type, this.state.selectedSpace, this.state.selectedInventory,
 				this.state.selectedHazard, this.state.dataPerPage, this.state.offset);
@@ -351,13 +357,15 @@ class DFR3Viewer extends React.Component {
 		this.setState({
 			chartConfig: plotConfig2d,
 			plotData3d: plotData3d,
-			selectedDFR3Curve: DFR3Curve
+			selectedDFR3Curve: DFR3Curve,
+			metadataClosed: false,
 		});
 	}
 
 	onClickDFR3Mapping(DFR3Mapping) {
 		this.setState({
-			selectedMapping: DFR3Mapping
+			selectedMapping: DFR3Mapping,
+			metadataClosed: false,
 		});
 	}
 
@@ -623,6 +631,12 @@ class DFR3Viewer extends React.Component {
 		return params;
 	}
 
+	closeMetadata(){
+		this.setState({
+			metadataClosed: true
+		});
+	}
+
 	render() {
 
 		const {classes} = this.props;
@@ -797,9 +811,10 @@ class DFR3Viewer extends React.Component {
 						{/*lists*/}
 						{tabIndex === 0 ?
 							<Grid container spacing={4}>
-								<Grid item lg={this.state.selectedDFR3Curve ? 4 : 12}
-									  md={this.state.selectedDFR3Curve ? 4 : 12}
-									  xl={this.state.selectedDFR3Curve ? 4 : 12} xs={12}>
+								<Grid item lg={this.state.selectedDFR3Curve && !this.state.metadataClosed? 4 : 12}
+									  md={this.state.selectedDFR3Curve && !this.state.metadataClosed? 4 : 12}
+									  xl={this.state.selectedDFR3Curve && !this.state.metadataClosed? 4 : 12}
+									  xs={12}>
 									<LoadingOverlay
 										active={this.state.curvesLoading}
 										spinner
@@ -825,6 +840,10 @@ class DFR3Viewer extends React.Component {
 								<Grid item lg={8} md={8} xl={8} xs={12}
 									  className={this.state.selectedDFR3Curve ? null : classes.hide}>
 									<Paper variant="outlined" className={classes.main}>
+										<IconButton aria-label="Close" onClick={this.closeMetadata}
+											className={classes.metadataCloseButton}>
+											<CloseIcon fontSize="small"/>
+										</IconButton>
 										{Object.keys(selectedCurveDetail).length > 0 ?
 											<div>
 												<div className={classes.paperHeader}>
@@ -944,9 +963,10 @@ class DFR3Viewer extends React.Component {
 
 						{tabIndex === 1 ?
 							<Grid container spacing={4}>
-								<Grid item lg={this.state.selectedMapping ? 4 : 12}
-									  md={this.state.selectedMapping ? 4 : 12}
-									  xl={this.state.selectedMapping ? 4 : 12} xs={12}>
+								<Grid item lg={this.state.selectedMapping && !this.state.metadataClosed? 4 : 12}
+									  md={this.state.selectedMapping && !this.state.metadataClosed? 4 : 12}
+									  xl={this.state.selectedMapping && !this.state.metadataClosed? 4 : 12}
+									  xs={12}>
 									<LoadingOverlay
 										active={this.state.mappingsLoading}
 										spinner
@@ -973,6 +993,10 @@ class DFR3Viewer extends React.Component {
 								<Grid item lg={8} md={8} xl={8} xs={12}
 									  className={this.state.selectedMapping ? null : classes.hide}>
 									<Paper variant="outlined" className={classes.main}>
+										<IconButton aria-label="Close" onClick={this.closeMetadata}
+											className={classes.metadataCloseButton}>
+											<CloseIcon fontSize="small"/>
+										</IconButton>
 										{Object.keys(selectedMappingDetails).length > 0 ?
 											<div>
 												<div className={classes.paperHeader}>
