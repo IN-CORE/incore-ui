@@ -443,7 +443,8 @@ class HazardViewer extends Component {
 			return (
 				<div>
 					{/*error message display inside viewer*/}
-					<ErrorMessage error="You do not have the privilege to delete this item."
+					<ErrorMessage message="You do not have the privilege to delete this item."
+								  error=""
 								  messageOpen={this.state.messageOpen}
 								  closeErrorMessage={this.closeErrorMessage}/>
 					<Confirmation confirmOpen={this.state.confirmOpen}

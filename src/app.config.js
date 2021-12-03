@@ -51,4 +51,6 @@ config["maxUsage"] = {
 	}
 };
 
+config["mailingList"] = "incore-dev@lists.illinois.edu";
+
 export default config;

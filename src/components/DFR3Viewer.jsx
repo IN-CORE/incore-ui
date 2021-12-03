@@ -146,6 +146,8 @@ class DFR3Viewer extends React.Component {
 			pageNumberMappings: 1,
 			urlPrefix: config.urlPrefix,
 			tabIndex: 0,
+			error: "",
+			message: "",
 			messageOpen: false,
 			confirmOpen: false,
 			deleteType: "curve", // or mapping
@@ -218,10 +220,15 @@ class DFR3Viewer extends React.Component {
 		});
 	}
 
-	// TODO set state inside component did up date is bad practice!!
+	// TODO set state inside componentDidUpdate is bad practice!!
+	// DELETE error
 	componentDidUpdate(prevProps, prevState) {
 		if (this.props.deleteError && !prevState.messageOpen) {
-			this.setState({messageOpen: true});
+			this.setState({
+				message: "You do not have the privilege to delete this item.",
+				error: "",
+				messageOpen: true
+			});
 		} else if (!this.props.deleteError && prevState.messageOpen) {
 			this.setState({messageOpen: false});
 		}
@@ -346,18 +353,23 @@ class DFR3Viewer extends React.Component {
 	async onClickDFR3Curve(DFR3Curve) {
 		let plotData3d = {};
 		let plotConfig2d = {};
+		let message = "Something is wrong with this DFR3 Curve definition. We cannot display its preview.";
+		let error = "";
 
 		if (DFR3Curve.fragilityCurves && DFR3Curve.is3dPlot) {
-			plotData3d = await this.generate3dPlotData(DFR3Curve);
+			[plotData3d, error] = await this.generate3dPlotData(DFR3Curve);
 		}
 		else if (DFR3Curve.fragilityCurves && !DFR3Curve.is3dPlot) {
-			plotConfig2d = await this.generate2dPlotData(DFR3Curve);
+			[plotConfig2d, error] = await this.generate2dPlotData(DFR3Curve);
 		}
 
 		this.setState({
 			chartConfig: plotConfig2d,
 			plotData3d: plotData3d,
 			selectedDFR3Curve: DFR3Curve,
+			error: `DFR3 Curve ID:${DFR3Curve.id}%0D%0A%0D%0A${error}`, // line break %0D%0A
+			message: message,
+			messageOpen: error !== "",
 			metadataClosed: false,
 		});
 	}
@@ -401,6 +413,8 @@ class DFR3Viewer extends React.Component {
 	closeErrorMessage() {
 		this.props.resetError();
 		this.setState({
+			message:"",
+			error:"",
 			messageOpen: false
 		});
 	}
@@ -487,6 +501,7 @@ class DFR3Viewer extends React.Component {
 	async generate2dPlotData(DFR3Curve) {
 		let updatedChartConfig = Object.assign({}, chartConfig.DFR3Config);
 
+		let error = "";
 
 		let description = DFR3Curve.description !== null ? DFR3Curve.description : "";
 		let authors = DFR3Curve.authors.join(", ");
@@ -500,18 +515,22 @@ class DFR3Viewer extends React.Component {
 			let demandUnits = DFR3Curve.demandUnits.length > 0 ? DFR3Curve.demandUnits.join(", ") : "";
 			updatedChartConfig.xAxis.title.text = `${demandTypes} (${demandUnits})`;
 
-			let plotData = await fetchPlot(DFR3Curve);
-			Object.keys(plotData).map(key => {
-				let series = {
-					marker: {
-						enabled: false
-					},
-					name: key,
-					data: plotData[key]
-				};
-				updatedChartConfig.series.push(series);
-			});
-			return updatedChartConfig;
+			let [requestStatus, response] = await fetchPlot(DFR3Curve);
+			if (requestStatus === 200){
+				Object.keys(response).map(key => {
+					let series = {
+						marker: {
+							enabled: false
+						},
+						name: key,
+						data: response[key]
+					};
+					updatedChartConfig.series.push(series);
+				});
+			}
+			else{
+				error = response;
+			}
 		}
 		// repair/restoration curve still using legacy code
 		else {
@@ -529,8 +548,10 @@ class DFR3Viewer extends React.Component {
 			} else {
 				curves = [];
 			}
-			this._legacyGenerate2DChartConfig(updatedChartConfig, curves);
+			updatedChartConfig = this._legacyGenerate2DChartConfig(updatedChartConfig, curves);
 		}
+
+		return [updatedChartConfig, error];
 	}
 
 	_legacyGenerate2DChartConfig(updatedChartConfig, curves){
@@ -575,15 +596,22 @@ class DFR3Viewer extends React.Component {
 	}
 
 	async generate3dPlotData(DFR3Curve) {
-		let plotData = await fetchPlot(DFR3Curve);
+		let [requestStatus, response] = await fetchPlot(DFR3Curve);
+		let error = "";
 
-		let limitState = Object.keys(plotData)[0];
-		let description = DFR3Curve.description !== null ? DFR3Curve.description : "";
-		let authors = DFR3Curve.authors.join(", ");
-		let title = `${description} [${authors}] - ${limitState}`;
+		if (requestStatus === 200){
+			let limitState = Object.keys(response)[0];
+			let description = DFR3Curve.description !== null ? DFR3Curve.description : "";
+			let authors = DFR3Curve.authors.join(", ");
+			let title = `${description} [${authors}] - ${limitState}`;
 
-		//TODO For now only plot the first limit state; but in the future may add tabs to plot all states
-		return {"data": plotData[limitState], "title": title};
+			//TODO For now only plot the first limit state; but in the future may add tabs to plot all states
+			return [{"data": response[limitState], "title": title} , error];
+		}
+		else{
+			error = response;
+			return [{"data": null, "title": null}, error];
+		}
 	}
 
 	exportMappingJson() {
@@ -687,7 +715,8 @@ class DFR3Viewer extends React.Component {
 			return (
 				<div>
 					{/*error message display inside viewer*/}
-					<ErrorMessage error="You do not have the privilege to delete this item."
+					<ErrorMessage error={this.state.error}
+								  message={this.state.message}
 								  messageOpen={this.state.messageOpen}
 								  closeErrorMessage={this.closeErrorMessage}/>
 					{this.state.deleteType === "curve" ?
