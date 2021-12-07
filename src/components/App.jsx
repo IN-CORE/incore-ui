@@ -305,21 +305,16 @@ class App extends Component {
 							Terms of Service
 						</Link>
 					</MenuItem>
+					<MenuItem className={classes.denseStyle} onClick={() => {this.handleProfileMenuClose();}}>
+						<Link href={config.privacyURL} target="_blank" style={{textDecoration:"none"}}>
+							Web Privacy Notice
+						</Link>
+					</MenuItem>
 					<Divider orientation="horizontal"/>
 					<MenuItem className={classes.denseStyle} onClick={() => {
 						this.handleProfileMenuClose();
 						this.logout();
 					}}>Log Out</MenuItem>
-					{/*<Divider orientation="horizontal"/>*/}
-					{/*<Box className={classes.status}*/}
-					{/*	 style={{display: "flex", justifyContent: "space-between", marginTop: "5px"}}>*/}
-					{/*	<Link href={config.privacyURL} className={classes.fontLight} target="_blank">*/}
-					{/*		Privacy Policy*/}
-					{/*	</Link>*/}
-					{/*	<Link href={config.tosURL} className={classes.fontLight} target="_blank">*/}
-					{/*		Terms of Service*/}
-					{/*	</Link>*/}
-					{/*</Box>*/}
 				</Menu>
 			);
 		}
