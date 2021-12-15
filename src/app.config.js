@@ -9,7 +9,7 @@ config["pyIncoreDocUrl"] = `${hostname}/doc/pyincore/index.html`;
 config["pyIncoreVizDocUrl"] = `${hostname}/doc/pyincore_viz/index.html`;
 config["pyIncoreDataDocUrl"] = `${hostname}/doc/pyincore_data/index.html`;
 config["swaggerUrl"] = `${hostname}/doc/api/`;
-config["webVersion"] = "0.9.8";
+config["webVersion"] = "0.9.9";
 config["spaceService"] = `${hostname}/space/api/spaces`;
 config["dfr3Service"] = `${hostname}/dfr3/api/`;
 config["fragilityService"] = `${hostname}/dfr3/api/fragilities`;
@@ -50,5 +50,7 @@ config["maxUsage"] = {
 		"labUsage":{ "vCPU": "0", "RAM": "0 GB", "Storage":"0 GB"}
 	}
 };
+
+config["mailingList"] = "incore-dev@lists.illinois.edu";
 
 export default config;

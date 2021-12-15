@@ -20,7 +20,6 @@ import config from "../app.config";
 import ErrorMessage from "./children/ErrorMessage";
 import {getCurrUserInfo, determineUserGroup} from "../utils/common";
 import Gravatar from "react-gravatar";
-import EditIcon from "@material-ui/icons/Edit";
 
 
 global.__base = `${__dirname}/`;
@@ -137,7 +136,8 @@ class App extends Component {
 			viewerMenuOpen: false,
 			helpMenuOpen: false,
 			anchorEl: null,
-			errorMessage:"",
+			message:"",
+			error:"",
 			messageOpen: true,
 		};
 		this.logout = this.logout.bind(this);
@@ -153,7 +153,7 @@ class App extends Component {
 	componentWillMount() {
 		// set error message
 		this.setState({
-			errorMessage: this.props.location.query.error
+			message: this.props.location.query.error
 		});
 	}
 	componentDidMount(){
@@ -295,7 +295,7 @@ class App extends Component {
 							  }}>
 						Profile</MenuItem>
 					<MenuItem className={classes.denseStyle} onClick={() => {this.handleProfileMenuClose();}}>
-						<Link href="mailto:incore-dev@lists.illinois.edu" target="_blank"
+						<Link href={`mailto:${config.mailingList}`} target="_blank"
 							  style={{textDecoration: "none"}}>
 							Contact Us
 						</Link>
@@ -305,21 +305,16 @@ class App extends Component {
 							Terms of Service
 						</Link>
 					</MenuItem>
+					<MenuItem className={classes.denseStyle} onClick={() => {this.handleProfileMenuClose();}}>
+						<Link href={config.privacyURL} target="_blank" style={{textDecoration:"none"}}>
+							Web Privacy Notice
+						</Link>
+					</MenuItem>
 					<Divider orientation="horizontal"/>
 					<MenuItem className={classes.denseStyle} onClick={() => {
 						this.handleProfileMenuClose();
 						this.logout();
 					}}>Log Out</MenuItem>
-					{/*<Divider orientation="horizontal"/>*/}
-					{/*<Box className={classes.status}*/}
-					{/*	 style={{display: "flex", justifyContent: "space-between", marginTop: "5px"}}>*/}
-					{/*	<Link href={config.privacyURL} className={classes.fontLight} target="_blank">*/}
-					{/*		Privacy Policy*/}
-					{/*	</Link>*/}
-					{/*	<Link href={config.tosURL} className={classes.fontLight} target="_blank">*/}
-					{/*		Terms of Service*/}
-					{/*	</Link>*/}
-					{/*</Box>*/}
 				</Menu>
 			);
 		}
@@ -417,8 +412,14 @@ class App extends Component {
 				</AppBar>
 				{/*error message */}
 				{
-					this.state.errorMessage ?
-						<ErrorMessage error={this.state.errorMessage} messageOpen={this.state.messageOpen} closeErrorMessage={this.closeErrorMessage}/> : null
+					this.state.message ?
+						<ErrorMessage
+							message={this.state.message}
+							error={this.state.error}
+							messageOpen={this.state.messageOpen}
+							closeErrorMessage={this.closeErrorMessage}/>
+						:
+						null
 				}
 				<div className={classes.appBar}>
 					{this.props.children}
