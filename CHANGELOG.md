@@ -5,7 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [0.9.8] -2021-09-01
+
+## [0.9.9] -2021-12-15
+
+### Added
+- UIUC Web Privacy Notification [#42](https://github.com/IN-CORE/incore-ui/issues/42)
+- Capability to report error when DFR3 viewer failed to display preview [#19](https://github.com/IN-CORE/incore-ui/issues/19)
+
+### Changed
+- Expand and collapse button to toggle the metadata section [#24](https://github.com/IN-CORE/incore-ui/issues/24)
+
+
+## [0.9.8] -2021-10-27
 
 ### Addded
 - Preview 3D fragility curves [#21](https://github.com/IN-CORE/incore-ui/issues/21)
