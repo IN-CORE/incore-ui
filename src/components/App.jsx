@@ -333,16 +333,19 @@ class App extends Component {
 						  onClick={() => {
 							  this.handleViewerMenuClose();
 							  browserHistory.push("/DFR3Viewer");
+							  fetch("/DFR3Viewer");
 						  }}>DFR3 Viewer</MenuItem>
 				<MenuItem className={classes.denseStyle}
 						  onClick={() => {
 							  this.handleViewerMenuClose();
 							  browserHistory.push("/DataViewer");
+							  fetch("/DataViewer");
 						  }}>Data Viewer</MenuItem>
 				<MenuItem className={classes.denseStyle}
 						  onClick={() => {
 							  this.handleViewerMenuClose();
 							  browserHistory.push("/HazardViewer");
+							  fetch("/HazardViewer");
 						  }}>Hazard Viewer</MenuItem>
 			</Menu>
 		);
