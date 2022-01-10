@@ -22,7 +22,6 @@ import {
 } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 import CloseIcon from "@material-ui/icons/Close";
-import chartSampler from "../utils/chartSampler";
 import chartConfig from "./config/ChartConfig";
 import config from "../app.config";
 import {browserHistory} from "react-router";
@@ -532,67 +531,29 @@ class DFR3Viewer extends React.Component {
 				error = response;
 			}
 		}
-		// repair/restoration curve still using legacy code
-		else {
-			let curves;
-			if ("repairCurves" in DFR3Curve) {
-				curves = DFR3Curve.repairCurves;
-				let timeType = "time";
-				let timeUnit = DFR3Curve.timeUnits !== null ? DFR3Curve.timeUnits : "";
-				updatedChartConfig.xAxis.title.text = `${timeType} (${timeUnit})`;
-			} else if ("restorationCurves" in DFR3Curve) {
-				curves = DFR3Curve.restorationCurves;
-				let timeType = "time";
-				let timeUnit = DFR3Curve.timeUnits !== null ? DFR3Curve.timeUnits : "";
-				updatedChartConfig.xAxis.title.text = `${timeType} (${timeUnit})`;
-			} else {
-				curves = [];
-			}
-			updatedChartConfig = this._legacyGenerate2DChartConfig(updatedChartConfig, curves);
+		else{
+			let
 		}
+		// repair/restoration curve still using legacy code
+		// else {
+		// 	let curves;
+		// 	if ("repairCurves" in DFR3Curve) {
+		// 		curves = DFR3Curve.repairCurves;
+		// 		let timeType = "time";
+		// 		let timeUnit = DFR3Curve.timeUnits !== null ? DFR3Curve.timeUnits : "";
+		// 		updatedChartConfig.xAxis.title.text = `${timeType} (${timeUnit})`;
+		// 	} else if ("restorationCurves" in DFR3Curve) {
+		// 		curves = DFR3Curve.restorationCurves;
+		// 		let timeType = "time";
+		// 		let timeUnit = DFR3Curve.timeUnits !== null ? DFR3Curve.timeUnits : "";
+		// 		updatedChartConfig.xAxis.title.text = `${timeType} (${timeUnit})`;
+		// 	} else {
+		// 		curves = [];
+		// 	}
+		// 	updatedChartConfig = this._legacyGenerate2DChartConfig(updatedChartConfig, curves);
+		// }
 
 		return [updatedChartConfig, error];
-	}
-
-	_legacyGenerate2DChartConfig(updatedChartConfig, curves){
-		for (let i = 0; i < curves.length; i++) {
-			let curve = curves[i];
-
-			let plotData;
-
-			if (curve.className.includes("CustomExpression")) {
-				plotData = chartSampler.computeExpressionSamples(0.001, 1.0, 1000, curve.expression);
-			} else if (curve.className.includes("Standard")) {
-				if (curve.className.includes("ConditionalStandard")) {
-					plotData = chartSampler.sampleConditional(0, 0.999, 1000, curve.alphaType,
-						curve.rules, curve.alpha, curve.beta);
-				} else {
-					plotData = chartSampler.sample(0, 0.999, 1000, curve.alphaType, curve.alpha, curve.beta);
-				}
-			} else if (curve.className === "ParametricFragilityCurve") {
-				plotData = chartSampler.computeParametricSampes(0.001, 1, 1000, curve.curveType, curve.parameters);
-			} else if (curve.className === "PeriodBuildingFragilityCurve") {
-				plotData = chartSampler.computePeriodBuildingSamples(0, 5, 1000, curve.fsParam0, curve.fsParam1,
-					curve.fsParam2, curve.fsParam3, curve.fsParam4, curve.fsParam5);
-			} else if (curve.className === "FragilityCurveRefactored") {
-				plotData = null;
-			} else {
-				plotData = null;
-			}
-
-			if (plotData !== null) {
-				let series = {
-					marker: {
-						enabled: false
-					},
-					name: curve.description,
-					data: plotData
-				};
-
-				updatedChartConfig.series.push(series);
-			}
-		}
-		return updatedChartConfig;
 	}
 
 	async generate3dPlotData(DFR3Curve) {
@@ -649,8 +610,8 @@ class DFR3Viewer extends React.Component {
 
 	extractParamTable(DFR3Curve){
 		let params = {};
-		if (DFR3Curve["fragilityCurveParameters"] !== undefined ){
-			DFR3Curve["fragilityCurveParameters"].map((curveParam) => {
+		if (DFR3Curve["curveParameters"] !== undefined ){
+			DFR3Curve["curveParameters"].map((curveParam) => {
 				params[curveParam["name"]] = {};
 				params[curveParam["name"]]["expression"] = curveParam["expression"];
 				params[curveParam["name"]]["description"] = curveParam["description"];
