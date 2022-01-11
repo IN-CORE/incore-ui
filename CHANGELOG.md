@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+
+### Changed
+- Renamed master branch to main [#50](https://github.com/IN-CORE/incore-ui/issues/50)
 
 ## [0.9.9] -2021-12-15
 
