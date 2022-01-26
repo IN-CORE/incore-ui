@@ -254,7 +254,7 @@ class DFR3Viewer extends React.Component {
 		});
 	}
 
-	handleTabChange(event, value){
+	handleTabChange = (event, value) => {
 		this.setState({tabIndex: value});
 	}
 
