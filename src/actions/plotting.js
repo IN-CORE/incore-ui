@@ -8,7 +8,7 @@ import {
 const cookies = new Cookies();
 
 export async function fetchPlot(fragilitySet) {
-	let endpoint = `${config.plottingService}?refresh=true`;
+	let endpoint = `${config.plottingService}`;
 	let request = await fetch(endpoint, {method:"post", mode: "cors", headers: getHeader(), body: JSON.stringify(fragilitySet)});
 	if (request.status === 200) {
 		return [request.status, await request.json()];

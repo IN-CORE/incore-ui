@@ -254,9 +254,9 @@ class DFR3Viewer extends React.Component {
 		});
 	}
 
-	handleTabChange = (event, value) => {
+	handleTabChange(event, value){
 		this.setState({tabIndex: value});
-	};
+	}
 
 	handleInventorySelection(event) {
 		this.setState({
@@ -531,27 +531,6 @@ class DFR3Viewer extends React.Component {
 				error = response;
 			}
 		}
-		else{
-			let
-		}
-		// repair/restoration curve still using legacy code
-		// else {
-		// 	let curves;
-		// 	if ("repairCurves" in DFR3Curve) {
-		// 		curves = DFR3Curve.repairCurves;
-		// 		let timeType = "time";
-		// 		let timeUnit = DFR3Curve.timeUnits !== null ? DFR3Curve.timeUnits : "";
-		// 		updatedChartConfig.xAxis.title.text = `${timeType} (${timeUnit})`;
-		// 	} else if ("restorationCurves" in DFR3Curve) {
-		// 		curves = DFR3Curve.restorationCurves;
-		// 		let timeType = "time";
-		// 		let timeUnit = DFR3Curve.timeUnits !== null ? DFR3Curve.timeUnits : "";
-		// 		updatedChartConfig.xAxis.title.text = `${timeType} (${timeUnit})`;
-		// 	} else {
-		// 		curves = [];
-		// 	}
-		// 	updatedChartConfig = this._legacyGenerate2DChartConfig(updatedChartConfig, curves);
-		// }
 
 		return [updatedChartConfig, error];
 	}
@@ -852,14 +831,16 @@ class DFR3Viewer extends React.Component {
 
 														(() => {
 															if (this.state.selectedDFR3Curve.fragilityCurves){
-																if (this.state.selectedDFR3Curve.is3dPlot && this.state.plotData3d.data.length > 0){
+																if (this.state.selectedDFR3Curve.is3dPlot
+																	&& this.state.plotData3d.data.length > 0){
 																	return (<Button color="primary"
 																		variant="contained"
 																		className={classes.inlineButtons}
 																		size="small"
 																		onClick={this.preview}>Preview</Button>);
 																}
-																else if(!this.state.selectedDFR3Curve.is3dPlot && this.state.chartConfig.series.length > 0){
+																else if(!this.state.selectedDFR3Curve.is3dPlot
+																	&& this.state.chartConfig.series.length > 0){
 																	return (<Button color="primary"
 																				   variant="contained"
 																				   className={classes.inlineButtons}
