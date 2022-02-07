@@ -333,16 +333,19 @@ class App extends Component {
 						  onClick={() => {
 							  this.handleViewerMenuClose();
 							  browserHistory.push("/DFR3Viewer");
+							  fetch("/DFR3Viewer");
 						  }}>DFR3 Viewer</MenuItem>
 				<MenuItem className={classes.denseStyle}
 						  onClick={() => {
 							  this.handleViewerMenuClose();
 							  browserHistory.push("/DataViewer");
+							  fetch("/DataViewer");
 						  }}>Data Viewer</MenuItem>
 				<MenuItem className={classes.denseStyle}
 						  onClick={() => {
 							  this.handleViewerMenuClose();
 							  browserHistory.push("/HazardViewer");
+							  fetch("/HazardViewer");
 						  }}>Hazard Viewer</MenuItem>
 			</Menu>
 		);
@@ -398,8 +401,12 @@ class App extends Component {
 							User Guides<ExpandMoreIcon fontSize="small"/></Typography>
 						{helpMenu}
 						<Typography className={classes.toolBarItem}>
-							<Link href={config.incoreLab} target="_blank"
-								  style={{color: "#ffffff", textDecoration: "none"}}>
+							<Link target="_blank"
+								  style={{color: "#ffffff", textDecoration: "none"}}
+								  onClick={() => {
+									  window.open(config.incoreLab);
+									  fetch("/jupyterhub");
+								  }}>
 								IN-CORE lab</Link></Typography>
 						<Typography onClick={this.handleViewerMenuOpen} className={classes.toolBarItem}
 							style={{verticalAlign: "middle", display: "inline-flex"}}>

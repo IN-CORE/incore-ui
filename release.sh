@@ -15,7 +15,7 @@ BRANCH=${BRANCH:-"$(git rev-parse --abbrev-ref HEAD)"}
 PKG_VERSION=$(cat package.json | grep \"version\" | head -1 | awk -F= "{ print $2 }" | sed 's/[version:,",]//g' | tr -d '[[:space:]]')
 
 # Find out the version
-if [ "$BRANCH" = "master" ]; then
+if [ "$BRANCH" = "main" ]; then
     echo "Detected version ${PKG_VERSION}"
     VERSIONS="latest"
     OLDVERSION=""
