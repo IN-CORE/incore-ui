@@ -5,10 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased]
+## [1.0.0] -2021-02-07
 
 ### Changed
 - Renamed master branch to main [#50](https://github.com/IN-CORE/incore-ui/issues/50)
+- Updating DFR3 fields matching the change of repair/restoration on the backend [#48](https://github.com/IN-CORE/incore-ui/issues/48)
+- Tracking frontend usage by each viewer [#37](https://github.com/IN-CORE/incore-ui/issues/37)
 
 ## [0.9.9] -2021-12-15
 
