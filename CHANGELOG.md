@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [1.0.1] - 2021-03-25
 ### Security
+- Bump nanoid from 3.1.23 to 3.2.0 [#53](https://github.com/IN-CORE/incore-ui/pull/53)
 - Bump node-sass from 6.0.1 to 7.0.0 [#58](https://github.com/IN-CORE/incore-ui/pull/58)
 - Bump follow-redirects from 1.14.1 to 1.14.8 [#59](https://github.com/IN-CORE/incore-ui/pull/59)
 
