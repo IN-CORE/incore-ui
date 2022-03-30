@@ -6,13 +6,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
-## [1.0.1] - 2021-03-25
+## [1.0.1] - 2022-03-25
 ### Security
 - Bump nanoid from 3.1.23 to 3.2.0 [#53](https://github.com/IN-CORE/incore-ui/pull/53)
 - Bump node-sass from 6.0.1 to 7.0.0 [#58](https://github.com/IN-CORE/incore-ui/pull/58)
 - Bump follow-redirects from 1.14.1 to 1.14.8 [#59](https://github.com/IN-CORE/incore-ui/pull/59)
 
-## [1.0.0] -2021-02-07
+## [1.0.0] -2022-02-07
 
 ### Changed
 - Renamed master branch to main [#50](https://github.com/IN-CORE/incore-ui/issues/50)
