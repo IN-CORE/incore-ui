@@ -12,6 +12,7 @@
 		"start-message": "babel-node tools/startMessage.js",
 		"prestart": "npm-run-all --parallel start-message",
 		"start": "npm-run-all --parallel open:src lint:watch",
+		"start:dev": "export INCORE_REMOTE_HOSTNAME=https://incore-dev.ncsa.illinois.edu && npm start",
 		"open:src": "babel-node tools/srcServer.js",
 		"open:dist": "babel-node tools/distServer.js",
 		"lint": "esw webpack.config.* src --color --ext .jsx,.js || exit 0",
