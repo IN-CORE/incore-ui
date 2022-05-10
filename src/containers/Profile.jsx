@@ -7,6 +7,7 @@ const mapStateToProps = (state) => {
 		datasetUsage: state.usage.datasetUsage,
 		hazardUsage: state.usage.hazardUsage,
 		labUsage: state.usage.labUsage,
+		allocation: state.usage.allocations,
 	};
 };
 

@@ -29,24 +29,16 @@ config["tosURL"] = `${hostname}/doc/incore/termsofservice.html`;
 config["privacyURL"] = "https://www.vpaa.uillinois.edu/resources/web_privacy";
 config["maxUsage"] = {
 	"incore_user":{
-		"datasetUsage":{"entity":200, "fileSize":"2 GB", "fileSizeByte": 2*1024*1024*1024},
-		"hazardUsage":{"entity": 200, "fileSize":"2 GB", "fileSizeByte": 2*1024*1024*1024},
 		"labUsage":{ "vCPU": "2", "RAM": "4 GB", "Storage":"4 GB"}
 	},
 	"incore_coe":{
-		"datasetUsage":{"entity":500, "fileSize":"5 GB", "fileSizeByte": 5*1024*1024*1024},
-		"hazardUsage":{"entity": 500, "fileSize":"5 GB", "fileSizeByte": 5*1024*1024*1024},
 		"labUsage":{ "vCPU": "4", "RAM": "8 GB", "Storage":"10 GB"}
 	},
 	"incore_ncsa":{
-		"datasetUsage":{"entity":1000, "fileSize":"10 GB", "fileSizeByte": 10*1024*1024*1024},
-		"hazardUsage":{"entity": 1000, "fileSize":"10 GB", "fileSizeByte": 10*1024*1024*1024},
 		"labUsage":{ "vCPU": "4", "RAM": "8 GB", "Storage":"10 GB"}
 	},
 	// fall back if user does not belong to any group
 	"NA":{
-		"datasetUsage":{"entity":0, "fileSize":"0 GB", "fileSizeByte": 0*1024*1024*1024},
-		"hazardUsage":{"entity": 0, "fileSize":"0 GB", "fileSizeByte": 0*1024*1024*1024},
 		"labUsage":{ "vCPU": "0", "RAM": "0 GB", "Storage":"0 GB"}
 	}
 };

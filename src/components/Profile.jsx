@@ -109,7 +109,7 @@ const useStyles = makeStyles({
 });
 
 export default function Profile(props) {
-	const {loginError, datasetUsage, hazardUsage} = props;
+	const {loginError, datasetUsage, hazardUsage, allocations} = props;
 	const [authError, setAuthError] = useState(false);
 	const [dataEntityPie, setDataEntityPie] = useState({});
 	const [dataFileSizePie, setDataFileSizePie] = useState({});
@@ -136,7 +136,7 @@ export default function Profile(props) {
 
 	useEffect(() => {
 		if (datasetUsage !== undefined && Object.keys(datasetUsage).length > 0){
-			let pieChartConfig = configurePieCharts(datasetUsage, "datasetUsage", group);
+			let pieChartConfig = configurePieCharts(allocations, datasetUsage, "datasetUsage");
 			setDataEntityPie(pieChartConfig["entity"]);
 			setDataFileSizePie(pieChartConfig["fileSize"]);
 		}
@@ -144,7 +144,7 @@ export default function Profile(props) {
 
 	useEffect(() => {
 		if (hazardUsage !== undefined && Object.keys(hazardUsage).length > 0){
-			let pieChartConfig = configurePieCharts(hazardUsage, "hazardUsage", group);
+			let pieChartConfig = configurePieCharts(allocations, hazardUsage, "hazardUsage");
 			setHazardEntityPie(pieChartConfig["entity"]);
 			setHazardFileSizePie(pieChartConfig["fileSize"]);
 		}
@@ -160,34 +160,44 @@ export default function Profile(props) {
 	/*
 	function to configure group of pie chart
 	 */
-	const configurePieCharts = (usage, type="datasetUsage", group) => {
+	const configurePieCharts = (allocations, usage, type="datasetUsage") => {
 		// to create a deep copy !important
 		let defaultEntityPieConfig = JSON.parse(JSON.stringify(chartConfig.pieChartConfig));
 		let defaultFileSizePieConfig = JSON.parse(JSON.stringify(chartConfig.pieChartConfig));
 
+		const totalNumAllocated = type === "datasetUsage" ?
+			allocations["total_number_of_datasets"]
+			:
+			allocations["total_number_of_hazards"];
+		const totalBytesAllocated = type === "datasetUsage"?
+			allocations["total_file_size_of_datasets_byte"]
+			:
+			allocations["total_file_size_of_hazard_datasets_byte"];
+
 		defaultEntityPieConfig["series"][0]["data"] = [
 			{
 				name: "Available",
-				y: config.maxUsage[group][type].entity - usage["total_number_of_datasets"]
+				y: type === totalNumAllocated - usage["total_number_of_datasets"]
 			},
 			{
 				name: "Used",
 				y: usage["total_number_of_datasets"]
-			}];
+			}
+		];
 		defaultEntityPieConfig["title"]["text"] = "Entities";
-		defaultEntityPieConfig["subtitle"]["text"] = `Used ${usage["total_number_of_datasets"]} of ${config.maxUsage[group][type].entity}`;
+		defaultEntityPieConfig["subtitle"]["text"] = `Used ${usage["total_number_of_datasets"]} of ${totalNumAllocated}`;
 
 		defaultFileSizePieConfig["series"][0]["data"] = [
 			{
 				name: "Available",
-				y: config.maxUsage[group][type].fileSizeByte - usage["total_file_size_byte"]
+				y: totalBytesAllocated - usage["total_file_size_byte"]
 			},
 			{
 				name: "Used",
 				y: usage["total_file_size_byte"]
 			}];
 		defaultFileSizePieConfig["title"]["text"] = "File Size";
-		defaultFileSizePieConfig["subtitle"]["text"] = `Used ${usage["total_file_size"]} of ${config.maxUsage[group][type].fileSize}`;
+		defaultFileSizePieConfig["subtitle"]["text"] = `Used ${usage["total_file_size"]} of ${totalBytesAllocated}`;
 
 		return {"entity": defaultEntityPieConfig, "fileSize": defaultFileSizePieConfig};
 	};
