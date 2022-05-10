@@ -162,6 +162,7 @@ class App extends Component {
 			( this.props.Authorization !== "" && this.props.Authorization !== undefined)) {
 			this.props.getDatasetUsage();
 			this.props.getHazardUsage();
+			this.props.getAllocations();
 		}
 	}
 
@@ -173,6 +174,7 @@ class App extends Component {
 			&& this.props.Authorization !== undefined)) {
 			this.props.getDatasetUsage();
 			this.props.getHazardUsage();
+			this.props.getAllocations();
 		}
 	}
 
@@ -275,16 +277,16 @@ class App extends Component {
 					</Box>
 					<Box className={classes.status}>
 						<LinearProgress variant="determinate" className={classes.customProgressBar}
-							value={this.props.datasetUsage["total_file_size_byte"] / config.maxUsage[group]["datasetUsage"]["fileSizeByte"] * 100}/>
+							value={this.props.datasetUsage["total_file_size_byte"] / this.props.allocations["total_file_size_of_datasets_byte"] * 100}/>
 						<Typography className={classes.fontLight} style={{fontSize: "10px"}}>
-							Data {this.props.datasetUsage["total_file_size"]} of {config.maxUsage[group]["datasetUsage"]["fileSize"]} used
+							Data {this.props.datasetUsage["total_file_size"]} of {this.props.allocations["total_file_size_of_datasets"]} used
 						</Typography>
 					</Box>
 					<Box className={classes.status}>
 						<LinearProgress variant="determinate" className={classes.customProgressBar}
-							value={this.props.hazardUsage["total_file_size_byte"] / config.maxUsage[group]["hazardUsage"]["fileSizeByte"] * 100}/>
+							value={this.props.hazardUsage["total_file_size_byte"] / this.props.allocations["total_file_size_of_hazard_datasets_byte"]* 100}/>
 						<Typography className={classes.fontLight} style={{fontSize: "10px"}}>
-							Hazard {this.props.hazardUsage["total_file_size"]} of {config.maxUsage[group]["hazardUsage"]["fileSize"]} used
+							Hazard {this.props.hazardUsage["total_file_size"]} of {this.props.allocations["total_file_size_of_hazard_datasets"]} used
 						</Typography>
 					</Box>
 					<Divider orientation="horizontal"/>
