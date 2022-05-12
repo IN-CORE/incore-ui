@@ -135,20 +135,22 @@ export default function Profile(props) {
 	}, []);
 
 	useEffect(() => {
-		if (datasetUsage !== undefined && Object.keys(datasetUsage).length > 0){
+		if (allocations !== undefined && Object.keys(allocations).length > 0
+			&& datasetUsage !== undefined && Object.keys(datasetUsage).length > 0){
 			let pieChartConfig = configurePieCharts(allocations, datasetUsage, "datasetUsage");
 			setDataEntityPie(pieChartConfig["entity"]);
 			setDataFileSizePie(pieChartConfig["fileSize"]);
 		}
-	}, [datasetUsage]);
+	}, [datasetUsage, allocations]);
 
 	useEffect(() => {
-		if (hazardUsage !== undefined && Object.keys(hazardUsage).length > 0){
+		if (allocations !== undefined && Object.keys(allocations).length > 0
+			&& hazardUsage !== undefined && Object.keys(hazardUsage).length > 0){
 			let pieChartConfig = configurePieCharts(allocations, hazardUsage, "hazardUsage");
 			setHazardEntityPie(pieChartConfig["entity"]);
 			setHazardFileSizePie(pieChartConfig["fileSize"]);
 		}
-	}, [hazardUsage]);
+	}, [hazardUsage, allocations]);
 
 	// for any auth error
 	useEffect(() =>{
@@ -173,11 +175,15 @@ export default function Profile(props) {
 			allocations["total_file_size_of_datasets_byte"]
 			:
 			allocations["total_file_size_of_hazard_datasets_byte"];
+		const totalBytesTextAllocated = type === "datasetUsage" ?
+			allocations["total_file_size_of_datasets"]
+			:
+			allocations["total_file_size_of_hazard_datasets"];
 
 		defaultEntityPieConfig["series"][0]["data"] = [
 			{
 				name: "Available",
-				y: type === totalNumAllocated - usage["total_number_of_datasets"]
+				y: totalNumAllocated - usage["total_number_of_datasets"]
 			},
 			{
 				name: "Used",
@@ -197,7 +203,7 @@ export default function Profile(props) {
 				y: usage["total_file_size_byte"]
 			}];
 		defaultFileSizePieConfig["title"]["text"] = "File Size";
-		defaultFileSizePieConfig["subtitle"]["text"] = `Used ${usage["total_file_size"]} of ${totalBytesAllocated}`;
+		defaultFileSizePieConfig["subtitle"]["text"] = `Used ${usage["total_file_size"]} of ${totalBytesTextAllocated}`;
 
 		return {"entity": defaultEntityPieConfig, "fileSize": defaultFileSizePieConfig};
 	};
