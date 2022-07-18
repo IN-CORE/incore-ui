@@ -127,6 +127,8 @@ export default function Profile(props) {
 		// logged in
 		if (config.hostname.includes("localhost") || (authorization !== undefined && authorization !== "" && authorization !== null)) {
 			setAuthError(false);
+
+			// need to refresh from endpoint when page load; just in case people deleted stuff on other viewers
 			getUsage();
 		}
 		// not logged in
@@ -162,20 +164,21 @@ export default function Profile(props) {
 		let defaultEntityPieConfig = JSON.parse(JSON.stringify(chartConfig.pieChartConfig));
 		let defaultFileSizePieConfig = JSON.parse(JSON.stringify(chartConfig.pieChartConfig));
 
+		let totalNum = -999;
+		let totalFileSizeByte = -999;
+		let totalFileSize = "NA";
+
 		if (type === "datasetUsage"){
-			const totalNum = usage["total_number_of_datasets"];
-			const totalFileSizeByte = usage["total_file_size_of_datasets_byte"];
-			const totalFileSize = usage["total_file_size_of_datasets"];
+			totalNum = usage["total_number_of_datasets"];
+			totalFileSizeByte = usage["total_file_size_of_datasets_byte"];
+			totalFileSize = usage["total_file_size_of_datasets"];
 		}
 		else if (type === "hazardUsage"){
-			const totalNum = usage["total_number_of_hazards"];
-			const totalFileSizeByte = usage["total_file_size_of_hazard_datasets_byte"];
-			const totalFileSize = usage["total_file_size_of_hazard_datasets"];
+			totalNum = usage["total_number_of_hazards"];
+			totalFileSizeByte = usage["total_file_size_of_hazard_datasets_byte"];
+			totalFileSize = usage["total_file_size_of_hazard_datasets"];
 		}
 		else{
-			const totalNum = -999;
-			const totalFileSizeByte = -999;
-			const totalFileSize = "NA";
 			console.log(`${type} not supported!`);
 		}
 
