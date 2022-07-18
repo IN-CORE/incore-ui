@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Use github release instead of github tag to display the latest versions on the landing page [#77](https://github.com/IN-CORE/incore-ui/pull/77)
 - Update CHANGELOG link for branch renaming [#78](https://github.com/IN-CORE/incore-ui/issues/78)
 
+### Security
+- Bump shell-quote from 1.7.2 to 1.7.3 [#75](https://github.com/IN-CORE/incore-ui/pull/75)
 
 ## [1.0.1] - 2022-03-30
 ### Security
