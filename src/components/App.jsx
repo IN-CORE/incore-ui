@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import {
 	AppBar,
+	Box,
 	Button,
 	Divider,
 	IconButton,
@@ -8,7 +9,6 @@ import {
 	Link,
 	Menu,
 	MenuItem,
-	Box,
 	Toolbar,
 	Typography,
 } from "@material-ui/core";
@@ -18,7 +18,7 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import {browserHistory} from "react-router";
 import config from "../app.config";
 import ErrorMessage from "./children/ErrorMessage";
-import {getCurrUserInfo, determineUserGroup} from "../utils/common";
+import {determineUserGroup, getCurrUserInfo} from "../utils/common";
 import Gravatar from "react-gravatar";
 
 
@@ -70,9 +70,9 @@ const theme = createMuiTheme({
 });
 
 const styles = {
-	menuCustomWidth:{
-		"& li":{
-			width:"200px"
+	menuCustomWidth: {
+		"& li": {
+			width: "200px"
 		}
 	},
 	appBar: {
@@ -82,7 +82,7 @@ const styles = {
 			duration: theme.transitions.duration.leavingScreen,
 		}),
 	},
-	avatarImg:{
+	avatarImg: {
 		width: "32px",
 		height: "32px",
 		borderRadius: "50%",
@@ -101,28 +101,28 @@ const styles = {
 		lineHeight: "30px",
 		fontSize: "12px",
 	},
-	status:{
-		padding:"6px 16px"
+	status: {
+		padding: "6px 16px"
 	},
-	fontLight:{
+	fontLight: {
 		fontSize: "12px",
-		color:"#333333",
-		fontWeight:100,
+		color: "#333333",
+		fontWeight: 100,
 		fontFamily: theme.typography.body1.fontFamily,
 	},
-	fontBold:{
+	fontBold: {
 		fontSize: "12px",
-		color:"#000000",
-		fontWeight:600,
+		color: "#000000",
+		fontWeight: 600,
 		fontFamily: theme.typography.body1.fontFamily,
 	},
 	toolBarItem: {
 		margin: "auto 20px",
 		cursor: "pointer"
 	},
-	customProgressBar:{
-		borderRadius:5,
-		height:5,
+	customProgressBar: {
+		borderRadius: 5,
+		height: 5,
 	}
 };
 
@@ -136,8 +136,8 @@ class App extends Component {
 			viewerMenuOpen: false,
 			helpMenuOpen: false,
 			anchorEl: null,
-			message:"",
-			error:"",
+			message: "",
+			error: "",
 			messageOpen: true,
 		};
 		this.logout = this.logout.bind(this);
@@ -156,12 +156,12 @@ class App extends Component {
 			message: this.props.location.query.error
 		});
 	}
-	componentDidMount(){
+
+	componentDidMount() {
 		// if localhost, immediately get usage
 		if (config.hostname.includes("localhost") ||
-			( this.props.Authorization !== "" && this.props.Authorization !== undefined)) {
-			this.props.getDatasetUsage();
-			this.props.getHazardUsage();
+			(this.props.Authorization !== "" && this.props.Authorization !== undefined)) {
+			this.props.getUsage();
 		}
 	}
 
@@ -171,8 +171,7 @@ class App extends Component {
 			this.props.Authorization !== prevProps.Authorization
 			&& this.props.Authorization !== ""
 			&& this.props.Authorization !== undefined)) {
-			this.props.getDatasetUsage();
-			this.props.getHazardUsage();
+			this.props.getUsage();
 		}
 	}
 
@@ -251,7 +250,7 @@ class App extends Component {
 					{
 						userInfo["email"] !== undefined ?
 							<Gravatar className={classes.avatarImg} email={userInfo["email"]}
-								  rating="g"/>
+									  rating="g"/>
 							:
 							<AccountCircle fontSize="small"/>
 					}
@@ -275,16 +274,16 @@ class App extends Component {
 					</Box>
 					<Box className={classes.status}>
 						<LinearProgress variant="determinate" className={classes.customProgressBar}
-							value={this.props.datasetUsage["total_file_size_byte"] / config.maxUsage[group]["datasetUsage"]["fileSizeByte"] * 100}/>
+										value={this.props.usage["total_file_size_of_datasets_byte"] / config.maxUsage[group]["datasetUsage"]["fileSizeByte"] * 100}/>
 						<Typography className={classes.fontLight} style={{fontSize: "10px"}}>
-							Data {this.props.datasetUsage["total_file_size"]} of {config.maxUsage[group]["datasetUsage"]["fileSize"]} used
+							Data {this.props.usage["total_file_size_of_datasets"]} of {config.maxUsage[group]["datasetUsage"]["fileSize"]} used
 						</Typography>
 					</Box>
 					<Box className={classes.status}>
 						<LinearProgress variant="determinate" className={classes.customProgressBar}
-							value={this.props.hazardUsage["total_file_size_byte"] / config.maxUsage[group]["hazardUsage"]["fileSizeByte"] * 100}/>
+										value={this.props.usage["total_file_size_of_hazard_datasets_byte"] / config.maxUsage[group]["hazardUsage"]["fileSizeByte"] * 100}/>
 						<Typography className={classes.fontLight} style={{fontSize: "10px"}}>
-							Hazard {this.props.hazardUsage["total_file_size"]} of {config.maxUsage[group]["hazardUsage"]["fileSize"]} used
+							Hazard {this.props.usage["total_file_size_of_hazard_datasets"]} of {config.maxUsage[group]["hazardUsage"]["fileSize"]} used
 						</Typography>
 					</Box>
 					<Divider orientation="horizontal"/>
@@ -301,12 +300,12 @@ class App extends Component {
 						</Link>
 					</MenuItem>
 					<MenuItem className={classes.denseStyle} onClick={() => {this.handleProfileMenuClose();}}>
-						<Link href={config.tosURL} target="_blank" style={{textDecoration:"none"}}>
+						<Link href={config.tosURL} target="_blank" style={{textDecoration: "none"}}>
 							Terms of Service
 						</Link>
 					</MenuItem>
 					<MenuItem className={classes.denseStyle} onClick={() => {this.handleProfileMenuClose();}}>
-						<Link href={config.privacyURL} target="_blank" style={{textDecoration:"none"}}>
+						<Link href={config.privacyURL} target="_blank" style={{textDecoration: "none"}}>
 							Web Privacy Notice
 						</Link>
 					</MenuItem>
@@ -392,12 +391,12 @@ class App extends Component {
 			<MuiThemeProvider theme={theme}>
 				{/*TODO add auto collapse to hamburger once screen is small*/}
 				<AppBar position="static"
-					className={classes.appBar}>
+						className={classes.appBar}>
 					<Toolbar className={classes.toolBar}>
 						<Typography className={classes.toolBarItem}>
 							<Link href="/" style={{color: "#ffffff", textDecoration: "none"}}>HOME</Link></Typography>
 						<Typography onClick={this.handleHelpMenuOpen} className={classes.toolBarItem}
-							style={{verticalAlign: "middle", display: "inline-flex"}}>
+									style={{verticalAlign: "middle", display: "inline-flex"}}>
 							User Guides<ExpandMoreIcon fontSize="small"/></Typography>
 						{helpMenu}
 						<Typography className={classes.toolBarItem}>
@@ -409,7 +408,7 @@ class App extends Component {
 								  }}>
 								IN-CORE lab</Link></Typography>
 						<Typography onClick={this.handleViewerMenuOpen} className={classes.toolBarItem}
-							style={{verticalAlign: "middle", display: "inline-flex"}}>
+									style={{verticalAlign: "middle", display: "inline-flex"}}>
 							Web Tools<ExpandMoreIcon fontSize="small"/></Typography>
 						{viewerMenu}
 						<Typography variant="body1" style={{flex: 1}}/>

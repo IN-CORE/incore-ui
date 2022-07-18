@@ -109,7 +109,7 @@ const useStyles = makeStyles({
 });
 
 export default function Profile(props) {
-	const {loginError, datasetUsage, hazardUsage} = props;
+	const {loginError, usage, getUsage} = props;
 	const [authError, setAuthError] = useState(false);
 	const [dataEntityPie, setDataEntityPie] = useState({});
 	const [dataFileSizePie, setDataFileSizePie] = useState({});
@@ -127,6 +127,7 @@ export default function Profile(props) {
 		// logged in
 		if (config.hostname.includes("localhost") || (authorization !== undefined && authorization !== "" && authorization !== null)) {
 			setAuthError(false);
+			getUsage();
 		}
 		// not logged in
 		else {
@@ -135,20 +136,16 @@ export default function Profile(props) {
 	}, []);
 
 	useEffect(() => {
-		if (datasetUsage !== undefined && Object.keys(datasetUsage).length > 0){
-			let pieChartConfig = configurePieCharts(datasetUsage, "datasetUsage", group);
-			setDataEntityPie(pieChartConfig["entity"]);
-			setDataFileSizePie(pieChartConfig["fileSize"]);
-		}
-	}, [datasetUsage]);
+		if (usage !== undefined && Object.keys(usage).length > 0){
+			let dataPieChartConfig = configurePieCharts(usage, "datasetUsage", group);
+			setDataEntityPie(dataPieChartConfig["entity"]);
+			setDataFileSizePie(dataPieChartConfig["fileSize"]);
 
-	useEffect(() => {
-		if (hazardUsage !== undefined && Object.keys(hazardUsage).length > 0){
-			let pieChartConfig = configurePieCharts(hazardUsage, "hazardUsage", group);
-			setHazardEntityPie(pieChartConfig["entity"]);
-			setHazardFileSizePie(pieChartConfig["fileSize"]);
+			let hazardPieChartConfig = configurePieCharts(usage, "hazardUsage", group);
+			setHazardEntityPie(hazardPieChartConfig["entity"]);
+			setHazardFileSizePie(hazardPieChartConfig["fileSize"]);
 		}
-	}, [hazardUsage]);
+	}, [usage]);
 
 	// for any auth error
 	useEffect(() =>{
@@ -165,29 +162,46 @@ export default function Profile(props) {
 		let defaultEntityPieConfig = JSON.parse(JSON.stringify(chartConfig.pieChartConfig));
 		let defaultFileSizePieConfig = JSON.parse(JSON.stringify(chartConfig.pieChartConfig));
 
+		if (type === "datasetUsage"){
+			const totalNum = usage["total_number_of_datasets"];
+			const totalFileSizeByte = usage["total_file_size_of_datasets_byte"];
+			const totalFileSize = usage["total_file_size_of_datasets"];
+		}
+		else if (type === "hazardUsage"){
+			const totalNum = usage["total_number_of_hazards"];
+			const totalFileSizeByte = usage["total_file_size_of_hazard_datasets_byte"];
+			const totalFileSize = usage["total_file_size_of_hazard_datasets"];
+		}
+		else{
+			const totalNum = -999;
+			const totalFileSizeByte = -999;
+			const totalFileSize = "NA";
+			console.log(`${type} not supported!`);
+		}
+
 		defaultEntityPieConfig["series"][0]["data"] = [
 			{
 				name: "Available",
-				y: config.maxUsage[group][type].entity - usage["total_number_of_datasets"]
+				y: config.maxUsage[group][type].entity - totalNum
 			},
 			{
 				name: "Used",
-				y: usage["total_number_of_datasets"]
+				y: totalNum
 			}];
 		defaultEntityPieConfig["title"]["text"] = "Entities";
-		defaultEntityPieConfig["subtitle"]["text"] = `Used ${usage["total_number_of_datasets"]} of ${config.maxUsage[group][type].entity}`;
+		defaultEntityPieConfig["subtitle"]["text"] = `Used ${totalNum} of ${config.maxUsage[group][type].entity}`;
 
 		defaultFileSizePieConfig["series"][0]["data"] = [
 			{
 				name: "Available",
-				y: config.maxUsage[group][type].fileSizeByte - usage["total_file_size_byte"]
+				y: config.maxUsage[group][type].fileSizeByte - totalFileSizeByte
 			},
 			{
 				name: "Used",
-				y: usage["total_file_size_byte"]
+				y: totalFileSizeByte
 			}];
 		defaultFileSizePieConfig["title"]["text"] = "File Size";
-		defaultFileSizePieConfig["subtitle"]["text"] = `Used ${usage["total_file_size"]} of ${config.maxUsage[group][type].fileSize}`;
+		defaultFileSizePieConfig["subtitle"]["text"] = `Used ${totalFileSize} of ${config.maxUsage[group][type].fileSize}`;
 
 		return {"entity": defaultEntityPieConfig, "fileSize": defaultFileSizePieConfig};
 	};
