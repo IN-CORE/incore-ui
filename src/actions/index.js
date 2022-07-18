@@ -257,7 +257,7 @@ export function fetchDatasets(dataType, space, limit, offset) {
 }
 
 export function fetchUsage() {
-	let endpoint = `${config.spaceService}/usage`;
+	let endpoint = `${config.spaceServiceBase}usage`;
 	return (dispatch: Dispatch) => {
 		return fetch(endpoint, {mode: "cors", headers: getHeader()})
 			.then(response => {
