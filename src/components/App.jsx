@@ -160,7 +160,8 @@ class App extends Component {
 	componentDidMount() {
 		// if localhost, immediately get usage
 		if (config.hostname.includes("localhost") ||
-			(this.props.Authorization !== "" && this.props.Authorization !== undefined)) {
+			( this.props.Authorization !== "" && this.props.Authorization !== undefined)) {
+			this.props.getAllocations();
 			this.props.getUsage();
 		}
 	}
@@ -171,6 +172,7 @@ class App extends Component {
 			this.props.Authorization !== prevProps.Authorization
 			&& this.props.Authorization !== ""
 			&& this.props.Authorization !== undefined)) {
+			this.props.getAllocations();
 			this.props.getUsage();
 		}
 	}
@@ -274,16 +276,16 @@ class App extends Component {
 					</Box>
 					<Box className={classes.status}>
 						<LinearProgress variant="determinate" className={classes.customProgressBar}
-										value={this.props.usage["total_file_size_of_datasets_byte"] / config.maxUsage[group]["datasetUsage"]["fileSizeByte"] * 100}/>
+							value={this.props.usage["total_file_size_of_datasets_byte"] / this.props.allocations["total_file_size_of_datasets_byte"] * 100}/>
 						<Typography className={classes.fontLight} style={{fontSize: "10px"}}>
-							Data {this.props.usage["total_file_size_of_datasets"]} of {config.maxUsage[group]["datasetUsage"]["fileSize"]} used
+							Data {this.props.usage["total_file_size_of_datasets"]} of {this.props.allocations["total_file_size_of_datasets"]} used
 						</Typography>
 					</Box>
 					<Box className={classes.status}>
 						<LinearProgress variant="determinate" className={classes.customProgressBar}
-										value={this.props.usage["total_file_size_of_hazard_datasets_byte"] / config.maxUsage[group]["hazardUsage"]["fileSizeByte"] * 100}/>
+							value={this.props.usage["total_file_size_of_hazard_datasets_byte"] / this.props.allocations["total_file_size_of_hazard_datasets_byte"]* 100}/>
 						<Typography className={classes.fontLight} style={{fontSize: "10px"}}>
-							Hazard {this.props.usage["total_file_size_of_hazard_datasets"]} of {config.maxUsage[group]["hazardUsage"]["fileSize"]} used
+							Hazard {this.props.usage["total_file_size_of_hazard_datasets"]} of {this.props.allocations["total_file_size_of_hazard_datasets"]} used
 						</Typography>
 					</Box>
 					<Divider orientation="horizontal"/>
@@ -391,12 +393,12 @@ class App extends Component {
 			<MuiThemeProvider theme={theme}>
 				{/*TODO add auto collapse to hamburger once screen is small*/}
 				<AppBar position="static"
-						className={classes.appBar}>
+					className={classes.appBar}>
 					<Toolbar className={classes.toolBar}>
 						<Typography className={classes.toolBarItem}>
 							<Link href="/" style={{color: "#ffffff", textDecoration: "none"}}>HOME</Link></Typography>
 						<Typography onClick={this.handleHelpMenuOpen} className={classes.toolBarItem}
-									style={{verticalAlign: "middle", display: "inline-flex"}}>
+							style={{verticalAlign: "middle", display: "inline-flex"}}>
 							User Guides<ExpandMoreIcon fontSize="small"/></Typography>
 						{helpMenu}
 						<Typography className={classes.toolBarItem}>
@@ -408,7 +410,7 @@ class App extends Component {
 								  }}>
 								IN-CORE lab</Link></Typography>
 						<Typography onClick={this.handleViewerMenuOpen} className={classes.toolBarItem}
-									style={{verticalAlign: "middle", display: "inline-flex"}}>
+							style={{verticalAlign: "middle", display: "inline-flex"}}>
 							Web Tools<ExpandMoreIcon fontSize="small"/></Typography>
 						{viewerMenu}
 						<Typography variant="body1" style={{flex: 1}}/>

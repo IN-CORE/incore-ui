@@ -311,6 +311,40 @@ export function fetchSpaces() {
 	};
 }
 
+export const RECEIVE_ALLOCATIONS = "RECEIVE_ALLOCATIONS";
+export function fetchAllocations() {
+	const endpoint = `${config.spaceServiceBase}allocations`;
+	return (dispatch: Dispatch) => {
+		return fetch(endpoint, {mode: "cors", headers: getHeader()})
+			.then(response => {
+				if (response.status === 200) {
+					response.json().then(json => {
+						dispatch({
+							type: RECEIVE_ALLOCATIONS,
+							allocations: json,
+							receivedAt: Date.now(),
+						});
+					});
+				}
+				else if (response.status === 401) {
+					cookies.remove("Authorization");
+					dispatch({
+						type: LOGIN_ERROR,
+						usage: {},
+						receivedAt: Date.now(),
+					});
+				}
+				else {
+					dispatch({
+						type: RECEIVE_ALLOCATIONS,
+						usage: {},
+						receivedAt: Date.now(),
+					});
+				}
+			});
+	};
+}
+
 export function fetchUniqueDatatypes(){
 	let endpoint = `${config.dataServiceBase}datatypes`;
 	return (dispatch: Dispatch) => {

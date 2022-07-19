@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Use github release instead of github tag to display the latest versions on the landing page [#81](https://github.com/IN-CORE/incore-ui/issues/81)
 - Update CHANGELOG link for branch renaming [#78](https://github.com/IN-CORE/incore-ui/issues/78)
 - New space/api/usage endpoint to get correct user usage info [#79](https://github.com/IN-CORE/incore-ui/issues/79)
+- Use the allocation quota from service endpoint [#69](https://github.com/IN-CORE/incore-ui/issues/69)
 
 ### Security
 - Bump shell-quote from 1.7.2 to 1.7.3 [#75](https://github.com/IN-CORE/incore-ui/pull/75)
