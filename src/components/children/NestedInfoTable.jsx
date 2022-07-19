@@ -50,8 +50,8 @@ class NestedInfoTable extends React.Component {
 														return (<div key={hazardDataset.datasetId}>
 															<ListItem key={hazardDataset.datasetId}>
 																<Button color="primary" variant="contained"
-																		size="small" className={classes.inlineButtons}
-																		onClick={() => this.props.onClick(hazardDataset.datasetId)}>Preview</Button>
+																	size="small" className={classes.inlineButtons}
+																	onClick={() => this.props.onClick(hazardDataset.datasetId)}>Preview</Button>
 																{hazardDataset.datasetId}
 															</ListItem>
 															<Divider/>
@@ -75,8 +75,8 @@ class NestedInfoTable extends React.Component {
 										<List>
 											<ListItem key={this.props.data.rasterDataset.datasetId}>
 												<Button color="primary" variant="contained" size="small"
-														className={classes.inlineButtons}
-														onClick={() => this.props.onClick(this.props.data.rasterDataset.datasetId)}>Preview</Button>
+													className={classes.inlineButtons}
+													onClick={() => this.props.onClick(this.props.data.rasterDataset.datasetId)}>Preview</Button>
 												{this.props.data.rasterDataset.datasetId}
 											</ListItem>
 											<Divider/>
@@ -96,8 +96,8 @@ class NestedInfoTable extends React.Component {
 										<List>
 											<ListItem key={this.props.data.datasetId}>
 												<Button color="primary" variant="contained" size="small"
-														className={classes.inlineButtons}
-														onClick={() => this.props.onClick(this.props.data.datasetId)}>Preview</Button>
+													className={classes.inlineButtons}
+													onClick={() => this.props.onClick(this.props.data.datasetId)}>Preview</Button>
 												{this.props.data.datasetId}
 											</ListItem>
 											<Divider/>
