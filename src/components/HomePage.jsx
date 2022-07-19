@@ -166,7 +166,7 @@ class HomePage extends Component {
 				title: "pyIncore",
 				repoName: "pyincore",
 				options: {
-					"Change log": "https://github.com/IN-CORE/pyincore/blob/master/CHANGELOG.md",
+					"Change log": "https://github.com/IN-CORE/pyincore/blob/main/CHANGELOG.md",
 					"GitHub": "https://github.com/IN-CORE/pyincore",
 					"Conda package": "https://anaconda.org/in-core/pyincore",
 				}
@@ -175,7 +175,7 @@ class HomePage extends Component {
 				title: "pyIncore-viz",
 				repoName: "pyincore-viz",
 				options: {
-					"Change log": "https://github.com/IN-CORE/pyincore-viz/blob/master/CHANGELOG.md",
+					"Change log": "https://github.com/IN-CORE/pyincore-viz/blob/main/CHANGELOG.md",
 					"GitHub": "https://github.com/IN-CORE/pyincore-viz",
 					"Conda package": "https://anaconda.org/in-core/pyincore-viz",
 				}
@@ -184,7 +184,7 @@ class HomePage extends Component {
 				title: "pyIncore-data",
 				repoName: "pyincore-data",
 				options: {
-					"Change log": "https://github.com/IN-CORE/pyincore-data/blob/master/CHANGELOG.md",
+					"Change log": "https://github.com/IN-CORE/pyincore-data/blob/main/CHANGELOG.md",
 					"GitHub": "https://github.com/IN-CORE/pyincore-data",
 					"Conda package": "https://anaconda.org/in-core/pyincore-data",
 				}
@@ -193,7 +193,7 @@ class HomePage extends Component {
 				title: "Web Services",
 				repoName:"incore-services",
 				options: {
-					"Change log": "https://github.com/IN-CORE/incore-services/blob/master/CHANGELOG.md",
+					"Change log": "https://github.com/IN-CORE/incore-services/blob/main/CHANGELOG.md",
 					"GitHub": "https://github.com/IN-CORE/incore-services"
 				}
 			},
@@ -201,7 +201,7 @@ class HomePage extends Component {
 				title: "Web Tools",
 				repoName: "incore-ui",
 				options: {
-					"Change log": "https://github.com/IN-CORE/incore-ui/blob/master/CHANGELOG.md",
+					"Change log": "https://github.com/IN-CORE/incore-ui/blob/main/CHANGELOG.md",
 					"GitHub": "https://github.com/IN-CORE/incore-ui"
 				}
 			},
@@ -209,7 +209,7 @@ class HomePage extends Component {
 				title: "IN-CORE Lab",
 				repoName: "incore-lab",
 				options: {
-					"Change log": "https://github.com/IN-CORE/incore-lab/blob/master/CHANGELOG.md",
+					"Change log": "https://github.com/IN-CORE/incore-lab/blob/main/CHANGELOG.md",
 					"GitHub": "https://github.com/IN-CORE/incore-lab"
 				}
 			},

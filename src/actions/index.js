@@ -59,8 +59,7 @@ export function receiveDatasets(type: string, json: Datasets) {
 	};
 }
 
-export const RECEIVE_DATASET_USAGE = "RECEIVE_DATASET_USAGE";
-export const RECEIVE_HAZARD_USAGE = "RECEIVE_HAZARD_USAGE";
+export const RECEIVE_USAGE = "RECEIVE_USAGE";
 export const RECEIVE_LAB_USAGE = "RECEIVE_LAB_USAGE";
 export function receieveUsage(type, json){
 	return (dispatch: Dispatch) => {
@@ -89,7 +88,7 @@ export function deleteItemById(resourceType, id) {
 	}
 	else if (resourceType === "mappings" || resourceType === "fragilities" || resourceType === "restorations"
 		|| resourceType === "repairs") {
-		endpoint = `${config.dfr3Service}${resourceType}/${id}`;
+		endpoint = `${config.dfr3ServiceBase}${resourceType}/${id}`;
 	}
 	else if (resourceType === "earthquakes" || resourceType === "tsunamis" || resourceType === "floods"
 		|| resourceType === "tornadoes" || resourceType === "hurricanes" || resourceType === "hurricaneWindfields") {
@@ -257,14 +256,14 @@ export function fetchDatasets(dataType, space, limit, offset) {
 	};
 }
 
-export function fetchDatasetUsage() {
-	let endpoint = `${config.dataServiceBase}status/usage/datasets`;
+export function fetchUsage() {
+	let endpoint = `${config.spaceServiceBase}usage`;
 	return (dispatch: Dispatch) => {
 		return fetch(endpoint, {mode: "cors", headers: getHeader()})
 			.then(response => {
 				if (response.status === 200) {
 					response.json().then(json => {
-						dispatch(receieveUsage(RECEIVE_DATASET_USAGE, json));
+						dispatch(receieveUsage(RECEIVE_USAGE, json));
 					});
 				}
 				else if (response.status === 401) {
@@ -272,28 +271,7 @@ export function fetchDatasetUsage() {
 					dispatch(receieveUsage(LOGIN_ERROR, {}));
 				}
 				else {
-					dispatch(receieveUsage(RECEIVE_DATASET_USAGE, {}));
-				}
-			});
-	};
-}
-
-export function fetchHazardUsage() {
-	let endpoint = `${config.dataServiceBase}status/usage/hazards`;
-	return (dispatch: Dispatch) => {
-		return fetch(endpoint, {mode: "cors", headers: getHeader()})
-			.then(response => {
-				if (response.status === 200) {
-					response.json().then(json => {
-						dispatch(receieveUsage(RECEIVE_HAZARD_USAGE, json));
-					});
-				}
-				else if (response.status === 401) {
-					cookies.remove("Authorization");
-					dispatch(receieveUsage(LOGIN_ERROR, {}));
-				}
-				else {
-					dispatch(receieveUsage(RECEIVE_HAZARD_USAGE, {}));
+					dispatch(receieveUsage(RECEIVE_USAGE, {}));
 				}
 			});
 	};
@@ -313,7 +291,7 @@ export function fetchLabUsage(){
 }
 
 export function fetchSpaces() {
-	const endpoint = `${config.spaceService}spaces`;
+	const endpoint = config.spaceService;
 	return (dispatch: Dispatch) => {
 		return fetch(endpoint, {mode: "cors", headers: getHeader()})
 			.then(response => {
@@ -335,7 +313,7 @@ export function fetchSpaces() {
 
 export const RECEIVE_ALLOCATIONS = "RECEIVE_ALLOCATIONS";
 export function fetchAllocations() {
-	const endpoint = `${config.spaceService}allocations`;
+	const endpoint = `${config.spaceServiceBase}allocations`;
 	return (dispatch: Dispatch) => {
 		return fetch(endpoint, {mode: "cors", headers: getHeader()})
 			.then(response => {
@@ -343,7 +321,7 @@ export function fetchAllocations() {
 					response.json().then(json => {
 						dispatch({
 							type: RECEIVE_ALLOCATIONS,
-							usage: json,
+							allocations: json,
 							receivedAt: Date.now(),
 						});
 					});
@@ -389,7 +367,7 @@ export function fetchUniqueDatatypes(){
 }
 
 export function searchDFR3Curves(dfr3_type, keyword, limit, offset) {
-	let endpoint = `${config.dfr3Service}${dfr3_type}/search?limit=${limit}&skip=${offset}&text=${keyword}`;
+	let endpoint = `${config.dfr3ServiceBase}${dfr3_type}/search?limit=${limit}&skip=${offset}&text=${keyword}`;
 	return (dispatch: Dispatch) => {
 		dispatch(loading(DFR3CURVE_LOADING));
 		return fetch(endpoint, {mode: "cors", headers: getHeader()})
@@ -412,7 +390,7 @@ export function searchDFR3Curves(dfr3_type, keyword, limit, offset) {
 }
 
 export function fetchDFR3Curves(dfr3_type: string, space: string, inventory: string, hazard: string, limit, offset) {
-	let endpoint = `${config.dfr3Service}${dfr3_type}?limit=${limit}&skip=${offset}`;
+	let endpoint = `${config.dfr3ServiceBase}${dfr3_type}?limit=${limit}&skip=${offset}`;
 	if (space !== null && space !== "All") {
 		endpoint = `${endpoint}&space=${space}`;
 	}
@@ -456,7 +434,7 @@ export function getMappingTypeFromDFR3Url(dfr3_type: string) {
 }
 
 export function fetchDFR3Mappings(dfr3_type: string, space: string, inventory: string, hazard: string, limit, offset) {
-	let endpoint = `${config.dfr3Service}mappings?limit=${limit}&skip=${offset}`;
+	let endpoint = `${config.dfr3ServiceBase}mappings?limit=${limit}&skip=${offset}`;
 
 	if (dfr3_type !== null && dfr3_type !== "All") {
 		dfr3_type = getMappingTypeFromDFR3Url(dfr3_type);
@@ -495,7 +473,7 @@ export function fetchDFR3Mappings(dfr3_type: string, space: string, inventory: s
 }
 
 export function searchDFR3Mappings(dfr3_type, keyword, limit, offset) {
-	let endpoint = `${config.dfr3Service}mappings/search?limit=${limit}&skip=${offset}&text=${keyword}`;
+	let endpoint = `${config.dfr3ServiceBase}mappings/search?limit=${limit}&skip=${offset}&text=${keyword}`;
 
 	if (dfr3_type !== null && dfr3_type !== "All") {
 		dfr3_type = getMappingTypeFromDFR3Url(dfr3_type);

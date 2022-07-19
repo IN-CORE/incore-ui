@@ -1,6 +1,6 @@
 import {connect} from "react-redux";
 import AppComponent from "../components/App";
-import {fetchAllocations, fetchDatasetUsage, fetchHazardUsage, fetchLabUsage, logout} from "../actions";
+import {fetchAllocations, fetchUsage, fetchLabUsage, logout} from "../actions";
 import Cookies from "universal-cookie";
 
 const cookies = new Cookies();
@@ -8,8 +8,7 @@ const cookies = new Cookies();
 const mapStateToProps = (state) => {
 	return{
 		Authorization: cookies.get("Authorization"),
-		datasetUsage: state.usage.datasetUsage,
-		hazardUsage: state.usage.hazardUsage,
+		usage: state.usage.usage,
 		labUsage: state.usage.labUsage,
 		allocations: state.usage.allocations
 	};
@@ -17,11 +16,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		getDatasetUsage: () => {
-			dispatch(fetchDatasetUsage());
-		},
-		getHazardUsage:() => {
-			dispatch(fetchHazardUsage());
+		getUsage: () => {
+			dispatch(fetchUsage());
 		},
 		// TODO fetch lab usage is not actually being used yet
 		getLabUsage:() =>{

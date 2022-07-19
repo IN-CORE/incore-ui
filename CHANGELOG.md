@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## [Unreleased]
+### Changed
+- Use github release instead of github tag to display the latest versions on the landing page [#81](https://github.com/IN-CORE/incore-ui/issues/81)
+- Update CHANGELOG link for branch renaming [#78](https://github.com/IN-CORE/incore-ui/issues/78)
+- New space/api/usage endpoint to get correct user usage info [#79](https://github.com/IN-CORE/incore-ui/issues/79)
+
+### Security
+- Bump shell-quote from 1.7.2 to 1.7.3 [#75](https://github.com/IN-CORE/incore-ui/pull/75)
+- Bump moment from 2.29.1 to 2.29.4 #76 [#76](https://github.com/IN-CORE/incore-ui/pull/76)
+
 ## [1.0.1] - 2022-03-30
 ### Security
 - Bump nanoid from 3.1.23 to 3.2.0 [#53](https://github.com/IN-CORE/incore-ui/pull/53)
