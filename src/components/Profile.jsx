@@ -109,7 +109,7 @@ const useStyles = makeStyles({
 });
 
 export default function Profile(props) {
-	const {loginError, usage, getUsage} = props;
+	const {loginError, usage, getUsage, allocations, getAllocations} = props;
 	const [authError, setAuthError] = useState(false);
 	const [dataEntityPie, setDataEntityPie] = useState({});
 	const [dataFileSizePie, setDataFileSizePie] = useState({});
@@ -129,6 +129,7 @@ export default function Profile(props) {
 			setAuthError(false);
 
 			// need to refresh from endpoint when page load; just in case people deleted stuff on other viewers
+			getAllocations();
 			getUsage();
 		}
 		// not logged in
@@ -138,16 +139,17 @@ export default function Profile(props) {
 	}, []);
 
 	useEffect(() => {
-		if (usage !== undefined && Object.keys(usage).length > 0){
-			let dataPieChartConfig = configurePieCharts(usage, "datasetUsage", group);
+		if (allocations !== undefined && Object.keys(allocations).length > 0 &&
+			usage !== undefined && Object.keys(usage).length > 0){
+			let dataPieChartConfig = configurePieCharts(allocations, usage, "datasetUsage");
 			setDataEntityPie(dataPieChartConfig["entity"]);
 			setDataFileSizePie(dataPieChartConfig["fileSize"]);
 
-			let hazardPieChartConfig = configurePieCharts(usage, "hazardUsage", group);
+			let hazardPieChartConfig = configurePieCharts(allocations, usage, "hazardUsage");
 			setHazardEntityPie(hazardPieChartConfig["entity"]);
 			setHazardFileSizePie(hazardPieChartConfig["fileSize"]);
 		}
-	}, [usage]);
+	}, [usage, allocations]);
 
 	// for any auth error
 	useEffect(() =>{
@@ -159,24 +161,32 @@ export default function Profile(props) {
 	/*
 	function to configure group of pie chart
 	 */
-	const configurePieCharts = (usage, type="datasetUsage", group) => {
+	const configurePieCharts = (allocations, usage, type="datasetUsage") => {
 		// to create a deep copy !important
 		let defaultEntityPieConfig = JSON.parse(JSON.stringify(chartConfig.pieChartConfig));
 		let defaultFileSizePieConfig = JSON.parse(JSON.stringify(chartConfig.pieChartConfig));
-
 		let totalNum = -999;
 		let totalFileSizeByte = -999;
 		let totalFileSize = "NA";
+		let totalNumAllocated = -999;
+		let totalBytesAllocated = -999;
+		let totalBytesTextAllocated = "NA";
 
 		if (type === "datasetUsage"){
 			totalNum = usage["total_number_of_datasets"];
 			totalFileSizeByte = usage["total_file_size_of_datasets_byte"];
 			totalFileSize = usage["total_file_size_of_datasets"];
+			totalNumAllocated = allocations["total_number_of_datasets"];
+			totalBytesAllocated = allocations["total_file_size_of_datasets_byte"];
+			totalBytesTextAllocated = allocations["total_file_size_of_datasets"];
 		}
 		else if (type === "hazardUsage"){
 			totalNum = usage["total_number_of_hazards"];
 			totalFileSizeByte = usage["total_file_size_of_hazard_datasets_byte"];
 			totalFileSize = usage["total_file_size_of_hazard_datasets"];
+			totalNumAllocated = allocations["total_number_of_hazards"];
+			totalBytesAllocated = allocations["total_file_size_of_hazard_datasets_byte"];
+			totalBytesTextAllocated = allocations["total_file_size_of_hazard_datasets"];
 		}
 		else{
 			console.log(`${type} not supported!`);
@@ -185,26 +195,27 @@ export default function Profile(props) {
 		defaultEntityPieConfig["series"][0]["data"] = [
 			{
 				name: "Available",
-				y: config.maxUsage[group][type].entity - totalNum
+				y: totalNumAllocated - totalNum
 			},
 			{
 				name: "Used",
 				y: totalNum
 			}];
 		defaultEntityPieConfig["title"]["text"] = "Entities";
-		defaultEntityPieConfig["subtitle"]["text"] = `Used ${totalNum} of ${config.maxUsage[group][type].entity}`;
+		defaultEntityPieConfig["subtitle"]["text"] = `Used ${totalNum} of ${totalNumAllocated}`;
+
 
 		defaultFileSizePieConfig["series"][0]["data"] = [
 			{
 				name: "Available",
-				y: config.maxUsage[group][type].fileSizeByte - totalFileSizeByte
+				y: totalBytesAllocated - totalFileSizeByte
 			},
 			{
 				name: "Used",
 				y: totalFileSizeByte
 			}];
 		defaultFileSizePieConfig["title"]["text"] = "File Size";
-		defaultFileSizePieConfig["subtitle"]["text"] = `Used ${totalFileSize} of ${config.maxUsage[group][type].fileSize}`;
+		defaultFileSizePieConfig["subtitle"]["text"] = `Used ${totalFileSize} of ${totalBytesTextAllocated}`;
 
 		return {"entity": defaultEntityPieConfig, "fileSize": defaultFileSizePieConfig};
 	};

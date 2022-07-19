@@ -1,12 +1,13 @@
 import {connect} from "react-redux";
 import ProfileComponent from "../components/Profile";
-import {fetchLabUsage, fetchUsage} from "../actions";
+import {fetchLabUsage, fetchUsage, fetchAllocations} from "../actions";
 
 const mapStateToProps = (state) => {
 	return {
 		loginError: state.user.loginError,
 		usage: state.usage.usage,
 		labUsage: state.usage.labUsage,
+		allocations: state.usage.allocations
 	};
 };
 
@@ -14,6 +15,9 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		getUsage: () => {
 			dispatch(fetchUsage());
+		},
+		getAllocations: () => {
+			dispatch(fetchAllocations());
 		},
 		// TODO fetch lab usage is not actually being used yet
 		getLabUsage:() =>{
