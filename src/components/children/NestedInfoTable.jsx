@@ -1,7 +1,5 @@
 import React from "react";
-import {
-	Button, Divider, List, ListItem, Table, TableBody,
-	TableCell, TableRow, Tooltip} from "@material-ui/core";
+import {Button, Divider, List, ListItem, Table, TableBody, TableCell, TableRow, Tooltip} from "@material-ui/core";
 import {withStyles} from "@material-ui/core/styles/index";
 
 
@@ -10,14 +8,14 @@ const styles = {
 		display: "inline-block",
 		margin: "auto 5px"
 	},
-	rowHeaderCell:{
+	rowHeaderCell: {
 		minWidth: "30%",
 		fontWeight: "bold",
 		backgroundColor: "#eee"
 	},
-	rowSubHeaderCell:{
+	rowSubHeaderCell: {
 		minWidth: "30%",
-		fontWeight:"bold"
+		fontWeight: "bold"
 	}
 };
 
@@ -66,6 +64,27 @@ class NestedInfoTable extends React.Component {
 								</TableRow>
 							);
 						}
+						// model based eq
+						else if (key === "rasterDataset" && this.props.data[key] && this.props.data.rasterDataset.datasetId) {
+							return (
+								<TableRow>
+									<TableCell className={classes.rowHeaderCell}>
+										{key}
+									</TableCell>
+									<TableCell>
+										<List>
+											<ListItem key={this.props.data.rasterDataset.datasetId}>
+												<Button color="primary" variant="contained" size="small"
+													className={classes.inlineButtons}
+													onClick={() => this.props.onClick(this.props.data.rasterDataset.datasetId)}>Preview</Button>
+												{this.props.data.rasterDataset.datasetId}
+											</ListItem>
+											<Divider/>
+										</List>
+									</TableCell>
+								</TableRow>
+							);
+						}
 						// tornado only has single dataset
 						else if (key === "datasetId" && this.props.data[key]) {
 							return (
@@ -86,8 +105,7 @@ class NestedInfoTable extends React.Component {
 									</TableCell>
 								</TableRow>
 							);
-						}
-						else if (this.props.data[key]) {
+						} else if (this.props.data[key]) {
 							return (
 								<TableRow>
 									{
@@ -117,11 +135,12 @@ class NestedInfoTable extends React.Component {
 													{
 														(typeof this.props.data[key][key2] === "object" && this.props.data[key][key2]) ?
 															Object.keys(this.props.data[key][key2]).map((key3) => {
-																if(key3 !== "legacyEntry") {
+																if (key3 !== "legacyEntry") {
 																	return (
-																	// third level
+																		// third level
 																		<TableRow>
-																			<TableCell className={classes.rowSubHeaderCell}>
+																			<TableCell
+																				className={classes.rowSubHeaderCell}>
 																				{key3}
 																			</TableCell>
 																			<TableCell>
@@ -142,8 +161,7 @@ class NestedInfoTable extends React.Component {
 										(<TableCell>{this.props.data[key]}</TableCell>)
 									}
 								</TableRow>);
-						}
-						else {
+						} else {
 							return null;
 						}
 					})

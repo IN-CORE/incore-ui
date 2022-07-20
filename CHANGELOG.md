@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
 ## [Unreleased]
+### Added
+- Enable preview of model based EQ [#67](https://github.com/IN-CORE/incore-ui/issues/67)
+
 ### Changed
 - Use github release instead of github tag to display the latest versions on the landing page [#81](https://github.com/IN-CORE/incore-ui/issues/81)
 - Update CHANGELOG link for branch renaming [#78](https://github.com/IN-CORE/incore-ui/issues/78)
