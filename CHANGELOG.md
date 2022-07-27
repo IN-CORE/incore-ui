@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
-## [Unreleased]
+## [1.2.0] - 2022-07-27
 ### Added
 - Enable preview of model based EQ [#67](https://github.com/IN-CORE/incore-ui/issues/67)
 
