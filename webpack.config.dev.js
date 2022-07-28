@@ -70,12 +70,12 @@ export default {
 				test: /\.[ot]tf(\?v=\d+.\d+.\d+)?$/,
 				type: "asset/inline"
 			},
-			// {
-			// 	test: /\.ico$/,
-			// 	loader: "file-loader?name=[name].[ext]"
-			// },
 			{	test: /\.ico$/,
 				type: "asset/resource"
+			},
+			{
+				test: /\.svg(\?v=\d+.\d+.\d+)?$/,
+				type: "asset/inline"
 			},
 			{
 				test: /\.(jpe?g|png|gif)$/i,

@@ -30,7 +30,8 @@ export default {
 		new WebpackMd5Hash(),
 
 		// Optimize the order that items are bundled. This assures the hash is deterministic.
-		new webpack.optimize.OccurrenceOrderPlugin(),
+		// enabled by default now
+		// new webpack.optimize.OccurrenceOrderPlugin(),
 
 		new webpack.DefinePlugin({
 			"process.env": {
@@ -79,28 +80,47 @@ export default {
 	],
 	module: {
 		rules: [
-			{test: /\.jsx?$/, exclude: /node_modules/, loaders:["babel-loader"]},
-			{test: /\.eot(\?v=\d+.\d+.\d+)?$/, loader: "url-loader?name=[name].[ext]"},
+			{
+				test: /\.jsx?$/,
+				exclude: /node_modules/,
+				loader: "babel-loader"
+			},
+			{
+				test: /\.eot(\?v=\d+.\d+.\d+)?$/,
+				type: "asset/inline"
+			},
 			{
 				test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-				loader: "url-loader?limit=10000&mimetype=application/font-woff&name=[name].[ext]"
+				type: "asset/inline"
 			},
 			{
 				test: /\.[ot]tf(\?v=\d+.\d+.\d+)?$/,
-				loader: "url-loader?limit=10000&mimetype=application/octet-stream&name=[name].[ext]"
+				type: "asset/inline"
 			},
 			{
 				test: /\.svg(\?v=\d+.\d+.\d+)?$/,
-				loader: "url-loader?limit=10000&mimetype=image/svg+xml&name=[name].[ext]"
+				type: "asset/inline"
 			},
-			{test: /\.(jpe?g|png|gif)$/i, loader: "file-loader?name=[name].[ext]"},
-			{test: /\.ico$/, loader: "file-loader?name=[name].[ext]"},
+			{
+				test: /\.(jpe?g|png|gif)$/i,
+				type: "asset/resource"
+			},
+			{	test: /\.ico$/,
+				type: "asset/resource"
+			},
 			{
 				test: /(\.css|\.scss)$/,
 				use: [
 					MiniCssExtractPlugin.loader,
 					"css-loader",
-					{ loader: "postcss-loader", options: { postcssOptions: { plugins: ["autoprefixer"] }}},
+					{
+						loader: "postcss-loader",
+						options: {
+							postcssOptions: {
+								plugins: ["autoprefixer"]
+							}
+						}
+					},
 					"sass-loader"
 				]
 			},
