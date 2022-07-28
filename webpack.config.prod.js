@@ -26,13 +26,6 @@ export default {
 		filename: "[name].[chunkhash].js"
 	},
 	plugins: [
-		// Hash the files using MD5 so that their names change when the content changes.
-		new WebpackMd5Hash(),
-
-		// Optimize the order that items are bundled. This assures the hash is deterministic.
-		// enabled by default now
-		// new webpack.optimize.OccurrenceOrderPlugin(),
-
 		new webpack.DefinePlugin({
 			"process.env": {
 				"NODE_ENV": JSON.stringify("production"),
