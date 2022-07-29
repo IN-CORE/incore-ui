@@ -2,7 +2,6 @@
 // For info on how we"re generating bundles with hashed filenames for cache busting: https://medium.com/@okonetchnikov/long-term-caching-of-static-assets-with-webpack-1ecb139adb95#.w99i89nsz
 import webpack from "webpack";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
-import WebpackMd5Hash from "webpack-md5-hash";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import autoprefixer from "autoprefixer";
 import path from "path";
@@ -55,7 +54,8 @@ export default {
 			inject: true,
 			// Note that you can add custom options here if you need to handle other custom logic in index.html
 			// To track JavaScript errors via TrackJS, sign up for a free trial at TrackJS.com and enter your token below.
-			trackJSToken: ""
+			trackJSToken: "",
+			favicon: "./src/public/favicon.ico"
 		}),
 
 		new webpack.LoaderOptionsPlugin({
