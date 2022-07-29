@@ -23,8 +23,7 @@
 		"build": "babel-node tools/build.js",
 		"test": "karma start karma.conf.js || exit 0",
 		"test:headless": "karma start --browsers ChromeHeadless karma.conf.js || exit 0",
-		"test:watch": "npm run test --watch || exit 0",
-		"analyze-bundle": "babel-node ./tools/analyzeBundle.js"
+		"test:watch": "npm run test --watch || exit 0"
 	},
 	"author": "NCSA",
 	"dependencies": {
@@ -95,7 +94,7 @@
 		"jasmine": "2.5.3",
 		"json-loader": "0.5.4",
 		"mini-css-extract-plugin": "^1.6.0",
-		"node-sass": "^6.0.1",
+		"node-sass": "^7.0.1",
 		"npm-run-all": "4.0.1",
 		"postcss-loader": "^4.2.0",
 		"redux-immutable-state-invariant": "1.2.4",
@@ -104,8 +103,7 @@
 		"style-loader": "^2.0.0",
 		"terser-webpack-plugin": "^4.2.3",
 		"wallaby-webpack": "^3.9.15",
-	  	"webpack": "^5.74.0",
-	  	"webpack-bundle-analyzer": "^3.6.1",
+		"webpack": "^5.74.0",
 		"webpack-dev-middleware": "^3.7.2",
 		"webpack-hot-middleware": "^2.25.0"
 	},
