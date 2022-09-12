@@ -66,8 +66,10 @@ const Login = (props) => {
 		
 		if (props.loginError) {
 			setLoginErrorText("Username/Password is not correct. Try again")
+			console.log("ERssR")
 		}
 		if (!props.loginError){
+			console.log("ERR")
 			if ( origin === undefined ){
 				browserHistory.push("/");
 			} else {
@@ -92,6 +94,7 @@ const Login = (props) => {
 	// else render login page
 	return (
 				<div>
+				{console.log(props)}
 					<div className="center"
 						 style={{display: "block", margin: "auto", width: "500px", paddingTop: "10%"}}>
 						{/*TODO: Add loading spinner here*/}
