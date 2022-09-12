@@ -1,6 +1,6 @@
-import React, {Component} from "react";
+import React from "react";
 import {browserHistory} from "react-router";
-import {Avatar, Box, Button, Divider, GridList, GridListTile, Paper, TextField, Typography, Link} from "@material-ui/core";
+import {Avatar, Box, Button, Divider, ImageList, ImageListItem, Paper, TextField, Typography, Link} from "@material-ui/core";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Version from "./children/Version";
 import Cookies from "universal-cookie";
@@ -29,97 +29,68 @@ const styles = theme => ({
 	}
 });
 
+const Login = (props) => {
+	const [username, setUsername] = React.useState("");
+	const [password, setPassword] = React.useState("");
+	const [passwordErrorText, setPasswordErrorText] = React.useState("");
+	const [loginErrorText, setLoginErrorText] = React.useState("");
+	const [error, setError] = React.useState(false);
+	const [origin, setOrigin] = React.useState(props.location.query["origin"]);
 
-
-class Login extends Component {
-	constructor(props) {
-		super(props);
-
-		this.state = {
-			username: "",
-			password: "",
-			passwordErrorText: "",
-			loginErrorText: "",
-			error: false,
-			origin: props.location.query["origin"],
-		};
-
-		this.changeUsername = this.changeUsername.bind(this);
-		this.changePassword = this.changePassword.bind(this);
-		this.login = this.login.bind(this);
-		this.handleKeyPressed = this.handleKeyPressed.bind(this);
+	const changeUsername = event => {
+		setUsername(event.target.value)
+		setLoginErrorText("")
 	}
 
-	handleKeyPressed(event: Object) {
-		if (event.charCode === 13) {
-			this.login();
-		}
-	}
-
-	changeUsername(event: Object) {
-		this.setState({
-			username: event.target.value,
-			loginErrorText: ""
-		});
-	}
-
-	changePassword(event: Object) {
-		let password = event.target.value;
-
-		if (password.length <= 6) {
-			this.setState({
-				error: true,
-				passwordErrorText: "Your password must be at least 6 characters long",
-				loginErrorText: "",
-			});
+	const changePassword = event => {
+		let pass = event.target.value;
+		if (pass.length <= 6) {
+			setError(true);
+			setPasswordErrorText("Your password must be at least 6 characters long")
+			setLoginErrorText("")
 		} else {
-			this.setState({
-				error: false,
-				passwordErrorText: "",
-				loginErrorText: "",
-			});
+			setError(false);
+			setPasswordErrorText("")
+			setLoginErrorText("")
 		}
 
+		setPassword(pass)
 
-		this.setState({password: password});
 		if (event.charCode === 13) {
-			this.login(event);
+			login(event);
 		}
 	}
 
-	async login() {
-		await this.props.login(this.state.username, this.state.password);
-		if (this.props.loginError) {
-			this.setState({
-				loginErrorText: "Username/Password is not correct. Try again"
-			});
+	const login = async () => {
+		await props.login(username, password);
+		
+		if (props.loginError) {
+			setLoginErrorText("Username/Password is not correct. Try again")
 		}
-		if (!this.props.loginError) {
-			if ( this.state.origin === undefined ){
+		if (!props.loginError){
+			if ( origin === undefined ){
 				browserHistory.push("/");
+			} else {
+				browserHistory.push(origin);
 			}
-			else{
-				browserHistory.push(this.state.origin);
-			}
-
 		}
-
 	}
 
-	render() {
-
-		const {classes} = this.props;
-
-		// if already login, redirect to homepage
-		let Authorization = cookies.get("Authorization");
-		if (Authorization !== undefined && Authorization !== "" && Authorization !== null) {
-			browserHistory.push("/");
-			return null;
+	const handleKeyPressed = event => {
+		if (event.charCode === 13) {
+			login();
 		}
+	}
 
-		// else render login page
-		else {
-			return (
+	const {classes} = props;
+	// if already login, redirect to homepage
+	let Authorization = cookies.get("Authorization");
+	if (Authorization !== undefined && Authorization !== "" && Authorization !== null) {
+		browserHistory.push("/");
+		return null;
+	}
+	// else render login page
+	return (
 				<div>
 					<div className="center"
 						 style={{display: "block", margin: "auto", width: "500px", paddingTop: "10%"}}>
@@ -132,11 +103,11 @@ class Login extends Component {
 								Sign in
 							</Typography>
 							<Divider/>
-							<GridList cols={1} cellHeight="auto">
-								<GridListTile>
-									<p style={{color: "red"}}>{this.state.loginErrorText} </p>
-								</GridListTile>
-								<GridListTile>
+							<ImageList cols={1} cellHeight="auto">
+								<ImageListItem>
+									<p style={{color: "red"}}>{loginErrorText} </p>
+								</ImageListItem>
+								<ImageListItem>
 									<TextField
 										variant="outlined"
 										margin="normal"
@@ -146,8 +117,8 @@ class Login extends Component {
 										id="username"
 										label="Username"
 										name="username"
-										value={this.state.username}
-										onChange={this.changeUsername}
+										value={username}
+										onChange={changeUsername}
 									/>
 									<TextField
 										variant="outlined"
@@ -158,11 +129,11 @@ class Login extends Component {
 										label="Password"
 										name="password"
 										type="password"
-										error={this.state.error}
-										helperText={this.state.passwordErrorText}
-										value={this.state.password}
-										onChange={this.changePassword}
-										onKeyPress={this.handleKeyPressed}
+										error={error}
+										helperText={passwordErrorText}
+										value={password}
+										onChange={changePassword}
+										onKeyPress={handleKeyPressed}
 									/>
 									<Link href={config.resetPwURL} className={classes.resetPW} target="_blank">Forgot password?</Link>
 									<Box className={classes.tos}>
@@ -176,18 +147,16 @@ class Login extends Component {
 										fullWidth
 										variant="contained"
 										color="primary"
-										onClick={this.login}
+										onClick={login}
 									>Sign In</Button>
 									<Link href={config.signUpURL} className={classes.signUp} target="_blank">Don't have an account? Sign up.</Link>
-								</GridListTile>
-							</GridList>
+								</ImageListItem>
+							</ImageList>
 						</Paper>
 						<Version/>
 					</div>
 				</div>
-			);
-		}
-	}
+	)
 }
 
 export default withStyles(styles)(Login);
