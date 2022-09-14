@@ -2,7 +2,6 @@
 // For info on how we"re generating bundles with hashed filenames for cache busting: https://medium.com/@okonetchnikov/long-term-caching-of-static-assets-with-webpack-1ecb139adb95#.w99i89nsz
 import webpack from "webpack";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
-import WebpackMd5Hash from "webpack-md5-hash";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import autoprefixer from "autoprefixer";
 import path from "path";
@@ -26,12 +25,6 @@ export default {
 		filename: "[name].[chunkhash].js"
 	},
 	plugins: [
-		// Hash the files using MD5 so that their names change when the content changes.
-		new WebpackMd5Hash(),
-
-		// Optimize the order that items are bundled. This assures the hash is deterministic.
-		new webpack.optimize.OccurrenceOrderPlugin(),
-
 		new webpack.DefinePlugin({
 			"process.env": {
 				"NODE_ENV": JSON.stringify("production"),
@@ -61,7 +54,8 @@ export default {
 			inject: true,
 			// Note that you can add custom options here if you need to handle other custom logic in index.html
 			// To track JavaScript errors via TrackJS, sign up for a free trial at TrackJS.com and enter your token below.
-			trackJSToken: ""
+			trackJSToken: "",
+			favicon: "./src/public/favicon.ico"
 		}),
 
 		new webpack.LoaderOptionsPlugin({
@@ -79,28 +73,47 @@ export default {
 	],
 	module: {
 		rules: [
-			{test: /\.jsx?$/, exclude: /node_modules/, loaders:["babel-loader"]},
-			{test: /\.eot(\?v=\d+.\d+.\d+)?$/, loader: "url-loader?name=[name].[ext]"},
+			{
+				test: /\.jsx?$/,
+				exclude: /node_modules/,
+				loader: "babel-loader"
+			},
+			{
+				test: /\.eot(\?v=\d+.\d+.\d+)?$/,
+				type: "asset/inline"
+			},
 			{
 				test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-				loader: "url-loader?limit=10000&mimetype=application/font-woff&name=[name].[ext]"
+				type: "asset/inline"
 			},
 			{
 				test: /\.[ot]tf(\?v=\d+.\d+.\d+)?$/,
-				loader: "url-loader?limit=10000&mimetype=application/octet-stream&name=[name].[ext]"
+				type: "asset/inline"
 			},
 			{
 				test: /\.svg(\?v=\d+.\d+.\d+)?$/,
-				loader: "url-loader?limit=10000&mimetype=image/svg+xml&name=[name].[ext]"
+				type: "asset/inline"
 			},
-			{test: /\.(jpe?g|png|gif)$/i, loader: "file-loader?name=[name].[ext]"},
-			{test: /\.ico$/, loader: "file-loader?name=[name].[ext]"},
+			{
+				test: /\.(jpe?g|png|gif)$/i,
+				type: "asset/resource"
+			},
+			{	test: /\.ico$/,
+				type: "asset/resource"
+			},
 			{
 				test: /(\.css|\.scss)$/,
 				use: [
 					MiniCssExtractPlugin.loader,
 					"css-loader",
-					{ loader: "postcss-loader", options: { postcssOptions: { plugins: ["autoprefixer"] }}},
+					{
+						loader: "postcss-loader",
+						options: {
+							postcssOptions: {
+								plugins: ["autoprefixer"]
+							}
+						}
+					},
 					"sass-loader"
 				]
 			},

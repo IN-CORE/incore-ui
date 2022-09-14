@@ -18,9 +18,7 @@ export default {
 	],
 	target: "web",
 	output: {
-		path: path.resolve(__dirname, "dist"),
 		publicPath: "",
-		filename: "bundle.js"
 	},
 	plugins: [
 		new webpack.DefinePlugin({
@@ -38,7 +36,8 @@ export default {
 				removeComments: true,
 				collapseWhitespace: true
 			},
-			inject: true
+			inject: true,
+			favicon: "./src/public/favicon.ico"
 		}),
 		new webpack.LoaderOptionsPlugin({
 			debug: true,
@@ -55,16 +54,34 @@ export default {
 	],
 	module: {
 		rules: [
-			{test: /\.jsx?$/, exclude: /node_modules/, loaders: ["babel-loader"]},
-			{test: /\.eot(\?v=\d+.\d+.\d+)?$/, loader: "file-loader"},
+			{
+				test: /\.jsx?$/,
+				exclude: /node_modules/,
+				loader: "babel-loader"
+			},
+			{
+				test: /\.eot(\?v=\d+.\d+.\d+)?$/,
+				type: "asset/inline"
+			},
 			{
 				test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-				loader: "url-loader?limit=10000&mimetype=application/font-woff"
+				type: "asset/inline"
 			},
-			{test: /\.[ot]tf(\?v=\d+.\d+.\d+)?$/, loader: "url-loader?limit=10000&mimetype=application/octet-stream"},
-			{test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, loader: "url-loader?limit=10000&mimetype=image/svg+xml"},
-			{test: /\.(jpe?g|png|gif)$/i, loader: "file-loader?name=[name].[ext]"},
-			{test: /\.ico$/, loader: "file-loader?name=[name].[ext]"},
+			{
+				test: /\.[ot]tf(\?v=\d+.\d+.\d+)?$/,
+				type: "asset/inline"
+			},
+			{	test: /\.ico$/,
+				type: "asset/resource"
+			},
+			{
+				test: /\.svg(\?v=\d+.\d+.\d+)?$/,
+				type: "asset/inline"
+			},
+			{
+				test: /\.(jpe?g|png|gif)$/i,
+				type: "asset/resource"
+			},
 			{
 				test: /(\.css|\.scss)$/i,
 				use:[
@@ -74,7 +91,10 @@ export default {
 					{ loader: "sass-loader", options: { sourceMap: true } }
 				]
 			},
-			{test: /\.json$/, loader: "json-loader"}
+			{
+				test: /\.json$/,
+				loader: "json-loader"
+			}
 		]
 	}
 };
