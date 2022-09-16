@@ -2,8 +2,6 @@
   "root": true,
   "extends": [
     "eslint:recommended",
-    "airbnb",
-    "prettier",
     "plugin:react/recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:prettier/recommended"
@@ -13,15 +11,6 @@
     "react",
     "@typescript-eslint"
   ],
-  // "parser": "babel-eslint",
-  // "parserOptions": {
-  //   "ecmaVersion": 6,
-  //   "sourceType": "module",
-  //   "ecmaFeatures": {
-  //     "jsx": true,
-  //     "experimentalObjectRestSpread": true
-  //   }
-  // },
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "project": "./tsconfig.json",
