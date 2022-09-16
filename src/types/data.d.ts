@@ -1,6 +1,8 @@
-export type Dispatch = (action: any) => null;
+interface Dipatch {
+	(action: any): null;
+}
 
-export type AnalysisInput = {
+interface AnalysisInput {
 	id: string;
 	name: string;
 	description: string;
@@ -8,15 +10,15 @@ export type AnalysisInput = {
 	advanced: boolean;
 	multiple: boolean;
 	type: string;
-};
+}
 
-export type AnalysisOutput = {
+interface AnalysisOutput {
 	name: string;
 	type: string;
 	description: string;
-};
+}
 
-export type AnalysisParameter = {
+interface AnalysisParameter {
 	id: string;
 	name: string;
 	description: string;
@@ -24,9 +26,9 @@ export type AnalysisParameter = {
 	advanced: boolean;
 	multiple: boolean;
 	type: string;
-};
+}
 
-export type Analysis = {
+interface Analysis {
 	id: string;
 	description: string;
 	name: string;
@@ -36,25 +38,21 @@ export type Analysis = {
 	datasets: AnalysisInput[];
 	outputs: AnalysisOutput[];
 	parameter: AnalysisParameter[];
-};
+}
 
-export type Analyses = Analysis[];
+type Analyses = Analysis[];
 
-export type AnalysisMetadata = {
+interface AnalysisMetadata {
 	id: string;
 	description: string;
 	name: string;
 	category: string;
 	helpContext: string;
-};
+}
 
-export type AnalysesMetadata = AnalysisMetadata[];
+type AnalysesMetadata = AnalysisMetadata[];
 
-export type AnalysesState = {
-	analysisMetadata: AnalysesMetadata;
-};
-
-export type FileDescriptor = {
+interface FileDescriptor {
 	id: string;
 	deleted: boolean;
 	filename: string;
@@ -62,9 +60,9 @@ export type FileDescriptor = {
 	size: number;
 	dataURL: string;
 	md5sum: string;
-};
+}
 
-export type Dataset = {
+interface Dataset {
 	id: string;
 	deleted: boolean;
 	title: string;
@@ -78,10 +76,10 @@ export type Dataset = {
 	format: string;
 	sourceDataset: string;
 	spaces: string[];
-};
+}
 
 /* Earthquakes */
-export type HazardDataset = {
+interface HazardDataset {
 	hazardType: string;
 	datasetId: string;
 	demandType: string;
@@ -90,9 +88,9 @@ export type HazardDataset = {
 	recurrenceInterval: number;
 	recurrenceUnit: string;
 	absTime: Date;
-};
+}
 
-export type EqParameters = {
+interface EqParameters {
 	srcLatitude: Number;
 	srcLongitude: Number;
 	magnitude: Number;
@@ -106,14 +104,14 @@ export type EqParameters = {
 	shearWaveDepth1p0: Number;
 	faultTypeMap: Object;
 	region: string;
-};
+}
 
-export type Privileges = {
+interface Privileges {
 	userPrivileges: Object;
 	groupPrivileges: Object;
-};
+}
 
-export type VisualizationParameters = {
+interface VisualizationParameters {
 	demandType: string;
 	demandUnits: string;
 	minX: number;
@@ -122,18 +120,18 @@ export type VisualizationParameters = {
 	maxY: number;
 	numPoints: number;
 	amplifyHazard: boolean;
-};
+}
 
-export type RasterDataset = {
+interface RasterDataset {
 	hazardType: string;
 	datasetId: string;
 	demandType: string;
 	demandUnits: string;
 	period: number;
 	eqParameters: EqParameters;
-};
+}
 
-export type DeterministicEarthquake = {
+interface DeterministicEarthquake {
 	eqType: string;
 	id: string;
 	privileges: Privileges;
@@ -145,21 +143,21 @@ export type DeterministicEarthquake = {
 	defaultSiteClass: string;
 	siteAmplicfication: string;
 	rasterDataset: RasterDataset;
-};
+}
 
-export type ProbabilisticEarthquake = {
+interface ProbabilisticEarthquake {
 	eqType: string;
 	id: string;
 	privileges: Privileges;
 	name: string;
 	description: string;
 	hazardDatasets: HazardDataset[];
-};
+}
 
-export type Earthquake = DeterministicEarthquake | ProbabilisticEarthquake;
+type Earthquake = DeterministicEarthquake | ProbabilisticEarthquake;
 
 /* Tornado */
-export type TornadoParameters = {
+interface TornadoParameters {
 	efRating: string;
 	maxWindSpeed: number;
 	startLatitude: number;
@@ -169,13 +167,13 @@ export type TornadoParameters = {
 	numSimulations: number;
 	endLatitude: number[];
 	endLongitude: number[];
-};
+}
 
-export type EfBox = {
+interface EfBox {
 	efBoxWidths: number[];
-};
+}
 
-export type Tornado = {
+interface Tornado {
 	id: string;
 	tornadoModel: string;
 	tornadoParameters: TornadoParameters;
@@ -183,10 +181,10 @@ export type Tornado = {
 	efBoxes: EfBox[];
 	tornadoDatasetId: string;
 	privileges: Privileges;
-};
+}
 
 /* Hurricane */
-export type Hurricane = {
+interface Hurricane {
 	id: string;
 	privileges: Privileges;
 	name: string;
@@ -206,20 +204,16 @@ export type Hurricane = {
 	rfMethod: string;
 	times: Date[];
 	hazardDatasets: HazardDataset[];
-};
+}
 
-export type Hazards = Earthquake[] | Tornado[] | Hurricane[];
+type Hazards = Earthquake[] | Tornado[] | Hurricane[];
 
-export type HazardState = {
-	hazards: Hazards;
-};
-
-export type Datasets = Dataset[];
+type Datasets = Dataset[];
 
 /* DFR3 */
-export type DFR3Curve2D = {
+interface DFR3Curve2D {
 	className: string;
-	description: name;
+	description: string;
 	alpha: number;
 	beta: number;
 	curveType: string;
@@ -227,15 +221,15 @@ export type DFR3Curve2D = {
 	periodParam1: number;
 	periodParam0: number;
 	periodEqnType: number;
-};
+}
 
-export type DFR3Curve3D = {
+interface DFR3Curve3D {
 	className: string;
-	description: name;
+	description: string;
 	expression: string;
-};
+}
 
-export type DFR3Curve = {
+interface DFR3Curve {
 	id: string;
 	legacyId: string;
 	description: string;
@@ -250,15 +244,11 @@ export type DFR3Curve = {
 	fragilityCurves: DFR3Curve2D[] | DFR3Curve3D[];
 	privileges: Privileges;
 	creator: string;
-};
+}
 
-export type DFR3Curves = DFR3Curve[];
+type DFR3Curves = DFR3Curve[];
 
-export type DFR3CurvesState = {
-	DFR3Curves: DFR3Curves;
-};
-
-export type DFR3Mappings = {
+interface DFR3Mappings {
 	id: string;
 	name: string;
 	authors: string[];
@@ -266,24 +256,38 @@ export type DFR3Mappings = {
 	inventoryType: string;
 	mappings: Object[];
 	mappingType: string;
-};
+}
 
-export type DFR3MappingsState = {
+/* States */
+interface AnalysesState {
+	analysisMetadata: AnalysesMetadata;
+}
+
+interface HazardState {
+	hazards: Hazards;
+}
+
+interface DFR3CurvesState {
+	DFR3Curves: DFR3Curves;
+}
+
+interface DFR3MappingsState {
 	DFR3Mappings: DFR3Mappings;
-};
+}
 
-/* Dataset */
-export type DatasetState = {
+interface DatasetState {
 	datasets: Dataset[];
-};
+}
 
-export type ExecutionState = {
+interface ExecutionState {
 	executionId: string;
-};
+}
 
-export type GetState = () => Object;
+interface GetState {
+	(): Object;
+}
 
-export type UserState = {
+interface UserState {
 	Authorization: string;
 	loginError: boolean;
-};
+}

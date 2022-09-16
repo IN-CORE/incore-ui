@@ -1,8 +1,13 @@
-import {connect} from "react-redux";
-import DataViewerComponent from "../components/DataViewer";
-import {fetchDatasets, fetchSpaces, fetchUniqueDatatypes, searchDatasets, deleteItemById,
-	resetError} from "../actions";
-
+import { connect } from 'react-redux';
+import DataViewerComponent from '../components/DataViewer';
+import {
+	fetchDatasets,
+	fetchSpaces,
+	fetchUniqueDatatypes,
+	searchDatasets,
+	deleteItemById,
+	resetError
+} from '../actions';
 
 const mapStateToProps = (state) => {
 	return {
@@ -30,7 +35,7 @@ const mapDispatchToProps = (dispatch) => {
 			dispatch(searchDatasets(keyword, limit, offset));
 		},
 		deleteItemById: (id) => {
-			dispatch(deleteItemById("datasets", id));
+			dispatch(deleteItemById('datasets', id));
 		},
 		resetError: () => {
 			dispatch(resetError);
