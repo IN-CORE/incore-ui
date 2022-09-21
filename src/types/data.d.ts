@@ -1,4 +1,4 @@
-interface Dipatch {
+interface Dispatch {
 	(action: any): null;
 }
 
