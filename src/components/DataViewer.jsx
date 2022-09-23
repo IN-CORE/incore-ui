@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
-import FileContentTable from './children/FileContentTable';
-import NestedInfoTable from './children/NestedInfoTable';
-import Map from './children/Map';
-import SpaceChip from './children/SpaceChip';
+import React, { Component } from "react";
+import FileContentTable from "./children/FileContentTable";
+import NestedInfoTable from "./children/NestedInfoTable";
+import Map from "./children/Map";
+import SpaceChip from "./children/SpaceChip";
 import {
 	Button,
 	Card,
@@ -20,33 +20,33 @@ import {
 	TextField,
 	Tooltip,
 	Typography
-} from '@material-ui/core';
-import SearchIcon from '@material-ui/icons/Search';
-import TableIcon from '@material-ui/icons/TableChart';
-import TextIcon from '@material-ui/icons/Description';
-import MapIcon from '@material-ui/icons/Map';
-import MappingIcon from '@material-ui/icons/CompareArrows';
-import ChartIcon from '@material-ui/icons/ShowChart';
-import NetworkIcon from '@material-ui/icons/DeviceHub';
-import UnknownIcon from '@material-ui/icons/ContactSupport';
-import CloseIcon from '@material-ui/icons/Close';
-import config from '../app.config';
-import { getHeader } from '../actions';
-import { browserHistory } from 'react-router';
-import Pagination from './children/Pagination';
-import DataPerPage from './children/DataPerPage';
-import Space from './children/Space';
-import Version from './children/Version';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { createMuiTheme, withStyles } from '@material-ui/core/styles/index';
-import Cookies from 'universal-cookie';
-import Datatype from './children/Datatype';
-import ErrorMessage from './children/ErrorMessage';
-import Confirmation from './children/Confirmation';
-import LoadingOverlay from 'react-loading-overlay';
+} from "@material-ui/core";
+import SearchIcon from "@material-ui/icons/Search";
+import TableIcon from "@material-ui/icons/TableChart";
+import TextIcon from "@material-ui/icons/Description";
+import MapIcon from "@material-ui/icons/Map";
+import MappingIcon from "@material-ui/icons/CompareArrows";
+import ChartIcon from "@material-ui/icons/ShowChart";
+import NetworkIcon from "@material-ui/icons/DeviceHub";
+import UnknownIcon from "@material-ui/icons/ContactSupport";
+import CloseIcon from "@material-ui/icons/Close";
+import config from "../app.config";
+import { getHeader } from "../actions";
+import { browserHistory } from "react-router";
+import Pagination from "./children/Pagination";
+import DataPerPage from "./children/DataPerPage";
+import Space from "./children/Space";
+import Version from "./children/Version";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import { createMuiTheme, withStyles } from "@material-ui/core/styles/index";
+import Cookies from "universal-cookie";
+import Datatype from "./children/Datatype";
+import ErrorMessage from "./children/ErrorMessage";
+import Confirmation from "./children/Confirmation";
+import LoadingOverlay from "react-loading-overlay";
 
 const cookies = new Cookies();
-const redundantProp = ['deleted', 'privileges', 'spaces'];
+const redundantProp = ["deleted", "privileges", "spaces"];
 const theme = createMuiTheme();
 const styles = {
 	root: {
@@ -54,64 +54,64 @@ const styles = {
 	},
 	filter: {
 		padding: theme.spacing(4),
-		overflow: 'auto',
-		height: '100px'
+		overflow: "auto",
+		height: "100px"
 	},
 	main: {
 		padding: theme.spacing(4),
-		overflow: 'auto',
-		height: '60vh'
+		overflow: "auto",
+		height: "60vh"
 	},
 	selectDiv: {
-		margin: 'auto',
-		display: 'inline-block',
-		width: '33%'
+		margin: "auto",
+		display: "inline-block",
+		width: "33%"
 	},
 	select: {
-		width: '80%',
-		fontSize: '12px'
+		width: "80%",
+		fontSize: "12px"
 	},
 	search: {
-		width: '100%',
-		fontSize: '12px'
+		width: "100%",
+		fontSize: "12px"
 	},
 	denseStyle: {
-		minHeight: '10px',
-		lineHeight: '30px',
-		fontSize: '12px'
+		minHeight: "10px",
+		lineHeight: "30px",
+		fontSize: "12px"
 	},
 	metadata: {
 		margin: theme.spacing(2),
-		overflow: 'auto'
+		overflow: "auto"
 	},
 	inlineButtons: {
-		display: 'inline-block',
-		margin: 'auto 5px'
+		display: "inline-block",
+		margin: "auto 5px"
 	},
 	hide: {
-		display: 'none'
+		display: "none"
 	},
 	paperFooter: {
 		padding: theme.spacing(2),
-		borderTop: '1px solid #eeeeee',
-		borderBottomLeftRadius: '2px',
-		borderBottomRightRadius: '2px'
+		borderTop: "1px solid #eeeeee",
+		borderBottomLeftRadius: "2px",
+		borderBottomRightRadius: "2px"
 	},
 	paperHeader: {
 		padding: theme.spacing(2),
-		borderBottom: '1px solid #eeeeee',
-		borderTopLeftRadius: '2px',
-		borderTopRightRadius: '2px'
+		borderBottom: "1px solid #eeeeee",
+		borderTopLeftRadius: "2px",
+		borderTopRightRadius: "2px"
 	},
 	preview: {
-		padding: '50px'
+		padding: "50px"
 	},
 	previewClose: {
-		display: 'inline',
-		float: 'right'
+		display: "inline",
+		float: "right"
 	},
 	metadataCloseButton: {
-		float: 'right'
+		float: "right"
 	}
 };
 
@@ -123,14 +123,14 @@ class DataViewer extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			selectedDataType: 'All',
-			selectedSpace: 'All',
-			selectedDataset: '',
-			selectedDatasetFormat: '',
-			fileData: '',
-			fileExtension: '',
-			searchText: '',
-			registeredSearchText: '',
+			selectedDataType: "All",
+			selectedSpace: "All",
+			selectedDataset: "",
+			selectedDatasetFormat: "",
+			fileData: "",
+			fileExtension: "",
+			searchText: "",
+			registeredSearchText: "",
 			searching: false,
 			authError: false,
 			preview: false,
@@ -168,12 +168,12 @@ class DataViewer extends Component {
 
 	componentWillMount() {
 		// check if logged in
-		let authorization = cookies.get('Authorization');
+		let authorization = cookies.get("Authorization");
 
 		// logged in
 		if (
-			config.hostname.includes('localhost') ||
-			(authorization !== undefined && authorization !== '' && authorization !== null)
+			config.hostname.includes("localhost") ||
+			(authorization !== undefined && authorization !== "" && authorization !== null)
 		) {
 			this.setState(
 				{
@@ -226,12 +226,12 @@ class DataViewer extends Component {
 				selectedDataType: event.target.value,
 				pageNumber: 1,
 				offset: 0,
-				selectedDataset: '',
-				selectedDatasetFormat: '',
-				fileData: '',
-				fileExtension: '',
-				searchText: '',
-				registeredSearchText: '',
+				selectedDataset: "",
+				selectedDatasetFormat: "",
+				fileData: "",
+				fileExtension: "",
+				searchText: "",
+				registeredSearchText: "",
 				searching: false
 			},
 			function () {
@@ -251,12 +251,12 @@ class DataViewer extends Component {
 				selectedSpace: event.target.value,
 				pageNumber: 1,
 				offset: 0,
-				selectedDataset: '',
-				selectedDatasetFormat: '',
-				fileData: '',
-				fileExtension: '',
-				searchText: '',
-				registeredSearchText: '',
+				selectedDataset: "",
+				selectedDatasetFormat: "",
+				fileData: "",
+				fileExtension: "",
+				searchText: "",
+				registeredSearchText: "",
 				searching: false
 			},
 			function () {
@@ -275,8 +275,8 @@ class DataViewer extends Component {
 		this.setState({
 			selectedDataset: dataset,
 			selectedDatasetFormat: dataset.format,
-			fileData: '',
-			fileExtension: '',
+			fileData: "",
+			fileExtension: "",
 			metadataClosed: false
 		});
 	}
@@ -296,10 +296,10 @@ class DataViewer extends Component {
 	handleConfirmed() {
 		this.props.deleteItemById(this.state.selectedDataset.id);
 		this.setState({
-			selectedDataset: '',
-			selectedDatasetFormat: '',
-			fileData: '',
-			fileExtension: '',
+			selectedDataset: "",
+			selectedDatasetFormat: "",
+			fileData: "",
+			fileExtension: "",
 			confirmOpen: false
 		});
 	}
@@ -315,14 +315,14 @@ class DataViewer extends Component {
 		this.setState({
 			registeredSearchText: this.state.searchText,
 			searching: true,
-			selectedDataset: '',
-			fileData: '',
-			fileExtension: '',
-			selectedDatasetFormat: '',
+			selectedDataset: "",
+			fileData: "",
+			fileExtension: "",
+			selectedDatasetFormat: "",
 			pageNumber: 1,
 			offset: 0,
-			selectedDataType: 'All',
-			selectedSpace: 'All'
+			selectedDataType: "All",
+			selectedSpace: "All"
 		});
 	}
 
@@ -343,17 +343,17 @@ class DataViewer extends Component {
 	async onClickFileDescriptor(selected_dataset_id, file_descriptor_id, file_name) {
 		const url = `${config.dataServiceBase}files/${file_descriptor_id}/blob`;
 
-		let response = await fetch(url, { method: 'GET', mode: 'cors', headers: getHeader() });
+		let response = await fetch(url, { method: "GET", mode: "cors", headers: getHeader() });
 
 		if (response.ok) {
 			let text = await response.text();
 			this.setState({
-				fileData: text.split('\n'),
-				fileExtension: file_name.split('.').slice(-1).pop(),
+				fileData: text.split("\n"),
+				fileExtension: file_name.split(".").slice(-1).pop(),
 				authError: false
 			});
 		} else if (response.status === 401) {
-			cookies.remove('Authorization');
+			cookies.remove("Authorization");
 			this.setState({
 				fileData: [],
 				fileExtension: null,
@@ -373,14 +373,14 @@ class DataViewer extends Component {
 		let filename = `${datasetId}.zip`;
 		let url = `${config.dataService}/${datasetId}/blob`;
 
-		let response = await fetch(url, { method: 'GET', mode: 'cors', headers: await getHeader() });
+		let response = await fetch(url, { method: "GET", mode: "cors", headers: await getHeader() });
 
 		if (response.ok) {
 			let blob = await response.blob();
 			if (window.navigator.msSaveOrOpenBlob) {
 				window.navigator.msSaveBlob(blob, filename);
 			} else {
-				let anchor = window.document.createElement('a');
+				let anchor = window.document.createElement("a");
 				anchor.href = window.URL.createObjectURL(blob);
 				anchor.download = filename;
 				document.body.appendChild(anchor);
@@ -388,7 +388,7 @@ class DataViewer extends Component {
 				document.body.removeChild(anchor);
 			}
 		} else if (response.status === 401) {
-			cookies.remove('Authorization');
+			cookies.remove("Authorization");
 			this.setState({
 				authError: true
 			});
@@ -401,14 +401,14 @@ class DataViewer extends Component {
 
 	async exportJson() {
 		let datasetJSON = JSON.stringify(this.state.selectedDataset, null, 4);
-		let blob = new Blob([datasetJSON], { type: 'application/json' });
+		let blob = new Blob([datasetJSON], { type: "application/json" });
 
 		const filename = `${this.state.selectedDataset.id}.json`;
 
 		if (window.navigator.msSaveOrOpenBlob) {
 			window.navigator.msSaveBlob(blob, filename);
 		} else {
-			let anchor = window.document.createElement('a');
+			let anchor = window.document.createElement("a");
 			anchor.href = window.URL.createObjectURL(blob);
 			anchor.download = filename;
 			document.body.appendChild(anchor);
@@ -422,13 +422,13 @@ class DataViewer extends Component {
 			{
 				offset: (this.state.pageNumber - 2) * this.state.dataPerPage,
 				pageNumber: this.state.pageNumber - 1,
-				selectedDataset: '',
-				selectedDatasetFormat: '',
-				fileData: '',
-				fileExtension: ''
+				selectedDataset: "",
+				selectedDatasetFormat: "",
+				fileData: "",
+				fileExtension: ""
 			},
 			function () {
-				if (this.state.registeredSearchText !== '' && this.state.searching) {
+				if (this.state.registeredSearchText !== "" && this.state.searching) {
 					// change page on searchAllDatasets
 					this.props.searchAllDatasets(
 						this.state.registeredSearchText,
@@ -453,13 +453,13 @@ class DataViewer extends Component {
 			{
 				offset: this.state.pageNumber * this.state.dataPerPage,
 				pageNumber: this.state.pageNumber + 1,
-				selectedDataset: '',
-				selectedDatasetFormat: '',
-				fileData: '',
-				fileExtension: ''
+				selectedDataset: "",
+				selectedDatasetFormat: "",
+				fileData: "",
+				fileExtension: ""
 			},
 			function () {
-				if (this.state.registeredSearchText !== '' && this.state.searching) {
+				if (this.state.registeredSearchText !== "" && this.state.searching) {
 					// change page on searchAllDatasets
 					this.props.searchAllDatasets(
 						this.state.registeredSearchText,
@@ -485,13 +485,13 @@ class DataViewer extends Component {
 				pageNumber: 1,
 				offset: 0,
 				dataPerPage: event.target.value,
-				selectedDataset: '',
-				selectedDatasetFormat: '',
-				fileData: '',
-				fileExtension: ''
+				selectedDataset: "",
+				selectedDatasetFormat: "",
+				fileData: "",
+				fileExtension: ""
 			},
 			function () {
-				if (this.state.registeredSearchText !== '' && this.state.searching) {
+				if (this.state.registeredSearchText !== "" && this.state.searching) {
 					// change page on searchAllDatasets
 					this.props.searchAllDatasets(
 						this.state.registeredSearchText,
@@ -533,10 +533,10 @@ class DataViewer extends Component {
 		const { classes } = this.props;
 
 		// list items
-		let list_items = '';
+		let list_items = "";
 		if (this.props.datasets.length > 0) {
 			list_items = this.props.datasets.map((dataset) => {
-				if (dataset.format === 'table') {
+				if (dataset.format === "table") {
 					return (
 						<ListItem
 							button
@@ -552,7 +552,7 @@ class DataViewer extends Component {
 							<SpaceChip item={dataset} selectedItem={this.state.selectedDataset} />
 						</ListItem>
 					);
-				} else if (dataset.format === 'textFiles') {
+				} else if (dataset.format === "textFiles") {
 					return (
 						<ListItem
 							button
@@ -569,9 +569,9 @@ class DataViewer extends Component {
 						</ListItem>
 					);
 				} else if (
-					dataset.format.toLowerCase() === 'shapefile' ||
-					dataset.format.toLowerCase() === 'raster' ||
-					dataset.format.toLowerCase().includes('geotif')
+					dataset.format.toLowerCase() === "shapefile" ||
+					dataset.format.toLowerCase() === "raster" ||
+					dataset.format.toLowerCase().includes("geotif")
 				) {
 					return (
 						<ListItem
@@ -588,7 +588,7 @@ class DataViewer extends Component {
 							<SpaceChip item={dataset} selectedItem={this.state.selectedDataset} />
 						</ListItem>
 					);
-				} else if (dataset.format === 'mapping') {
+				} else if (dataset.format === "mapping") {
 					return (
 						<ListItem
 							button
@@ -604,7 +604,7 @@ class DataViewer extends Component {
 							<SpaceChip item={dataset} selectedItem={this.state.selectedDataset} />
 						</ListItem>
 					);
-				} else if (dataset.format === 'fragility') {
+				} else if (dataset.format === "fragility") {
 					return (
 						<ListItem
 							button
@@ -620,7 +620,7 @@ class DataViewer extends Component {
 							<SpaceChip item={dataset} selectedItem={this.state.selectedDataset} />
 						</ListItem>
 					);
-				} else if (dataset.format === 'Network') {
+				} else if (dataset.format === "Network") {
 					return (
 						<ListItem
 							button
@@ -667,9 +667,9 @@ class DataViewer extends Component {
 		}
 
 		// after selected an item
-		let file_list = '';
-		let file_contents = '';
-		let right_column = '';
+		let file_list = "";
+		let file_contents = "";
+		let right_column = "";
 		if (this.state.selectedDataset) {
 			// file list
 			file_list = this.state.selectedDataset.fileDescriptors.map((file_descriptor) => (
@@ -688,15 +688,15 @@ class DataViewer extends Component {
 				</ListItem>
 			));
 			// file contents
-			if (this.state.fileExtension && this.state.fileData && this.state.fileExtension === 'csv') {
-				let data = this.state.fileData.map((data) => data.split(','));
+			if (this.state.fileExtension && this.state.fileData && this.state.fileExtension === "csv") {
+				let data = this.state.fileData.map((data) => data.split(","));
 				file_contents = (
 					<div>
 						<Typography variant="h6">File Content Preview</Typography>
 						<FileContentTable container="data_container" data={data.slice(2, 8)} colHeaders={data[0]} />
 					</div>
 				);
-			} else if (this.state.fileExtension === 'xml' || this.state.fileExtension === 'txt') {
+			} else if (this.state.fileExtension === "xml" || this.state.fileExtension === "txt") {
 				file_contents = (
 					<div>
 						<Typography variant="h6">File Content Preview</Typography>
@@ -712,9 +712,9 @@ class DataViewer extends Component {
 			}
 			// right column
 			if (
-				this.state.selectedDatasetFormat.toLowerCase() === 'shapefile' ||
-				this.state.selectedDatasetFormat.toLowerCase() === 'raster' ||
-				this.state.selectedDatasetFormat.toLowerCase().includes('geotif')
+				this.state.selectedDatasetFormat.toLowerCase() === "shapefile" ||
+				this.state.selectedDatasetFormat.toLowerCase() === "raster" ||
+				this.state.selectedDatasetFormat.toLowerCase().includes("geotif")
 			) {
 				right_column = (
 					<div>
@@ -736,7 +736,7 @@ class DataViewer extends Component {
 		}
 
 		if (this.state.authError) {
-			browserHistory.push('/login?origin=DataViewer');
+			browserHistory.push("/login?origin=DataViewer");
 			return null;
 		} else {
 			return (
@@ -801,7 +801,7 @@ class DataViewer extends Component {
 													</IconButton>
 												</InputAdornment>
 											),
-											style: { fontSize: '12px' }
+											style: { fontSize: "12px" }
 										}}
 										className={classes.search}
 										margin="dense"
