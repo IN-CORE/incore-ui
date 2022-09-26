@@ -1,14 +1,10 @@
 import { connect } from "react-redux";
 import AppComponent from "../components/App";
 import { fetchAllocations, fetchUsage, fetchLabUsage, logout } from "../actions";
-import Cookies from "universal-cookie";
-
-const cookies = new Cookies();
 
 const mapStateToProps = (state) => {
 	return {
-		Authorization: cookies.get("Authorization"),
-		// Authorization: state.user.Authorization,
+		Authorization: state.user.Authorization,
 		usage: state.usage.usage,
 		labUsage: state.usage.labUsage,
 		allocations: state.usage.allocations

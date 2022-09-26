@@ -54,6 +54,7 @@ const Login = () => {
 	const dispatch = useDispatch();
 	const loginError = useSelector((state) => state.user.loginError);
 	const loginSuccess = useSelector((state) => state.user.loginSuccess);
+	const Authorization = useSelector((state) => state.user.Authorization);
 
 	React.useEffect(() => {
 		if (loginError) {
@@ -101,7 +102,7 @@ const Login = () => {
 	};
 
 	// if already login, redirect to homepage
-	let Authorization = cookies.get("Authorization");
+	// let Authorization = cookies.get("Authorization");
 	if (Authorization !== undefined && Authorization !== "" && Authorization !== null) {
 		browserHistory.push("/");
 		return null;

@@ -1,7 +1,3 @@
-interface Dispatch {
-	(action: any): null;
-}
-
 interface AnalysisInput {
 	id: string;
 	name: string;
