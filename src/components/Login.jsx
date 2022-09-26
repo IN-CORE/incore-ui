@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
 	}
 }));
 
-const Login = () => {
+const Login = ({ location }) => {
 	const [username, setUsername] = React.useState("");
 	const [password, setPassword] = React.useState("");
 	const [passwordErrorText, setPasswordErrorText] = React.useState("");
@@ -61,7 +61,11 @@ const Login = () => {
 			setLoginErrorText("Username/Password is not correct. Try again");
 		}
 		if (loginSuccess) {
-			browserHistory.push("/");
+			if (location.query["origin"] === undefined) {
+				browserHistory.push("/");
+			} else {
+				browserHistory.push(location.query["origin"]);
+			}
 		}
 	}, [loginError, loginSuccess]);
 
@@ -102,7 +106,6 @@ const Login = () => {
 	};
 
 	// if already login, redirect to homepage
-	// let Authorization = cookies.get("Authorization");
 	if (Authorization !== undefined && Authorization !== "" && Authorization !== null) {
 		browserHistory.push("/");
 		return null;
