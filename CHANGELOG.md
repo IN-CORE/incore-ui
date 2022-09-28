@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [unreleased]
+### Added
+
+- Typescript configurations and interfaces and types for majority of the objects used in the project [#62](https://github.com/IN-CORE/incore-ui/issues/62)
+
+### Changed
+
+- Remove class based component for login component and associated container to support functional components and hooks [#62](https://github.com/IN-CORE/incore-ui/issues/62)
+
 ## [1.3.0] - 2022-09-14
 ### Security
 - Upgrade webpack from v4 to v5; addressing security vulnerabilities [#86](https://github.com/IN-CORE/incore-ui/issues/86)
