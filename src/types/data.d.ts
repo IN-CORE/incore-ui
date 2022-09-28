@@ -98,13 +98,13 @@ interface EqParameters {
 	depth: Number;
 	depth2p5KmPerSecShearWaveVelocity: Number;
 	shearWaveDepth1p0: Number;
-	faultTypeMap: Object;
+	faultTypeMap: any;
 	region: string;
 }
 
 interface Privileges {
-	userPrivileges: Object;
-	groupPrivileges: Object;
+	userPrivileges: any;
+	groupPrivileges: any;
 }
 
 interface VisualizationParameters {
@@ -133,7 +133,7 @@ interface DeterministicEarthquake {
 	privileges: Privileges;
 	name: string;
 	description: string;
-	attenuations: Object;
+	attenuations: any;
 	eqParameters: EqParameters;
 	visualizationParameters: VisualizationParameters;
 	defaultSiteClass: string;
@@ -250,7 +250,7 @@ interface DFR3Mappings {
 	authors: string[];
 	hazardType: string;
 	inventoryType: string;
-	mappings: Object[];
+	mappings: any[];
 	mappingType: string;
 }
 
@@ -280,7 +280,7 @@ interface ExecutionState {
 }
 
 interface GetState {
-	(): Object;
+	(): any;
 }
 
 interface UserState {
