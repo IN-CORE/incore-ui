@@ -1,19 +1,21 @@
 {
   "root": true,
   "extends": [
-    "eslint:recommended"
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended"
   ],
   "plugins": [
-    "react"
+    "prettier",
+    "react",
+    "@typescript-eslint"
   ],
-  "parser": "babel-eslint",
+  "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "ecmaVersion": 6,
-    "sourceType": "module",
-    "ecmaFeatures": {
-      "jsx": true,
-      "experimentalObjectRestSpread": true
-    }
+    "project": "./tsconfig.json",
+    "tsconfigRootDir": "./",
+    "jsx":true
   },
   "env": {
     "es6": true,

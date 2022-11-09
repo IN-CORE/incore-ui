@@ -1,4 +1,4 @@
-Incore Service UI 
+Incore Service UI
 ==================================
 
 **Work in Progress**
@@ -9,6 +9,7 @@ Requirements: [Node.js](https://nodejs.org) and [Yarn](https://yarnpkg.com).
 
 Install dependencies: `yarn install` or `npm install`
 
+Connect with remote development server: `npm run start:dev`
 Connect with remote test server: `export INCORE_REMOTE_HOSTNAME=https://incore-tst.ncsa.illinois.edu` and run `yarn start` or `npm start`
 Connect with remote prod server: `export INCORE_REMOTE_HOSTNAME=https://incore.ncsa.illinois.edu` and run `yarn start` or `npm start`
 Connect with local server: `export INCORE_REMOTE_HOSTNAME=http://localhost:8080` and run `yarn start` or `npm start`

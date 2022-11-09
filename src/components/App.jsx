@@ -1,6 +1,7 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 import {
 	AppBar,
+	Box,
 	Button,
 	Divider,
 	IconButton,
@@ -8,19 +9,17 @@ import {
 	Link,
 	Menu,
 	MenuItem,
-	Box,
 	Toolbar,
-	Typography,
+	Typography
 } from "@material-ui/core";
-import {createMuiTheme, MuiThemeProvider, withStyles} from "@material-ui/core/styles";
+import { createMuiTheme, MuiThemeProvider, withStyles } from "@material-ui/core/styles";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import {browserHistory} from "react-router";
+import { browserHistory } from "react-router";
 import config from "../app.config";
 import ErrorMessage from "./children/ErrorMessage";
-import {getCurrUserInfo, determineUserGroup} from "../utils/common";
+import { determineUserGroup, getCurrUserInfo } from "../utils/common";
 import Gravatar from "react-gravatar";
-
 
 global.__base = `${__dirname}/`;
 
@@ -66,32 +65,32 @@ const theme = createMuiTheme({
 			fontFamily: "'Work Sans',sans-serif",
 			fontSize: "12px"
 		}
-	},
+	}
 });
 
 const styles = {
-	menuCustomWidth:{
-		"& li":{
-			width:"200px"
+	menuCustomWidth: {
+		"& li": {
+			width: "200px"
 		}
 	},
 	appBar: {
 		width: "100%",
 		transition: theme.transitions.create(["margin", "width"], {
 			easing: theme.transitions.easing.sharp,
-			duration: theme.transitions.duration.leavingScreen,
-		}),
+			duration: theme.transitions.duration.leavingScreen
+		})
 	},
-	avatarImg:{
+	avatarImg: {
 		width: "32px",
 		height: "32px",
-		borderRadius: "50%",
+		borderRadius: "50%"
 		// border:"solid 2px #FFFFFF"
 	},
 	toolBar: {
 		minHeight: "48px",
 		display: "flex",
-		justifyContent: "flex-start",
+		justifyContent: "flex-start"
 	},
 	smallButton: {
 		padding: "6px"
@@ -99,35 +98,34 @@ const styles = {
 	denseStyle: {
 		minHeight: "10px",
 		lineHeight: "30px",
-		fontSize: "12px",
+		fontSize: "12px"
 	},
-	status:{
-		padding:"6px 16px"
+	status: {
+		padding: "6px 16px"
 	},
-	fontLight:{
+	fontLight: {
 		fontSize: "12px",
-		color:"#333333",
-		fontWeight:100,
-		fontFamily: theme.typography.body1.fontFamily,
+		color: "#333333",
+		fontWeight: 100,
+		fontFamily: theme.typography.body1.fontFamily
 	},
-	fontBold:{
+	fontBold: {
 		fontSize: "12px",
-		color:"#000000",
-		fontWeight:600,
-		fontFamily: theme.typography.body1.fontFamily,
+		color: "#000000",
+		fontWeight: 600,
+		fontFamily: theme.typography.body1.fontFamily
 	},
 	toolBarItem: {
 		margin: "auto 20px",
 		cursor: "pointer"
 	},
-	customProgressBar:{
-		borderRadius:5,
-		height:5,
+	customProgressBar: {
+		borderRadius: 5,
+		height: 5
 	}
 };
 
 class App extends Component {
-
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -136,9 +134,9 @@ class App extends Component {
 			viewerMenuOpen: false,
 			helpMenuOpen: false,
 			anchorEl: null,
-			message:"",
-			error:"",
-			messageOpen: true,
+			message: "",
+			error: "",
+			messageOpen: true
 		};
 		this.logout = this.logout.bind(this);
 		this.handleProfileMenuOpen = this.handleProfileMenuOpen.bind(this);
@@ -156,23 +154,28 @@ class App extends Component {
 			message: this.props.location.query.error
 		});
 	}
-	componentDidMount(){
+
+	componentDidMount() {
 		// if localhost, immediately get usage
-		if (config.hostname.includes("localhost") ||
-			( this.props.Authorization !== "" && this.props.Authorization !== undefined)) {
-			this.props.getDatasetUsage();
-			this.props.getHazardUsage();
+		if (
+			config.hostname.includes("localhost") ||
+			(this.props.Authorization !== "" && this.props.Authorization !== undefined)
+		) {
+			this.props.getAllocations();
+			this.props.getUsage();
 		}
 	}
 
 	componentDidUpdate(prevProps) {
 		// after immediate login, need to update the usage
-		if (!config.hostname.includes("localhost") && (
-			this.props.Authorization !== prevProps.Authorization
-			&& this.props.Authorization !== ""
-			&& this.props.Authorization !== undefined)) {
-			this.props.getDatasetUsage();
-			this.props.getHazardUsage();
+		if (
+			!config.hostname.includes("localhost") &&
+			this.props.Authorization !== prevProps.Authorization &&
+			this.props.Authorization !== "" &&
+			this.props.Authorization !== undefined
+		) {
+			this.props.getAllocations();
+			this.props.getUsage();
 		}
 	}
 
@@ -180,7 +183,7 @@ class App extends Component {
 		this.props.logout();
 		browserHistory.push("/");
 		this.setState({
-			profileMenuOpen: false,
+			profileMenuOpen: false
 		});
 	}
 
@@ -207,7 +210,7 @@ class App extends Component {
 
 	handleProfileMenuClose() {
 		this.setState({
-			profileMenuOpen: false,
+			profileMenuOpen: false
 		});
 	}
 
@@ -219,24 +222,31 @@ class App extends Component {
 
 	handleViewerMenuClose(event) {
 		this.setState({
-			viewerMenuOpen: false,
+			viewerMenuOpen: false
 		});
 	}
 
 	handleHelpMenuClose(event) {
 		this.setState({
-			helpMenuOpen: false,
+			helpMenuOpen: false
 		});
 	}
 
 	render() {
-		const {classes} = this.props;
+		const { classes } = this.props;
 		let username;
 		let group;
 
-		let contents = <Button color="inherit" href={"login"} className={classes.smallButton}>Login</Button>;
+		let contents = (
+			<Button color="inherit" href={"login"} className={classes.smallButton}>
+				Login
+			</Button>
+		);
 		let profileMenu = <></>;
-		if (config.hostname.includes("localhost") || (this.props.Authorization !== "" && this.props.Authorization !== undefined)) {
+		if (
+			config.hostname.includes("localhost") ||
+			(this.props.Authorization !== "" && this.props.Authorization !== undefined)
+		) {
 			const userInfo = getCurrUserInfo();
 			group = determineUserGroup(userInfo);
 
@@ -248,22 +258,21 @@ class App extends Component {
 
 			contents = (
 				<IconButton color="inherit" className={classes.smallButton} onClick={this.handleProfileMenuOpen}>
-					{
-						userInfo["email"] !== undefined ?
-							<Gravatar className={classes.avatarImg} email={userInfo["email"]}
-								  rating="g"/>
-							:
-							<AccountCircle fontSize="small"/>
-					}
-				</IconButton>);
+					{userInfo["email"] !== undefined ? (
+						<Gravatar className={classes.avatarImg} email={userInfo["email"]} rating="g" />
+					) : (
+						<AccountCircle fontSize="small" />
+					)}
+				</IconButton>
+			);
 
 			//TODO: My account is a placeholder for now
 			profileMenu = (
 				<Menu
 					anchorEl={this.state.anchorEl}
-					anchorOrigin={{vertical: "bottom", horizontal: "left"}}
+					anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
 					keepMounted
-					transformOrigin={{vertical: "top", horizontal: "center"}}
+					transformOrigin={{ vertical: "top", horizontal: "center" }}
 					open={this.state.profileMenuOpen}
 					onClose={this.handleProfileMenuClose}
 					getContentAnchorEl={null}
@@ -274,47 +283,85 @@ class App extends Component {
 						<Typography className={classes.fontBold}>{username}</Typography>
 					</Box>
 					<Box className={classes.status}>
-						<LinearProgress variant="determinate" className={classes.customProgressBar}
-							value={this.props.datasetUsage["total_file_size_byte"] / config.maxUsage[group]["datasetUsage"]["fileSizeByte"] * 100}/>
-						<Typography className={classes.fontLight} style={{fontSize: "10px"}}>
-							Data {this.props.datasetUsage["total_file_size"]} of {config.maxUsage[group]["datasetUsage"]["fileSize"]} used
+						<LinearProgress
+							variant="determinate"
+							className={classes.customProgressBar}
+							value={
+								(this.props.usage["total_file_size_of_datasets_byte"] /
+									this.props.allocations["total_file_size_of_datasets_byte"]) *
+								100
+							}
+						/>
+						<Typography className={classes.fontLight} style={{ fontSize: "10px" }}>
+							Data {this.props.usage["total_file_size_of_datasets"]} of{" "}
+							{this.props.allocations["total_file_size_of_datasets"]} used
 						</Typography>
 					</Box>
 					<Box className={classes.status}>
-						<LinearProgress variant="determinate" className={classes.customProgressBar}
-							value={this.props.hazardUsage["total_file_size_byte"] / config.maxUsage[group]["hazardUsage"]["fileSizeByte"] * 100}/>
-						<Typography className={classes.fontLight} style={{fontSize: "10px"}}>
-							Hazard {this.props.hazardUsage["total_file_size"]} of {config.maxUsage[group]["hazardUsage"]["fileSize"]} used
+						<LinearProgress
+							variant="determinate"
+							className={classes.customProgressBar}
+							value={
+								(this.props.usage["total_file_size_of_hazard_datasets_byte"] /
+									this.props.allocations["total_file_size_of_hazard_datasets_byte"]) *
+								100
+							}
+						/>
+						<Typography className={classes.fontLight} style={{ fontSize: "10px" }}>
+							Hazard {this.props.usage["total_file_size_of_hazard_datasets"]} of{" "}
+							{this.props.allocations["total_file_size_of_hazard_datasets"]} used
 						</Typography>
 					</Box>
-					<Divider orientation="horizontal"/>
-					<MenuItem className={classes.denseStyle}
-							  onClick={() => {
-								  this.handleProfileMenuClose();
-								  browserHistory.push("/profile");
-							  }}>
-						Profile</MenuItem>
-					<MenuItem className={classes.denseStyle} onClick={() => {this.handleProfileMenuClose();}}>
-						<Link href={`mailto:${config.mailingList}`} target="_blank"
-							  style={{textDecoration: "none"}}>
+					<Divider orientation="horizontal" />
+					<MenuItem
+						className={classes.denseStyle}
+						onClick={() => {
+							this.handleProfileMenuClose();
+							browserHistory.push("/profile");
+						}}
+					>
+						Profile
+					</MenuItem>
+					<MenuItem
+						className={classes.denseStyle}
+						onClick={() => {
+							this.handleProfileMenuClose();
+						}}
+					>
+						<Link href={`mailto:${config.mailingList}`} target="_blank" style={{ textDecoration: "none" }}>
 							Contact Us
 						</Link>
 					</MenuItem>
-					<MenuItem className={classes.denseStyle} onClick={() => {this.handleProfileMenuClose();}}>
-						<Link href={config.tosURL} target="_blank" style={{textDecoration:"none"}}>
+					<MenuItem
+						className={classes.denseStyle}
+						onClick={() => {
+							this.handleProfileMenuClose();
+						}}
+					>
+						<Link href={config.tosURL} target="_blank" style={{ textDecoration: "none" }}>
 							Terms of Service
 						</Link>
 					</MenuItem>
-					<MenuItem className={classes.denseStyle} onClick={() => {this.handleProfileMenuClose();}}>
-						<Link href={config.privacyURL} target="_blank" style={{textDecoration:"none"}}>
+					<MenuItem
+						className={classes.denseStyle}
+						onClick={() => {
+							this.handleProfileMenuClose();
+						}}
+					>
+						<Link href={config.privacyURL} target="_blank" style={{ textDecoration: "none" }}>
 							Web Privacy Notice
 						</Link>
 					</MenuItem>
-					<Divider orientation="horizontal"/>
-					<MenuItem className={classes.denseStyle} onClick={() => {
-						this.handleProfileMenuClose();
-						this.logout();
-					}}>Log Out</MenuItem>
+					<Divider orientation="horizontal" />
+					<MenuItem
+						className={classes.denseStyle}
+						onClick={() => {
+							this.handleProfileMenuClose();
+							this.logout();
+						}}
+					>
+						Log Out
+					</MenuItem>
 				</Menu>
 			);
 		}
@@ -322,66 +369,78 @@ class App extends Component {
 		let viewerMenu = (
 			<Menu
 				anchorEl={this.state.anchorEl}
-				anchorOrigin={{vertical: "bottom", horizontal: "center"}}
+				anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
 				keepMounted
-				transformOrigin={{vertical: "top", horizontal: "center"}}
+				transformOrigin={{ vertical: "top", horizontal: "center" }}
 				open={this.state.viewerMenuOpen}
 				onClose={this.handleViewerMenuClose}
 				getContentAnchorEl={null}
 			>
-				<MenuItem className={classes.denseStyle}
-						  onClick={() => {
-							  this.handleViewerMenuClose();
-							  browserHistory.push("/DFR3Viewer");
-							  fetch("/DFR3Viewer");
-						  }}>DFR3 Viewer</MenuItem>
-				<MenuItem className={classes.denseStyle}
-						  onClick={() => {
-							  this.handleViewerMenuClose();
-							  browserHistory.push("/DataViewer");
-							  fetch("/DataViewer");
-						  }}>Data Viewer</MenuItem>
-				<MenuItem className={classes.denseStyle}
-						  onClick={() => {
-							  this.handleViewerMenuClose();
-							  browserHistory.push("/HazardViewer");
-							  fetch("/HazardViewer");
-						  }}>Hazard Viewer</MenuItem>
+				<MenuItem
+					className={classes.denseStyle}
+					onClick={() => {
+						this.handleViewerMenuClose();
+						browserHistory.push("/DFR3Viewer");
+						fetch("/DFR3Viewer");
+					}}
+				>
+					DFR3 Viewer
+				</MenuItem>
+				<MenuItem
+					className={classes.denseStyle}
+					onClick={() => {
+						this.handleViewerMenuClose();
+						browserHistory.push("/DataViewer");
+						fetch("/DataViewer");
+					}}
+				>
+					Data Viewer
+				</MenuItem>
+				<MenuItem
+					className={classes.denseStyle}
+					onClick={() => {
+						this.handleViewerMenuClose();
+						browserHistory.push("/HazardViewer");
+						fetch("/HazardViewer");
+					}}
+				>
+					Hazard Viewer
+				</MenuItem>
 			</Menu>
 		);
 
 		let helpMenu = (
 			<Menu
 				anchorEl={this.state.anchorEl}
-				anchorOrigin={{vertical: "bottom", horizontal: "center"}}
+				anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
 				keepMounted
-				transformOrigin={{vertical: "top", horizontal: "center"}}
+				transformOrigin={{ vertical: "top", horizontal: "center" }}
 				open={this.state.helpMenuOpen}
 				onClose={this.handleHelpMenuClose}
 				getContentAnchorEl={null}
 			>
 				<MenuItem className={classes.denseStyle} onClick={this.handleHelpMenuClose}>
-					<Link href="/doc/incore/index.html" target="_blank" style={{textDecoration: "none"}}>
+					<Link href="/doc/incore/index.html" target="_blank" style={{ textDecoration: "none" }}>
 						IN-CORE Manual
 					</Link>
 				</MenuItem>
 				<MenuItem className={classes.denseStyle} onClick={this.handleHelpMenuClose}>
-					<Link href={config.pyIncoreDocUrl} target="_blank" style={{textDecoration: "none"}}>
+					<Link href={config.pyIncoreDocUrl} target="_blank" style={{ textDecoration: "none" }}>
 						pyIncore Reference
 					</Link>
 				</MenuItem>
 				<MenuItem className={classes.denseStyle} onClick={this.handleHelpMenuClose}>
-					<Link href={config.pyIncoreDataDocUrl} target="_blank" style={{textDecoration: "none"}}>
+					<Link href={config.pyIncoreDataDocUrl} target="_blank" style={{ textDecoration: "none" }}>
 						pyIncore-data Reference
 					</Link>
 				</MenuItem>
 				<MenuItem className={classes.denseStyle} onClick={this.handleHelpMenuClose}>
-					<Link href={config.pyIncoreVizDocUrl} target="_blank" style={{textDecoration: "none"}}>
+					<Link href={config.pyIncoreVizDocUrl} target="_blank" style={{ textDecoration: "none" }}>
 						pyIncore-viz Reference
 					</Link>
 				</MenuItem>
 				<MenuItem className={classes.denseStyle} onClick={this.handleHelpMenuClose}>
-					<Link href={config.swaggerUrl} target="_blank" style={{textDecoration: "none"}}>
+					<Link href={config.swaggerUrl} target="_blank" style={{ textDecoration: "none" }}>
 						Web Service API
 					</Link>
 				</MenuItem>
@@ -391,50 +450,61 @@ class App extends Component {
 		return (
 			<MuiThemeProvider theme={theme}>
 				{/*TODO add auto collapse to hamburger once screen is small*/}
-				<AppBar position="static"
-					className={classes.appBar}>
+				<AppBar position="static" className={classes.appBar}>
 					<Toolbar className={classes.toolBar}>
 						<Typography className={classes.toolBarItem}>
-							<Link href="/" style={{color: "#ffffff", textDecoration: "none"}}>HOME</Link></Typography>
-						<Typography onClick={this.handleHelpMenuOpen} className={classes.toolBarItem}
-							style={{verticalAlign: "middle", display: "inline-flex"}}>
-							User Guides<ExpandMoreIcon fontSize="small"/></Typography>
+							<Link href="/" style={{ color: "#ffffff", textDecoration: "none" }}>
+								HOME
+							</Link>
+						</Typography>
+						<Typography
+							onClick={this.handleHelpMenuOpen}
+							className={classes.toolBarItem}
+							style={{ verticalAlign: "middle", display: "inline-flex" }}
+						>
+							User Guides
+							<ExpandMoreIcon fontSize="small" />
+						</Typography>
 						{helpMenu}
 						<Typography className={classes.toolBarItem}>
-							<Link target="_blank"
-								  style={{color: "#ffffff", textDecoration: "none"}}
-								  onClick={() => {
-									  window.open(config.incoreLab);
-									  fetch("/jupyterhub");
-								  }}>
-								IN-CORE lab</Link></Typography>
-						<Typography onClick={this.handleViewerMenuOpen} className={classes.toolBarItem}
-							style={{verticalAlign: "middle", display: "inline-flex"}}>
-							Web Tools<ExpandMoreIcon fontSize="small"/></Typography>
+							<Link
+								target="_blank"
+								style={{ color: "#ffffff", textDecoration: "none" }}
+								onClick={() => {
+									window.open(config.incoreLab);
+									fetch("/jupyterhub");
+								}}
+							>
+								IN-CORE lab
+							</Link>
+						</Typography>
+						<Typography
+							onClick={this.handleViewerMenuOpen}
+							className={classes.toolBarItem}
+							style={{ verticalAlign: "middle", display: "inline-flex" }}
+						>
+							Web Tools
+							<ExpandMoreIcon fontSize="small" />
+						</Typography>
 						{viewerMenu}
-						<Typography variant="body1" style={{flex: 1}}/>
+						<Typography variant="body1" style={{ flex: 1 }} />
 						{contents}
 						{profileMenu}
 					</Toolbar>
 				</AppBar>
 				{/*error message */}
-				{
-					this.state.message ?
-						<ErrorMessage
-							message={this.state.message}
-							error={this.state.error}
-							messageOpen={this.state.messageOpen}
-							closeErrorMessage={this.closeErrorMessage}/>
-						:
-						null
-				}
-				<div className={classes.appBar}>
-					{this.props.children}
-				</div>
+				{this.state.message ? (
+					<ErrorMessage
+						message={this.state.message}
+						error={this.state.error}
+						messageOpen={this.state.messageOpen}
+						closeErrorMessage={this.closeErrorMessage}
+					/>
+				) : null}
+				<div className={classes.appBar}>{this.props.children}</div>
 			</MuiThemeProvider>
 		);
 	}
-
 }
 
 export default withStyles(styles)(App);

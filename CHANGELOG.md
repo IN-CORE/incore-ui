@@ -5,6 +5,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [unreleased]
+### Added
+
+- Typescript configurations and interfaces and types for majority of the objects used in the project [#62](https://github.com/IN-CORE/incore-ui/issues/62)
+
+### Changed
+
+- Remove class based component for login component and associated container to support functional components and hooks [#62](https://github.com/IN-CORE/incore-ui/issues/62)
+
+## [1.3.0] - 2022-09-14
+### Security
+- Upgrade webpack from v4 to v5; addressing security vulnerabilities [#86](https://github.com/IN-CORE/incore-ui/issues/86)
+
+
+## [1.2.0] - 2022-07-27
+### Added
+- Enable preview of model based EQ [#67](https://github.com/IN-CORE/incore-ui/issues/67)
+
+### Changed
+- Use github release instead of github tag to display the latest versions on the landing page [#81](https://github.com/IN-CORE/incore-ui/issues/81)
+- Update CHANGELOG link for branch renaming [#78](https://github.com/IN-CORE/incore-ui/issues/78)
+- New space/api/usage endpoint to get correct user usage info [#79](https://github.com/IN-CORE/incore-ui/issues/79)
+- Use the allocation quota from service endpoint [#69](https://github.com/IN-CORE/incore-ui/issues/69)
+
+### Security
+- Bump shell-quote from 1.7.2 to 1.7.3 [#75](https://github.com/IN-CORE/incore-ui/pull/75)
+- Bump moment from 2.29.1 to 2.29.4 #76 [#76](https://github.com/IN-CORE/incore-ui/pull/76)
 
 ##[Unreleased]
 
