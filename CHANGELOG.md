@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+
+## [Unreleased]
+### Security
+- Bump loader-utils from 2.0.2 to 2.0.3 [#94](https://github.com/IN-CORE/incore-ui/pull/94)
+
+
 ## [1.3.0] - 2022-09-14
 ### Security
 - Upgrade webpack from v4 to v5; addressing security vulnerabilities [#86](https://github.com/IN-CORE/incore-ui/issues/86)
