@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+##[Unreleased]
+
 ## [1.0.1] - 2022-03-30
 ### Security
 - Bump nanoid from 3.1.23 to 3.2.0 [#53](https://github.com/IN-CORE/incore-ui/pull/53)
