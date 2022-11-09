@@ -93,7 +93,7 @@
     "jasmine": "2.5.3",
     "json-loader": "0.5.4",
     "mini-css-extract-plugin": "^1.6.0",
-    "node-sass": "^7.0.1",
+    "node-sass": "^7.0.3",
     "npm-run-all": "4.0.1",
     "postcss-loader": "^7.0.1",
     "redux-immutable-state-invariant": "1.2.4",
