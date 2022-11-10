@@ -2,6 +2,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { browserHistory } from "react-router";
 
+import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -30,15 +31,19 @@ const useStyles = makeStyles((theme) => ({
     h4: {
 		// fontWeight: "bold",
 		color: theme.palette.primary,
-        marginBottom: theme.spacing(3),
-		marginTop: theme.spacing(4),
+		marginTop: theme.spacing(3),
+	},
+    h5: {
+		marginBottom: theme.spacing(2),
 	},
     cardroot: {
         maxWidth: 400,
         marginBottom: theme.spacing(3),
+        marginTop: theme.spacing(3),
     },
     cardmedia: {
         height: 200,
+        width: 400
     },
     footerContainer: {
 		marginTop: theme.spacing(4),
@@ -69,6 +74,7 @@ const CommunityApps = ({ location }) => {
         {app: "Salt Lake City", img: "/public/salt-lake-city.jpeg"},
         {app: "Joplin", img: "/public/joplin-main-street.jpeg"},
     ]
+    const diag_img = "/public/step_diag.png"
     const footerLogos = [
 			{
 				image: "/public/CSU-logo.png",
@@ -98,12 +104,15 @@ const CommunityApps = ({ location }) => {
                         title={image.app}
                     />
                     <CardContent>
+                    <Box textAlign="center">
                         <Typography gutterBottom variant="h5" component="h2">
                             {image.app}
                         </Typography>
-                        <Typography variant="body2" color="textSecondary" component="p">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras porta sapien at turpis dictum pharetra. Nullam congue diam quis accumsan ultrices. Proin tempus dolor quam, at pellentesque tellus blandit eu. Fusce non elit lacus. Nullam lacus mi, mollis vestibulum blandit ut, vehicula sit amet justo. Suspendisse auctor id nunc eget ornare. Cras neque lacus, facilisis ac commodo eu, tincidunt eu nulla. Fusce ac mauris vel arcu fringilla porttitor eget sed libero.
-                        </Typography>
+                    </Box>
+                        
+                        {/* <Typography variant="body2" color="textSecondary" component="p">
+                            Community App for 
+                        </Typography> */}
                     </CardContent>
                 </CardActionArea>
                 {/* <CardActions>
@@ -121,10 +130,13 @@ const CommunityApps = ({ location }) => {
     return (
         <div>
             <div className={classes.root}>
-                {/* <h1>This is the community landing page. Welcome!</h1> */}
                 <Paper elevation={2} >
-                    <Typography color="inherit" align="center" variant="h4" className={classes.h4}>
-		    			Community Apps
+                    <Typography component="div">
+                        <Box textAlign="center" p={2}>
+                            <Typography color="inherit" align="center" variant="h4" className={classes.h4}>
+		            			Community Resilience Planning
+                            </Typography>
+                        </Box>
                     </Typography>
                     <Grid container className={classes.grid_container} spacing={2}>
                         <Grid item xs={12}>
@@ -139,6 +151,18 @@ const CommunityApps = ({ location }) => {
                             </Grid>
                         </Grid>
                     </Grid>
+                    <Typography component='div'>
+                        <Box textAlign="justify" p={1} ml={7} mr={7} >
+                            <Typography color="inherit" variant="h5" className={classes.h5}>
+                            This graph shows the framework used for matching and integrating the steps of the NIST’s Community Resilience Planning Guide for Buildings and Infrastructure Systems (Playbook) with modules in IN-CORE. NIST’s Resilience Planning Playbook is a practical,  flexible methodology to set priorities, allocate  resources, and manage risks to improve resilience. IN-CORE can provide  data and analyses for multiple aspects of  community infrastructure for recovery and resilience planning. This integrative framework matches the planning steps with the appropriate data outputs or models within IN-CORE. For example, Step 2 of the Playbook, Understand the Situation is a planning step that draws information from built environment, social, economic, impact, and recovery inventories developed in IN-CORE such as buildings inventory, housing units, household allocation inventory. IN-CORE community description inventories also support Step 3 of the Playbook process, Determine Goals and Objectives. The next phase of this framework integrates IN-CORE's predictive models of hazard, damages, social and economic impacts, and recovery with Step 4 of the Playbook, Plan development where user communities can develop strategies, policies, actions to achieve their resilience goals and objectives based on the predictions provided by various IN-CORE models such as expected building damages, population dislocation, employment losses. Plan development (Step 4) also relies on the capability of IN-CORE modules to present the expected outcomes of various mitigation and recovery policies in order to reduce damages and losses and improve recovery proactively in advance of predicted hazard scenarios. Together the data and analysis capabilities of IN-CORE and the planning process of the Playbook are integrated to support and inform planning with analysis and modeling.
+                            </Typography>
+                        </Box>
+                    </Typography>
+                    <Box textAlign="center" p={2} m={1}>
+                            <img style={{maxWidth:"80%", height:"auto"}} src={diag_img} />
+                    </Box>
+                    
+                    
                 </Paper>
             </div>
             {/*footer*/}
