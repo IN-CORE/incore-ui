@@ -31,7 +31,6 @@ const useStyles = makeStyles((theme) => ({
     h4: {
 		// fontWeight: "bold",
 		color: theme.palette.primary,
-		marginTop: theme.spacing(3),
 	},
     h5: {
 		marginBottom: theme.spacing(2),
@@ -42,8 +41,8 @@ const useStyles = makeStyles((theme) => ({
         marginTop: theme.spacing(3),
     },
     cardmedia: {
-        height: 200,
-        width: 400
+        height: 250,
+        width: 500
     },
     footerContainer: {
 		marginTop: theme.spacing(4),
@@ -131,13 +130,16 @@ const CommunityApps = ({ location }) => {
         <div>
             <div className={classes.root}>
                 <Paper elevation={2} >
-                    <Typography component="div">
-                        <Box textAlign="center" p={2}>
-                            <Typography color="inherit" align="center" variant="h4" className={classes.h4}>
-		            			Community Resilience Planning
-                            </Typography>
-                        </Box>
-                    </Typography>
+                    <Grid container direction="row" alignItems="center" justifyContent="center" spacing={2}>
+                            <Grid item>
+                              <img src="/public/cr-logo.png" />
+                            </Grid>
+                            <Grid item>
+                                <Typography color="inherit" align="center" variant="h4" className={classes.h4}>
+		            			    Community Resilience Planning
+                                </Typography>
+                            </Grid>
+                    </Grid>
                     <Grid container className={classes.grid_container} spacing={2}>
                         <Grid item xs={12}>
                             <Grid container justifyContent="center" spacing={3}>
@@ -152,10 +154,8 @@ const CommunityApps = ({ location }) => {
                         </Grid>
                     </Grid>
                     <Typography component='div'>
-                        <Box textAlign="justify" p={1} ml={7} mr={7} >
-                            <Typography color="inherit" variant="h5" className={classes.h5}>
+                        <Box textAlign="justify" ml={10} mr={10} pl={4} pr={4} fontSize={20}>
                             This graph shows the framework used for matching and integrating the steps of the NIST’s Community Resilience Planning Guide for Buildings and Infrastructure Systems (Playbook) with modules in IN-CORE. NIST’s Resilience Planning Playbook is a practical,  flexible methodology to set priorities, allocate  resources, and manage risks to improve resilience. IN-CORE can provide  data and analyses for multiple aspects of  community infrastructure for recovery and resilience planning. This integrative framework matches the planning steps with the appropriate data outputs or models within IN-CORE. For example, Step 2 of the Playbook, Understand the Situation is a planning step that draws information from built environment, social, economic, impact, and recovery inventories developed in IN-CORE such as buildings inventory, housing units, household allocation inventory. IN-CORE community description inventories also support Step 3 of the Playbook process, Determine Goals and Objectives. The next phase of this framework integrates IN-CORE's predictive models of hazard, damages, social and economic impacts, and recovery with Step 4 of the Playbook, Plan development where user communities can develop strategies, policies, actions to achieve their resilience goals and objectives based on the predictions provided by various IN-CORE models such as expected building damages, population dislocation, employment losses. Plan development (Step 4) also relies on the capability of IN-CORE modules to present the expected outcomes of various mitigation and recovery policies in order to reduce damages and losses and improve recovery proactively in advance of predicted hazard scenarios. Together the data and analysis capabilities of IN-CORE and the planning process of the Playbook are integrated to support and inform planning with analysis and modeling.
-                            </Typography>
                         </Box>
                     </Typography>
                     <Box textAlign="center" p={2} m={1}>
