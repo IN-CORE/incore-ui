@@ -5,12 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+
 ## [unreleased]
 ### Added
 - Typescript configurations and interfaces and types for majority of the objects used in the project [#62](https://github.com/IN-CORE/incore-ui/issues/62)
 
 ### Changed
 - Remove class based component for login component and associated container to support functional components and hooks [#62](https://github.com/IN-CORE/incore-ui/issues/62)
+
+### Security
+- Bump loader-utils from 2.0.2 to 2.0.3 [#94](https://github.com/IN-CORE/incore-ui/pull/94)
+
 
 ## [1.3.0] - 2022-09-14
 ### Security
