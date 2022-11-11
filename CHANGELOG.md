@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Security
 - Bump loader-utils from 2.0.2 to 2.0.3 [#94](https://github.com/IN-CORE/incore-ui/pull/94)
-
+- Bump scss-tokenizer and node-sass [#95](https://github.com/IN-CORE/incore-ui/pull/95/files)
 
 ## [1.3.0] - 2022-09-14
 ### Security
