@@ -1,6 +1,7 @@
 {
 	"presets": [
 		"@babel/preset-env",
+		"@babel/preset-typescript",
 		"@babel/preset-react",
 		"@babel/preset-flow"
 	],
@@ -42,6 +43,7 @@
 		"development": {
 			"presets": [
 			  "@babel/preset-env",
+			  "@babel/preset-typescript",
 			  "@babel/preset-react",
 			  "@babel/preset-flow"
 			]
