@@ -36,7 +36,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Bump shell-quote from 1.7.2 to 1.7.3 [#75](https://github.com/IN-CORE/incore-ui/pull/75)
 - Bump moment from 2.29.1 to 2.29.4 #76 [#76](https://github.com/IN-CORE/incore-ui/pull/76)
 
-##[Unreleased]
 
 ## [1.0.1] - 2022-03-30
 ### Security
