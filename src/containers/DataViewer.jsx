@@ -1,8 +1,13 @@
-import {connect} from "react-redux";
+import { connect } from "react-redux";
 import DataViewerComponent from "../components/DataViewer";
-import {fetchDatasets, fetchSpaces, fetchUniqueDatatypes, searchDatasets, deleteItemById,
-	resetError} from "../actions";
-
+import {
+	fetchDatasets,
+	fetchSpaces,
+	fetchUniqueDatatypes,
+	searchDatasets,
+	deleteItemById,
+	resetError
+} from "../actions";
 
 const mapStateToProps = (state) => {
 	return {

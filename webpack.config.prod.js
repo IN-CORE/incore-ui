@@ -8,16 +8,12 @@ import path from "path";
 import TerserPlugin from "terser-webpack-plugin";
 
 export default {
-	mode:"production",
+	mode: "production",
 	resolve: {
-		extensions: [".js", ".jsx", ".json"]
+		extensions: [".ts", ".tsx", ".js", ".jsx", ".json"]
 	},
 	devtool: "source-map", // more info:https://webpack.github.io/docs/build-performance.html#sourcemaps and https://webpack.github.io/docs/configuration.html#devtool
-	entry: [
-		"babel-polyfill",
-		"whatwg-fetch",
-		path.resolve(__dirname, "src/index.js")
-	],
+	entry: ["babel-polyfill", "whatwg-fetch", path.resolve(__dirname, "src/index.js")],
 	target: "web", // necessary per https://webpack.github.io/docs/testing.html#compile-and-test
 	output: {
 		path: path.resolve(__dirname, "dist"),
@@ -27,14 +23,14 @@ export default {
 	plugins: [
 		new webpack.DefinePlugin({
 			"process.env": {
-				"NODE_ENV": JSON.stringify("production"),
-				"INCORE_REMOTE_HOSTNAME": JSON.stringify(process.env.INCORE_REMOTE_HOSTNAME)
+				NODE_ENV: JSON.stringify("production"),
+				INCORE_REMOTE_HOSTNAME: JSON.stringify(process.env.INCORE_REMOTE_HOSTNAME)
 			},
-			__DEV__: false
+			"__DEV__": false
 		}),
 
 		// Generate an external css file with a hash in the filename
-		new MiniCssExtractPlugin({filename: "[name].[contenthash].css"}),
+		new MiniCssExtractPlugin({ filename: "[name].[contenthash].css" }),
 
 		// Generate HTML file that contains references to generated bundles. See here for how this works: https://github.com/ampedandwired/html-webpack-plugin#basic-usage
 		new HtmlWebpackPlugin({
@@ -65,16 +61,14 @@ export default {
 					includePaths: [path.resolve(__dirname, "src", "scss")]
 				},
 				context: "/",
-				postcss: [
-					autoprefixer(),
-				]
+				postcss: [autoprefixer()]
 			}
 		})
 	],
 	module: {
 		rules: [
 			{
-				test: /\.jsx?$/,
+				test: /\.[tj]sx?$/,
 				exclude: /node_modules/,
 				loader: "babel-loader"
 			},
@@ -98,9 +92,7 @@ export default {
 				test: /\.(jpe?g|png|gif)$/i,
 				type: "asset/resource"
 			},
-			{	test: /\.ico$/,
-				type: "asset/resource"
-			},
+			{ test: /\.ico$/, type: "asset/resource" },
 			{
 				test: /(\.css|\.scss)$/,
 				use: [
@@ -117,17 +109,19 @@ export default {
 					"sass-loader"
 				]
 			},
-			{test: /\.json$/, loader: "json-loader"}
+			{ test: /\.json$/, loader: "json-loader" }
 		]
 	},
-	optimization:{
-		minimizer: [new TerserPlugin({
-			terserOptions: {
-				ecma:8,
-				compress: {
-					warnings: false
+	optimization: {
+		minimizer: [
+			new TerserPlugin({
+				terserOptions: {
+					ecma: 8,
+					compress: {
+						warnings: false
+					}
 				}
-			}
-		})],
+			})
+		]
 	}
 };

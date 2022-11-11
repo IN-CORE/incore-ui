@@ -1,7 +1,14 @@
-import {connect} from "react-redux";
+import { connect } from "react-redux";
 import DFR3ViewerComponent from "../components/DFR3Viewer";
-import {fetchDFR3Curves, fetchDFR3Mappings, fetchSpaces, searchDFR3Curves, searchDFR3Mappings,
-	deleteItemById, resetError} from "../actions";
+import {
+	fetchDFR3Curves,
+	fetchDFR3Mappings,
+	fetchSpaces,
+	searchDFR3Curves,
+	searchDFR3Mappings,
+	deleteItemById,
+	resetError
+} from "../actions";
 
 const mapStateToProps = (state) => {
 	return {
@@ -11,13 +18,13 @@ const mapStateToProps = (state) => {
 		spaces: state.space.spaces,
 		authError: state.user.loginError,
 		curvesLoading: state.dfr3Curve.loading,
-		mappingsLoading: state.dfr3Mapping.loading,
+		mappingsLoading: state.dfr3Mapping.loading
 	};
 };
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		getAllSpaces: () =>{
+		getAllSpaces: () => {
 			dispatch(fetchSpaces());
 		},
 		getAllDFR3Curves: (dfr3_type, space, inventory, hazard, limit, offset) => {

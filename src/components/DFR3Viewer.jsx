@@ -24,23 +24,23 @@ import SearchIcon from "@material-ui/icons/Search";
 import CloseIcon from "@material-ui/icons/Close";
 import chartConfig from "./config/ChartConfig";
 import config from "../app.config";
-import {browserHistory} from "react-router";
+import { browserHistory } from "react-router";
 import Pagination from "./children/Pagination";
 import DataPerPage from "./children/DataPerPage";
 import Space from "./children/Space";
 import Version from "./children/Version";
-import {CopyToClipboard} from "react-copy-to-clipboard";
-import {createMuiTheme, withStyles} from "@material-ui/core/styles/index";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import { createMuiTheme, withStyles } from "@material-ui/core/styles/index";
 import Cookies from "universal-cookie";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 
-import {exportJson, is3dCurve} from "../utils/common";
+import { exportJson, is3dCurve } from "../utils/common";
 import ErrorMessage from "./children/ErrorMessage";
 import Confirmation from "./children/Confirmation";
 import LoadingOverlay from "react-loading-overlay";
 
-import {fetchPlot} from "../actions/plotting";
+import { fetchPlot } from "../actions/plotting";
 import ThreeDimensionalPlot from "./children/ThreeDimensionalPlot";
 
 const cookies = new Cookies();
@@ -72,12 +72,12 @@ const styles = {
 	},
 	search: {
 		width: "100%",
-		fontSize: "12px",
+		fontSize: "12px"
 	},
 	denseStyle: {
 		minHeight: "10px",
 		lineHeight: "30px",
-		fontSize: "12px",
+		fontSize: "12px"
 	},
 	metadata: {
 		margin: theme.spacing(2),
@@ -88,7 +88,7 @@ const styles = {
 		margin: "auto 5px"
 	},
 	hide: {
-		display: "none",
+		display: "none"
 	},
 	paperFooter: {
 		padding: theme.spacing(2),
@@ -109,17 +109,16 @@ const styles = {
 		display: "inline",
 		float: "right"
 	},
-	previewTable:{
+	previewTable: {
 		width: "80%",
 		margin: "50px auto"
 	},
-	metadataCloseButton:{
-		float: "right",
+	metadataCloseButton: {
+		float: "right"
 	}
 };
 
 class DFR3Viewer extends React.Component {
-
 	constructor(props) {
 		super(props);
 
@@ -152,7 +151,7 @@ class DFR3Viewer extends React.Component {
 			deleteType: "curve", // or mapping
 			curvesLoading: false,
 			mappingsLoading: false,
-			metadataClosed: true,
+			metadataClosed: true
 		};
 
 		this.changeDFR3Type = this.changeDFR3Type.bind(this);
@@ -186,21 +185,39 @@ class DFR3Viewer extends React.Component {
 		let authorization = cookies.get("Authorization");
 
 		// logged in
-		if (config.hostname.includes("localhost") || (authorization !== undefined && authorization !== "" && authorization !== null)) {
-			this.setState({
-				authError: false
-			}, function () {
-				this.props.getAllSpaces();
-				this.props.getAllDFR3Curves(this.state.selectedDFR3Type, this.state.selectedSpace, this.state.selectedInventory,
-					this.state.selectedHazard, this.state.dataPerPage, this.state.offset);
-				this.props.getAllDFR3Mappings(this.state.selectedDFR3Type, this.state.selectedSpace, this.state.selectedInventory,
-					this.state.selectedHazard, this.state.dataPerPage, this.state.offsetMappings);
-			});
+		if (
+			config.hostname.includes("localhost") ||
+			(authorization !== undefined && authorization !== "" && authorization !== null)
+		) {
+			this.setState(
+				{
+					authError: false
+				},
+				function () {
+					this.props.getAllSpaces();
+					this.props.getAllDFR3Curves(
+						this.state.selectedDFR3Type,
+						this.state.selectedSpace,
+						this.state.selectedInventory,
+						this.state.selectedHazard,
+						this.state.dataPerPage,
+						this.state.offset
+					);
+					this.props.getAllDFR3Mappings(
+						this.state.selectedDFR3Type,
+						this.state.selectedSpace,
+						this.state.selectedInventory,
+						this.state.selectedHazard,
+						this.state.dataPerPage,
+						this.state.offsetMappings
+					);
+				}
+			);
 		}
 		// not logged in
 		else {
 			this.setState({
-				authError: true,
+				authError: true
 			});
 		}
 	}
@@ -215,7 +232,6 @@ class DFR3Viewer extends React.Component {
 			authError: nextProps.authError,
 			curvesLoading: nextProps.curvesLoading,
 			mappingsLoading: nextProps.mappingsLoading
-
 		});
 	}
 
@@ -229,93 +245,153 @@ class DFR3Viewer extends React.Component {
 				messageOpen: true
 			});
 		} else if (!this.props.deleteError && prevState.messageOpen) {
-			this.setState({messageOpen: false});
+			this.setState({ messageOpen: false });
 		}
 	}
 
 	changeDFR3Type(event) {
-		this.setState({
-			searching: false,
-			searchText: "",
-			registeredSearchText: "",
-			selectedDFR3Curve: null,
-			selectedDFR3Type: event.target.value,
-			pageNumber: 1,
-			offset: 0,
-			pageNumberMappings: 1,
-			offsetMappings: 0,
-			selectedMapping: "",
-			metadataClosed: false,
-		}, function () {
-			this.props.getAllDFR3Curves(this.state.selectedDFR3Type, this.state.selectedSpace, this.state.selectedInventory,
-				this.state.selectedHazard, this.state.dataPerPage, this.state.offset);
-			this.props.getAllDFR3Mappings(this.state.selectedDFR3Type, this.state.selectedSpace, this.state.selectedInventory,
-				this.state.selectedHazard, this.state.dataPerPage, this.state.offsetMappings);
-		});
+		this.setState(
+			{
+				searching: false,
+				searchText: "",
+				registeredSearchText: "",
+				selectedDFR3Curve: null,
+				selectedDFR3Type: event.target.value,
+				pageNumber: 1,
+				offset: 0,
+				pageNumberMappings: 1,
+				offsetMappings: 0,
+				selectedMapping: "",
+				metadataClosed: false
+			},
+			function () {
+				this.props.getAllDFR3Curves(
+					this.state.selectedDFR3Type,
+					this.state.selectedSpace,
+					this.state.selectedInventory,
+					this.state.selectedHazard,
+					this.state.dataPerPage,
+					this.state.offset
+				);
+				this.props.getAllDFR3Mappings(
+					this.state.selectedDFR3Type,
+					this.state.selectedSpace,
+					this.state.selectedInventory,
+					this.state.selectedHazard,
+					this.state.dataPerPage,
+					this.state.offsetMappings
+				);
+			}
+		);
 	}
 
 	handleTabChange = (event, value) => {
-		this.setState({tabIndex: value});
-	}
+		this.setState({ tabIndex: value });
+	};
 
 	handleInventorySelection(event) {
-		this.setState({
-			searching: false,
-			searchText: "",
-			registeredSearchText: "",
-			selectedDFR3Curve: null,
-			selectedInventory: event.target.value,
-			pageNumber: 1,
-			offset: 0,
-			pageNumberMappings: 1,
-			offsetMappings: 0,
-			selectedMapping: ""
-		}, function () {
-			this.props.getAllDFR3Curves(this.state.selectedDFR3Type, this.state.selectedSpace, this.state.selectedInventory,
-				this.state.selectedHazard, this.state.dataPerPage, this.state.offset);
-			this.props.getAllDFR3Mappings(this.state.selectedDFR3Type, this.state.selectedSpace, this.state.selectedInventory,
-				this.state.selectedHazard, this.state.dataPerPage, this.state.offsetMappings);
-		});
+		this.setState(
+			{
+				searching: false,
+				searchText: "",
+				registeredSearchText: "",
+				selectedDFR3Curve: null,
+				selectedInventory: event.target.value,
+				pageNumber: 1,
+				offset: 0,
+				pageNumberMappings: 1,
+				offsetMappings: 0,
+				selectedMapping: ""
+			},
+			function () {
+				this.props.getAllDFR3Curves(
+					this.state.selectedDFR3Type,
+					this.state.selectedSpace,
+					this.state.selectedInventory,
+					this.state.selectedHazard,
+					this.state.dataPerPage,
+					this.state.offset
+				);
+				this.props.getAllDFR3Mappings(
+					this.state.selectedDFR3Type,
+					this.state.selectedSpace,
+					this.state.selectedInventory,
+					this.state.selectedHazard,
+					this.state.dataPerPage,
+					this.state.offsetMappings
+				);
+			}
+		);
 	}
 
 	handleSpaceSelection(event) {
-		this.setState({
-			selectedSpace: event.target.value,
-			searching: false,
-			searchText: "",
-			registeredSearchText: "",
-			selectedDFR3Curve: null,
-			pageNumber: 1,
-			offset: 0,
-			pageNumberMappings: 1,
-			offsetMappings: 0,
-			selectedMapping: ""
-		}, function () {
-			this.props.getAllDFR3Curves(this.state.selectedDFR3Type, this.state.selectedSpace, this.state.selectedInventory,
-				this.state.selectedHazard, this.state.dataPerPage, this.state.offset);
-			this.props.getAllDFR3Mappings(this.state.selectedDFR3Type, this.state.selectedSpace, this.state.selectedInventory,
-				this.state.selectedHazard, this.state.dataPerPage, this.state.offsetMappings);
-		});
+		this.setState(
+			{
+				selectedSpace: event.target.value,
+				searching: false,
+				searchText: "",
+				registeredSearchText: "",
+				selectedDFR3Curve: null,
+				pageNumber: 1,
+				offset: 0,
+				pageNumberMappings: 1,
+				offsetMappings: 0,
+				selectedMapping: ""
+			},
+			function () {
+				this.props.getAllDFR3Curves(
+					this.state.selectedDFR3Type,
+					this.state.selectedSpace,
+					this.state.selectedInventory,
+					this.state.selectedHazard,
+					this.state.dataPerPage,
+					this.state.offset
+				);
+				this.props.getAllDFR3Mappings(
+					this.state.selectedDFR3Type,
+					this.state.selectedSpace,
+					this.state.selectedInventory,
+					this.state.selectedHazard,
+					this.state.dataPerPage,
+					this.state.offsetMappings
+				);
+			}
+		);
 	}
 
 	handleHazardSelection(event) {
-		this.setState({
-			searching: false,
-			searchText: "",
-			registeredSearchText: "",
-			selectedDFR3Curve: null,
-			selectedHazard: event.target.value,
-			pageNumber: 1,
-			offset: 0,
-			pageNumberMappings: 1,
-			offsetMappings: 0,
-			selectedMapping: ""
-		}, function () {
-			this.props.getAllDFR3Curves(this.state.selectedDFR3Type, this.state.selectedSpace, this.state.selectedInventory,
-				this.state.selectedHazard, this.state.dataPerPage, this.state.offset);
-			this.props.getAllDFR3Mappings(this.state.selectedDFR3Type, this.state.selectedSpace, this.state.selectedInventory,
-				this.state.selectedHazard, this.state.dataPerPage, this.state.offsetMappings);
-		});
+		this.setState(
+			{
+				searching: false,
+				searchText: "",
+				registeredSearchText: "",
+				selectedDFR3Curve: null,
+				selectedHazard: event.target.value,
+				pageNumber: 1,
+				offset: 0,
+				pageNumberMappings: 1,
+				offsetMappings: 0,
+				selectedMapping: ""
+			},
+			function () {
+				this.props.getAllDFR3Curves(
+					this.state.selectedDFR3Type,
+					this.state.selectedSpace,
+					this.state.selectedInventory,
+					this.state.selectedHazard,
+					this.state.dataPerPage,
+					this.state.offset
+				);
+				this.props.getAllDFR3Mappings(
+					this.state.selectedDFR3Type,
+					this.state.selectedSpace,
+					this.state.selectedInventory,
+					this.state.selectedHazard,
+					this.state.dataPerPage,
+					this.state.offsetMappings
+				);
+			}
+		);
 	}
 
 	async setSearchState() {
@@ -335,18 +411,39 @@ class DFR3Viewer extends React.Component {
 	}
 
 	async handleKeyPressed(event) {
-		if (event.charCode === 13) { // enter
+		if (event.charCode === 13) {
+			// enter
 			event.preventDefault();
 			await this.setSearchState();
-			this.props.searchAllDFR3Curves(this.state.selectedDFR3Type, this.state.registeredSearchText, this.state.dataPerPage, this.state.offset);
-			this.props.searchAllDFR3Mappings(this.state.selectedDFR3Type, this.state.registeredSearchText, this.state.dataPerPage, this.state.offsetMappings);
+			this.props.searchAllDFR3Curves(
+				this.state.selectedDFR3Type,
+				this.state.registeredSearchText,
+				this.state.dataPerPage,
+				this.state.offset
+			);
+			this.props.searchAllDFR3Mappings(
+				this.state.selectedDFR3Type,
+				this.state.registeredSearchText,
+				this.state.dataPerPage,
+				this.state.offsetMappings
+			);
 		}
 	}
 
 	async clickSearch() {
 		await this.setSearchState();
-		this.props.searchAllDFR3Curves(this.state.selectedDFR3Type, this.state.registeredSearchText, this.state.dataPerPage, this.state.offset);
-		this.props.searchAllDFR3Mappings(this.state.selectedDFR3Type, this.state.registeredSearchText, this.state.dataPerPage, this.state.offsetMappings);
+		this.props.searchAllDFR3Curves(
+			this.state.selectedDFR3Type,
+			this.state.registeredSearchText,
+			this.state.dataPerPage,
+			this.state.offset
+		);
+		this.props.searchAllDFR3Mappings(
+			this.state.selectedDFR3Type,
+			this.state.registeredSearchText,
+			this.state.dataPerPage,
+			this.state.offsetMappings
+		);
 	}
 
 	async onClickDFR3Curve(DFR3Curve) {
@@ -357,8 +454,7 @@ class DFR3Viewer extends React.Component {
 
 		if (DFR3Curve.fragilityCurves && DFR3Curve.is3dPlot) {
 			[plotData3d, error] = await this.generate3dPlotData(DFR3Curve);
-		}
-		else if (DFR3Curve.fragilityCurves && !DFR3Curve.is3dPlot) {
+		} else if (DFR3Curve.fragilityCurves && !DFR3Curve.is3dPlot) {
 			[plotConfig2d, error] = await this.generate2dPlotData(DFR3Curve);
 		}
 
@@ -369,14 +465,14 @@ class DFR3Viewer extends React.Component {
 			error: `DFR3 Curve ID:${DFR3Curve.id}%0D%0A%0D%0A${error}`, // line break %0D%0A
 			message: message,
 			messageOpen: error !== "",
-			metadataClosed: false,
+			metadataClosed: false
 		});
 	}
 
 	onClickDFR3Mapping(DFR3Mapping) {
 		this.setState({
 			selectedMapping: DFR3Mapping,
-			metadataClosed: false,
+			metadataClosed: false
 		});
 	}
 
@@ -391,7 +487,7 @@ class DFR3Viewer extends React.Component {
 		this.props.deleteMappingItemById(this.state.selectedMapping.id);
 		this.setState({
 			selectedMapping: "",
-			confirmOpen: false,
+			confirmOpen: false
 		});
 	}
 
@@ -399,7 +495,7 @@ class DFR3Viewer extends React.Component {
 		this.props.deleteCurveItemById(this.state.selectedDFR3Type, this.state.selectedDFR3Curve.id);
 		this.setState({
 			selectedDFR3Curve: "",
-			confirmOpen: false,
+			confirmOpen: false
 		});
 	}
 
@@ -412,89 +508,160 @@ class DFR3Viewer extends React.Component {
 	closeErrorMessage() {
 		this.props.resetError();
 		this.setState({
-			message:"",
-			error:"",
+			message: "",
+			error: "",
 			messageOpen: false
 		});
 	}
 
 	previous() {
-		this.setState({
-			offset: (this.state.pageNumber - 2) * this.state.dataPerPage,
-			pageNumber: this.state.pageNumber - 1,
-			selectedDFR3Curve: ""
-		}, function () {
-			if (this.state.registeredSearchText !== "" && this.state.searching) {
-				this.props.searchAllDFR3Curves(this.state.selectedDFR3Type, this.state.registeredSearchText, this.state.dataPerPage, this.state.offset);
-			} else {
-				this.props.getAllDFR3Curves(this.state.selectedDFR3Type, this.state.selectedSpace, this.state.selectedInventory,
-					this.state.selectedHazard, this.state.dataPerPage, this.state.offset);
+		this.setState(
+			{
+				offset: (this.state.pageNumber - 2) * this.state.dataPerPage,
+				pageNumber: this.state.pageNumber - 1,
+				selectedDFR3Curve: ""
+			},
+			function () {
+				if (this.state.registeredSearchText !== "" && this.state.searching) {
+					this.props.searchAllDFR3Curves(
+						this.state.selectedDFR3Type,
+						this.state.registeredSearchText,
+						this.state.dataPerPage,
+						this.state.offset
+					);
+				} else {
+					this.props.getAllDFR3Curves(
+						this.state.selectedDFR3Type,
+						this.state.selectedSpace,
+						this.state.selectedInventory,
+						this.state.selectedHazard,
+						this.state.dataPerPage,
+						this.state.offset
+					);
+				}
 			}
-		});
+		);
 	}
 
 	next() {
-		this.setState({
-			offset: (this.state.pageNumber) * this.state.dataPerPage,
-			pageNumber: this.state.pageNumber + 1,
-			selectedDFR3Curve: ""
-		}, function () {
-			if (this.state.registeredSearchText !== "" && this.state.searching) {
-				this.props.searchAllDFR3Curves(this.state.selectedDFR3Type, this.state.registeredSearchText, this.state.dataPerPage, this.state.offset);
-			} else {
-				this.props.getAllDFR3Curves(this.state.selectedDFR3Type, this.state.selectedSpace, this.state.selectedInventory,
-					this.state.selectedHazard, this.state.dataPerPage, this.state.offset);
+		this.setState(
+			{
+				offset: this.state.pageNumber * this.state.dataPerPage,
+				pageNumber: this.state.pageNumber + 1,
+				selectedDFR3Curve: ""
+			},
+			function () {
+				if (this.state.registeredSearchText !== "" && this.state.searching) {
+					this.props.searchAllDFR3Curves(
+						this.state.selectedDFR3Type,
+						this.state.registeredSearchText,
+						this.state.dataPerPage,
+						this.state.offset
+					);
+				} else {
+					this.props.getAllDFR3Curves(
+						this.state.selectedDFR3Type,
+						this.state.selectedSpace,
+						this.state.selectedInventory,
+						this.state.selectedHazard,
+						this.state.dataPerPage,
+						this.state.offset
+					);
+				}
 			}
-		});
+		);
 	}
 
 	changeDataPerPage(event) {
-		this.setState({
-			pageNumber: 1,
-			offset: 0,
-			dataPerPage: event.target.value,
-			selectedDFR3Curve: "",
-			searchText: "",
-			registeredSearchText: "",
-			pageNumberMappings: 1,
-			offsetMappings: 0,
-			selectedMapping: ""
-		}, function () {
-			this.props.getAllDFR3Curves(this.state.selectedDFR3Type, this.state.selectedSpace, this.state.selectedInventory,
-				this.state.selectedHazard, this.state.dataPerPage, this.state.offset);
-			this.props.getAllDFR3Mappings(this.state.selectedDFR3Type, this.state.selectedSpace, this.state.selectedInventory,
-				this.state.selectedHazard, this.state.dataPerPage, this.state.offsetMappings);
-		});
+		this.setState(
+			{
+				pageNumber: 1,
+				offset: 0,
+				dataPerPage: event.target.value,
+				selectedDFR3Curve: "",
+				searchText: "",
+				registeredSearchText: "",
+				pageNumberMappings: 1,
+				offsetMappings: 0,
+				selectedMapping: ""
+			},
+			function () {
+				this.props.getAllDFR3Curves(
+					this.state.selectedDFR3Type,
+					this.state.selectedSpace,
+					this.state.selectedInventory,
+					this.state.selectedHazard,
+					this.state.dataPerPage,
+					this.state.offset
+				);
+				this.props.getAllDFR3Mappings(
+					this.state.selectedDFR3Type,
+					this.state.selectedSpace,
+					this.state.selectedInventory,
+					this.state.selectedHazard,
+					this.state.dataPerPage,
+					this.state.offsetMappings
+				);
+			}
+		);
 	}
 
 	previousMappings() {
-		this.setState({
-			offsetMappings: (this.state.pageNumberMappings - 2) * this.state.dataPerPage,
-			pageNumberMappings: this.state.pageNumberMappings - 1,
-			selectedMapping: ""
-		}, function () {
-			if (this.state.registeredSearchText !== "" && this.state.searching) {
-				this.props.searchAllDFR3Mappings(this.state.selectedDFR3Type, this.state.registeredSearchText, this.state.dataPerPage, this.state.offsetMappings);
-			} else {
-				this.props.getAllDFR3Mappings(this.state.selectedDFR3Type, this.state.selectedSpace, this.state.selectedInventory,
-					this.state.selectedHazard, this.state.dataPerPage, this.state.offsetMappings);
+		this.setState(
+			{
+				offsetMappings: (this.state.pageNumberMappings - 2) * this.state.dataPerPage,
+				pageNumberMappings: this.state.pageNumberMappings - 1,
+				selectedMapping: ""
+			},
+			function () {
+				if (this.state.registeredSearchText !== "" && this.state.searching) {
+					this.props.searchAllDFR3Mappings(
+						this.state.selectedDFR3Type,
+						this.state.registeredSearchText,
+						this.state.dataPerPage,
+						this.state.offsetMappings
+					);
+				} else {
+					this.props.getAllDFR3Mappings(
+						this.state.selectedDFR3Type,
+						this.state.selectedSpace,
+						this.state.selectedInventory,
+						this.state.selectedHazard,
+						this.state.dataPerPage,
+						this.state.offsetMappings
+					);
+				}
 			}
-		});
+		);
 	}
 
 	nextMappings() {
-		this.setState({
-			offsetMappings: (this.state.pageNumberMappings) * this.state.dataPerPage,
-			pageNumberMappings: this.state.pageNumberMappings + 1,
-			selectedMapping: ""
-		}, function () {
-			if (this.state.registeredSearchText !== "" && this.state.searching) {
-				this.props.searchAllDFR3Mappings(this.state.selectedDFR3Type, this.state.registeredSearchText, this.state.dataPerPage, this.state.offsetMappings);
-			} else {
-				this.props.getAllDFR3Mappings(this.state.selectedDFR3Type, this.state.selectedSpace, this.state.selectedInventory,
-					this.state.selectedHazard, this.state.dataPerPage, this.state.offsetMappings);
+		this.setState(
+			{
+				offsetMappings: this.state.pageNumberMappings * this.state.dataPerPage,
+				pageNumberMappings: this.state.pageNumberMappings + 1,
+				selectedMapping: ""
+			},
+			function () {
+				if (this.state.registeredSearchText !== "" && this.state.searching) {
+					this.props.searchAllDFR3Mappings(
+						this.state.selectedDFR3Type,
+						this.state.registeredSearchText,
+						this.state.dataPerPage,
+						this.state.offsetMappings
+					);
+				} else {
+					this.props.getAllDFR3Mappings(
+						this.state.selectedDFR3Type,
+						this.state.selectedSpace,
+						this.state.selectedInventory,
+						this.state.selectedHazard,
+						this.state.dataPerPage,
+						this.state.offsetMappings
+					);
+				}
 			}
-		});
+		);
 	}
 
 	async generate2dPlotData(DFR3Curve) {
@@ -515,8 +682,8 @@ class DFR3Viewer extends React.Component {
 			updatedChartConfig.xAxis.title.text = `${demandTypes} (${demandUnits})`;
 
 			let [requestStatus, response] = await fetchPlot(DFR3Curve);
-			if (requestStatus === 200){
-				Object.keys(response).map(key => {
+			if (requestStatus === 200) {
+				Object.keys(response).map((key) => {
 					let series = {
 						marker: {
 							enabled: false
@@ -526,8 +693,7 @@ class DFR3Viewer extends React.Component {
 					};
 					updatedChartConfig.series.push(series);
 				});
-			}
-			else{
+			} else {
 				error = response;
 			}
 		}
@@ -539,18 +705,17 @@ class DFR3Viewer extends React.Component {
 		let [requestStatus, response] = await fetchPlot(DFR3Curve);
 		let error = "";
 
-		if (requestStatus === 200){
+		if (requestStatus === 200) {
 			let limitState = Object.keys(response)[0];
 			let description = DFR3Curve.description !== null ? DFR3Curve.description : "";
 			let authors = DFR3Curve.authors.join(", ");
 			let title = `${description} [${authors}] - ${limitState}`;
 
 			//TODO For now only plot the first limit state; but in the future may add tabs to plot all states
-			return [{"data": response[limitState], "title": title} , error];
-		}
-		else{
+			return [{ data: response[limitState], title: title }, error];
+		} else {
 			error = response;
-			return [{"data": null, "title": null}, error];
+			return [{ data: null, title: null }, error];
 		}
 	}
 
@@ -560,36 +725,36 @@ class DFR3Viewer extends React.Component {
 
 	exportCurveJson() {
 		// do not include added field is3dPlot
-		let {is3dPlot, ...metadataJson} = this.state.selectedDFR3Curve;
+		let { is3dPlot, ...metadataJson } = this.state.selectedDFR3Curve;
 
 		exportJson(metadataJson);
 	}
 
 	preview() {
 		this.setState({
-			preview: true,
+			preview: true
 		});
 	}
 
 	handlePreviewerClose() {
 		this.setState({
-			preview: false,
+			preview: false
 		});
 	}
 
-	extractCurveInfoTable(DFR3Curve){
+	extractCurveInfoTable(DFR3Curve) {
 		let curveInfo = {};
-		if (DFR3Curve["fragilityCurves"] !== undefined){
+		if (DFR3Curve["fragilityCurves"] !== undefined) {
 			DFR3Curve["fragilityCurves"].map((curve) => {
-				curveInfo[curve["returnType"]["description"]]= curve["rules"];
+				curveInfo[curve["returnType"]["description"]] = curve["rules"];
 			});
 		}
 		return curveInfo;
 	}
 
-	extractParamTable(DFR3Curve){
+	extractParamTable(DFR3Curve) {
 		let params = {};
-		if (DFR3Curve["curveParameters"] !== undefined ){
+		if (DFR3Curve["curveParameters"] !== undefined) {
 			DFR3Curve["curveParameters"].map((curveParam) => {
 				params[curveParam["name"]] = {};
 				params[curveParam["name"]]["expression"] = curveParam["expression"];
@@ -599,15 +764,14 @@ class DFR3Viewer extends React.Component {
 		return params;
 	}
 
-	closeMetadata(){
+	closeMetadata() {
 		this.setState({
 			metadataClosed: true
 		});
 	}
 
 	render() {
-
-		const {classes} = this.props;
+		const { classes } = this.props;
 		let tabIndex = this.state.tabIndex;
 
 		// Curve list
@@ -655,23 +819,29 @@ class DFR3Viewer extends React.Component {
 			return (
 				<div>
 					{/*error message display inside viewer*/}
-					<ErrorMessage error={this.state.error}
-								  message={this.state.message}
-								  messageOpen={this.state.messageOpen}
-								  closeErrorMessage={this.closeErrorMessage}/>
-					{this.state.deleteType === "curve" ?
-						<Confirmation confirmOpen={this.state.confirmOpen}
-									  actionBtnName="Delete"
-									  actionText="Once deleted, you won't be able to revert this!"
-									  handleConfirmed={this.deleteCurveConfirmed}
-									  handleCanceled={this.handleCanceled}/>
-						:
-						<Confirmation confirmOpen={this.state.confirmOpen}
-									  actionBtnName="Delete"
-									  actionText="Once deleted, you won't be able to revert this!"
-									  handleConfirmed={this.deleteMappingConfirmed}
-									  handleCanceled={this.handleCanceled}/>
-					}
+					<ErrorMessage
+						error={this.state.error}
+						message={this.state.message}
+						messageOpen={this.state.messageOpen}
+						closeErrorMessage={this.closeErrorMessage}
+					/>
+					{this.state.deleteType === "curve" ? (
+						<Confirmation
+							confirmOpen={this.state.confirmOpen}
+							actionBtnName="Delete"
+							actionText="Once deleted, you won't be able to revert this!"
+							handleConfirmed={this.deleteCurveConfirmed}
+							handleCanceled={this.handleCanceled}
+						/>
+					) : (
+						<Confirmation
+							confirmOpen={this.state.confirmOpen}
+							actionBtnName="Delete"
+							actionText="Once deleted, you won't be able to revert this!"
+							handleConfirmed={this.deleteMappingConfirmed}
+							handleCanceled={this.handleCanceled}
+						/>
+					)}
 
 					<div className={classes.root}>
 						<Grid container spacing={4}>
@@ -682,339 +852,481 @@ class DFR3Viewer extends React.Component {
 									{/* select dfr3 curve type */}
 									<div className={classes.selectDiv}>
 										<InputLabel>Curve Type</InputLabel>
-										<Select value={this.state.selectedDFR3Type} onChange={this.changeDFR3Type}
-											className={classes.select}>
-											<MenuItem value="fragilities" key="fragilities"
-													  className={classes.denseStyle}>Fragility</MenuItem>
-											<MenuItem value="restorations" key="restorations"
-													  className={classes.denseStyle}>Restoration</MenuItem>
-											<MenuItem value="repairs"
-													  key="repairs"
-													  className={classes.denseStyle}>Repair</MenuItem>
+										<Select
+											value={this.state.selectedDFR3Type}
+											onChange={this.changeDFR3Type}
+											className={classes.select}
+										>
+											<MenuItem
+												value="fragilities"
+												key="fragilities"
+												className={classes.denseStyle}
+											>
+												Fragility
+											</MenuItem>
+											<MenuItem
+												value="restorations"
+												key="restorations"
+												className={classes.denseStyle}
+											>
+												Restoration
+											</MenuItem>
+											<MenuItem value="repairs" key="repairs" className={classes.denseStyle}>
+												Repair
+											</MenuItem>
 										</Select>
 									</div>
 									{/* Hazard Type */}
 									<div className={classes.selectDiv}>
 										<InputLabel>Hazard Type</InputLabel>
-										<Select value={this.state.selectedHazard} onChange={this.handleHazardSelection}
-											className={classes.select}>
-											<MenuItem value="All" className={classes.denseStyle}>All</MenuItem>
-											<MenuItem value="earthquake"
-													  className={classes.denseStyle}>Earthquake</MenuItem>
-											<MenuItem value="tornado" className={classes.denseStyle}>Tornado</MenuItem>
-											<MenuItem value="hurricane"
-													  className={classes.denseStyle}>Hurricane</MenuItem>
-											<MenuItem value="hurricaneWindfield" className={classes.denseStyle}>Hurricane
-												Windfield</MenuItem>
-											<MenuItem value="tsunami" className={classes.denseStyle}>Tsunami</MenuItem>
-											<MenuItem value="flood" className={classes.denseStyle}>Flood</MenuItem>
+										<Select
+											value={this.state.selectedHazard}
+											onChange={this.handleHazardSelection}
+											className={classes.select}
+										>
+											<MenuItem value="All" className={classes.denseStyle}>
+												All
+											</MenuItem>
+											<MenuItem value="earthquake" className={classes.denseStyle}>
+												Earthquake
+											</MenuItem>
+											<MenuItem value="tornado" className={classes.denseStyle}>
+												Tornado
+											</MenuItem>
+											<MenuItem value="hurricane" className={classes.denseStyle}>
+												Hurricane
+											</MenuItem>
+											<MenuItem value="hurricaneWindfield" className={classes.denseStyle}>
+												Hurricane Windfield
+											</MenuItem>
+											<MenuItem value="tsunami" className={classes.denseStyle}>
+												Tsunami
+											</MenuItem>
+											<MenuItem value="flood" className={classes.denseStyle}>
+												Flood
+											</MenuItem>
 										</Select>
 									</div>
 									{/* Inventory Type */}
 									<div className={classes.selectDiv}>
 										<InputLabel>Inventory Type</InputLabel>
-										<Select value={this.state.selectedInventory}
+										<Select
+											value={this.state.selectedInventory}
 											onChange={this.handleInventorySelection}
-											className={classes.select}>
-											<MenuItem value="All" className={classes.denseStyle}>All</MenuItem>
-											<MenuItem value="building"
-													  className={classes.denseStyle}>Building</MenuItem>
-											<MenuItem value="bridge" className={classes.denseStyle}>Bridge</MenuItem>
-											<Divider/>
-											<MenuItem value="roadway" className={classes.denseStyle}>Roadway</MenuItem>
-											<Divider/>
-											<MenuItem value="electric_facility" className={classes.denseStyle}>Electric
-												Power Facility</MenuItem>
-											<MenuItem value="electric_power_line" className={classes.denseStyle}>Eletric
-												Power Line</MenuItem>
-											<MenuItem value="water_facility" className={classes.denseStyle}>Water
-												Facility</MenuItem>
-											<MenuItem value="buried_pipeline" className={classes.denseStyle}>Water
-												Pipeline</MenuItem>
-											<MenuItem value="gas_facility" className={classes.denseStyle}>Gas
-												Facility</MenuItem>
+											className={classes.select}
+										>
+											<MenuItem value="All" className={classes.denseStyle}>
+												All
+											</MenuItem>
+											<MenuItem value="building" className={classes.denseStyle}>
+												Building
+											</MenuItem>
+											<MenuItem value="bridge" className={classes.denseStyle}>
+												Bridge
+											</MenuItem>
+											<Divider />
+											<MenuItem value="roadway" className={classes.denseStyle}>
+												Roadway
+											</MenuItem>
+											<Divider />
+											<MenuItem value="electric_facility" className={classes.denseStyle}>
+												Electric Power Facility
+											</MenuItem>
+											<MenuItem value="electric_power_line" className={classes.denseStyle}>
+												Eletric Power Line
+											</MenuItem>
+											<MenuItem value="water_facility" className={classes.denseStyle}>
+												Water Facility
+											</MenuItem>
+											<MenuItem value="buried_pipeline" className={classes.denseStyle}>
+												Water Pipeline
+											</MenuItem>
+											<MenuItem value="gas_facility" className={classes.denseStyle}>
+												Gas Facility
+											</MenuItem>
 										</Select>
 									</div>
 									{/*spaces*/}
 									<div className={classes.selectDiv}>
-										<Space selectedSpace={this.state.selectedSpace}
-											   spaces={this.props.spaces}
-											   handleSpaceSelection={this.handleSpaceSelection}/>
+										<Space
+											selectedSpace={this.state.selectedSpace}
+											spaces={this.props.spaces}
+											handleSpaceSelection={this.handleSpaceSelection}
+										/>
 									</div>
 									{/*Data per page */}
 									<div className={classes.selectDiv}>
-										<DataPerPage dataPerPage={this.state.dataPerPage}
-													 changeDataPerPage={this.changeDataPerPage}/>
+										<DataPerPage
+											dataPerPage={this.state.dataPerPage}
+											changeDataPerPage={this.changeDataPerPage}
+										/>
 									</div>
 								</Paper>
 							</Grid>
 							<Grid item lg={4} sm={4} xl={4} xs={12}>
 								<Paper variant="outlined" className={classes.filter}>
-									<Typography variant="h6">Search all {this.state.selectedDFR3Type} &
-										mappings</Typography>
-									<TextField variant="outlined" label="Search"
-											   onKeyPress={this.handleKeyPressed}
-											   value={this.state.searchText}
-											   onChange={e => {
-												   this.setState({searchText: e.target.value});
-											   }}
-											   InputProps={{
-												   endAdornment: (<InputAdornment position="end">
-													   <IconButton onClick={this.clickSearch}>
-														   <SearchIcon fontSize="small"/></IconButton>
-												   </InputAdornment>),
-
-											   }}
-											   margin="dense"
-											   className={classes.search}
+									<Typography variant="h6">
+										Search all {this.state.selectedDFR3Type} & mappings
+									</Typography>
+									<TextField
+										variant="outlined"
+										label="Search"
+										onKeyPress={this.handleKeyPressed}
+										value={this.state.searchText}
+										onChange={(e) => {
+											this.setState({ searchText: e.target.value });
+										}}
+										InputProps={{
+											endAdornment: (
+												<InputAdornment position="end">
+													<IconButton onClick={this.clickSearch}>
+														<SearchIcon fontSize="small" />
+													</IconButton>
+												</InputAdornment>
+											)
+										}}
+										margin="dense"
+										className={classes.search}
 									/>
 								</Paper>
 							</Grid>
 						</Grid>
 
 						<Tabs value={tabIndex} onChange={this.handleTabChange}>
-							<Tab label="DFR3 Curves"/>
-							<Tab label="DFR3 Mappings"/>
+							<Tab label="DFR3 Curves" />
+							<Tab label="DFR3 Mappings" />
 						</Tabs>
 
 						{/*lists*/}
-						{tabIndex === 0 ?
+						{tabIndex === 0 ? (
 							<Grid container spacing={4}>
-								<Grid item lg={this.state.selectedDFR3Curve && !this.state.metadataClosed? 4 : 12}
-									  md={this.state.selectedDFR3Curve && !this.state.metadataClosed? 4 : 12}
-									  xl={this.state.selectedDFR3Curve && !this.state.metadataClosed? 4 : 12}
-									  xs={12}>
-									<LoadingOverlay
-										active={this.state.curvesLoading}
-										spinner
-										text="Loading ...">
+								<Grid
+									item
+									lg={this.state.selectedDFR3Curve && !this.state.metadataClosed ? 4 : 12}
+									md={this.state.selectedDFR3Curve && !this.state.metadataClosed ? 4 : 12}
+									xl={this.state.selectedDFR3Curve && !this.state.metadataClosed ? 4 : 12}
+									xs={12}
+								>
+									<LoadingOverlay active={this.state.curvesLoading} spinner text="Loading ...">
 										<Paper variant="outlined" className={classes.main}>
 											<div className={classes.paperHeader}>
 												<Typography variant="subtitle1">DFR3 Curves</Typography>
 											</div>
-											<DFR3CurvesGroupList id="DFR3Curve-list"
-																 onClick={this.onClickDFR3Curve}
-																 data={curvesWithInfo} displayField="author"
-																 selectedDFR3Curve={this.state.selectedDFR3Curve}/>
+											<DFR3CurvesGroupList
+												id="DFR3Curve-list"
+												onClick={this.onClickDFR3Curve}
+												data={curvesWithInfo}
+												displayField="author"
+												selectedDFR3Curve={this.state.selectedDFR3Curve}
+											/>
 											<div className={classes.paperFooter}>
-												<Pagination pageNumber={this.state.pageNumber}
+												<Pagination
+													pageNumber={this.state.pageNumber}
 													data={curvesWithInfo}
 													dataPerPage={this.state.dataPerPage}
 													previous={this.previous}
-													next={this.next}/>
+													next={this.next}
+												/>
 											</div>
 										</Paper>
 									</LoadingOverlay>
 								</Grid>
-								<Grid item lg={8} md={8} xl={8} xs={12}
-									  className={this.state.selectedDFR3Curve ? null : classes.hide}>
+								<Grid
+									item
+									lg={8}
+									md={8}
+									xl={8}
+									xs={12}
+									className={this.state.selectedDFR3Curve ? null : classes.hide}
+								>
 									<Paper variant="outlined" className={classes.main}>
-										<IconButton aria-label="Close" onClick={this.closeMetadata}
-											className={classes.metadataCloseButton}>
-											<CloseIcon fontSize="small"/>
+										<IconButton
+											aria-label="Close"
+											onClick={this.closeMetadata}
+											className={classes.metadataCloseButton}
+										>
+											<CloseIcon fontSize="small" />
 										</IconButton>
-										{Object.keys(selectedCurveDetail).length > 0 ?
+										{Object.keys(selectedCurveDetail).length > 0 ? (
 											<div>
 												<div className={classes.paperHeader}>
 													<Typography variant="subtitle1">Metadata</Typography>
 												</div>
 												<div className={classes.metadata}>
-													<Button color="primary"
+													<Button
+														color="primary"
 														variant="contained"
 														className={classes.inlineButtons}
 														size="small"
-														onClick={this.exportCurveJson}>Download Metadata</Button>
+														onClick={this.exportCurveJson}
+													>
+														Download Metadata
+													</Button>
 													{
 														// TODO: This should be updated with conditions for repair and restoration
 														//  curves when they are refactored to new equation based format
 														// 	cannot plot 3d refactored fragility curves yet
 
 														(() => {
-															if (this.state.selectedDFR3Curve.fragilityCurves){
-																if (this.state.selectedDFR3Curve.is3dPlot
-																	&& this.state.plotData3d.data.length > 0){
-																	return (<Button color="primary"
+															if (this.state.selectedDFR3Curve.fragilityCurves) {
+																if (
+																	this.state.selectedDFR3Curve.is3dPlot &&
+																	this.state.plotData3d.data.length > 0
+																) {
+																	return (
+																		<Button
+																			color="primary"
+																			variant="contained"
+																			className={classes.inlineButtons}
+																			size="small"
+																			onClick={this.preview}
+																		>
+																			Preview
+																		</Button>
+																	);
+																} else if (
+																	!this.state.selectedDFR3Curve.is3dPlot &&
+																	this.state.chartConfig.series.length > 0
+																) {
+																	return (
+																		<Button
+																			color="primary"
+																			variant="contained"
+																			className={classes.inlineButtons}
+																			size="small"
+																			onClick={this.preview}
+																		>
+																			Preview
+																		</Button>
+																	);
+																} else {
+																	return (
+																		<Button
+																			color="primary"
+																			variant="contained"
+																			className={classes.inlineButtons}
+																			size="small"
+																			disabled
+																		>
+																			Preview N/A
+																		</Button>
+																	);
+																}
+															} else {
+																return (
+																	<Button
+																		color="primary"
 																		variant="contained"
 																		className={classes.inlineButtons}
 																		size="small"
-																		onClick={this.preview}>Preview</Button>);
-																}
-																else if(!this.state.selectedDFR3Curve.is3dPlot
-																	&& this.state.chartConfig.series.length > 0){
-																	return (<Button color="primary"
-																				   variant="contained"
-																				   className={classes.inlineButtons}
-																				   size="small"
-																				   onClick={this.preview}>Preview</Button>);
-																}
-																else{
-																	return (<Button color="primary"
-																		variant="contained"
-																		className={classes.inlineButtons}
-																		size="small"
-																		disabled>Preview N/A</Button>);
-																}
+																		disabled
+																	>
+																		Preview N/A
+																	</Button>
+																);
 															}
-															else{
-																return (<Button color="primary"
-																	variant="contained"
-																	className={classes.inlineButtons}
-																	size="small"
-																	disabled>Preview N/A</Button>);
-															}
-
 														})()
 													}
 													<CopyToClipboard text={this.state.selectedDFR3Curve.id}>
-														<Button color="secondary" variant="contained"
+														<Button
+															color="secondary"
+															variant="contained"
 															className={classes.inlineButtons}
-															size="small">Copy
-															ID</Button>
+															size="small"
+														>
+															Copy ID
+														</Button>
 													</CopyToClipboard>
-													<Button color="secondary"
+													<Button
+														color="secondary"
 														variant="contained"
 														className={classes.inlineButtons}
 														size="small"
-														onClick={() => {this.onClickDelete("curve");}}>
+														onClick={() => {
+															this.onClickDelete("curve");
+														}}
+													>
 														DELETE
 													</Button>
 												</div>
 												<div className={classes.metadata}>
-													<NestedInfoTable data={selectedCurveDetail}/>
+													<NestedInfoTable data={selectedCurveDetail} />
 												</div>
 											</div>
-											:
-											<div/>
-										}
+										) : (
+											<div />
+										)}
 									</Paper>
 								</Grid>
 
 								{/* Preview */}
-								{this.state.selectedDFR3Curve ?
-									<Dialog open={this.state.preview} onClose={this.handlePreviewerClose} maxWidth="lg"
+								{this.state.selectedDFR3Curve ? (
+									<Dialog
+										open={this.state.preview}
+										onClose={this.handlePreviewerClose}
+										maxWidth="lg"
 										fullWidth
-										scroll="paper">
+										scroll="paper"
+									>
 										<DialogContent className={classes.preview}>
-											<IconButton aria-label="Close" onClick={this.handlePreviewerClose}
-												className={classes.previewClose}>
-												<CloseIcon fontSize="small"/>
+											<IconButton
+												aria-label="Close"
+												onClick={this.handlePreviewerClose}
+												className={classes.previewClose}
+											>
+												<CloseIcon fontSize="small" />
 											</IconButton>
-											{this.state.selectedDFR3Curve.is3dPlot ?
+											{this.state.selectedDFR3Curve.is3dPlot ? (
 												<div>
 													<Typography variant="h6">{this.state.plotData3d.title}</Typography>
-													<ThreeDimensionalPlot plotId="3dplot"
-																		  data={this.state.plotData3d.data}
-																		  xLabel={this.state.selectedDFR3Curve.demandTypes.join(", ")}
-																		  yLabel="Y"
-																		  width="100%" height="350px" style="surface"/>
+													<ThreeDimensionalPlot
+														plotId="3dplot"
+														data={this.state.plotData3d.data}
+														xLabel={this.state.selectedDFR3Curve.demandTypes.join(", ")}
+														yLabel="Y"
+														width="100%"
+														height="350px"
+														style="surface"
+													/>
 												</div>
-												:
-												<CustomHighChart chartId="chart" configuration={this.state.chartConfig}
-																 customClassName="linecharts-container"/>
-											}
+											) : (
+												<CustomHighChart
+													chartId="chart"
+													configuration={this.state.chartConfig}
+													customClassName="linecharts-container"
+												/>
+											)}
 											<div className={classes.previewTable}>
 												<Typography variant="body1">Table 1. Curve Information</Typography>
-												<NestedInfoTable data={this.extractCurveInfoTable(this.state.selectedDFR3Curve)}/>
+												<NestedInfoTable
+													data={this.extractCurveInfoTable(this.state.selectedDFR3Curve)}
+												/>
 											</div>
 											<div className={classes.previewTable}>
-												<Typography variant="body1">Table 2. Default Curve Parameters</Typography>
-												<NestedInfoTable data={this.extractParamTable(this.state.selectedDFR3Curve)}/>
+												<Typography variant="body1">
+													Table 2. Default Curve Parameters
+												</Typography>
+												<NestedInfoTable
+													data={this.extractParamTable(this.state.selectedDFR3Curve)}
+												/>
 											</div>
 										</DialogContent>
-										}
 									</Dialog>
-									:
-									<div/>
-								}
-
+								) : (
+									<div />
+								)}
 							</Grid>
+						) : (
+							<div />
+						)}
 
-							: <div/>
-						}
-
-						{tabIndex === 1 ?
+						{tabIndex === 1 ? (
 							<Grid container spacing={4}>
-								<Grid item lg={this.state.selectedMapping && !this.state.metadataClosed? 4 : 12}
-									  md={this.state.selectedMapping && !this.state.metadataClosed? 4 : 12}
-									  xl={this.state.selectedMapping && !this.state.metadataClosed? 4 : 12}
-									  xs={12}>
-									<LoadingOverlay
-										active={this.state.mappingsLoading}
-										spinner
-										text="Loading ...">
+								<Grid
+									item
+									lg={this.state.selectedMapping && !this.state.metadataClosed ? 4 : 12}
+									md={this.state.selectedMapping && !this.state.metadataClosed ? 4 : 12}
+									xl={this.state.selectedMapping && !this.state.metadataClosed ? 4 : 12}
+									xs={12}
+								>
+									<LoadingOverlay active={this.state.mappingsLoading} spinner text="Loading ...">
 										<Paper variant="outlined" className={classes.main}>
 											<div className={classes.paperHeader}>
 												<Typography variant="subtitle1">DFR3 Mappings</Typography>
 											</div>
-											<DFR3MappingsGroupList id="DFR3Mappings-list"
-																   onClick={this.onClickDFR3Mapping}
-																   data={mappingsWithInfo} displayField="name"
-																   selectedMapping={this.state.selectedMapping}/>
+											<DFR3MappingsGroupList
+												id="DFR3Mappings-list"
+												onClick={this.onClickDFR3Mapping}
+												data={mappingsWithInfo}
+												displayField="name"
+												selectedMapping={this.state.selectedMapping}
+											/>
 											<div className={classes.paperFooter}>
-												<Pagination pageNumber={this.state.pageNumberMappings}
+												<Pagination
+													pageNumber={this.state.pageNumberMappings}
 													data={mappingsWithInfo}
 													dataPerPage={this.state.dataPerPage}
 													previous={this.previousMappings}
-													next={this.nextMappings}/>
+													next={this.nextMappings}
+												/>
 											</div>
 										</Paper>
 									</LoadingOverlay>
 								</Grid>
 
-								<Grid item lg={8} md={8} xl={8} xs={12}
-									  className={this.state.selectedMapping ? null : classes.hide}>
+								<Grid
+									item
+									lg={8}
+									md={8}
+									xl={8}
+									xs={12}
+									className={this.state.selectedMapping ? null : classes.hide}
+								>
 									<Paper variant="outlined" className={classes.main}>
-										<IconButton aria-label="Close" onClick={this.closeMetadata}
-											className={classes.metadataCloseButton}>
-											<CloseIcon fontSize="small"/>
+										<IconButton
+											aria-label="Close"
+											onClick={this.closeMetadata}
+											className={classes.metadataCloseButton}
+										>
+											<CloseIcon fontSize="small" />
 										</IconButton>
-										{Object.keys(selectedMappingDetails).length > 0 ?
+										{Object.keys(selectedMappingDetails).length > 0 ? (
 											<div>
 												<div className={classes.paperHeader}>
 													<Typography variant="subtitle1">Metadata</Typography>
 												</div>
 												<div className={classes.metadata}>
-													<Button color="primary"
+													<Button
+														color="primary"
 														variant="contained"
 														className={classes.inlineButtons}
 														size="small"
-														onClick={this.exportMappingJson}>Download Metadata</Button>
+														onClick={this.exportMappingJson}
+													>
+														Download Metadata
+													</Button>
 													<CopyToClipboard text={this.state.selectedMapping.id}>
-														<Button color="secondary" variant="contained"
+														<Button
+															color="secondary"
+															variant="contained"
 															className={classes.inlineButtons}
-															size="small">Copy
-															ID</Button>
+															size="small"
+														>
+															Copy ID
+														</Button>
 													</CopyToClipboard>
-													<Button color="secondary"
+													<Button
+														color="secondary"
 														variant="contained"
 														className={classes.inlineButtons}
 														size="small"
-														onClick={() => {this.onClickDelete("mapping");}}>
+														onClick={() => {
+															this.onClickDelete("mapping");
+														}}
+													>
 														DELETE
 													</Button>
 												</div>
 												<div className={classes.metadata}>
-													<NestedInfoTable data={selectedMappingDetails}/>
+													<NestedInfoTable data={selectedMappingDetails} />
 												</div>
 											</div>
-											:
-											<div/>
-										}
+										) : (
+											<div />
+										)}
 									</Paper>
 								</Grid>
 							</Grid>
-							:
-							<div/>
-						}
+						) : (
+							<div />
+						)}
 
-						<Version/>
+						<Version />
 					</div>
-
 				</div>
 			);
 		}
 	}
 }
-
 
 export default withStyles(styles)(DFR3Viewer);
