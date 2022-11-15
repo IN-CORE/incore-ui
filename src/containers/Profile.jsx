@@ -1,6 +1,6 @@
-import {connect} from "react-redux";
+import { connect } from "react-redux";
 import ProfileComponent from "../components/Profile";
-import {fetchLabUsage, fetchUsage, fetchAllocations} from "../actions";
+import { fetchLabUsage, fetchUsage, fetchAllocations } from "../actions";
 
 const mapStateToProps = (state) => {
 	return {
@@ -20,9 +20,9 @@ const mapDispatchToProps = (dispatch) => {
 			dispatch(fetchAllocations());
 		},
 		// TODO fetch lab usage is not actually being used yet
-		getLabUsage:() =>{
+		getLabUsage: () => {
 			dispatch(fetchLabUsage());
-		},
+		}
 	};
 };
 
