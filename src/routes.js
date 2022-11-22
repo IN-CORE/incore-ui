@@ -10,7 +10,6 @@ import HomePage from "./components/HomePage";
 import Login from "./containers/Login";
 import Profile from "./containers/Profile";
 
-
 export default (
 	<Route path="/" component={App}>
 		<IndexRoute component={HomePage}/>
@@ -23,4 +22,3 @@ export default (
 		<Route path="HazardViewer" component={HazardViewer}/>
 	</Route>
 );
-
