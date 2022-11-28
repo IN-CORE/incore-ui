@@ -288,3 +288,9 @@ interface UserState {
 	loginError: boolean;
 	loginSuccess: boolean;
 }
+
+interface DatasetState {
+	datasets: Datasets;
+	loading: boolean;
+	deleteError: boolean;
+}

@@ -8,3 +8,5 @@ export const userStateInitialValue: UserState = {
 	loginError: false,
 	loginSuccess: false
 };
+
+export const datasetsStateInitialValue: DatasetState = { datasets: [], loading: false, deleteError: false };
