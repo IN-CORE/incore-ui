@@ -143,17 +143,17 @@ const DataViewer = () => {
 	const [searchText, setSearchText] = React.useState("");
 	const [registeredSearchText, setRegisteredSearchText] = React.useState("");
 	const [searching, setSearching] = React.useState(false);
-	const [authError, setAuthError] = React.useState(useSelector((state) => state.user.loginError));
 	const [preview, setPreview] = React.useState(false);
 	const [offset, setOffset] = React.useState(0);
 	const [pageNumber, setPageNumber] = React.useState(1);
 	const [dataPerPage, setDataPerPage] = React.useState(50);
 	const [messageOpen, setMessageOpen] = React.useState(false);
 	const [confirmOpen, setConfirmOpen] = React.useState(false);
-	const [loading, setLoading] = React.useState(useSelector((state) => state.data.loading));
 	const [metadataClosed, setMetadataClosed] = React.useState(true);
 
 	const dispatch = useDispatch();
+	const authError = useSelector((state) => state.user.loginError);
+	const loading = useSelector((state) => state.data.loading);
 	const datasets = useSelector((state) => state.data.datasets);
 	const deleteError = useSelector((state) => state.data.deleteError);
 	const spaces = useSelector((state) => state.space.spaces);
@@ -162,11 +162,6 @@ const DataViewer = () => {
 	React.useEffect(() => {
 		// check if logged in
 		let authorization = cookies.get("Authorization");
-		console.log(
-			config.hostname.includes("localhost") ||
-				(authorization !== undefined && authorization !== "" && authorization !== null)
-		);
-		console.log(authError);
 		if (
 			config.hostname.includes("localhost") ||
 			(authorization !== undefined && authorization !== "" && authorization !== null)
@@ -175,16 +170,10 @@ const DataViewer = () => {
 			fetchSpaces()(dispatch);
 			fetchUniqueDatatypes()(dispatch);
 		} else {
-			console.log("Dispatching Login error");
-			// dispatch({ type: "LOGIN_ERROR" });
-			setAuthError(true);
+			dispatch({ type: "LOGIN_ERROR" });
 		}
 		dispatch(resetError);
 	}, []);
-
-	React.useEffect(() => {
-		console.log("From effect hook", authError);
-	}, [authError]);
 
 	React.useEffect(() => {
 		if (deleteError && !messageOpen) {
@@ -217,12 +206,9 @@ const DataViewer = () => {
 	};
 
 	React.useEffect(() => {
+		console.log("Fired 1");
 		fetchDatasets(selectedDataType, selectedSpace, dataPerPage, offset)(dispatch);
-	}, [selectedDataType]);
-
-	React.useEffect(() => {
-		fetchDatasets(selectedDataType, selectedSpace, dataPerPage, offset)(dispatch);
-	}, [selectedSpace]);
+	}, [selectedDataType, selectedSpace]);
 
 	const onClickDataset = (datasetId) => {
 		const dataset = datasets.find((dataset) => dataset.id === datasetId);
@@ -280,7 +266,10 @@ const DataViewer = () => {
 	};
 
 	React.useEffect(() => {
-		searchDatasets(registeredSearchText, dataPerPage, offset);
+		console.log("Fired 2");
+		if (registeredSearchText !== "") {
+			searchDatasets(registeredSearchText, dataPerPage, offset)(dispatch);
+		}
 	}, [registeredSearchText]);
 
 	const onClickFileDescriptor = async (selected_dataset_id, file_descriptor_id, file_name) => {
@@ -290,7 +279,6 @@ const DataViewer = () => {
 
 		let fdata = [];
 		let fextension = null;
-		// let autherr = false
 
 		if (response.ok) {
 			let text = await response.text();
@@ -298,8 +286,7 @@ const DataViewer = () => {
 			fextension = file_name.split(".").slice(-1).pop();
 		} else if (response.status === 401) {
 			cookies.remove("Authorization");
-			// dispatch({ type: "LOGIN_ERROR" });
-			setAuthError(true);
+			dispatch({ type: "LOGIN_ERROR" });
 		}
 
 		setFileData(fdata);
@@ -327,8 +314,7 @@ const DataViewer = () => {
 			}
 		} else if (response.status === 401) {
 			cookies.remove("Authorization");
-			// dispatch({ type: "LOGIN_ERROR" });
-			setAuthError(true);
+			dispatch({ type: "LOGIN_ERROR" });
 		}
 	};
 
@@ -640,7 +626,6 @@ const DataViewer = () => {
 								</div>
 							</Paper>
 						</Grid>
-						{console.log(searchText)}
 						<Grid item lg={4} sm={4} xl={4} xs={12}>
 							<Paper variant="outlined" className={classes.filter}>
 								<Typography variant="h6">Search all</Typography>

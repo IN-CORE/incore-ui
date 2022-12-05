@@ -294,3 +294,9 @@ interface DatasetState {
 	loading: boolean;
 	deleteError: boolean;
 }
+
+interface DFR3State {
+	dfr3Curves: DFR3Curves;
+	loading: boolean;
+	deleteError: boolean;
+}

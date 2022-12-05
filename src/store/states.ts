@@ -10,3 +10,5 @@ export const userStateInitialValue: UserState = {
 };
 
 export const datasetsStateInitialValue: DatasetState = { datasets: [], loading: false, deleteError: false };
+
+export const dfr3CurvesStateInitialValue: DFR3State = { dfr3Curves: [], loading: false, deleteError: false };

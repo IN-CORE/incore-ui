@@ -1,8 +1,8 @@
 import { combineReducers } from "redux";
 import { routerReducer } from "react-router-redux";
-import datasets from "./datasets";
+import datasets from "./datasets.ts";
 import hazards from "./hazards";
-import dfr3Curves from "./dfr3Curves";
+import dfr3Curves from "./dfr3Curves.ts";
 import dfr3Mappings from "./dfr3Mappings";
 import spaces from "./spaces";
 import datatypes from "./datatypes";

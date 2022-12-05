@@ -4,7 +4,7 @@ import { IndexRoute, Route } from "react-router";
 import App from "./containers/App";
 import CommunityApps from "./components/CommunityApps";
 import DataViewer from "./components/DataViewer";
-import DFR3Viewer from "./containers/DFR3Viewer";
+import DFR3Viewer from "./components/DFR3Viewer";
 import HazardViewer from "./containers/HazardViewer";
 import HomePage from "./components/HomePage";
 import Login from "./components/Login";

@@ -1,8 +1,9 @@
 import React from "react";
-import DFR3CurvesGroupList from "./children/DFR3CurvesGroupList";
-import DFR3MappingsGroupList from "./children/DFR3MappingsGroupList";
-import CustomHighChart from "./children/CustomHighChart";
-import NestedInfoTable from "./children/NestedInfoTable";
+import { useDispatch, useSelector } from "react-redux";
+import { browserHistory } from "react-router";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import LoadingOverlay from "react-loading-overlay";
+
 // import ThreeDimensionalPlot from "./children/ThreeDimensionalPlot";
 import "whatwg-fetch";
 import {
@@ -22,32 +23,42 @@ import {
 } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 import CloseIcon from "@material-ui/icons/Close";
-import chartConfig from "./config/ChartConfig";
+import { createTheme, makeStyles } from "@material-ui/core/styles/index";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
 import config from "../app.config";
-import { browserHistory } from "react-router";
+import { exportJson, is3dCurve } from "../utils/common";
+import { fetchPlot } from "../actions/plotting";
+import chartConfig from "./config/ChartConfig";
 import Pagination from "./children/Pagination";
 import DataPerPage from "./children/DataPerPage";
 import Space from "./children/Space";
 import Version from "./children/Version";
-import { CopyToClipboard } from "react-copy-to-clipboard";
-import { createMuiTheme, withStyles } from "@material-ui/core/styles/index";
-import Cookies from "universal-cookie";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-
-import { exportJson, is3dCurve } from "../utils/common";
 import ErrorMessage from "./children/ErrorMessage";
 import Confirmation from "./children/Confirmation";
-import LoadingOverlay from "react-loading-overlay";
-
-import { fetchPlot } from "../actions/plotting";
+import DFR3CurvesGroupList from "./children/DFR3CurvesGroupList";
+import DFR3MappingsGroupList from "./children/DFR3MappingsGroupList";
+import CustomHighChart from "./children/CustomHighChart";
+import NestedInfoTable from "./children/NestedInfoTable";
 import ThreeDimensionalPlot from "./children/ThreeDimensionalPlot";
+
+import {
+	fetchDFR3Curves,
+	fetchDFR3Mappings,
+	fetchSpaces,
+	searchDFR3Curves,
+	searchDFR3Mappings,
+	deleteItemById,
+	resetError
+} from "../actions";
+
+import Cookies from "universal-cookie";
 
 const cookies = new Cookies();
 const redundantProp = ["legacyId", "privileges", "creator", "is3dPlot", "spaces"];
 
-const theme = createMuiTheme();
-const styles = {
+const theme = createTheme();
+const useStyles = makeStyles(() => ({
 	root: {
 		padding: theme.spacing(4)
 	},
@@ -116,555 +127,175 @@ const styles = {
 	metadataCloseButton: {
 		float: "right"
 	}
-};
+}));
 
-class DFR3Viewer extends React.Component {
-	constructor(props) {
-		super(props);
+const DFR3Viewer = () => {
+	const classes = useStyles();
 
-		this.state = {
-			selectedDFR3Type: "fragilities",
-			selectedInventory: "All",
-			selectedHazard: "All",
-			selectedSpace: "All",
-			selectedDFR3Curve: null,
-			selectedMapping: "",
-			searchText: "",
-			registeredSearchText: "",
-			searching: false,
-			chartConfig: chartConfig.DFR3Config,
-			plotData3d: {},
-			authError: false,
-			spaces: [],
-			preview: false,
-			offset: 0,
-			pageNumber: 1,
-			dataPerPage: 50,
-			offsetMappings: 0,
-			pageNumberMappings: 1,
-			urlPrefix: config.urlPrefix,
-			tabIndex: 0,
-			error: "",
-			message: "",
-			messageOpen: false,
-			confirmOpen: false,
-			deleteType: "curve", // or mapping
-			curvesLoading: false,
-			mappingsLoading: false,
-			metadataClosed: true
-		};
+	const [selectedDFR3Type, setSelectedDFR3Type] = React.useState("fragilities");
+	const [selectedInventory, setSelectedInventory] = React.useState("All");
+	const [selectedHazard, setSelectedHazard] = React.useState("All");
+	const [selectedSpace, setSelectedSpace] = React.useState("All");
+	const [selectedDFR3Curve, setSelectedDFR3Curve] = React.useState(null);
+	const [selectedMapping, setSelectedMapping] = React.useState("");
+	const [searchText, setSearchText] = React.useState("");
+	const [registeredSearchText, setRegisteredSearchText] = React.useState("");
+	const [searching, setSearching] = React.useState(false);
+	const [chartConfigVar, setChartConfigVar] = React.useState(chartConfig);
+	const [plotData3D, setPlotData3D] = React.useState({});
+	const [preview, setPreview] = React.useState(false);
+	const [offset, setOffset] = React.useState(0);
+	const [pageNumber, setPageNumber] = React.useState(1);
+	const [dataPerPage, setDataPerPage] = React.useState(50);
+	const [offsetMappings, setOffsetMappings] = React.useState(0);
+	const [pageNumberMappings, setPageNumberMappings] = React.useState(1);
+	const [urlPrefix, setUrlPrefix] = React.useState(config.urlPrefix);
+	const [tabIndex, setTabIndex] = React.useState(0);
+	const [error, setError] = React.useState("");
+	const [message, setMessage] = React.useState("");
+	const [messageOpen, setMessageOpen] = React.useState(false);
+	const [confirmOpen, setConfirmOpen] = React.useState(false);
+	const [deleteType, setDeleteType] = React.useState("curve");
+	const [metadataClosed, setMetadataClosed] = React.useState(true);
 
-		this.changeDFR3Type = this.changeDFR3Type.bind(this);
-		this.onClickDFR3Curve = this.onClickDFR3Curve.bind(this);
-		this.onClickDFR3Mapping = this.onClickDFR3Mapping.bind(this);
-		this.onClickDelete = this.onClickDelete.bind(this);
-		this.deleteCurveConfirmed = this.deleteCurveConfirmed.bind(this);
-		this.deleteMappingConfirmed = this.deleteMappingConfirmed.bind(this);
-		this.handleCanceled = this.handleCanceled.bind(this);
-		this.closeErrorMessage = this.closeErrorMessage.bind(this);
-		this.handleInventorySelection = this.handleInventorySelection.bind(this);
-		this.handleHazardSelection = this.handleHazardSelection.bind(this);
-		this.setSearchState = this.setSearchState.bind(this);
-		this.handleKeyPressed = this.handleKeyPressed.bind(this);
-		this.clickSearch = this.clickSearch.bind(this);
-		this.preview = this.preview.bind(this);
-		this.exportCurveJson = this.exportCurveJson.bind(this);
-		this.exportMappingJson = this.exportMappingJson.bind(this);
-		this.previous = this.previous.bind(this);
-		this.next = this.next.bind(this);
-		this.previousMappings = this.previousMappings.bind(this);
-		this.nextMappings = this.nextMappings.bind(this);
-		this.handlePreviewerClose = this.handlePreviewerClose.bind(this);
-		this.changeDataPerPage = this.changeDataPerPage.bind(this);
-		this.handleSpaceSelection = this.handleSpaceSelection.bind(this);
-		this.closeMetadata = this.closeMetadata.bind(this);
-	}
+	const dispatch = useDispatch();
+	const authError = useSelector((state) => state.user.loginError);
+	const deleteError = useSelector((state) => state.dfr3Curve.deleteError || state.dfr3Mapping.deleteError);
+	const curvesLoading = useSelector((state) => state.dfr3Curve.loading);
+	const mappingsLoading = useSelector((state) => state.dfr3Mapping.loading);
+	const spaces = useSelector((state) => state.space.spaces);
+	const dfr3Curves = useSelector((state) => state.dfr3Curve.dfr3Curves);
+	const dfr3Mappings = useSelector((state) => state.dfr3Mapping.dfr3Mappings);
 
-	async componentWillMount() {
+	React.useEffect(() => {
 		// check if logged in
 		let authorization = cookies.get("Authorization");
-
-		// logged in
 		if (
 			config.hostname.includes("localhost") ||
 			(authorization !== undefined && authorization !== "" && authorization !== null)
 		) {
-			this.setState(
-				{
-					authError: false
-				},
-				function () {
-					this.props.getAllSpaces();
-					this.props.getAllDFR3Curves(
-						this.state.selectedDFR3Type,
-						this.state.selectedSpace,
-						this.state.selectedInventory,
-						this.state.selectedHazard,
-						this.state.dataPerPage,
-						this.state.offset
-					);
-					this.props.getAllDFR3Mappings(
-						this.state.selectedDFR3Type,
-						this.state.selectedSpace,
-						this.state.selectedInventory,
-						this.state.selectedHazard,
-						this.state.dataPerPage,
-						this.state.offsetMappings
-					);
-				}
-			);
+			fetchSpaces()(dispatch);
+			fetchDFR3Curves(
+				selectedDFR3Type,
+				selectedSpace,
+				selectedInventory,
+				selectedHazard,
+				dataPerPage,
+				offset
+			)(dispatch);
+			fetchDFR3Mappings(
+				selectedDFR3Type,
+				selectedSpace,
+				selectedInventory,
+				selectedHazard,
+				dataPerPage,
+				offsetMappings
+			)(dispatch);
+		} else {
+			dispatch({ type: "LOGIN_ERROR" });
 		}
-		// not logged in
-		else {
-			this.setState({
-				authError: true
-			});
+		dispatch(resetError);
+	}, []);
+
+	React.useEffect(() => {
+		if (deleteError && !messageOpen) {
+			setMessage("You do not have the privilege to delete this item.");
+			setError("");
+			setMessageOpen(true);
+		} else if (!deleteError && messageOpen) {
+			setMessageOpen(false);
 		}
-	}
+	}, [messageOpen]);
 
-	componentDidMount() {
-		// reset delete error
-		this.props.resetError();
-	}
+	React.useEffect(() => {
+		fetchDFR3Curves(
+			selectedDFR3Type,
+			selectedSpace,
+			selectedInventory,
+			selectedHazard,
+			dataPerPage,
+			offset
+		)(dispatch);
+		fetchDFR3Mappings(
+			selectedDFR3Type,
+			selectedSpace,
+			selectedInventory,
+			selectedHazard,
+			dataPerPage,
+			offsetMappings
+		)(dispatch);
+	}, [selectedDFR3Type, selectedInventory, selectedSpace, selectedHazard]);
 
-	componentWillReceiveProps(nextProps) {
-		this.setState({
-			authError: nextProps.authError,
-			curvesLoading: nextProps.curvesLoading,
-			mappingsLoading: nextProps.mappingsLoading
-		});
-	}
-
-	// TODO set state inside componentDidUpdate is bad practice!!
-	// DELETE error
-	componentDidUpdate(prevProps, prevState) {
-		if (this.props.deleteError && !prevState.messageOpen) {
-			this.setState({
-				message: "You do not have the privilege to delete this item.",
-				error: "",
-				messageOpen: true
-			});
-		} else if (!this.props.deleteError && prevState.messageOpen) {
-			this.setState({ messageOpen: false });
-		}
-	}
-
-	changeDFR3Type(event) {
-		this.setState(
-			{
-				searching: false,
-				searchText: "",
-				registeredSearchText: "",
-				selectedDFR3Curve: null,
-				selectedDFR3Type: event.target.value,
-				pageNumber: 1,
-				offset: 0,
-				pageNumberMappings: 1,
-				offsetMappings: 0,
-				selectedMapping: "",
-				metadataClosed: false
-			},
-			function () {
-				this.props.getAllDFR3Curves(
-					this.state.selectedDFR3Type,
-					this.state.selectedSpace,
-					this.state.selectedInventory,
-					this.state.selectedHazard,
-					this.state.dataPerPage,
-					this.state.offset
-				);
-				this.props.getAllDFR3Mappings(
-					this.state.selectedDFR3Type,
-					this.state.selectedSpace,
-					this.state.selectedInventory,
-					this.state.selectedHazard,
-					this.state.dataPerPage,
-					this.state.offsetMappings
-				);
-			}
-		);
-	}
-
-	handleTabChange = (event, value) => {
-		this.setState({ tabIndex: value });
+	const setCommonParameters = () => {
+		setSearching(false);
+		setSearchText("");
+		setRegisteredSearchText("");
+		setSelectedDFR3Curve(null);
+		setPageNumber(1);
+		setOffset(0);
+		setPageNumberMappings(1);
+		setOffsetMappings(0);
+		setSelectedMapping("");
 	};
 
-	handleInventorySelection(event) {
-		this.setState(
-			{
-				searching: false,
-				searchText: "",
-				registeredSearchText: "",
-				selectedDFR3Curve: null,
-				selectedInventory: event.target.value,
-				pageNumber: 1,
-				offset: 0,
-				pageNumberMappings: 1,
-				offsetMappings: 0,
-				selectedMapping: ""
-			},
-			function () {
-				this.props.getAllDFR3Curves(
-					this.state.selectedDFR3Type,
-					this.state.selectedSpace,
-					this.state.selectedInventory,
-					this.state.selectedHazard,
-					this.state.dataPerPage,
-					this.state.offset
-				);
-				this.props.getAllDFR3Mappings(
-					this.state.selectedDFR3Type,
-					this.state.selectedSpace,
-					this.state.selectedInventory,
-					this.state.selectedHazard,
-					this.state.dataPerPage,
-					this.state.offsetMappings
-				);
-			}
-		);
-	}
+	const handleDFR3TypeChange = (event) => {
+		setCommonParameters();
+		setSelectedDFR3Type(event.target.value);
+		setMetadataClosed(false);
+	};
 
-	handleSpaceSelection(event) {
-		this.setState(
-			{
-				selectedSpace: event.target.value,
-				searching: false,
-				searchText: "",
-				registeredSearchText: "",
-				selectedDFR3Curve: null,
-				pageNumber: 1,
-				offset: 0,
-				pageNumberMappings: 1,
-				offsetMappings: 0,
-				selectedMapping: ""
-			},
-			function () {
-				this.props.getAllDFR3Curves(
-					this.state.selectedDFR3Type,
-					this.state.selectedSpace,
-					this.state.selectedInventory,
-					this.state.selectedHazard,
-					this.state.dataPerPage,
-					this.state.offset
-				);
-				this.props.getAllDFR3Mappings(
-					this.state.selectedDFR3Type,
-					this.state.selectedSpace,
-					this.state.selectedInventory,
-					this.state.selectedHazard,
-					this.state.dataPerPage,
-					this.state.offsetMappings
-				);
-			}
-		);
-	}
+	const handleInventoryTypeChange = (event) => {
+		setCommonParameters();
+		setSelectedInventory(event.target.value);
+	};
 
-	handleHazardSelection(event) {
-		this.setState(
-			{
-				searching: false,
-				searchText: "",
-				registeredSearchText: "",
-				selectedDFR3Curve: null,
-				selectedHazard: event.target.value,
-				pageNumber: 1,
-				offset: 0,
-				pageNumberMappings: 1,
-				offsetMappings: 0,
-				selectedMapping: ""
-			},
-			function () {
-				this.props.getAllDFR3Curves(
-					this.state.selectedDFR3Type,
-					this.state.selectedSpace,
-					this.state.selectedInventory,
-					this.state.selectedHazard,
-					this.state.dataPerPage,
-					this.state.offset
-				);
-				this.props.getAllDFR3Mappings(
-					this.state.selectedDFR3Type,
-					this.state.selectedSpace,
-					this.state.selectedInventory,
-					this.state.selectedHazard,
-					this.state.dataPerPage,
-					this.state.offsetMappings
-				);
-			}
-		);
-	}
+	const handleHazardTypeChange = (event) => {
+		setCommonParameters();
+		setSelectedHazard(event.target.value);
+	};
 
-	async setSearchState() {
-		this.setState({
-			registeredSearchText: this.state.searchText,
-			searching: true,
-			pageNumber: 1,
-			offset: 0,
-			pageNumberMappings: 1,
-			offsetMappings: 0,
-			selectedMapping: "",
-			selectedInventory: "All",
-			selectedHazard: "All",
-			selectedSpace: "All",
-			selectedDFR3Curve: null
-		});
-	}
+	const handleSpaceChange = (event) => {
+		setCommonParameters();
+		setSelectedSpace(event.target.value);
+	};
 
-	async handleKeyPressed(event) {
+	const handleTabChange = (event, value) => {
+		setTabIndex(value);
+	};
+
+	const setSearchState = () => {
+		setRegisteredSearchText(searchText);
+		setSearching(true);
+		setSelectedDFR3Curve(null);
+		setPageNumber(1);
+		setOffset(0);
+		setPageNumberMappings(1);
+		setOffsetMappings(0);
+		setSelectedMapping("");
+		setSelectedInventory("All");
+		setSelectedSpace("All");
+		setSelectedHazard("All");
+	};
+
+	const handleKeyPressed = (event) => {
 		if (event.charCode === 13) {
-			// enter
 			event.preventDefault();
-			await this.setSearchState();
-			this.props.searchAllDFR3Curves(
-				this.state.selectedDFR3Type,
-				this.state.registeredSearchText,
-				this.state.dataPerPage,
-				this.state.offset
-			);
-			this.props.searchAllDFR3Mappings(
-				this.state.selectedDFR3Type,
-				this.state.registeredSearchText,
-				this.state.dataPerPage,
-				this.state.offsetMappings
-			);
+			setSearchState();
 		}
-	}
+	};
 
-	async clickSearch() {
-		await this.setSearchState();
-		this.props.searchAllDFR3Curves(
-			this.state.selectedDFR3Type,
-			this.state.registeredSearchText,
-			this.state.dataPerPage,
-			this.state.offset
-		);
-		this.props.searchAllDFR3Mappings(
-			this.state.selectedDFR3Type,
-			this.state.registeredSearchText,
-			this.state.dataPerPage,
-			this.state.offsetMappings
-		);
-	}
+	const clickSearch = () => {
+		setSearchState();
+	};
 
-	async onClickDFR3Curve(DFR3Curve) {
-		let plotData3d = {};
-		let plotConfig2d = {};
-		let message = "Something is wrong with this DFR3 Curve definition. We cannot display its preview.";
-		let error = "";
-
-		if (DFR3Curve.fragilityCurves && DFR3Curve.is3dPlot) {
-			[plotData3d, error] = await this.generate3dPlotData(DFR3Curve);
-		} else if (DFR3Curve.fragilityCurves && !DFR3Curve.is3dPlot) {
-			[plotConfig2d, error] = await this.generate2dPlotData(DFR3Curve);
+	React.useEffect(() => {
+		if (registeredSearchText !== "") {
+			searchDFR3Curves(selectedDFR3Type, registeredSearchText, dataPerPage, offset)(dispatch);
+			searchDFR3Mappings(selectedDFR3Type, registeredSearchText, dataPerPage, offsetMappings)(dispatch);
 		}
+	}, [registeredSearchText]);
 
-		this.setState({
-			chartConfig: plotConfig2d,
-			plotData3d: plotData3d,
-			selectedDFR3Curve: DFR3Curve,
-			error: `DFR3 Curve ID:${DFR3Curve.id}%0D%0A%0D%0A${error}`, // line break %0D%0A
-			message: message,
-			messageOpen: error !== "",
-			metadataClosed: false
-		});
-	}
-
-	onClickDFR3Mapping(DFR3Mapping) {
-		this.setState({
-			selectedMapping: DFR3Mapping,
-			metadataClosed: false
-		});
-	}
-
-	onClickDelete(deleteType) {
-		this.setState({
-			confirmOpen: true,
-			deleteType: deleteType
-		});
-	}
-
-	deleteMappingConfirmed() {
-		this.props.deleteMappingItemById(this.state.selectedMapping.id);
-		this.setState({
-			selectedMapping: "",
-			confirmOpen: false
-		});
-	}
-
-	deleteCurveConfirmed() {
-		this.props.deleteCurveItemById(this.state.selectedDFR3Type, this.state.selectedDFR3Curve.id);
-		this.setState({
-			selectedDFR3Curve: "",
-			confirmOpen: false
-		});
-	}
-
-	handleCanceled() {
-		this.setState({
-			confirmOpen: false
-		});
-	}
-
-	closeErrorMessage() {
-		this.props.resetError();
-		this.setState({
-			message: "",
-			error: "",
-			messageOpen: false
-		});
-	}
-
-	previous() {
-		this.setState(
-			{
-				offset: (this.state.pageNumber - 2) * this.state.dataPerPage,
-				pageNumber: this.state.pageNumber - 1,
-				selectedDFR3Curve: ""
-			},
-			function () {
-				if (this.state.registeredSearchText !== "" && this.state.searching) {
-					this.props.searchAllDFR3Curves(
-						this.state.selectedDFR3Type,
-						this.state.registeredSearchText,
-						this.state.dataPerPage,
-						this.state.offset
-					);
-				} else {
-					this.props.getAllDFR3Curves(
-						this.state.selectedDFR3Type,
-						this.state.selectedSpace,
-						this.state.selectedInventory,
-						this.state.selectedHazard,
-						this.state.dataPerPage,
-						this.state.offset
-					);
-				}
-			}
-		);
-	}
-
-	next() {
-		this.setState(
-			{
-				offset: this.state.pageNumber * this.state.dataPerPage,
-				pageNumber: this.state.pageNumber + 1,
-				selectedDFR3Curve: ""
-			},
-			function () {
-				if (this.state.registeredSearchText !== "" && this.state.searching) {
-					this.props.searchAllDFR3Curves(
-						this.state.selectedDFR3Type,
-						this.state.registeredSearchText,
-						this.state.dataPerPage,
-						this.state.offset
-					);
-				} else {
-					this.props.getAllDFR3Curves(
-						this.state.selectedDFR3Type,
-						this.state.selectedSpace,
-						this.state.selectedInventory,
-						this.state.selectedHazard,
-						this.state.dataPerPage,
-						this.state.offset
-					);
-				}
-			}
-		);
-	}
-
-	changeDataPerPage(event) {
-		this.setState(
-			{
-				pageNumber: 1,
-				offset: 0,
-				dataPerPage: event.target.value,
-				selectedDFR3Curve: "",
-				searchText: "",
-				registeredSearchText: "",
-				pageNumberMappings: 1,
-				offsetMappings: 0,
-				selectedMapping: ""
-			},
-			function () {
-				this.props.getAllDFR3Curves(
-					this.state.selectedDFR3Type,
-					this.state.selectedSpace,
-					this.state.selectedInventory,
-					this.state.selectedHazard,
-					this.state.dataPerPage,
-					this.state.offset
-				);
-				this.props.getAllDFR3Mappings(
-					this.state.selectedDFR3Type,
-					this.state.selectedSpace,
-					this.state.selectedInventory,
-					this.state.selectedHazard,
-					this.state.dataPerPage,
-					this.state.offsetMappings
-				);
-			}
-		);
-	}
-
-	previousMappings() {
-		this.setState(
-			{
-				offsetMappings: (this.state.pageNumberMappings - 2) * this.state.dataPerPage,
-				pageNumberMappings: this.state.pageNumberMappings - 1,
-				selectedMapping: ""
-			},
-			function () {
-				if (this.state.registeredSearchText !== "" && this.state.searching) {
-					this.props.searchAllDFR3Mappings(
-						this.state.selectedDFR3Type,
-						this.state.registeredSearchText,
-						this.state.dataPerPage,
-						this.state.offsetMappings
-					);
-				} else {
-					this.props.getAllDFR3Mappings(
-						this.state.selectedDFR3Type,
-						this.state.selectedSpace,
-						this.state.selectedInventory,
-						this.state.selectedHazard,
-						this.state.dataPerPage,
-						this.state.offsetMappings
-					);
-				}
-			}
-		);
-	}
-
-	nextMappings() {
-		this.setState(
-			{
-				offsetMappings: this.state.pageNumberMappings * this.state.dataPerPage,
-				pageNumberMappings: this.state.pageNumberMappings + 1,
-				selectedMapping: ""
-			},
-			function () {
-				if (this.state.registeredSearchText !== "" && this.state.searching) {
-					this.props.searchAllDFR3Mappings(
-						this.state.selectedDFR3Type,
-						this.state.registeredSearchText,
-						this.state.dataPerPage,
-						this.state.offsetMappings
-					);
-				} else {
-					this.props.getAllDFR3Mappings(
-						this.state.selectedDFR3Type,
-						this.state.selectedSpace,
-						this.state.selectedInventory,
-						this.state.selectedHazard,
-						this.state.dataPerPage,
-						this.state.offsetMappings
-					);
-				}
-			}
-		);
-	}
-
-	async generate2dPlotData(DFR3Curve) {
+	const generate2dPlotData = async (DFR3Curve) => {
 		let updatedChartConfig = Object.assign({}, chartConfig.DFR3Config);
 
 		let error = "";
@@ -699,9 +330,9 @@ class DFR3Viewer extends React.Component {
 		}
 
 		return [updatedChartConfig, error];
-	}
+	};
 
-	async generate3dPlotData(DFR3Curve) {
+	const generate3dPlotData = async (DFR3Curve) => {
 		let [requestStatus, response] = await fetchPlot(DFR3Curve);
 		let error = "";
 
@@ -717,32 +348,146 @@ class DFR3Viewer extends React.Component {
 			error = response;
 			return [{ data: null, title: null }, error];
 		}
-	}
+	};
 
-	exportMappingJson() {
-		exportJson(this.state.selectedMapping);
-	}
+	const onClickDFR3Curve = async (DFR3Curve) => {
+		let plotData3d = {};
+		let plotConfig2d = {};
+		let message = "Something is wrong with this DFR3 Curve definition. We cannot display its preview.";
+		let error = "";
 
-	exportCurveJson() {
-		// do not include added field is3dPlot
-		let { is3dPlot, ...metadataJson } = this.state.selectedDFR3Curve;
+		if (DFR3Curve.fragilityCurves && DFR3Curve.is3dPlot) {
+			[plotData3d, error] = await generate3dPlotData(DFR3Curve);
+		} else if (DFR3Curve.fragilityCurves && !DFR3Curve.is3dPlot) {
+			[plotConfig2d, error] = await generate2dPlotData(DFR3Curve);
+		}
 
+		setChartConfigVar(plotConfig2d);
+		setPlotData3D(plotData3d);
+		setSelectedDFR3Curve(DFR3Curve);
+		setError(`DFR3 Curve ID:${DFR3Curve.id}%0D%0A%0D%0A${error}`);
+		setMessage(message);
+		setMessageOpen(error !== "");
+		setMetadataClosed(false);
+	};
+
+	const onClickDFR3Mapping = (DFR3Mapping) => {
+		setSelectedMapping(DFR3Mapping);
+		setMetadataClosed(false);
+	};
+
+	const onClickDelete = (deleteType) => {
+		setConfirmOpen(true);
+		setDeleteType(deleteType);
+	};
+
+	const deleteMappingConfirmed = () => {
+		deleteItemById("mapping", selectedMapping.id)(dispatch);
+		setSelectedMapping("");
+		setConfirmOpen(false);
+	};
+
+	const deleteCurveConfirmed = () => {
+		deleteItemById(selectedDFR3Type, selectedDFR3Curve.id)(dispatch);
+		setSelectedDFR3Curve("");
+		setConfirmOpen(false);
+	};
+
+	const handleCanceled = () => {
+		setConfirmOpen(false);
+	};
+
+	const closeErrorMessage = () => {
+		dispatch(resetError);
+		setMessage("");
+		setError("");
+		setMessageOpen(false);
+	};
+
+	const pageChange = (direction, for_mapping) => {
+		if (direction === "previous") {
+			setOffset((pageNumber - 2) * dataPerPage);
+			setPageNumber(pageNumber - 1);
+		} else if (direction === "next") {
+			setOffset(pageNumber * dataPerPage);
+			setPageNumber(pageNumber + 1);
+		} else if (direction === "previousMapping") {
+			setOffsetMappings((pageNumberMappings - 2) * dataPerPage);
+			setPageNumberMappings(pageNumberMappings - 1);
+		} else if (direction === "nextMapping") {
+			setOffsetMappings(pageNumberMappings * dataPerPage);
+			setPageNumberMappings(pageNumberMappings + 1);
+		}
+
+		if (for_mapping) {
+			setSelectedMapping("");
+		} else {
+			setSelectedDFR3Curve("");
+		}
+	};
+
+	React.useEffect(() => {
+		console.log(dataPerPage);
+		if (registeredSearchText !== "" && searching) {
+			searchDFR3Mappings(selectedDFR3Type, registeredSearchText, dataPerPage, offsetMappings)(dispatch);
+		} else {
+			fetchDFR3Mappings(
+				selectedDFR3Type,
+				selectedSpace,
+				selectedInventory,
+				selectedHazard,
+				dataPerPage,
+				offsetMappings
+			)(dispatch);
+		}
+	}, [offsetMappings, pageNumberMappings, dataPerPage]);
+
+	React.useEffect(() => {
+		console.log(dataPerPage);
+		if (registeredSearchText !== "" && searching) {
+			searchDFR3Curves(selectedDFR3Type, registeredSearchText, dataPerPage, offset)(dispatch);
+		} else {
+			fetchDFR3Curves(
+				selectedDFR3Type,
+				selectedSpace,
+				selectedInventory,
+				selectedHazard,
+				dataPerPage,
+				offset
+			)(dispatch);
+		}
+	}, [offset, pageNumber, dataPerPage]);
+
+	const changeDataPerPage = (event) => {
+		setPageNumber(1);
+		setOffset(0);
+		setSearchText("");
+		setRegisteredSearchText("");
+		setSelectedDFR3Curve("");
+		setDataPerPage(event.target.value);
+		setPageNumberMappings(1);
+		setOffsetMappings(0);
+		setSelectedMapping("");
+	};
+
+	const exportMappingJson = () => {
+		exportJson(selectedMapping);
+	};
+
+	const exportCurveJson = () => {
+		let { is3dPlot, ...metadataJson } = selectedDFR3Curve;
 		exportJson(metadataJson);
-	}
+	};
 
-	preview() {
-		this.setState({
-			preview: true
-		});
-	}
+	const handlePreviewOpen = () => {
+		setPreview(true);
+	};
 
-	handlePreviewerClose() {
-		this.setState({
-			preview: false
-		});
-	}
+	const handlePreviewClose = () => {
+		setPreview(false);
+	};
 
-	extractCurveInfoTable(DFR3Curve) {
+	const extractCurveInfoTable = (DFR3Curve) => {
 		let curveInfo = {};
 		if (DFR3Curve["fragilityCurves"] !== undefined) {
 			DFR3Curve["fragilityCurves"].map((curve) => {
@@ -750,9 +495,9 @@ class DFR3Viewer extends React.Component {
 			});
 		}
 		return curveInfo;
-	}
+	};
 
-	extractParamTable(DFR3Curve) {
+	const extractParamTable = (DFR3Curve) => {
 		let params = {};
 		if (DFR3Curve["curveParameters"] !== undefined) {
 			DFR3Curve["curveParameters"].map((curveParam) => {
@@ -762,356 +507,321 @@ class DFR3Viewer extends React.Component {
 			});
 		}
 		return params;
-	}
+	};
 
-	closeMetadata() {
-		this.setState({
-			metadataClosed: true
+	const handleCloseMetadata = () => {
+		setMetadataClosed(true);
+	};
+
+	// curve list
+	let curveList = dfr3Curves;
+	let curvesWithInfo = [];
+	if (curveList.length > 0) {
+		curveList.map((DFR3Curve) => {
+			DFR3Curve["is3dPlot"] = is3dCurve(DFR3Curve);
+			curvesWithInfo.push(DFR3Curve);
 		});
 	}
 
-	render() {
-		const { classes } = this.props;
-		let tabIndex = this.state.tabIndex;
-
-		// Curve list
-		let curveList = this.props.dfr3Curves;
-		let curvesWithInfo = [];
-		if (curveList.length > 0) {
-			curveList.map((DFR3Curve) => {
-				DFR3Curve["is3dPlot"] = is3dCurve(DFR3Curve);
-				curvesWithInfo.push(DFR3Curve);
-			});
-		}
-
-		// selected Curves
-		let selectedCurveDetail = {};
-		if (this.state.selectedDFR3Curve) {
-			for (let item in this.state.selectedDFR3Curve) {
-				if (redundantProp.indexOf(item) === -1) {
-					selectedCurveDetail[item] = this.state.selectedDFR3Curve[item];
-				}
+	// selected Curves
+	let selectedCurveDetail = {};
+	if (selectedDFR3Curve) {
+		for (let item in selectedDFR3Curve) {
+			if (redundantProp.indexOf(item) === -1) {
+				selectedCurveDetail[item] = selectedDFR3Curve[item];
 			}
 		}
+	}
 
-		let mappingsList = this.props.dfr3Mappings;
-		let mappingsWithInfo = [];
-		if (mappingsList.length > 0) {
-			mappingsList.map((DFR3Mappings) => {
-				mappingsWithInfo.push(DFR3Mappings);
-			});
-		}
+	let mappingsList = dfr3Mappings;
+	let mappingsWithInfo = [];
+	if (mappingsList.length > 0) {
+		mappingsList.map((DFR3Mappings) => {
+			mappingsWithInfo.push(DFR3Mappings);
+		});
+	}
 
-		// selected Curves
-		let selectedMappingDetails = {};
-		if (this.state.selectedMapping) {
-			for (let item in this.state.selectedMapping) {
-				if (redundantProp.indexOf(item) === -1) {
-					selectedMappingDetails[item] = this.state.selectedMapping[item];
-				}
+	// selected Curves
+	let selectedMappingDetails = {};
+	if (selectedMapping) {
+		for (let item in selectedMapping) {
+			if (redundantProp.indexOf(item) === -1) {
+				selectedMappingDetails[item] = selectedMapping[item];
 			}
 		}
+	}
 
-		if (this.state.authError) {
-			browserHistory.push("/login?origin=DFR3Viewer");
-			return null;
-		} else {
-			return (
-				<div>
-					{/*error message display inside viewer*/}
-					<ErrorMessage
-						error={this.state.error}
-						message={this.state.message}
-						messageOpen={this.state.messageOpen}
-						closeErrorMessage={this.closeErrorMessage}
+	if (authError) {
+		browserHistory.push("/login?origin=DFR3Viewer");
+		return null;
+	} else {
+		return (
+			<div>
+				{/*error message display inside viewer*/}
+				<ErrorMessage
+					error={error}
+					message={message}
+					messageOpen={messageOpen}
+					closeErrorMessage={closeErrorMessage}
+				/>
+				{deleteType === "curve" ? (
+					<Confirmation
+						confirmOpen={confirmOpen}
+						actionBtnName="Delete"
+						actionText="Once deleted, you won't be able to revert this!"
+						handleConfirmed={deleteCurveConfirmed}
+						handleCanceled={handleCanceled}
 					/>
-					{this.state.deleteType === "curve" ? (
-						<Confirmation
-							confirmOpen={this.state.confirmOpen}
-							actionBtnName="Delete"
-							actionText="Once deleted, you won't be able to revert this!"
-							handleConfirmed={this.deleteCurveConfirmed}
-							handleCanceled={this.handleCanceled}
-						/>
-					) : (
-						<Confirmation
-							confirmOpen={this.state.confirmOpen}
-							actionBtnName="Delete"
-							actionText="Once deleted, you won't be able to revert this!"
-							handleConfirmed={this.deleteMappingConfirmed}
-							handleCanceled={this.handleCanceled}
-						/>
-					)}
+				) : (
+					<Confirmation
+						confirmOpen={confirmOpen}
+						actionBtnName="Delete"
+						actionText="Once deleted, you won't be able to revert this!"
+						handleConfirmed={deleteMappingConfirmed}
+						handleCanceled={handleCanceled}
+					/>
+				)}
 
-					<div className={classes.root}>
-						<Grid container spacing={4}>
-							{/*filters*/}
-							<Grid item lg={8} sm={8} xl={8} xs={12}>
-								<Paper variant="outlined" className={classes.filter}>
-									<Typography variant="h6">Filters</Typography>
-									{/* select dfr3 curve type */}
-									<div className={classes.selectDiv}>
-										<InputLabel>Curve Type</InputLabel>
-										<Select
-											value={this.state.selectedDFR3Type}
-											onChange={this.changeDFR3Type}
-											className={classes.select}
+				<div className={classes.root}>
+					<Grid container spacing={4}>
+						{/*filters*/}
+						<Grid item lg={8} sm={8} xl={8} xs={12}>
+							<Paper variant="outlined" className={classes.filter}>
+								<Typography variant="h6">Filters</Typography>
+								{/* select dfr3 curve type */}
+								<div className={classes.selectDiv}>
+									<InputLabel>Curve Type</InputLabel>
+									<Select
+										value={selectedDFR3Type}
+										onChange={handleDFR3TypeChange}
+										className={classes.select}
+									>
+										<MenuItem value="fragilities" key="fragilities" className={classes.denseStyle}>
+											Fragility
+										</MenuItem>
+										<MenuItem
+											value="restorations"
+											key="restorations"
+											className={classes.denseStyle}
 										>
-											<MenuItem
-												value="fragilities"
-												key="fragilities"
-												className={classes.denseStyle}
-											>
-												Fragility
-											</MenuItem>
-											<MenuItem
-												value="restorations"
-												key="restorations"
-												className={classes.denseStyle}
-											>
-												Restoration
-											</MenuItem>
-											<MenuItem value="repairs" key="repairs" className={classes.denseStyle}>
-												Repair
-											</MenuItem>
-										</Select>
-									</div>
-									{/* Hazard Type */}
-									<div className={classes.selectDiv}>
-										<InputLabel>Hazard Type</InputLabel>
-										<Select
-											value={this.state.selectedHazard}
-											onChange={this.handleHazardSelection}
-											className={classes.select}
-										>
-											<MenuItem value="All" className={classes.denseStyle}>
-												All
-											</MenuItem>
-											<MenuItem value="earthquake" className={classes.denseStyle}>
-												Earthquake
-											</MenuItem>
-											<MenuItem value="tornado" className={classes.denseStyle}>
-												Tornado
-											</MenuItem>
-											<MenuItem value="hurricane" className={classes.denseStyle}>
-												Hurricane
-											</MenuItem>
-											<MenuItem value="hurricaneWindfield" className={classes.denseStyle}>
-												Hurricane Windfield
-											</MenuItem>
-											<MenuItem value="tsunami" className={classes.denseStyle}>
-												Tsunami
-											</MenuItem>
-											<MenuItem value="flood" className={classes.denseStyle}>
-												Flood
-											</MenuItem>
-										</Select>
-									</div>
-									{/* Inventory Type */}
-									<div className={classes.selectDiv}>
-										<InputLabel>Inventory Type</InputLabel>
-										<Select
-											value={this.state.selectedInventory}
-											onChange={this.handleInventorySelection}
-											className={classes.select}
-										>
-											<MenuItem value="All" className={classes.denseStyle}>
-												All
-											</MenuItem>
-											<MenuItem value="building" className={classes.denseStyle}>
-												Building
-											</MenuItem>
-											<MenuItem value="bridge" className={classes.denseStyle}>
-												Bridge
-											</MenuItem>
-											<Divider />
-											<MenuItem value="roadway" className={classes.denseStyle}>
-												Roadway
-											</MenuItem>
-											<Divider />
-											<MenuItem value="electric_facility" className={classes.denseStyle}>
-												Electric Power Facility
-											</MenuItem>
-											<MenuItem value="electric_power_line" className={classes.denseStyle}>
-												Eletric Power Line
-											</MenuItem>
-											<MenuItem value="water_facility" className={classes.denseStyle}>
-												Water Facility
-											</MenuItem>
-											<MenuItem value="buried_pipeline" className={classes.denseStyle}>
-												Water Pipeline
-											</MenuItem>
-											<MenuItem value="gas_facility" className={classes.denseStyle}>
-												Gas Facility
-											</MenuItem>
-										</Select>
-									</div>
-									{/*spaces*/}
-									<div className={classes.selectDiv}>
-										<Space
-											selectedSpace={this.state.selectedSpace}
-											spaces={this.props.spaces}
-											handleSpaceSelection={this.handleSpaceSelection}
-										/>
-									</div>
-									{/*Data per page */}
-									<div className={classes.selectDiv}>
-										<DataPerPage
-											dataPerPage={this.state.dataPerPage}
-											changeDataPerPage={this.changeDataPerPage}
-										/>
-									</div>
-								</Paper>
-							</Grid>
-							<Grid item lg={4} sm={4} xl={4} xs={12}>
-								<Paper variant="outlined" className={classes.filter}>
-									<Typography variant="h6">
-										Search all {this.state.selectedDFR3Type} & mappings
-									</Typography>
-									<TextField
-										variant="outlined"
-										label="Search"
-										onKeyPress={this.handleKeyPressed}
-										value={this.state.searchText}
-										onChange={(e) => {
-											this.setState({ searchText: e.target.value });
-										}}
-										InputProps={{
-											endAdornment: (
-												<InputAdornment position="end">
-													<IconButton onClick={this.clickSearch}>
-														<SearchIcon fontSize="small" />
-													</IconButton>
-												</InputAdornment>
-											)
-										}}
-										margin="dense"
-										className={classes.search}
+											Restoration
+										</MenuItem>
+										<MenuItem value="repairs" key="repairs" className={classes.denseStyle}>
+											Repair
+										</MenuItem>
+									</Select>
+								</div>
+								{/* Hazard Type */}
+								<div className={classes.selectDiv}>
+									<InputLabel>Hazard Type</InputLabel>
+									<Select
+										value={selectedHazard}
+										onChange={handleHazardTypeChange}
+										className={classes.select}
+									>
+										<MenuItem value="All" className={classes.denseStyle}>
+											All
+										</MenuItem>
+										<MenuItem value="earthquake" className={classes.denseStyle}>
+											Earthquake
+										</MenuItem>
+										<MenuItem value="tornado" className={classes.denseStyle}>
+											Tornado
+										</MenuItem>
+										<MenuItem value="hurricane" className={classes.denseStyle}>
+											Hurricane
+										</MenuItem>
+										<MenuItem value="hurricaneWindfield" className={classes.denseStyle}>
+											Hurricane Windfield
+										</MenuItem>
+										<MenuItem value="tsunami" className={classes.denseStyle}>
+											Tsunami
+										</MenuItem>
+										<MenuItem value="flood" className={classes.denseStyle}>
+											Flood
+										</MenuItem>
+									</Select>
+								</div>
+								{/* Inventory Type */}
+								<div className={classes.selectDiv}>
+									<InputLabel>Inventory Type</InputLabel>
+									<Select
+										value={selectedInventory}
+										onChange={handleInventoryTypeChange}
+										className={classes.select}
+									>
+										<MenuItem value="All" className={classes.denseStyle}>
+											All
+										</MenuItem>
+										<MenuItem value="building" className={classes.denseStyle}>
+											Building
+										</MenuItem>
+										<MenuItem value="bridge" className={classes.denseStyle}>
+											Bridge
+										</MenuItem>
+										<Divider />
+										<MenuItem value="roadway" className={classes.denseStyle}>
+											Roadway
+										</MenuItem>
+										<Divider />
+										<MenuItem value="electric_facility" className={classes.denseStyle}>
+											Electric Power Facility
+										</MenuItem>
+										<MenuItem value="electric_power_line" className={classes.denseStyle}>
+											Eletric Power Line
+										</MenuItem>
+										<MenuItem value="water_facility" className={classes.denseStyle}>
+											Water Facility
+										</MenuItem>
+										<MenuItem value="buried_pipeline" className={classes.denseStyle}>
+											Water Pipeline
+										</MenuItem>
+										<MenuItem value="gas_facility" className={classes.denseStyle}>
+											Gas Facility
+										</MenuItem>
+									</Select>
+								</div>
+								{/*spaces*/}
+								<div className={classes.selectDiv}>
+									<Space
+										selectedSpace={selectedSpace}
+										spaces={spaces}
+										handleSpaceSelection={handleSpaceChange}
 									/>
-								</Paper>
-							</Grid>
+								</div>
+								{/*Data per page */}
+								<div className={classes.selectDiv}>
+									<DataPerPage dataPerPage={dataPerPage} changeDataPerPage={changeDataPerPage} />
+								</div>
+							</Paper>
 						</Grid>
+						<Grid item lg={4} sm={4} xl={4} xs={12}>
+							<Paper variant="outlined" className={classes.filter}>
+								<Typography variant="h6">Search all {selectedDFR3Type} & mappings</Typography>
+								<TextField
+									variant="outlined"
+									label="Search"
+									onKeyPress={handleKeyPressed}
+									value={searchText}
+									onChange={(e) => {
+										setSearchText(e.target.value);
+									}}
+									InputProps={{
+										endAdornment: (
+											<InputAdornment position="end">
+												<IconButton onClick={clickSearch}>
+													<SearchIcon fontSize="small" />
+												</IconButton>
+											</InputAdornment>
+										)
+									}}
+									margin="dense"
+									className={classes.search}
+								/>
+							</Paper>
+						</Grid>
+					</Grid>
 
-						<Tabs value={tabIndex} onChange={this.handleTabChange}>
-							<Tab label="DFR3 Curves" />
-							<Tab label="DFR3 Mappings" />
-						</Tabs>
+					<Tabs value={tabIndex} onChange={handleTabChange}>
+						<Tab label="DFR3 Curves" />
+						<Tab label="DFR3 Mappings" />
+					</Tabs>
 
-						{/*lists*/}
-						{tabIndex === 0 ? (
-							<Grid container spacing={4}>
-								<Grid
-									item
-									lg={this.state.selectedDFR3Curve && !this.state.metadataClosed ? 4 : 12}
-									md={this.state.selectedDFR3Curve && !this.state.metadataClosed ? 4 : 12}
-									xl={this.state.selectedDFR3Curve && !this.state.metadataClosed ? 4 : 12}
-									xs={12}
-								>
-									<LoadingOverlay active={this.state.curvesLoading} spinner text="Loading ...">
-										<Paper variant="outlined" className={classes.main}>
-											<div className={classes.paperHeader}>
-												<Typography variant="subtitle1">DFR3 Curves</Typography>
-											</div>
-											<DFR3CurvesGroupList
-												id="DFR3Curve-list"
-												onClick={this.onClickDFR3Curve}
-												data={curvesWithInfo}
-												displayField="author"
-												selectedDFR3Curve={this.state.selectedDFR3Curve}
-											/>
-											<div className={classes.paperFooter}>
-												<Pagination
-													pageNumber={this.state.pageNumber}
-													data={curvesWithInfo}
-													dataPerPage={this.state.dataPerPage}
-													previous={this.previous}
-													next={this.next}
-												/>
-											</div>
-										</Paper>
-									</LoadingOverlay>
-								</Grid>
-								<Grid
-									item
-									lg={8}
-									md={8}
-									xl={8}
-									xs={12}
-									className={this.state.selectedDFR3Curve ? null : classes.hide}
-								>
+					{/*lists*/}
+					{tabIndex === 0 ? (
+						<Grid container spacing={4}>
+							<Grid
+								item
+								lg={selectedDFR3Curve && !metadataClosed ? 4 : 12}
+								md={selectedDFR3Curve && !metadataClosed ? 4 : 12}
+								xl={selectedDFR3Curve && !metadataClosed ? 4 : 12}
+								xs={12}
+							>
+								<LoadingOverlay active={curvesLoading} spinner text="Loading ...">
 									<Paper variant="outlined" className={classes.main}>
-										<IconButton
-											aria-label="Close"
-											onClick={this.closeMetadata}
-											className={classes.metadataCloseButton}
-										>
-											<CloseIcon fontSize="small" />
-										</IconButton>
-										{Object.keys(selectedCurveDetail).length > 0 ? (
-											<div>
-												<div className={classes.paperHeader}>
-													<Typography variant="subtitle1">Metadata</Typography>
-												</div>
-												<div className={classes.metadata}>
-													<Button
-														color="primary"
-														variant="contained"
-														className={classes.inlineButtons}
-														size="small"
-														onClick={this.exportCurveJson}
-													>
-														Download Metadata
-													</Button>
-													{
-														// TODO: This should be updated with conditions for repair and restoration
-														//  curves when they are refactored to new equation based format
-														// 	cannot plot 3d refactored fragility curves yet
+										<div className={classes.paperHeader}>
+											<Typography variant="subtitle1">DFR3 Curves</Typography>
+										</div>
+										<DFR3CurvesGroupList
+											id="DFR3Curve-list"
+											onClick={onClickDFR3Curve}
+											data={curvesWithInfo}
+											displayField="author"
+											selectedDFR3Curve={selectedDFR3Curve}
+										/>
+										<div className={classes.paperFooter}>
+											<Pagination
+												pageNumber={pageNumber}
+												data={curvesWithInfo}
+												dataPerPage={dataPerPage}
+												previous={() => pageChange("previous", false)}
+												next={() => pageChange("next", false)}
+											/>
+										</div>
+									</Paper>
+								</LoadingOverlay>
+							</Grid>
+							<Grid item lg={8} md={8} xl={8} xs={12} className={selectedDFR3Curve ? null : classes.hide}>
+								<Paper variant="outlined" className={classes.main}>
+									<IconButton
+										aria-label="Close"
+										onClick={handleCloseMetadata}
+										className={classes.metadataCloseButton}
+									>
+										<CloseIcon fontSize="small" />
+									</IconButton>
+									{Object.keys(selectedCurveDetail).length > 0 ? (
+										<div>
+											<div className={classes.paperHeader}>
+												<Typography variant="subtitle1">Metadata</Typography>
+											</div>
+											<div className={classes.metadata}>
+												<Button
+													color="primary"
+													variant="contained"
+													className={classes.inlineButtons}
+													size="small"
+													onClick={exportCurveJson}
+												>
+													Download Metadata
+												</Button>
+												{
+													// TODO: This should be updated with conditions for repair and restoration
+													//  curves when they are refactored to new equation based format
+													// 	cannot plot 3d refactored fragility curves yet
 
-														(() => {
-															if (this.state.selectedDFR3Curve.fragilityCurves) {
-																if (
-																	this.state.selectedDFR3Curve.is3dPlot &&
-																	this.state.plotData3d.data.length > 0
-																) {
-																	return (
-																		<Button
-																			color="primary"
-																			variant="contained"
-																			className={classes.inlineButtons}
-																			size="small"
-																			onClick={this.preview}
-																		>
-																			Preview
-																		</Button>
-																	);
-																} else if (
-																	!this.state.selectedDFR3Curve.is3dPlot &&
-																	this.state.chartConfig.series.length > 0
-																) {
-																	return (
-																		<Button
-																			color="primary"
-																			variant="contained"
-																			className={classes.inlineButtons}
-																			size="small"
-																			onClick={this.preview}
-																		>
-																			Preview
-																		</Button>
-																	);
-																} else {
-																	return (
-																		<Button
-																			color="primary"
-																			variant="contained"
-																			className={classes.inlineButtons}
-																			size="small"
-																			disabled
-																		>
-																			Preview N/A
-																		</Button>
-																	);
-																}
+													(() => {
+														if (selectedDFR3Curve.fragilityCurves) {
+															if (
+																selectedDFR3Curve.is3dPlot &&
+																plotData3D.data.length > 0
+															) {
+																return (
+																	<Button
+																		color="primary"
+																		variant="contained"
+																		className={classes.inlineButtons}
+																		size="small"
+																		onClick={handlePreviewOpen}
+																	>
+																		Preview
+																	</Button>
+																);
+															} else if (
+																!selectedDFR3Curve.is3dPlot &&
+																chartConfigVar.series.length > 0
+															) {
+																return (
+																	<Button
+																		color="primary"
+																		variant="contained"
+																		className={classes.inlineButtons}
+																		size="small"
+																		onClick={handlePreviewOpen}
+																	>
+																		Preview
+																	</Button>
+																);
 															} else {
 																return (
 																	<Button
@@ -1125,208 +835,207 @@ class DFR3Viewer extends React.Component {
 																	</Button>
 																);
 															}
-														})()
-													}
-													<CopyToClipboard text={this.state.selectedDFR3Curve.id}>
-														<Button
-															color="secondary"
-															variant="contained"
-															className={classes.inlineButtons}
-															size="small"
-														>
-															Copy ID
-														</Button>
-													</CopyToClipboard>
+														} else {
+															return (
+																<Button
+																	color="primary"
+																	variant="contained"
+																	className={classes.inlineButtons}
+																	size="small"
+																	disabled
+																>
+																	Preview N/A
+																</Button>
+															);
+														}
+													})()
+												}
+												<CopyToClipboard text={selectedDFR3Curve.id}>
 													<Button
 														color="secondary"
 														variant="contained"
 														className={classes.inlineButtons}
 														size="small"
-														onClick={() => {
-															this.onClickDelete("curve");
-														}}
 													>
-														DELETE
+														Copy ID
 													</Button>
-												</div>
-												<div className={classes.metadata}>
-													<NestedInfoTable data={selectedCurveDetail} />
-												</div>
+												</CopyToClipboard>
+												<Button
+													color="secondary"
+													variant="contained"
+													className={classes.inlineButtons}
+													size="small"
+													onClick={() => {
+														onClickDelete("curve");
+													}}
+												>
+													DELETE
+												</Button>
 											</div>
-										) : (
-											<div />
-										)}
-									</Paper>
-								</Grid>
-
-								{/* Preview */}
-								{this.state.selectedDFR3Curve ? (
-									<Dialog
-										open={this.state.preview}
-										onClose={this.handlePreviewerClose}
-										maxWidth="lg"
-										fullWidth
-										scroll="paper"
-									>
-										<DialogContent className={classes.preview}>
-											<IconButton
-												aria-label="Close"
-												onClick={this.handlePreviewerClose}
-												className={classes.previewClose}
-											>
-												<CloseIcon fontSize="small" />
-											</IconButton>
-											{this.state.selectedDFR3Curve.is3dPlot ? (
-												<div>
-													<Typography variant="h6">{this.state.plotData3d.title}</Typography>
-													<ThreeDimensionalPlot
-														plotId="3dplot"
-														data={this.state.plotData3d.data}
-														xLabel={this.state.selectedDFR3Curve.demandTypes.join(", ")}
-														yLabel="Y"
-														width="100%"
-														height="350px"
-														style="surface"
-													/>
-												</div>
-											) : (
-												<CustomHighChart
-													chartId="chart"
-													configuration={this.state.chartConfig}
-													customClassName="linecharts-container"
-												/>
-											)}
-											<div className={classes.previewTable}>
-												<Typography variant="body1">Table 1. Curve Information</Typography>
-												<NestedInfoTable
-													data={this.extractCurveInfoTable(this.state.selectedDFR3Curve)}
-												/>
+											<div className={classes.metadata}>
+												<NestedInfoTable data={selectedCurveDetail} />
 											</div>
-											<div className={classes.previewTable}>
-												<Typography variant="body1">
-													Table 2. Default Curve Parameters
-												</Typography>
-												<NestedInfoTable
-													data={this.extractParamTable(this.state.selectedDFR3Curve)}
-												/>
-											</div>
-										</DialogContent>
-									</Dialog>
-								) : (
-									<div />
-								)}
+										</div>
+									) : (
+										<div />
+									)}
+								</Paper>
 							</Grid>
-						) : (
-							<div />
-						)}
 
-						{tabIndex === 1 ? (
-							<Grid container spacing={4}>
-								<Grid
-									item
-									lg={this.state.selectedMapping && !this.state.metadataClosed ? 4 : 12}
-									md={this.state.selectedMapping && !this.state.metadataClosed ? 4 : 12}
-									xl={this.state.selectedMapping && !this.state.metadataClosed ? 4 : 12}
-									xs={12}
+							{/* Preview */}
+							{selectedDFR3Curve ? (
+								<Dialog
+									open={preview}
+									onClose={handlePreviewClose}
+									maxWidth="lg"
+									fullWidth
+									scroll="paper"
 								>
-									<LoadingOverlay active={this.state.mappingsLoading} spinner text="Loading ...">
-										<Paper variant="outlined" className={classes.main}>
-											<div className={classes.paperHeader}>
-												<Typography variant="subtitle1">DFR3 Mappings</Typography>
-											</div>
-											<DFR3MappingsGroupList
-												id="DFR3Mappings-list"
-												onClick={this.onClickDFR3Mapping}
-												data={mappingsWithInfo}
-												displayField="name"
-												selectedMapping={this.state.selectedMapping}
-											/>
-											<div className={classes.paperFooter}>
-												<Pagination
-													pageNumber={this.state.pageNumberMappings}
-													data={mappingsWithInfo}
-													dataPerPage={this.state.dataPerPage}
-													previous={this.previousMappings}
-													next={this.nextMappings}
-												/>
-											</div>
-										</Paper>
-									</LoadingOverlay>
-								</Grid>
-
-								<Grid
-									item
-									lg={8}
-									md={8}
-									xl={8}
-									xs={12}
-									className={this.state.selectedMapping ? null : classes.hide}
-								>
-									<Paper variant="outlined" className={classes.main}>
+									<DialogContent className={classes.preview}>
 										<IconButton
 											aria-label="Close"
-											onClick={this.closeMetadata}
-											className={classes.metadataCloseButton}
+											onClick={handlePreviewClose}
+											className={classes.previewClose}
 										>
 											<CloseIcon fontSize="small" />
 										</IconButton>
-										{Object.keys(selectedMappingDetails).length > 0 ? (
+										{selectedDFR3Curve.is3dPlot ? (
 											<div>
-												<div className={classes.paperHeader}>
-													<Typography variant="subtitle1">Metadata</Typography>
-												</div>
-												<div className={classes.metadata}>
-													<Button
-														color="primary"
-														variant="contained"
-														className={classes.inlineButtons}
-														size="small"
-														onClick={this.exportMappingJson}
-													>
-														Download Metadata
-													</Button>
-													<CopyToClipboard text={this.state.selectedMapping.id}>
-														<Button
-															color="secondary"
-															variant="contained"
-															className={classes.inlineButtons}
-															size="small"
-														>
-															Copy ID
-														</Button>
-													</CopyToClipboard>
+												<Typography variant="h6">{plotData3D.title}</Typography>
+												<ThreeDimensionalPlot
+													plotId="3dplot"
+													data={plotData3D.data}
+													xLabel={selectedDFR3Curve.demandTypes.join(", ")}
+													yLabel="Y"
+													width="100%"
+													height="350px"
+													style="surface"
+												/>
+											</div>
+										) : (
+											<CustomHighChart
+												chartId="chart"
+												configuration={chartConfigVar}
+												customClassName="linecharts-container"
+											/>
+										)}
+										<div className={classes.previewTable}>
+											<Typography variant="body1">Table 1. Curve Information</Typography>
+											<NestedInfoTable data={extractCurveInfoTable(selectedDFR3Curve)} />
+										</div>
+										<div className={classes.previewTable}>
+											<Typography variant="body1">Table 2. Default Curve Parameters</Typography>
+											<NestedInfoTable data={extractParamTable(selectedDFR3Curve)} />
+										</div>
+									</DialogContent>
+								</Dialog>
+							) : (
+								<div />
+							)}
+						</Grid>
+					) : (
+						<div />
+					)}
+
+					{tabIndex === 1 ? (
+						<Grid container spacing={4}>
+							<Grid
+								item
+								lg={selectedMapping && !metadataClosed ? 4 : 12}
+								md={selectedMapping && !metadataClosed ? 4 : 12}
+								xl={selectedMapping && !metadataClosed ? 4 : 12}
+								xs={12}
+							>
+								<LoadingOverlay active={mappingsLoading} spinner text="Loading ...">
+									<Paper variant="outlined" className={classes.main}>
+										<div className={classes.paperHeader}>
+											<Typography variant="subtitle1">DFR3 Mappings</Typography>
+										</div>
+										<DFR3MappingsGroupList
+											id="DFR3Mappings-list"
+											onClick={onClickDFR3Mapping}
+											data={mappingsWithInfo}
+											displayField="name"
+											selectedMapping={selectedMapping}
+										/>
+										<div className={classes.paperFooter}>
+											<Pagination
+												pageNumber={pageNumberMappings}
+												data={mappingsWithInfo}
+												dataPerPage={dataPerPage}
+												previous={() => pageChange("previousMapping", true)}
+												next={() => pageChange("nextMapping", true)}
+											/>
+										</div>
+									</Paper>
+								</LoadingOverlay>
+							</Grid>
+
+							<Grid item lg={8} md={8} xl={8} xs={12} className={selectedMapping ? null : classes.hide}>
+								<Paper variant="outlined" className={classes.main}>
+									<IconButton
+										aria-label="Close"
+										onClick={handleCloseMetadata}
+										className={classes.metadataCloseButton}
+									>
+										<CloseIcon fontSize="small" />
+									</IconButton>
+									{Object.keys(selectedMappingDetails).length > 0 ? (
+										<div>
+											<div className={classes.paperHeader}>
+												<Typography variant="subtitle1">Metadata</Typography>
+											</div>
+											<div className={classes.metadata}>
+												<Button
+													color="primary"
+													variant="contained"
+													className={classes.inlineButtons}
+													size="small"
+													onClick={exportMappingJson}
+												>
+													Download Metadata
+												</Button>
+												<CopyToClipboard text={selectedMapping.id}>
 													<Button
 														color="secondary"
 														variant="contained"
 														className={classes.inlineButtons}
 														size="small"
-														onClick={() => {
-															this.onClickDelete("mapping");
-														}}
 													>
-														DELETE
+														Copy ID
 													</Button>
-												</div>
-												<div className={classes.metadata}>
-													<NestedInfoTable data={selectedMappingDetails} />
-												</div>
+												</CopyToClipboard>
+												<Button
+													color="secondary"
+													variant="contained"
+													className={classes.inlineButtons}
+													size="small"
+													onClick={() => {
+														onClickDelete("mapping");
+													}}
+												>
+													DELETE
+												</Button>
 											</div>
-										) : (
-											<div />
-										)}
-									</Paper>
-								</Grid>
+											<div className={classes.metadata}>
+												<NestedInfoTable data={selectedMappingDetails} />
+											</div>
+										</div>
+									) : (
+										<div />
+									)}
+								</Paper>
 							</Grid>
-						) : (
-							<div />
-						)}
+						</Grid>
+					) : (
+						<div />
+					)}
 
-						<Version />
-					</div>
+					<Version />
 				</div>
-			);
-		}
+			</div>
+		);
 	}
-}
+};
 
-export default withStyles(styles)(DFR3Viewer);
+export default DFR3Viewer;
