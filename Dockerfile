@@ -26,7 +26,7 @@ RUN npm run build
 # Second stage, final image
 # ----------------------------------------------------------------------
 
-FROM nginx:alpine
+FROM nginx:alpine AS runtime
 
 RUN apk add --no-cache jq
 
