@@ -1,8 +1,7 @@
 # ----------------------------------------------------------------------
 # First stage, compile application
 # ----------------------------------------------------------------------
-
-FROM node:14 AS builder
+FROM --platform=$BUILDPLATFORM node:14 AS builder
 
 WORKDIR /usr/src/app
 
