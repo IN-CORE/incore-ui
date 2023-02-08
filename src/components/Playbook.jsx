@@ -93,7 +93,7 @@ const Playbook = ({ location }) => {
 	const getCard = (image) => {
 		return (
 			<Card className={classes.cardroot}>
-				<CardActionArea href={image.url}>
+				<CardActionArea href={image.url} target="_blank">
 					<CardMedia className={classes.cardmedia} image={image.img} title={image.app} />
 					<CardContent>
 						<Box textAlign="center">
