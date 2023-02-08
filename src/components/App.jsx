@@ -467,22 +467,34 @@ class App extends Component {
 						</Typography>
 						{helpMenu}
 						<Typography className={classes.toolBarItem}>
-							<Link target="_blank"
-								  style={{color: "#ffffff", textDecoration: "none"}}
-								  onClick={() => {
-									  window.open(config.incoreLab);
-									  fetch("/jupyterhub");
-								  }}>
-								IN-CORE lab</Link></Typography>
-						<Typography onClick={this.handleViewerMenuOpen} className={classes.toolBarItem}
-							style={{verticalAlign: "middle", display: "inline-flex"}}>
-							Web Tools<ExpandMoreIcon fontSize="small"/></Typography>
+							<Link
+								target="_blank"
+								style={{ color: "#ffffff", textDecoration: "none" }}
+								onClick={() => {
+									window.open(config.incoreLab);
+									fetch("/jupyterhub");
+								}}
+							>
+								IN-CORE lab
+							</Link>
+						</Typography>
+						<Typography
+							onClick={this.handleViewerMenuOpen}
+							className={classes.toolBarItem}
+							style={{ verticalAlign: "middle", display: "inline-flex" }}
+						>
+							Web Tools
+							<ExpandMoreIcon fontSize="small" />
+						</Typography>
 						<Typography className={classes.toolBarItem}>
-							<Link href="/community_apps" style={{color: "#ffffff", textDecoration: "none"}}>Community Resilience Planning</Link></Typography>
+							<Link href="/playbook" style={{ color: "#ffffff", textDecoration: "none" }}>
+								Community Resilience Planning
+							</Link>
+						</Typography>
 						{viewerMenu}
-						<Typography variant="body1" style={{flex: 1}}/>
-						{this.props.location.pathname === "/community_apps" ? null : contents}
-						{this.props.location.pathname === "/community_apps" ? null : profileMenu}
+						<Typography variant="body1" style={{ flex: 1 }} />
+						{this.props.location.pathname === "/playbook" ? null : contents}
+						{this.props.location.pathname === "/playbook" ? null : profileMenu}
 					</Toolbar>
 				</AppBar>
 				{/*error message */}
