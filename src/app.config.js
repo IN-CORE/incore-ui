@@ -44,9 +44,9 @@ config["maxUsage"] = {
 	}
 };
 config["playbookImageDetails"] = [
-	{ app: "Galveston", img: "/public/galveston.jpeg", url: "/playbook/galveston" },
-	{ app: "Salt Lake City", img: "/public/salt-lake-city.jpeg", url: "/plabyook/slc" },
-	{ app: "Joplin", img: "/public/joplin-main-street.jpeg", url: "/playbook/joplin" }
+	{ app: "Galveston", img: "/public/galveston.jpeg", url: "/playbook/galveston/" },
+	{ app: "Salt Lake City", img: "/public/salt-lake-city.jpeg", url: "/plabyook/slc/" },
+	{ app: "Joplin", img: "/public/joplin-main-street.jpeg", url: "/playbook/joplin/" }
 ];
 
 config["mailingList"] = "incore-dev@lists.illinois.edu";
