@@ -486,10 +486,15 @@ class App extends Component {
 							Web Tools
 							<ExpandMoreIcon fontSize="small" />
 						</Typography>
+						<Typography className={classes.toolBarItem}>
+							<Link href="/playbook" style={{ color: "#ffffff", textDecoration: "none" }}>
+								Community Resilience Planning
+							</Link>
+						</Typography>
 						{viewerMenu}
 						<Typography variant="body1" style={{ flex: 1 }} />
-						{contents}
-						{profileMenu}
+						{this.props.location.pathname === "/playbook" ? null : contents}
+						{this.props.location.pathname === "/playbook" ? null : profileMenu}
 					</Toolbar>
 				</AppBar>
 				{/*error message */}
