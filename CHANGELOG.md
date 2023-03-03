@@ -7,9 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
-### Added
+### Changed
+- builds are done on amd64 and then artifact copied to different platforms.
 
+### Added
 - Add Community playbook landing page. [#72](https://github.com/IN-CORE/incore-ui/issues/72)
+
 
 ## [1.4.0] - 2022-11-16
 ### Added
