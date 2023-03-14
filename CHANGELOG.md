@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.5.0] - 2023-03-15
+
+### Changed
+- builds are done on amd64 and then artifact copied to different platforms.
+
+### Added
+- Add Community playbook landing page. [#72](https://github.com/IN-CORE/incore-ui/issues/72)
+
 
 ## [1.4.0] - 2022-11-16
 ### Added

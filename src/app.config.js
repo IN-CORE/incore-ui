@@ -9,7 +9,7 @@ config["pyIncoreDocUrl"] = `${hostname}/doc/pyincore/index.html`;
 config["pyIncoreVizDocUrl"] = `${hostname}/doc/pyincore_viz/index.html`;
 config["pyIncoreDataDocUrl"] = `${hostname}/doc/pyincore_data/index.html`;
 config["swaggerUrl"] = `${hostname}/doc/api/`;
-config["webVersion"] = "1.4.0";
+config["webVersion"] = "1.5.0";
 config["spaceServiceBase"] = `${hostname}/space/api/`;
 config["spaceService"] = `${hostname}/space/api/spaces`;
 config["dfr3ServiceBase"] = `${hostname}/dfr3/api/`;
@@ -29,20 +29,25 @@ config["setGravatarURL"] = "https://en.gravatar.com/support/activating-your-acco
 config["tosURL"] = `${hostname}/doc/incore/termsofservice.html`;
 config["privacyURL"] = "https://www.vpaa.uillinois.edu/resources/web_privacy";
 config["maxUsage"] = {
-	"incore_user":{
-		"labUsage":{ "vCPU": "2", "RAM": "4 GB", "Storage":"4 GB"}
+	incore_user: {
+		labUsage: { vCPU: "2", RAM: "4 GB", Storage: "4 GB" }
 	},
-	"incore_coe":{
-		"labUsage":{ "vCPU": "4", "RAM": "8 GB", "Storage":"10 GB"}
+	incore_coe: {
+		labUsage: { vCPU: "4", RAM: "8 GB", Storage: "10 GB" }
 	},
-	"incore_ncsa":{
-		"labUsage":{ "vCPU": "4", "RAM": "8 GB", "Storage":"10 GB"}
+	incore_ncsa: {
+		labUsage: { vCPU: "4", RAM: "8 GB", Storage: "10 GB" }
 	},
 	// fall back if user does not belong to any group
-	"NA":{
-		"labUsage":{ "vCPU": "0", "RAM": "0 GB", "Storage":"0 GB"}
+	NA: {
+		labUsage: { vCPU: "0", RAM: "0 GB", Storage: "0 GB" }
 	}
 };
+config["playbookImageDetails"] = [
+	{ app: "Galveston", img: "/public/galveston.jpeg", url: "/playbook/galveston/" },
+	{ app: "Salt Lake City", img: "/public/salt-lake-city.jpeg", url: "/playbook/slc/" },
+	{ app: "Joplin", img: "/public/joplin-main-street.jpeg", url: "/playbook/joplin/" }
+];
 
 config["mailingList"] = "incore-dev@lists.illinois.edu";
 

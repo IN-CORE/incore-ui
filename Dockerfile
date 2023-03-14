@@ -1,8 +1,7 @@
 # ----------------------------------------------------------------------
 # First stage, compile application
 # ----------------------------------------------------------------------
-
-FROM node:14 AS builder
+FROM --platform=$BUILDPLATFORM node:14 AS builder
 
 WORKDIR /usr/src/app
 
@@ -27,7 +26,7 @@ RUN npm run build
 # Second stage, final image
 # ----------------------------------------------------------------------
 
-FROM nginx:alpine
+FROM nginx:alpine AS runtime
 
 RUN apk add --no-cache jq
 
