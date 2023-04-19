@@ -333,12 +333,12 @@ class HomePage extends Component {
 						</Typography>
 
 						{/*if version exists, display version; otherwise just the text*/}
-						{this.state.githubVersions && this.state.githubVersions["incore-docs"] ? (
+						{this.state.githubVersions && this.state.githubVersions["in-core"] ? (
 							<Chip
 								color="secondary"
 								size="medium"
 								className={classes.releaseChip}
-								label={`IN-CORE ${this.state.githubVersions["incore-docs"]} IS RELEASED INCLUDING`}
+								label={`IN-CORE ${this.state.githubVersions["in-core"]} IS RELEASED INCLUDING`}
 							/>
 						) : (
 							<Chip

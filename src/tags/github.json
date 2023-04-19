@@ -1,9 +1,13 @@
 {
-	"pyincore":"NA",
-	"pyincore-viz":"NA",
-  	"pyincore-data":"NA",
-	"incore-ui":"NA",
-	"incore-services":"NA",
-	"incore-lab":"NA",
-	"incore-docs":"NA"
+  "in-core": "NA",
+  "incore-auth": "NA",
+  "incore-docs": "NA",
+  "incore-helm": "NA",
+  "incore-lab": "NA",
+  "incore-services": "NA",
+  "incore-ui": "NA",
+  "plotting-service": "NA",
+  "pyincore": "NA",
+  "pyincore-viz": "NA",
+  "pyincore-data": "NA"
 }
