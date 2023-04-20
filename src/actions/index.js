@@ -706,7 +706,10 @@ function getDatawolfHeader() {
 }
 
 export async function getRepoVersion() {
-	const versionRequest = await fetch("tags/github.json");
+	const versionRequest = await fetch("https://raw.githubusercontent.com/IN-CORE/IN-CORE/main/tags.json", {
+		method: "GET",
+		redirect: "follow"
+	});
 
 	try {
 		const githubVersions = await versionRequest.json();
