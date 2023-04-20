@@ -711,12 +711,27 @@ export async function getRepoVersion() {
 		redirect: "follow"
 	});
 
+	const githubVersionResponseFallback = {
+		"in-core": "NA",
+		"incore-auth": "NA",
+		"incore-docs": "NA",
+		"incore-helm": "NA",
+		"incore-lab": "NA",
+		"incore-services": "NA",
+		"incore-ui": "NA",
+		"plotting-service": "NA",
+		"pyincore": "NA",
+		"pyincore-viz": "NA",
+		"pyincore-data": "NA"
+	};
+
 	try {
 		const githubVersions = await versionRequest.json();
 		return githubVersions;
 	} catch (error) {
 		// if fail just log the erorr and return null
 		console.log(error);
-		return null;
+		// return default valued expected object.
+		return githubVersionResponseFallback;
 	}
 }
