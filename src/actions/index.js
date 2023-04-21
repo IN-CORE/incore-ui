@@ -706,7 +706,24 @@ function getDatawolfHeader() {
 }
 
 export async function getRepoVersion() {
-	const versionRequest = await fetch("tags/github.json");
+	const versionRequest = await fetch("https://raw.githubusercontent.com/IN-CORE/IN-CORE/main/tags.json", {
+		method: "GET",
+		redirect: "follow"
+	});
+
+	const githubVersionResponseFallback = {
+		"in-core": "NA",
+		"incore-auth": "NA",
+		"incore-docs": "NA",
+		"incore-helm": "NA",
+		"incore-lab": "NA",
+		"incore-services": "NA",
+		"incore-ui": "NA",
+		"plotting-service": "NA",
+		"pyincore": "NA",
+		"pyincore-viz": "NA",
+		"pyincore-data": "NA"
+	};
 
 	try {
 		const githubVersions = await versionRequest.json();
@@ -714,6 +731,7 @@ export async function getRepoVersion() {
 	} catch (error) {
 		// if fail just log the erorr and return null
 		console.log(error);
-		return null;
+		// return default valued expected object.
+		return githubVersionResponseFallback;
 	}
 }
