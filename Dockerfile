@@ -32,8 +32,6 @@ RUN apk add --no-cache jq
 
 COPY --from=builder /usr/src/app/dist/ /usr/share/nginx/html/
 COPY src/public /usr/share/nginx/html/public/
-COPY src/tags /usr/share/nginx/html/tags/
-COPY getVersionTags.sh /
 COPY landing.conf /etc/nginx/conf.d/default.conf
 
 WORKDIR /usr/share/nginx/html/tags
