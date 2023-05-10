@@ -180,19 +180,19 @@ export default function Profile(props) {
 		let totalBytesTextAllocated = "NA";
 
 		if (type === "datasetUsage") {
-			totalNum = usage["total_number_of_datasets"];
-			totalFileSizeByte = usage["total_file_size_of_datasets_byte"];
-			totalFileSize = usage["total_file_size_of_datasets"];
-			totalNumAllocated = allocations["total_number_of_datasets"];
-			totalBytesAllocated = allocations["total_file_size_of_datasets_byte"];
-			totalBytesTextAllocated = allocations["total_file_size_of_datasets"];
+			totalNum = usage["total_number_of_datasets"] ?? 0;
+			totalFileSizeByte = usage["total_file_size_of_datasets_byte"] ?? 0;
+			totalFileSize = usage["total_file_size_of_datasets"] ?? 0;
+			totalNumAllocated = allocations["total_number_of_datasets"] ?? 0;
+			totalBytesAllocated = allocations["total_file_size_of_datasets_byte"] ?? 0;
+			totalBytesTextAllocated = allocations["total_file_size_of_datasets"] ?? 0;
 		} else if (type === "hazardUsage") {
-			totalNum = usage["total_number_of_hazards"];
-			totalFileSizeByte = usage["total_file_size_of_hazard_datasets_byte"];
-			totalFileSize = usage["total_file_size_of_hazard_datasets"];
-			totalNumAllocated = allocations["total_number_of_hazards"];
-			totalBytesAllocated = allocations["total_file_size_of_hazard_datasets_byte"];
-			totalBytesTextAllocated = allocations["total_file_size_of_hazard_datasets"];
+			totalNum = usage["total_number_of_hazards"] ?? 0;
+			totalFileSizeByte = usage["total_file_size_of_hazard_datasets_byte"] ?? 0;
+			totalFileSize = usage["total_file_size_of_hazard_datasets"] ?? 0;
+			totalNumAllocated = allocations["total_number_of_hazards"] ?? 0;
+			totalBytesAllocated = allocations["total_file_size_of_hazard_datasets_byte"] ?? 0;
+			totalBytesTextAllocated = allocations["total_file_size_of_hazard_datasets"] ?? 0;
 		} else {
 			console.log(`${type} not supported!`);
 		}
