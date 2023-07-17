@@ -1,14 +1,22 @@
 import { connect } from "react-redux";
 import SemanticViewerComponent from "../components/SemanticViewer";
-import { fetchHazards, fetchSpaces, searchHazards, deleteItemById, resetError } from "../actions";
+import {
+	fetchDatasets,
+	fetchSpaces,
+	fetchUniqueDatatypes,
+	searchDatasets,
+	deleteItemById,
+	resetError
+} from "../actions";
 
 const mapStateToProps = (state) => {
 	return {
-		hazards: state.hazard.hazards,
-		deleteError: state.hazard.deleteError,
+		datasets: state.data.datasets,
+		deleteError: state.data.deleteError,
 		spaces: state.space.spaces,
+		datatypes: state.datatype.datatypes,
 		authError: state.user.loginError,
-		loading: state.hazard.loading
+		loading: state.data.loading
 	};
 };
 
@@ -17,14 +25,17 @@ const mapDispatchToProps = (dispatch) => {
 		getAllSpaces: () => {
 			dispatch(fetchSpaces());
 		},
-		getAllHazards: (hazard_type, space, limit, offset) => {
-			dispatch(fetchHazards(hazard_type, space, limit, offset));
+		getUniqueDatatypes: () => {
+			dispatch(fetchUniqueDatatypes());
 		},
-		searchAllHazards: (hazard_type, keyword, limit, offset) => {
-			dispatch(searchHazards(hazard_type, keyword, limit, offset));
+		getAllDatasets: (dataType, space, limit, offset) => {
+			dispatch(fetchDatasets(dataType, space, limit, offset));
 		},
-		deleteItemById: (hazard_type, id) => {
-			dispatch(deleteItemById(hazard_type, id));
+		searchAllDatasets: (keyword, limit, offset) => {
+			dispatch(searchDatasets(keyword, limit, offset));
+		},
+		deleteItemById: (id) => {
+			dispatch(deleteItemById("datasets", id));
 		},
 		resetError: () => {
 			dispatch(resetError);

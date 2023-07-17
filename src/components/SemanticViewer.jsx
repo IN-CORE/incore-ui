@@ -1,28 +1,38 @@
 import React, { Component } from "react";
-import { getHeader } from "../actions";
-import { browserHistory } from "react-router";
+import FileContentTable from "./children/FileContentTable";
+import NestedInfoTable from "./children/NestedInfoTable";
+import Map from "./children/Map";
+import SpaceChip from "./children/SpaceChip";
 import {
 	Button,
+	Card,
+	CardContent,
 	Dialog,
 	DialogContent,
 	Grid,
 	IconButton,
 	InputAdornment,
-	InputLabel,
 	List,
 	ListItem,
+	ListItemIcon,
 	ListItemText,
-	MenuItem,
 	Paper,
-	Select,
 	TextField,
+	Tooltip,
 	Typography
 } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
+import TableIcon from "@material-ui/icons/TableChart";
+import TextIcon from "@material-ui/icons/Description";
+import MapIcon from "@material-ui/icons/Map";
+import MappingIcon from "@material-ui/icons/CompareArrows";
+import ChartIcon from "@material-ui/icons/ShowChart";
+import NetworkIcon from "@material-ui/icons/DeviceHub";
+import UnknownIcon from "@material-ui/icons/ContactSupport";
 import CloseIcon from "@material-ui/icons/Close";
-import Map from "./children/Map";
-import NestedInfoTable from "./children/NestedInfoTable";
 import config from "../app.config";
+import { getHeader } from "../actions";
+import { browserHistory } from "react-router";
 import Pagination from "./children/Pagination";
 import DataPerPage from "./children/DataPerPage";
 import Space from "./children/Space";
@@ -30,15 +40,13 @@ import Version from "./children/Version";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { createMuiTheme, withStyles } from "@material-ui/core/styles/index";
 import Cookies from "universal-cookie";
+import Datatype from "./children/Datatype";
 import ErrorMessage from "./children/ErrorMessage";
-import SpaceChip from "./children/SpaceChip";
 import Confirmation from "./children/Confirmation";
 import LoadingOverlay from "react-loading-overlay";
 
 const cookies = new Cookies();
-
-const redundantProp = ["privileges", "times", "spaces"];
-
+const redundantProp = ["deleted", "privileges", "spaces"];
 const theme = createMuiTheme();
 const styles = {
 	root: {
@@ -57,7 +65,7 @@ const styles = {
 	selectDiv: {
 		margin: "auto",
 		display: "inline-block",
-		width: "25%"
+		width: "33%"
 	},
 	select: {
 		width: "80%",
@@ -107,30 +115,36 @@ const styles = {
 	}
 };
 
+String.prototype.capitalize = function () {
+	return this.charAt(0).toUpperCase() + this.slice(1);
+};
+
 class SemanticViewer extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			selectedHazardType: "earthquakes",
+			selectedDataType: "All",
 			selectedSpace: "All",
-			selectedHazard: "",
-			selectedHazardDatasetId: "",
-			boundingBox: [],
+			selectedDataset: "",
+			selectedDatasetFormat: "",
+			fileData: "",
+			fileExtension: "",
 			searchText: "",
 			registeredSearchText: "",
 			searching: false,
 			authError: false,
+			preview: false,
 			offset: 0,
 			pageNumber: 1,
 			dataPerPage: 50,
-			preview: false,
 			messageOpen: false,
 			confirmOpen: false,
 			loading: false,
 			metadataClosed: true
 		};
-		this.changeHazardType = this.changeHazardType.bind(this);
-		this.onClickHazard = this.onClickHazard.bind(this);
+
+		this.changeDatasetType = this.changeDatasetType.bind(this);
+		this.onClickDataset = this.onClickDataset.bind(this);
 		this.onClickDelete = this.onClickDelete.bind(this);
 		this.handleConfirmed = this.handleConfirmed.bind(this);
 		this.handleCanceled = this.handleCanceled.bind(this);
@@ -138,7 +152,9 @@ class SemanticViewer extends Component {
 		this.setSearchState = this.setSearchState.bind(this);
 		this.handleKeyPressed = this.handleKeyPressed.bind(this);
 		this.clickSearch = this.clickSearch.bind(this);
+		this.onClickFileDescriptor = this.onClickFileDescriptor.bind(this);
 		this.exportJson = this.exportJson.bind(this);
+		this.downloadDataset = this.downloadDataset.bind(this);
 		this.handleSpaceSelection = this.handleSpaceSelection.bind(this);
 		this.previous = this.previous.bind(this);
 		this.next = this.next.bind(this);
@@ -147,6 +163,8 @@ class SemanticViewer extends Component {
 		this.handlePreviewerClose = this.handlePreviewerClose.bind(this);
 		this.closeMetadata = this.closeMetadata.bind(this);
 	}
+
+	//TODO auto select the first item in the list
 
 	componentWillMount() {
 		// check if logged in
@@ -162,16 +180,18 @@ class SemanticViewer extends Component {
 					authError: false
 				},
 				function () {
-					this.props.getAllSpaces();
-					this.props.getAllHazards(
-						this.state.selectedHazardType,
+					this.props.getAllDatasets(
+						this.state.selectedDataType,
 						this.state.selectedSpace,
 						this.state.dataPerPage,
 						this.state.offset
 					);
+					this.props.getAllSpaces();
+					this.props.getUniqueDatatypes();
 				}
 			);
 		}
+
 		// not logged in
 		else {
 			this.setState({
@@ -192,7 +212,6 @@ class SemanticViewer extends Component {
 		});
 	}
 
-	// TODO set state inside component did up date is bad practice!!
 	componentDidUpdate(prevProps, prevState) {
 		if (this.props.deleteError && !prevState.messageOpen) {
 			this.setState({ messageOpen: true });
@@ -201,21 +220,23 @@ class SemanticViewer extends Component {
 		}
 	}
 
-	changeHazardType(event) {
+	changeDatasetType(event) {
 		this.setState(
 			{
+				selectedDataType: event.target.value,
 				pageNumber: 1,
 				offset: 0,
-				selectedHazardType: event.target.value,
-				selectedHazard: "",
-				selectedHazardDatasetId: "",
+				selectedDataset: "",
+				selectedDatasetFormat: "",
+				fileData: "",
+				fileExtension: "",
 				searchText: "",
 				registeredSearchText: "",
 				searching: false
 			},
 			function () {
-				this.props.getAllHazards(
-					this.state.selectedHazardType,
+				this.props.getAllDatasets(
+					this.state.selectedDataType,
 					this.state.selectedSpace,
 					this.state.dataPerPage,
 					this.state.offset
@@ -227,18 +248,20 @@ class SemanticViewer extends Component {
 	handleSpaceSelection(event) {
 		this.setState(
 			{
+				selectedSpace: event.target.value,
 				pageNumber: 1,
 				offset: 0,
-				selectedHazard: "",
-				selectedHazardDatasetId: "",
+				selectedDataset: "",
+				selectedDatasetFormat: "",
+				fileData: "",
+				fileExtension: "",
 				searchText: "",
 				registeredSearchText: "",
-				searching: false,
-				selectedSpace: event.target.value
+				searching: false
 			},
 			function () {
-				this.props.getAllHazards(
-					this.state.selectedHazardType,
+				this.props.getAllDatasets(
+					this.state.selectedDataType,
 					this.state.selectedSpace,
 					this.state.dataPerPage,
 					this.state.offset
@@ -247,11 +270,13 @@ class SemanticViewer extends Component {
 		);
 	}
 
-	onClickHazard(hazardId) {
-		const hazard = this.props.hazards.find((hazard) => hazard.id === hazardId);
+	onClickDataset(datasetId) {
+		const dataset = this.props.datasets.find((dataset) => dataset.id === datasetId);
 		this.setState({
-			selectedHazard: hazard,
-			selectedHazardDatasetId: "",
+			selectedDataset: dataset,
+			selectedDatasetFormat: dataset.format,
+			fileData: "",
+			fileExtension: "",
 			metadataClosed: false
 		});
 	}
@@ -262,17 +287,19 @@ class SemanticViewer extends Component {
 		});
 	}
 
-	handleConfirmed() {
-		this.props.deleteItemById(this.state.selectedHazardType, this.state.selectedHazard.id);
+	handleCanceled() {
 		this.setState({
-			selectedHazard: "",
-			selectedHazardDatasetId: "",
 			confirmOpen: false
 		});
 	}
 
-	handleCanceled() {
+	handleConfirmed() {
+		this.props.deleteItemById(this.state.selectedDataset.id);
 		this.setState({
+			selectedDataset: "",
+			selectedDatasetFormat: "",
+			fileData: "",
+			fileExtension: "",
 			confirmOpen: false
 		});
 	}
@@ -288,12 +315,14 @@ class SemanticViewer extends Component {
 		this.setState({
 			registeredSearchText: this.state.searchText,
 			searching: true,
-			selectedSpace: "All",
-			selectedHazard: "",
-			selectedHazardDatasetId: "",
-			boundingBox: [],
+			selectedDataset: "",
+			fileData: "",
+			fileExtension: "",
+			selectedDatasetFormat: "",
 			pageNumber: 1,
-			offset: 0
+			offset: 0,
+			selectedDataType: "All",
+			selectedSpace: "All"
 		});
 	}
 
@@ -302,30 +331,79 @@ class SemanticViewer extends Component {
 			// enter
 			event.preventDefault();
 			await this.setSearchState();
-			this.props.searchAllHazards(
-				this.state.selectedHazardType,
-				this.state.registeredSearchText,
-				this.state.dataPerPage,
-				this.state.offset
-			);
+			this.props.searchAllDatasets(this.state.registeredSearchText, this.state.dataPerPage, this.state.offset);
 		}
 	}
 
 	async clickSearch() {
 		await this.setSearchState();
-		this.props.searchAllHazards(
-			this.state.selectedHazardType,
-			this.state.registeredSearchText,
-			this.state.dataPerPage,
-			this.state.offset
-		);
+		this.props.searchAllDatasets(this.state.registeredSearchText, this.state.dataPerPage, this.state.offset);
 	}
 
-	exportJson() {
-		let selected_hazard = this.props.hazards.find((hazard) => hazard.id === this.state.selectedHazard.id);
-		let hazardJson = JSON.stringify(selected_hazard, null, 4);
-		let blob = new Blob([hazardJson], { type: "application/json" });
-		const filename = `${this.state.selectedHazard.id}.json`;
+	async onClickFileDescriptor(selected_dataset_id, file_descriptor_id, file_name) {
+		const url = `${config.dataServiceBase}files/${file_descriptor_id}/blob`;
+
+		let response = await fetch(url, { method: "GET", mode: "cors", headers: getHeader() });
+
+		if (response.ok) {
+			let text = await response.text();
+			this.setState({
+				fileData: text.split("\n"),
+				fileExtension: file_name.split(".").slice(-1).pop(),
+				authError: false
+			});
+		} else if (response.status === 401) {
+			cookies.remove("Authorization");
+			this.setState({
+				fileData: [],
+				fileExtension: null,
+				authError: true
+			});
+		} else {
+			this.setState({
+				fileData: [],
+				fileExtension: null,
+				authError: false
+			});
+		}
+	}
+
+	async downloadDataset() {
+		let datasetId = this.state.selectedDataset.id;
+		let filename = `${datasetId}.zip`;
+		let url = `${config.dataService}/${datasetId}/blob`;
+
+		let response = await fetch(url, { method: "GET", mode: "cors", headers: await getHeader() });
+
+		if (response.ok) {
+			let blob = await response.blob();
+			if (window.navigator.msSaveOrOpenBlob) {
+				window.navigator.msSaveBlob(blob, filename);
+			} else {
+				let anchor = window.document.createElement("a");
+				anchor.href = window.URL.createObjectURL(blob);
+				anchor.download = filename;
+				document.body.appendChild(anchor);
+				anchor.click();
+				document.body.removeChild(anchor);
+			}
+		} else if (response.status === 401) {
+			cookies.remove("Authorization");
+			this.setState({
+				authError: true
+			});
+		} else {
+			this.setState({
+				authError: false
+			});
+		}
+	}
+
+	async exportJson() {
+		let datasetJSON = JSON.stringify(this.state.selectedDataset, null, 4);
+		let blob = new Blob([datasetJSON], { type: "application/json" });
+
+		const filename = `${this.state.selectedDataset.id}.json`;
 
 		if (window.navigator.msSaveOrOpenBlob) {
 			window.navigator.msSaveBlob(blob, filename);
@@ -344,21 +422,23 @@ class SemanticViewer extends Component {
 			{
 				offset: (this.state.pageNumber - 2) * this.state.dataPerPage,
 				pageNumber: this.state.pageNumber - 1,
-				selectedHazard: "",
-				selectedHazardDatasetId: "",
-				boundingBox: []
+				selectedDataset: "",
+				selectedDatasetFormat: "",
+				fileData: "",
+				fileExtension: ""
 			},
 			function () {
 				if (this.state.registeredSearchText !== "" && this.state.searching) {
-					this.props.searchAllHazards(
-						this.state.selectedHazardType,
+					// change page on searchAllDatasets
+					this.props.searchAllDatasets(
 						this.state.registeredSearchText,
 						this.state.dataPerPage,
 						this.state.offset
 					);
 				} else {
-					this.props.getAllHazards(
-						this.state.selectedHazardType,
+					// change page on getAllDatasets
+					this.props.getAllDatasets(
+						this.state.selectedDataType,
 						this.state.selectedSpace,
 						this.state.dataPerPage,
 						this.state.offset
@@ -373,21 +453,23 @@ class SemanticViewer extends Component {
 			{
 				offset: this.state.pageNumber * this.state.dataPerPage,
 				pageNumber: this.state.pageNumber + 1,
-				selectedHazard: "",
-				selectedHazardDatasetId: "",
-				boundingBox: []
+				selectedDataset: "",
+				selectedDatasetFormat: "",
+				fileData: "",
+				fileExtension: ""
 			},
 			function () {
 				if (this.state.registeredSearchText !== "" && this.state.searching) {
-					this.props.searchAllHazards(
-						this.state.selectedHazardType,
+					// change page on searchAllDatasets
+					this.props.searchAllDatasets(
 						this.state.registeredSearchText,
 						this.state.dataPerPage,
 						this.state.offset
 					);
 				} else {
-					this.props.getAllHazards(
-						this.state.selectedHazardType,
+					// change page on getAllDatasets
+					this.props.getAllDatasets(
+						this.state.selectedDataType,
 						this.state.selectedSpace,
 						this.state.dataPerPage,
 						this.state.offset
@@ -403,21 +485,23 @@ class SemanticViewer extends Component {
 				pageNumber: 1,
 				offset: 0,
 				dataPerPage: event.target.value,
-				selectedHazard: "",
-				selectedHazardDatasetId: "",
-				boundingBox: []
+				selectedDataset: "",
+				selectedDatasetFormat: "",
+				fileData: "",
+				fileExtension: ""
 			},
 			function () {
 				if (this.state.registeredSearchText !== "" && this.state.searching) {
-					this.props.searchAllHazards(
-						this.state.selectedHazardType,
+					// change page on searchAllDatasets
+					this.props.searchAllDatasets(
 						this.state.registeredSearchText,
 						this.state.dataPerPage,
 						this.state.offset
 					);
 				} else {
-					this.props.getAllHazards(
-						this.state.selectedHazardType,
+					// change page on getAllDatasets
+					this.props.getAllDatasets(
+						this.state.selectedDataType,
 						this.state.selectedSpace,
 						this.state.dataPerPage,
 						this.state.offset
@@ -427,36 +511,10 @@ class SemanticViewer extends Component {
 		);
 	}
 
-	async preview(hazardDatasetId) {
-		// query data services to:
-		// 1. verify that dataset exists
-		// 2. get the bounding box information
-		const url = `${config.dataServiceBase}datasets/${hazardDatasetId}`;
-		let response = await fetch(url, { method: "GET", mode: "cors", headers: getHeader() });
-		if (response.ok) {
-			let selectedHazardDataset = await response.json();
-			this.setState({
-				selectedHazardDatasetId: selectedHazardDataset.id,
-				boundingBox: selectedHazardDataset.boundingBox,
-				authError: false,
-				preview: true
-			});
-		} else if (response.status === 401) {
-			cookies.remove("Authorization");
-			this.setState({
-				selectedHazardDatasetId: "",
-				boundingBox: [],
-				authError: true,
-				preview: false
-			});
-		} else {
-			this.setState({
-				selectedHazardDatasetId: "",
-				boundingBox: [],
-				authError: false,
-				preview: false
-			});
-		}
+	preview() {
+		this.setState({
+			preview: true
+		});
 	}
 
 	handlePreviewerClose() {
@@ -474,49 +532,219 @@ class SemanticViewer extends Component {
 	render() {
 		const { classes } = this.props;
 
-		// rendering filtered hazards list
-		let hazards_list = this.props.hazards;
-		let hazards_list_display = "";
-		if (hazards_list.length > 0) {
-			hazards_list_display = (
-				<List component="nav" id="dataset-list" style={{ overflowY: "auto" }}>
-					{hazards_list.map((hazard) => {
-						return (
-							<ListItem
-								button
-								onClick={() => this.onClickHazard(hazard.id)}
-								key={hazard.id}
-								selected={hazard.id === this.state.selectedHazard.id}
-							>
-								<ListItemText>{hazard.name ? `${hazard.name}` : `${hazard.id}`}</ListItemText>
-								<SpaceChip item={hazard} selectedItem={this.state.selectedHazard} />
-							</ListItem>
-						);
-					})}
-				</List>
-			);
+		// list items
+		let list_items = "";
+		if (this.props.datasets.length > 0) {
+			list_items = this.props.datasets.map((dataset) => {
+				if (dataset.format === "table") {
+					return (
+						<ListItem
+							button
+							onClick={() => this.onClickDataset(dataset.id)}
+							selected={dataset.id === this.state.selectedDataset.id}
+						>
+							<Tooltip title="Table">
+								<ListItemIcon>
+									<TableIcon fontSize="small" />
+								</ListItemIcon>
+							</Tooltip>
+							<ListItemText primary={`${dataset.title} - ${dataset.creator.capitalize()}`} />
+							<SpaceChip item={dataset} selectedItem={this.state.selectedDataset} />
+						</ListItem>
+					);
+				} else if (dataset.format === "textFiles") {
+					return (
+						<ListItem
+							button
+							onClick={() => this.onClickDataset(dataset.id)}
+							selected={dataset.id === this.state.selectedDataset.id}
+						>
+							<Tooltip title="Text File">
+								<ListItemIcon>
+									<TextIcon fontSize="small" />
+								</ListItemIcon>
+							</Tooltip>
+							<ListItemText primary={`${dataset.title} - ${dataset.creator.capitalize()}`} />
+							<SpaceChip item={dataset} selectedItem={this.state.selectedDataset} />
+						</ListItem>
+					);
+				} else if (
+					dataset.format.toLowerCase() === "shapefile" ||
+					dataset.format.toLowerCase() === "raster" ||
+					dataset.format.toLowerCase().includes("geotif")
+				) {
+					return (
+						<ListItem
+							button
+							onClick={() => this.onClickDataset(dataset.id)}
+							selected={dataset.id === this.state.selectedDataset.id}
+						>
+							<Tooltip title="Shapefile">
+								<ListItemIcon>
+									<MapIcon fontSize="small" />
+								</ListItemIcon>
+							</Tooltip>
+							<ListItemText primary={`${dataset.title} - ${dataset.creator.capitalize()}`} />
+							<SpaceChip item={dataset} selectedItem={this.state.selectedDataset} />
+						</ListItem>
+					);
+				} else if (dataset.format === "mapping") {
+					return (
+						<ListItem
+							button
+							onClick={() => this.onClickDataset(dataset.id)}
+							selected={dataset.id === this.state.selectedDataset.id}
+						>
+							<Tooltip title="Mapping">
+								<ListItemIcon>
+									<MappingIcon fontSize="small" />
+								</ListItemIcon>
+							</Tooltip>
+							<ListItemText primary={`${dataset.title} - ${dataset.creator.capitalize()}`} />
+							<SpaceChip item={dataset} selectedItem={this.state.selectedDataset} />
+						</ListItem>
+					);
+				} else if (dataset.format === "fragility") {
+					return (
+						<ListItem
+							button
+							onClick={() => this.onClickDataset(dataset.id)}
+							selected={dataset.id === this.state.selectedDataset.id}
+						>
+							<Tooltip title="DFR3Curves">
+								<ListItemIcon>
+									<ChartIcon fontSize="small" />
+								</ListItemIcon>
+							</Tooltip>
+							<ListItemText primary={`${dataset.title} - ${dataset.creator.capitalize()}`} />
+							<SpaceChip item={dataset} selectedItem={this.state.selectedDataset} />
+						</ListItem>
+					);
+				} else if (dataset.format === "Network") {
+					return (
+						<ListItem
+							button
+							onClick={() => this.onClickDataset(dataset.id)}
+							selected={dataset.id === this.state.selectedDataset.id}
+						>
+							<Tooltip title="Network">
+								<ListItemIcon>
+									<NetworkIcon fontSize="small" />
+								</ListItemIcon>
+							</Tooltip>
+							<ListItemText primary={`${dataset.title} - ${dataset.creator.capitalize()}`} />
+							<SpaceChip item={dataset} selectedItem={this.state.selectedDataset} />
+						</ListItem>
+					);
+				} else {
+					return (
+						<ListItem
+							button
+							onClick={() => this.onClickDataset(dataset.id)}
+							selected={dataset.id === this.state.selectedDataset.id}
+						>
+							<Tooltip title="Unknown Type">
+								<ListItemIcon>
+									<UnknownIcon fontSize="small" />
+								</ListItemIcon>
+							</Tooltip>
+							<ListItemText primary={`${dataset.title} - ${dataset.creator.capitalize()}`} />
+							<SpaceChip item={dataset} selectedItem={this.state.selectedDataset} />
+						</ListItem>
+					);
+				}
+			});
 		}
 
-		// selected hazard
-		let selected_hazard_detail = {};
-		if (this.state.selectedHazard) {
-			for (let item in this.state.selectedHazard) {
+		// selected dataset
+		let selected_dataset_detail = {};
+		if (this.state.selectedDataset) {
+			for (let item in this.state.selectedDataset) {
 				if (redundantProp.indexOf(item) === -1) {
-					selected_hazard_detail[item] = this.state.selectedHazard[item];
+					selected_dataset_detail[item] = this.state.selectedDataset[item];
 				}
 			}
 		}
 
+		// after selected an item
+		let file_list = "";
+		let file_contents = "";
+		let right_column = "";
+		if (this.state.selectedDataset) {
+			// file list
+			file_list = this.state.selectedDataset.fileDescriptors.map((file_descriptor) => (
+				<ListItem
+					button
+					onClick={() =>
+						this.onClickFileDescriptor(
+							this.state.selectedDataset.id,
+							file_descriptor.id,
+							file_descriptor.filename
+						)
+					}
+					key={file_descriptor.id}
+				>
+					<ListItemText>{file_descriptor.filename}</ListItemText>
+				</ListItem>
+			));
+			// file contents
+			if (this.state.fileExtension && this.state.fileData && this.state.fileExtension === "csv") {
+				let data = this.state.fileData.map((data) => data.split(","));
+				file_contents = (
+					<div>
+						<Typography variant="h6">File Content Preview</Typography>
+						<FileContentTable container="data_container" data={data.slice(2, 8)} colHeaders={data[0]} />
+					</div>
+				);
+			} else if (this.state.fileExtension === "xml" || this.state.fileExtension === "txt") {
+				file_contents = (
+					<div>
+						<Typography variant="h6">File Content Preview</Typography>
+						<Card>
+							<CardContent>
+								<Typography variant="body2" noWrap>
+									{this.state.fileData}
+								</Typography>
+							</CardContent>
+						</Card>
+					</div>
+				);
+			}
+			// right column
+			if (
+				this.state.selectedDatasetFormat.toLowerCase() === "shapefile" ||
+				this.state.selectedDatasetFormat.toLowerCase() === "raster" ||
+				this.state.selectedDatasetFormat.toLowerCase().includes("geotif")
+			) {
+				right_column = (
+					<div>
+						<Typography variant="h6">Map</Typography>
+						<Map
+							datasetId={this.state.selectedDataset.id}
+							boundingBox={this.state.selectedDataset.boundingBox}
+						/>
+					</div>
+				);
+			} else if (file_list.length > 0) {
+				right_column = (
+					<div>
+						<Typography variant="h6">Files</Typography>
+						<List component="nav">{file_list}</List>
+					</div>
+				);
+			}
+		}
+
 		if (this.state.authError) {
-			browserHistory.push("/login?origin=HazardViewer");
+			browserHistory.push("/login?origin=SemanticViewer");
 			return null;
 		} else {
 			return (
 				<div>
 					{/*error message display inside viewer*/}
 					<ErrorMessage
-						message="You do not have the privilege to delete this item."
 						error=""
+						message="You do not have the privilege to delete this item."
 						messageOpen={this.state.messageOpen}
 						closeErrorMessage={this.closeErrorMessage}
 					/>
@@ -532,48 +760,13 @@ class SemanticViewer extends Component {
 							{/*filters*/}
 							<Grid item lg={8} sm={8} xl={8} xs={12}>
 								<Paper variant="outlined" className={classes.filter}>
-									<Typography variant="h6">Filters</Typography>
-									{/* select hazard type */}
 									<div className={classes.selectDiv}>
-										<InputLabel>Hazard Type</InputLabel>
-										<Select
-											value={this.state.selectedHazardType}
-											onChange={this.changeHazardType}
-											className={classes.select}
-										>
-											<MenuItem
-												value="earthquakes"
-												key="earthquakes"
-												className={classes.denseStyle}
-											>
-												Earthquake
-											</MenuItem>
-											<MenuItem value="tornadoes" key="tornadoes" className={classes.denseStyle}>
-												Tornado
-											</MenuItem>
-											<MenuItem
-												value="hurricanes"
-												key="hurricanes"
-												className={classes.denseStyle}
-											>
-												Hurricane
-											</MenuItem>
-											<MenuItem
-												value="hurricaneWindfields"
-												key="hurricaneWindfields"
-												className={classes.denseStyle}
-											>
-												Hurricane Windfield
-											</MenuItem>
-											<MenuItem value="tsunamis" key="tsunamis" className={classes.denseStyle}>
-												Tsunami
-											</MenuItem>
-											<MenuItem value="floods" key="floods" className={classes.denseStyle}>
-												Flood
-											</MenuItem>
-										</Select>
+										<Datatype
+											selectedDataType={this.state.selectedDataType}
+											datatypes={this.props.datatypes}
+											handleDatatypeSelection={this.changeDatasetType}
+										/>
 									</div>
-									{/*spaces*/}
 									<div className={classes.selectDiv}>
 										<Space
 											selectedSpace={this.state.selectedSpace}
@@ -581,7 +774,6 @@ class SemanticViewer extends Component {
 											handleSpaceSelection={this.handleSpaceSelection}
 										/>
 									</div>
-									{/* set data per page to be shown */}
 									<div className={classes.selectDiv}>
 										<DataPerPage
 											dataPerPage={this.state.dataPerPage}
@@ -592,10 +784,10 @@ class SemanticViewer extends Component {
 							</Grid>
 							<Grid item lg={4} sm={4} xl={4} xs={12}>
 								<Paper variant="outlined" className={classes.filter}>
-									<Typography variant="h6">Search all {this.state.selectedHazardType}</Typography>
+									<Typography variant="h6">Search all</Typography>
 									<TextField
-										label="Search"
 										variant="outlined"
+										label="Search"
 										onKeyPress={this.handleKeyPressed}
 										value={this.state.searchText}
 										onChange={(e) => {
@@ -618,23 +810,24 @@ class SemanticViewer extends Component {
 							</Grid>
 
 							{/*lists*/}
+
 							<Grid
 								item
-								lg={this.state.selectedHazard && !this.state.metadataClosed ? 4 : 12}
-								md={this.state.selectedHazard && !this.state.metadataClosed ? 4 : 12}
-								xl={this.state.selectedHazard && !this.state.metadataClosed ? 4 : 12}
+								lg={this.state.selectedDataset && !this.state.metadataClosed ? 4 : 12}
+								md={this.state.selectedDataset && !this.state.metadataClosed ? 4 : 12}
+								xl={this.state.selectedDataset && !this.state.metadataClosed ? 4 : 12}
 								xs={12}
 							>
 								<LoadingOverlay active={this.state.loading} spinner text="Loading ...">
 									<Paper variant="outlined" className={classes.main}>
 										<div className={classes.paperHeader}>
-											<Typography variant="subtitle1">Hazards</Typography>
+											<Typography variant="subtitle1">Dataset</Typography>
 										</div>
-										{hazards_list_display}
+										<List component="nav">{list_items}</List>
 										<div className={classes.paperFooter}>
 											<Pagination
 												pageNumber={this.state.pageNumber}
-												data={hazards_list_display}
+												data={list_items}
 												dataPerPage={this.state.dataPerPage}
 												previous={this.previous}
 												next={this.next}
@@ -644,14 +837,14 @@ class SemanticViewer extends Component {
 								</LoadingOverlay>
 							</Grid>
 
-							{/* Metadata */}
+							{/*metadata*/}
 							<Grid
 								item
 								lg={8}
 								md={8}
 								xl={8}
 								xs={12}
-								className={this.state.selectedHazard ? null : classes.hide}
+								className={this.state.selectedDataset ? null : classes.hide}
 							>
 								<Paper variant="outlined" className={classes.main}>
 									<IconButton
@@ -661,7 +854,7 @@ class SemanticViewer extends Component {
 									>
 										<CloseIcon fontSize="small" />
 									</IconButton>
-									{Object.keys(selected_hazard_detail).length > 0 ? (
+									{Object.keys(selected_dataset_detail).length > 0 ? (
 										<div>
 											<div className={classes.paperHeader}>
 												<Typography variant="subtitle1">Metadata</Typography>
@@ -676,7 +869,25 @@ class SemanticViewer extends Component {
 												>
 													Download Metadata
 												</Button>
-												<CopyToClipboard text={this.state.selectedHazard.id}>
+												<Button
+													color="primary"
+													variant="contained"
+													className={classes.inlineButtons}
+													size="small"
+													onClick={this.downloadDataset}
+												>
+													Download Dataset
+												</Button>
+												<Button
+													color="primary"
+													variant="contained"
+													className={classes.inlineButtons}
+													size="small"
+													onClick={this.preview}
+												>
+													Preview
+												</Button>
+												<CopyToClipboard text={this.state.selectedDataset.id}>
 													<Button
 														color="secondary"
 														variant="contained"
@@ -697,11 +908,7 @@ class SemanticViewer extends Component {
 												</Button>
 											</div>
 											<div className={classes.metadata}>
-												<NestedInfoTable
-													data={selected_hazard_detail}
-													selectedHazardDataset={this.state.selectedHazardDatasetId}
-													onClick={this.preview}
-												/>
+												<NestedInfoTable data={selected_dataset_detail} />
 											</div>
 										</div>
 									) : (
@@ -710,11 +917,12 @@ class SemanticViewer extends Component {
 								</Paper>
 							</Grid>
 						</Grid>
+						{/*version*/}
 						<Version />
 					</div>
 
 					{/* Preview */}
-					{this.state.selectedHazard ? (
+					{this.state.selectedDataset ? (
 						<Dialog
 							open={this.state.preview}
 							onClose={this.handlePreviewerClose}
@@ -731,11 +939,8 @@ class SemanticViewer extends Component {
 									<CloseIcon fontSize="small" />
 								</IconButton>
 								<div>
-									<Typography variant="h6">Map</Typography>
-									<Map
-										datasetId={this.state.selectedHazardDatasetId}
-										boundingBox={this.state.boundingBox}
-									/>
+									{right_column}
+									{file_contents}
 								</div>
 							</DialogContent>
 						</Dialog>
