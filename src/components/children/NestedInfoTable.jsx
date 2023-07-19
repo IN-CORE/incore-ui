@@ -167,7 +167,7 @@ class NestedInfoTable extends React.Component {
 								})
 							) : key ==='dataType' ? // Another ternary operator to check if the value is a dataType if so create linking
 									(<TableCell>
-										<a href={`${config.hostname}/semantics/api/types/${data[key]}`} target="_blank" rel="noopener noreferrer">{data[key]} </a>
+										<a href={`/semantics/api/types/${data[key]}`} target="_blank" rel="noopener noreferrer">{data[key]} </a>
 									</TableCell>)
 									:
 								(<TableCell>
