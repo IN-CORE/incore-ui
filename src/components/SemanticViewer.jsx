@@ -180,7 +180,7 @@ class SemanticViewer extends Component {
 					authError: false
 				},
 				function () {
-					this.props.getAllDatasets(
+					this.props.getAllSemantics(
 						this.state.selectedDataType,
 						this.state.selectedSpace,
 						this.state.dataPerPage,
@@ -235,7 +235,7 @@ class SemanticViewer extends Component {
 				searching: false
 			},
 			function () {
-				this.props.getAllDatasets(
+				this.props.getAllSemantics(
 					this.state.selectedDataType,
 					this.state.selectedSpace,
 					this.state.dataPerPage,
@@ -260,7 +260,7 @@ class SemanticViewer extends Component {
 				searching: false
 			},
 			function () {
-				this.props.getAllDatasets(
+				this.props.getAllSemantics(
 					this.state.selectedDataType,
 					this.state.selectedSpace,
 					this.state.dataPerPage,
@@ -436,8 +436,8 @@ class SemanticViewer extends Component {
 						this.state.offset
 					);
 				} else {
-					// change page on getAllDatasets
-					this.props.getAllDatasets(
+					// change page on getAllSemantics
+					this.props.getAllSemantics(
 						this.state.selectedDataType,
 						this.state.selectedSpace,
 						this.state.dataPerPage,
@@ -467,8 +467,8 @@ class SemanticViewer extends Component {
 						this.state.offset
 					);
 				} else {
-					// change page on getAllDatasets
-					this.props.getAllDatasets(
+					// change page on getAllSemantics
+					this.props.getAllSemantics(
 						this.state.selectedDataType,
 						this.state.selectedSpace,
 						this.state.dataPerPage,
@@ -499,7 +499,7 @@ class SemanticViewer extends Component {
 						this.state.offset
 					);
 				} else {
-					// change page on getAllDatasets
+					// change page on getAllSemantics
 					this.props.getAllDatasets(
 						this.state.selectedDataType,
 						this.state.selectedSpace,

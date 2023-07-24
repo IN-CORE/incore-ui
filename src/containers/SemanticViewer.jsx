@@ -1,17 +1,15 @@
 import { connect } from "react-redux";
 import SemanticViewerComponent from "../components/SemanticViewer";
 import {
-	fetchDatasets,
+	fetchSemantics,
 	fetchSpaces,
-	fetchUniqueDatatypes,
-	searchDatasets,
 	deleteItemById,
 	resetError
 } from "../actions";
 
 const mapStateToProps = (state) => {
 	return {
-		datasets: state.data.datasets,
+		semantics: state.data.semantics,
 		deleteError: state.data.deleteError,
 		spaces: state.space.spaces,
 		datatypes: state.datatype.datatypes,
@@ -25,17 +23,11 @@ const mapDispatchToProps = (dispatch) => {
 		getAllSpaces: () => {
 			dispatch(fetchSpaces());
 		},
-		getUniqueDatatypes: () => {
-			dispatch(fetchUniqueDatatypes());
-		},
-		getAllDatasets: (dataType, space, limit, offset) => {
-			dispatch(fetchDatasets(dataType, space, limit, offset));
-		},
-		searchAllDatasets: (keyword, limit, offset) => {
-			dispatch(searchDatasets(keyword, limit, offset));
+		getAllSemantics: (dataType, space, limit, offset) => {
+			dispatch(fetchSemantics(dataType, space, limit, offset));
 		},
 		deleteItemById: (id) => {
-			dispatch(deleteItemById("datasets", id));
+			dispatch(deleteItemById("semantics", id));
 		},
 		resetError: () => {
 			dispatch(resetError);

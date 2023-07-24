@@ -655,8 +655,9 @@ export function receiveSemantics(type: string, json) {
 }
 
 // TODO - WIP
-export function fetchSemantics(dataType, space, limit, offset) {
-	let endpoint = `${config.semanticService}?excludeHazard=true&limit=${limit}&skip=${offset}`;
+export function fetchSemantics(dataType, space) {
+	let endpoint = `${config.semanticService}`;
+	// Check if we need to filter by data type or space
 	if (dataType !== null && dataType !== "All") {
 		endpoint = `${endpoint}&type=${dataType}`;
 	}
@@ -665,18 +666,18 @@ export function fetchSemantics(dataType, space, limit, offset) {
 	}
 
 	return (dispatch: Dispatch) => {
-		dispatch(loading(DATA_LOADING));
+		dispatch(loading(SEMANTIC_LOADING));
 		return fetch(endpoint, { mode: "cors", headers: getHeader() }).then((response) => {
-			dispatch(loadComplete(DATA_LOAD_COMPLETE));
+			dispatch(loadComplete(SEMANTIC_LOAD_COMPLETE));
 			if (response.status === 200) {
 				response.json().then((json) => {
-					dispatch(receiveDatasets(RECEIVE_DATASETS, json));
+					dispatch(receiveSemantics(RECEIVE_SEMANTICS, json));
 				});
 			} else if (response.status === 401) {
 				cookies.remove("Authorization");
-				dispatch(receiveDatasets(LOGIN_ERROR, []));
+				dispatch(receiveSemantics(LOGIN_ERROR, []));
 			} else {
-				dispatch(receiveDatasets(RECEIVE_DATASETS, []));
+				dispatch(receiveSemantics(RECEIVE_SEMANTICS, []));
 			}
 		});
 	};
