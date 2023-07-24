@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 - Added support for new combined disaster (Tsunami + Earthquake) [#119](https://github.com/IN-CORE/incore-ui/issues/119)
+- Added clickable link in DataViewer to show semantic definition for datatype [#123](https://github.com/IN-CORE/incore-ui/pull/123)
 
 ### Fixed
 - When-user-has-no-usage-display-zero-instead-of-undefined [#110](https://github.com/IN-CORE/incore-ui/issues/110)

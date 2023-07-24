@@ -1,8 +1,7 @@
 import React from "react";
-import {Button, Divider, List, ListItem, Table, TableBody, TableCell, TableRow, Tooltip} from "@material-ui/core";
-import {withStyles} from "@material-ui/core/styles/index";
+import { Button, Divider, List, ListItem, Table, TableBody, TableCell, TableRow, Tooltip } from "@material-ui/core";
+import { withStyles } from "@material-ui/core/styles/index";
 import config from "../../app.config";
-
 
 const styles = {
 	inlineButtons: {
@@ -25,23 +24,24 @@ class NestedInfoTable extends React.Component {
 		super(props);
 	}
 
-	componentDidMount() {
-	}
+	componentDidMount() {}
 
 	render() {
+		const { classes } = this.props;
 
-		const {classes} = this.props;
-
+		const startsWithErgoOrIncore = (datatype) => {
+			const regexErgo = /^ergo:/;
+			const regexIncore = /^incore:/;
+			return regexErgo.test(datatype) || regexIncore.test(datatype);
+		};
 		const renderDataRows = (data, classes, onClick) => {
 			const keysToExclude = ["hazardDatasets", "rasterDataset", "datasetId"];
-			console.log(config.hostname + "semantics/api/types/" + "ergo");
+			console.log(`${config.hostname}semantics/api/types/` + "ergo");
 			return Object.keys(data).map((key) => {
 				if (key === "hazardDatasets" && data[key].length > 0) {
 					return (
 						<TableRow key={key}>
-							<TableCell className={classes.rowHeaderCell}>
-								{key}
-							</TableCell>
+							<TableCell className={classes.rowHeaderCell}>{key}</TableCell>
 							<TableCell>
 								<List>
 									{data[key].map((hazardDataset) => {
@@ -72,9 +72,7 @@ class NestedInfoTable extends React.Component {
 				} else if (key === "rasterDataset" && data[key] && data[key].datasetId) {
 					return (
 						<TableRow key={key}>
-							<TableCell className={classes.rowHeaderCell}>
-								{key}
-							</TableCell>
+							<TableCell className={classes.rowHeaderCell}>{key}</TableCell>
 							<TableCell>
 								<List>
 									<ListItem key={data[key].datasetId}>
@@ -97,9 +95,7 @@ class NestedInfoTable extends React.Component {
 				} else if (key === "datasetId" && data[key]) {
 					return (
 						<TableRow key={key}>
-							<TableCell className={classes.rowHeaderCell}>
-								{key}
-							</TableCell>
+							<TableCell className={classes.rowHeaderCell}>{key}</TableCell>
 							<TableCell>
 								<List>
 									<ListItem key={data[key]}>
@@ -124,23 +120,17 @@ class NestedInfoTable extends React.Component {
 						<TableRow key={key}>
 							{key === "creator" ? (
 								<Tooltip title="The person who created the resource">
-									<TableCell className={classes.rowHeaderCell}>
-										{key}
-									</TableCell>
+									<TableCell className={classes.rowHeaderCell}>{key}</TableCell>
 								</Tooltip>
 							) : (
-								<TableCell className={classes.rowHeaderCell}>
-									{key}
-								</TableCell>
+								<TableCell className={classes.rowHeaderCell}>{key}</TableCell>
 							)}
 							{/* If the value is an object, render a sub-table	*/}
 							{typeof data[key] === "object" && data[key] ? (
 								Object.keys(data[key]).map((key2) => {
 									return (
 										<TableRow key={key2}>
-											<TableCell className={classes.rowSubHeaderCell}>
-												{key2}
-											</TableCell>
+											<TableCell className={classes.rowSubHeaderCell}>{key2}</TableCell>
 
 											{typeof data[key][key2] === "object" && data[key][key2] ? (
 												Object.keys(data[key][key2]).map((key3) => {
@@ -158,22 +148,24 @@ class NestedInfoTable extends React.Component {
 													}
 												})
 											) : (
-												<TableCell>
-													{JSON.stringify(data[key][key2])}
-												</TableCell>
+												<TableCell>{JSON.stringify(data[key][key2])}</TableCell>
 											)}
 										</TableRow>
 									);
 								})
-							) : key ==='dataType' ? // Another ternary operator to check if the value is a dataType if so create linking
-									(<TableCell>
-										<a href={`/semantics/api/types/${data[key]}`} target="_blank" rel="noopener noreferrer">{data[key]} </a>
-									</TableCell>)
-									:
-								(<TableCell>
-									{data[key]}
-								</TableCell>)
-							}
+							) : key === "dataType" && startsWithErgoOrIncore(data[key]) ? ( // Another ternary operator to check if the value is a dataType if so create linking
+								<TableCell>
+									<a
+										href={`${config.semanticServiceType}${data[key]}`}
+										target="_blank"
+										rel="noopener noreferrer"
+									>
+										{data[key]}
+									</a>
+								</TableCell>
+							) : (
+								<TableCell>{data[key]}</TableCell>
+							)}
 						</TableRow>
 					);
 				} else {
@@ -182,13 +174,11 @@ class NestedInfoTable extends React.Component {
 			});
 		};
 
-		return (<Table size="small">
-			<TableBody>
-				{
-					renderDataRows(this.props.data, classes, this.props.onClick)
-				}
-			</TableBody>
-		</Table>);
+		return (
+			<Table size="small">
+				<TableBody>{renderDataRows(this.props.data, classes, this.props.onClick)}</TableBody>
+			</Table>
+		);
 	}
 }
 
