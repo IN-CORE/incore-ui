@@ -36,7 +36,6 @@ class NestedInfoTable extends React.Component {
 		};
 		const renderDataRows = (data, classes, onClick) => {
 			const keysToExclude = ["hazardDatasets", "rasterDataset", "datasetId"];
-			console.log(`${config.hostname}semantics/api/types/` + "ergo");
 			return Object.keys(data).map((key) => {
 				if (key === "hazardDatasets" && data[key].length > 0) {
 					return (
@@ -156,7 +155,8 @@ class NestedInfoTable extends React.Component {
 							) : key === "dataType" && startsWithErgoOrIncore(data[key]) ? ( // Another ternary operator to check if the value is a dataType if so create linking
 								<TableCell>
 									<a
-										href={`${config.semanticServiceType}${data[key]}`}
+										href={`${config.semanticServiceType}/${data[key]}`}
+										color={"#e8a114"}
 										target="_blank"
 										rel="noopener noreferrer"
 									>
