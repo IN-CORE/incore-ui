@@ -156,7 +156,7 @@ class NestedInfoTable extends React.Component {
 								<TableCell>
 									<a
 										href={`${config.semanticServiceType}/${data[key]}`}
-										color={"#e8a114"}
+										style={{ color: "#e8a114" }}
 										target="_blank"
 										rel="noopener noreferrer"
 									>
