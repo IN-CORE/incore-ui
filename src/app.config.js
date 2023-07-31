@@ -2,7 +2,7 @@ let config = {};
 let hostname = process.env.INCORE_REMOTE_HOSTNAME || "";
 
 config["hostname"] = hostname;
-config["semanticService"] = "${hostname}/semantics/api/types";
+config["semanticService"] = `${hostname}/semantics/api/types`;
 config["dataWolf"] = `${hostname}/datawolf/`;
 config["client_id"] = "react-auth";
 config["pyIncoreDocUrl"] = `${hostname}/doc/pyincore/index.html`;

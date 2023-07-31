@@ -9,10 +9,9 @@ import {
 
 const mapStateToProps = (state) => {
 	return {
-		semantics: state.data.semantics,
+		semantics: state.semantics.semantics,
 		deleteError: state.data.deleteError,
 		spaces: state.space.spaces,
-		datatypes: state.datatype.datatypes,
 		authError: state.user.loginError,
 		loading: state.data.loading
 	};
@@ -23,8 +22,8 @@ const mapDispatchToProps = (dispatch) => {
 		getAllSpaces: () => {
 			dispatch(fetchSpaces());
 		},
-		getAllSemantics: (dataType, space, limit, offset) => {
-			dispatch(fetchSemantics(dataType, space, limit, offset));
+		getAllSemantics: (space) => {
+			dispatch(fetchSemantics(space));
 		},
 		deleteItemById: (id) => {
 			dispatch(deleteItemById("semantics", id));

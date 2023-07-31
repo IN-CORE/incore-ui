@@ -655,12 +655,9 @@ export function receiveSemantics(type: string, json) {
 }
 
 // TODO - WIP
-export function fetchSemantics(dataType, space) {
+export function fetchSemantics(space) {
 	let endpoint = `${config.semanticService}`;
-	// Check if we need to filter by data type or space
-	if (dataType !== null && dataType !== "All") {
-		endpoint = `${endpoint}&type=${dataType}`;
-	}
+
 	if (space !== null && space !== "All") {
 		endpoint = `${endpoint}&space=${space}`;
 	}
