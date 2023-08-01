@@ -65,7 +65,7 @@ const styles = {
 	selectDiv: {
 		margin: "auto",
 		display: "inline-block",
-		width: "33%"
+		width: "50%"
 	},
 	select: {
 		width: "80%",
@@ -128,8 +128,16 @@ class SemanticViewer extends Component {
 			searching: false,
 			searchText: "",
 			authError: false,
-			loading:false
+			loading:false,
+			selectedDataTyoe:"",
+			pageNumber: 1,
+			metadataClosed: true
 		};
+
+		// this.onClickDataset = this.onClick.bind(this);
+		this.handleSpaceSelection = this.handleSpaceSelection.bind(this);
+		this.changeDataPerPage = this.changeDataPerPage.bind(this);
+		// this.handleKeyPressed = this.handleKeyPressed.bind(this);
 	}
 
 	componentWillMount() {
@@ -149,6 +157,7 @@ class SemanticViewer extends Component {
 					this.props.getAllSemantics(
 						this.state.selectedSpace
 					);
+					this.props.getAllSpaces();
 				}
 			);
 		} else {
@@ -178,20 +187,129 @@ class SemanticViewer extends Component {
 			this.setState({ messageOpen: false });
 		}
 	}
+
+	handleSpaceSelection(event) {
+		this.setState(
+			{
+				selectedSpace: event.target.value
+			},
+			function () {
+				this.props.getAllSemantics(
+					this.state.selectedSpace
+				);
+			}
+		);
+	}
+	changeDataPerPage(event) {
+		this.setState(
+			{
+				dataPerPage: event.target.value
+			},
+			function () {
+				// Code to limit amount of data spaces
+			}
+		);
+	}
+
+
 	render() {
 		const { classes } = this.props;
 
 		//list items
 		let list_items = "";
-		if (this.props.semantics.length > 0)
-		{
-			return(this.props.semantics);
-		}
-		else
-		{
-			return(<h1>hello</h1>);
-		}
+		list_items = this.props.semantics.map((semantic) => {
+			return (
+				<ListItem
+					button
+					onClick={() => this.onClickSemantic(semantic)}
+					// selected={semantic.id === this.state.semantic.id}
+				>
+					<ListItemText primary={`${semantic}`} />
+					<SpaceChip item={semantic} selectedItem={this.state.selectedSemantic} />
+				</ListItem>);
+		});
 
+		if (this.state.authError) {
+			browserHistory.push("/login?origin=DataViewer");
+			return null;
+		} else {
+			return (
+				<div>
+					<div className={classes.root}>
+						<Grid container spacing={4}>
+							<Grid item lg={6} sm={6} xl={6} xs={12}>
+								<Paper variant="outlined" className={classes.filter}>
+									<div className={classes.selectDiv}>
+										<Space
+											selectedSpace={this.state.selectedSpace}
+											spaces={this.props.spaces}
+											handleSpaceSelection={this.handleSpaceSelection}
+										/>
+									</div>
+									<div className={classes.selectDiv}>
+										<DataPerPage
+											dataPerPage={this.state.dataPerPage}
+											changeDataPerPage={this.changeDataPerPage}
+										/>
+									</div>
+								</Paper>
+							</Grid>
+							<Grid item lg={6} sm={6} xl={6} xs={12}>
+								<Paper variant="outlined" className={classes.filter}>
+									<Typography variant="h6">Search all</Typography>
+									<TextField
+										variant="outlined"
+										label="Search"
+										// onKeyPress={this.handleKeyPressed}
+										value={this.state.searchText}
+										onChange={(e) => {
+											this.setState({ searchText: e.target.value });
+										}}
+										// InputProps={{
+										// 	endAdornment: (
+										// 		<InputAdornment position="end">
+										// 			<IconButton onClick={this.clickSearch}>
+										// 				<SearchIcon fontSize="small" />
+										// 			</IconButton>
+										// 		</InputAdornment>
+										// 	),
+										// 	style: { fontSize: "12px" }
+										// }}
+										className={classes.search}
+										margin="dense"
+									/>
+								</Paper>
+							</Grid>
+							<Grid
+								item
+								lg={12}
+								md={12}
+								xl={12}
+								xs={12}
+							>
+								<LoadingOverlay active={this.state.loading} spinner text="Loading ...">
+									<Paper variant="outlined" className={classes.main}>
+										<div className={classes.paperHeader}>
+											<Typography variant="subtitle1">Dataset</Typography>
+										</div>
+										<List component="nav">{list_items}</List>
+										<div className={classes.paperFooter}>
+											<Pagination
+												pageNumber={this.state.pageNumber}
+												data={list_items}
+												dataPerPage={this.state.dataPerPage}
+												previous={this.previous}
+												next={this.next}
+											/>
+										</div>
+									</Paper>
+								</LoadingOverlay>
+							</Grid>
+						</Grid>
+					</div>
+				</div>
+			);
+		}
 	}
 }
 
