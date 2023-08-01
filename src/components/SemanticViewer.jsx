@@ -131,7 +131,7 @@ class SemanticViewer extends Component {
 			loading:false,
 			selectedDataTyoe:"",
 			pageNumber: 1,
-			metadataClosed: true
+			semanticWindowClosed: true
 		};
 
 		// this.onClickDataset = this.onClick.bind(this);
@@ -211,17 +211,26 @@ class SemanticViewer extends Component {
 		);
 	}
 
+	onClickDataset(semantic) {
+		this.setState({
+			selectedDataset: semantic,
+			semanticWindowClosed: false
+		});
+	}
+
 
 	render() {
 		const { classes } = this.props;
 
 		//list items
 		let list_items = "";
-		list_items = this.props.semantics.map((semantic) => {
+		list_items = this.props.semantics.map((semantic,) => {
 			return (
 				<ListItem
 					button
-					onClick={() => this.onClickSemantic(semantic)}
+					onClick={() => {
+						this.onClickDataset(semantic);
+					}}
 					// selected={semantic.id === this.state.semantic.id}
 				>
 					<ListItemText primary={`${semantic}`} />
@@ -234,79 +243,77 @@ class SemanticViewer extends Component {
 			return null;
 		} else {
 			return (
-				<div>
-					<div className={classes.root}>
-						<Grid container spacing={4}>
-							<Grid item lg={6} sm={6} xl={6} xs={12}>
-								<Paper variant="outlined" className={classes.filter}>
-									<div className={classes.selectDiv}>
-										<Space
-											selectedSpace={this.state.selectedSpace}
-											spaces={this.props.spaces}
-											handleSpaceSelection={this.handleSpaceSelection}
-										/>
-									</div>
-									<div className={classes.selectDiv}>
-										<DataPerPage
-											dataPerPage={this.state.dataPerPage}
-											changeDataPerPage={this.changeDataPerPage}
-										/>
-									</div>
-								</Paper>
-							</Grid>
-							<Grid item lg={6} sm={6} xl={6} xs={12}>
-								<Paper variant="outlined" className={classes.filter}>
-									<Typography variant="h6">Search all</Typography>
-									<TextField
-										variant="outlined"
-										label="Search"
-										// onKeyPress={this.handleKeyPressed}
-										value={this.state.searchText}
-										onChange={(e) => {
-											this.setState({ searchText: e.target.value });
-										}}
-										// InputProps={{
-										// 	endAdornment: (
-										// 		<InputAdornment position="end">
-										// 			<IconButton onClick={this.clickSearch}>
-										// 				<SearchIcon fontSize="small" />
-										// 			</IconButton>
-										// 		</InputAdornment>
-										// 	),
-										// 	style: { fontSize: "12px" }
-										// }}
-										className={classes.search}
-										margin="dense"
+				<div className={classes.root}>
+					<Grid container spacing={4}>
+						<Grid item lg={6} sm={6} xl={6} xs={12}>
+							<Paper variant="outlined" className={classes.filter}>
+								<div className={classes.selectDiv}>
+									<Space
+										selectedSpace={this.state.selectedSpace}
+										spaces={this.props.spaces}
+										handleSpaceSelection={this.handleSpaceSelection}
 									/>
-								</Paper>
-							</Grid>
-							<Grid
-								item
-								lg={12}
-								md={12}
-								xl={12}
-								xs={12}
-							>
-								<LoadingOverlay active={this.state.loading} spinner text="Loading ...">
-									<Paper variant="outlined" className={classes.main}>
-										<div className={classes.paperHeader}>
-											<Typography variant="subtitle1">Dataset</Typography>
-										</div>
-										<List component="nav">{list_items}</List>
-										<div className={classes.paperFooter}>
-											<Pagination
-												pageNumber={this.state.pageNumber}
-												data={list_items}
-												dataPerPage={this.state.dataPerPage}
-												previous={this.previous}
-												next={this.next}
-											/>
-										</div>
-									</Paper>
-								</LoadingOverlay>
-							</Grid>
+								</div>
+								<div className={classes.selectDiv}>
+									<DataPerPage
+										dataPerPage={this.state.dataPerPage}
+										changeDataPerPage={this.changeDataPerPage}
+									/>
+								</div>
+							</Paper>
 						</Grid>
-					</div>
+						<Grid item lg={6} sm={6} xl={6} xs={12}>
+							<Paper variant="outlined" className={classes.filter}>
+								<Typography variant="h6">Search all</Typography>
+								<TextField
+									variant="outlined"
+									label="Search"
+									// onKeyPress={this.handleKeyPressed}
+									value={this.state.searchText}
+									onChange={(e) => {
+										this.setState({ searchText: e.target.value });
+									}}
+									// InputProps={{
+									// 	endAdornment: (
+									// 		<InputAdornment position="end">
+									// 			<IconButton onClick={this.clickSearch}>
+									// 				<SearchIcon fontSize="small" />
+									// 			</IconButton>
+									// 		</InputAdornment>
+									// 	),
+									// 	style: { fontSize: "12px" }
+									// }}
+									className={classes.search}
+									margin="dense"
+								/>
+							</Paper>
+						</Grid>
+						<Grid
+							item
+							lg={this.state.selectedDataset && !this.state.semanticWindowClosed ? 4 : 12}
+							md={this.state.selectedDataset && !this.state.semanticWindowClosed ? 4 : 12}
+							xl={this.state.selectedDataset && !this.state.semanticWindowClosed ? 4 : 12}
+							xs={12}
+						>
+							<LoadingOverlay active={this.state.loading} spinner text="Loading ...">
+								<Paper variant="outlined" className={classes.main}>
+									<div className={classes.paperHeader}>
+										<Typography variant="subtitle1">Dataset</Typography>
+									</div>
+									<List component="nav">{list_items}</List>
+									<div className={classes.paperFooter}>
+										<Pagination
+											pageNumber={this.state.pageNumber}
+											data={list_items}
+											dataPerPage={this.state.dataPerPage}
+											previous={this.previous}
+											next={this.next}
+										/>
+									</div>
+								</Paper>
+							</LoadingOverlay>
+						</Grid>
+					</Grid>
 				</div>
 			);
 		}
