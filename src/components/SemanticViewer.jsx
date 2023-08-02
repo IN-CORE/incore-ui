@@ -16,7 +16,7 @@ import {
 	ListItem,
 	ListItemIcon,
 	ListItemText,
-	Paper,
+	Paper, TableBody, TableCell, TableRow,
 	TextField,
 	Tooltip,
 	Typography
@@ -131,12 +131,15 @@ class SemanticViewer extends Component {
 			loading:false,
 			selectedDataTyoe:"",
 			pageNumber: 1,
-			semanticWindowClosed: true
+			semanticWindowClosed: true,
+			previewLoading:true,
+			semanticJSON: {},
 		};
 
 		// this.onClickDataset = this.onClick.bind(this);
 		this.handleSpaceSelection = this.handleSpaceSelection.bind(this);
 		this.changeDataPerPage = this.changeDataPerPage.bind(this);
+		this.generateSemanticTable = this.generateSemanticTable.bind(this);
 		// this.handleKeyPressed = this.handleKeyPressed.bind(this);
 	}
 
@@ -211,16 +214,63 @@ class SemanticViewer extends Component {
 		);
 	}
 
-	onClickDataset(semantic) {
+
+	onClickDataset = async (semantic) => {
 		this.setState({
 			selectedDataset: semantic,
-			semanticWindowClosed: false
+			semanticWindowClosed: false,
+			previewLoading: true
 		});
-	}
+
+		try {
+			// Replace 'YOUR_JSON_URL' with the actual URL from which you want to fetch JSON data
+			let endpoint = `${config.semanticService}/${semantic}`;
+			const response = await fetch(endpoint, { mode: "cors", headers: getHeader(), contentType: "application/json" });
+			const jsonData = await response.json();
+			// Once the JSON data is fetched, you can use it as needed
+			console.log("Fetched JSON data:", jsonData);
+			this.setState({
+				previewLoading: false,
+				semanticJSON: jsonData[0]
+			});
+		} catch (error) {
+			console.error("Error fetching JSON data:", error);
+			this.setState({
+				previewLoading: false
+			});
+		}
+	};
+
 
 	closeSemanticWindow() {
 		this.setState({
-			semanticWindowClosed: true
+			semanticWindowClosed: true,
+			previewLoading:false,
+			semanticJSON: {}
+		});
+	}
+
+	generateSemanticTable(){
+		if (this.state.previewLoading) {
+			return null;
+		}
+		return this.state.semanticJSON["tableSchema"]["columns"].map((field) => {
+			if (field["name"] === '') {
+				return null;
+			}
+			return (
+				<TableRow key={field["name"]}>
+					<TableCell component="th" scope="row">
+						{field["name"]}
+					</TableCell>
+					<TableCell align="right">{field["titles"]}</TableCell>
+					<TableCell align="right">{field["datatype"]}</TableCell>
+					<TableCell align="right">{field["qudt:unit"]}</TableCell>
+					<TableCell align="right">
+						{field["required"] === '' ? "False" : "True"}
+					</TableCell>
+				</TableRow>
+			);
 		});
 	}
 
@@ -331,9 +381,18 @@ class SemanticViewer extends Component {
 								<div className={classes.paperHeader}>
 									<Typography variant="subtitle1">Semantic</Typography>
 								</div>
+								<div className={classes.metadata}>
+									<LoadingOverlay active={this.state.previewLoading} spinner text="Loading ...">
+
+										<TableBody>
+											{
+												this.generateSemanticTable()
+											}
+										</TableBody>
+									</LoadingOverlay>
+								</div>
 							</Paper>
 						</Grid>
-
 					</Grid>
 				</div>
 			);
