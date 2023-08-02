@@ -80,7 +80,7 @@ const styles = {
 		lineHeight: "30px",
 		fontSize: "12px"
 	},
-	metadata: {
+	semanticWindow: {
 		margin: theme.spacing(2),
 		overflow: "auto"
 	},
@@ -110,7 +110,7 @@ const styles = {
 		display: "inline",
 		float: "right"
 	},
-	metadataCloseButton: {
+	semanticWindowCloseButton: {
 		float: "right"
 	}
 };
@@ -218,6 +218,11 @@ class SemanticViewer extends Component {
 		});
 	}
 
+	closeSemanticWindow() {
+		this.setState({
+			semanticWindowClosed: true
+		});
+	}
 
 	render() {
 		const { classes } = this.props;
@@ -239,7 +244,7 @@ class SemanticViewer extends Component {
 		});
 
 		if (this.state.authError) {
-			browserHistory.push("/login?origin=DataViewer");
+			browserHistory.push("/login?origin=SemanticViewer");
 			return null;
 		} else {
 			return (
@@ -313,15 +318,22 @@ class SemanticViewer extends Component {
 								</Paper>
 							</LoadingOverlay>
 						</Grid>
-						{this.state.selectedDataset && !this.state.semanticWindowClosed ? (
-							<Grid item lg={8} md={8} xl={8} xs={12}>
-								<Paper variant="outlined" className={classes.main}>
-									<div className={classes.paperHeader}>
-										<Typography variant="subtitle1">Semantic</Typography>
-									</div>
-								</Paper>
-							</Grid>
-						) : null}
+						<Grid item lg={8} md={8} xl={8} xs={12}
+							  className={this.state.semanticWindowClosed ? classes.hide : null}>
+							<Paper variant="outlined" className={classes.main}>
+								<IconButton
+									aria-label="Close"
+									onClick={() => this.closeSemanticWindow()}
+									className={classes.semanticWindowCloseButton}
+								>
+									<CloseIcon fontSize="small" />
+								</IconButton>
+								<div className={classes.paperHeader}>
+									<Typography variant="subtitle1">Semantic</Typography>
+								</div>
+							</Paper>
+						</Grid>
+
 					</Grid>
 				</div>
 			);
