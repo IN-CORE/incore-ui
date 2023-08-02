@@ -313,6 +313,15 @@ class SemanticViewer extends Component {
 								</Paper>
 							</LoadingOverlay>
 						</Grid>
+						{this.state.selectedDataset && !this.state.semanticWindowClosed ? (
+							<Grid item lg={8} md={8} xl={8} xs={12}>
+								<Paper variant="outlined" className={classes.main}>
+									<div className={classes.paperHeader}>
+										<Typography variant="subtitle1">Semantic</Typography>
+									</div>
+								</Paper>
+							</Grid>
+						) : null}
 					</Grid>
 				</div>
 			);
