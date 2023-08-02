@@ -16,7 +16,7 @@ import {
 	ListItem,
 	ListItemIcon,
 	ListItemText,
-	Paper, TableBody, TableCell, TableRow,
+	Paper, Table, TableBody, TableCell, TableHead, TableRow,
 	TextField,
 	Tooltip,
 	Typography
@@ -112,6 +112,11 @@ const styles = {
 	},
 	semanticWindowCloseButton: {
 		float: "right"
+	},
+	headerCell: {
+		fontWeight: "bold",
+		fontSize: "1.1em",
+		backgroundColor: "#f5f5f5"
 	}
 };
 
@@ -136,7 +141,7 @@ class SemanticViewer extends Component {
 			semanticJSON: {},
 		};
 
-		// this.onClickDataset = this.onClick.bind(this);
+		this.onClickDataset = this.onClickDataset.bind(this);
 		this.handleSpaceSelection = this.handleSpaceSelection.bind(this);
 		this.changeDataPerPage = this.changeDataPerPage.bind(this);
 		this.generateSemanticTable = this.generateSemanticTable.bind(this);
@@ -228,7 +233,6 @@ class SemanticViewer extends Component {
 			const response = await fetch(endpoint, { mode: "cors", headers: getHeader(), contentType: "application/json" });
 			const jsonData = await response.json();
 			// Once the JSON data is fetched, you can use it as needed
-			console.log("Fetched JSON data:", jsonData);
 			this.setState({
 				previewLoading: false,
 				semanticJSON: jsonData[0]
@@ -379,16 +383,27 @@ class SemanticViewer extends Component {
 									<CloseIcon fontSize="small" />
 								</IconButton>
 								<div className={classes.paperHeader}>
-									<Typography variant="subtitle1">Semantic</Typography>
+									<Typography variant="h6">Semantic</Typography>
 								</div>
+								<Typography variant="subtitle1">Dataset Type - {this.state.selectedDataset}</Typography>
 								<div className={classes.metadata}>
 									<LoadingOverlay active={this.state.previewLoading} spinner text="Loading ...">
-
-										<TableBody>
-											{
-												this.generateSemanticTable()
-											}
-										</TableBody>
+										<Table size="small">
+											<TableHead>
+												<TableRow>
+													<TableCell className={classes.headerCell}>Name</TableCell>
+													<TableCell className={classes.headerCell} align="right">Titles</TableCell>
+													<TableCell className={classes.headerCell} align="right">Datatype</TableCell>
+													<TableCell className={classes.headerCell} align="right">Unit</TableCell>
+													<TableCell className={classes.headerCell} align="right">Required</TableCell>
+												</TableRow>
+											</TableHead>
+											<TableBody>
+												{
+													this.generateSemanticTable()
+												}
+											</TableBody>
+										</Table>
 									</LoadingOverlay>
 								</div>
 							</Paper>
