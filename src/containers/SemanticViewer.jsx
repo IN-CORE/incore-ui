@@ -4,6 +4,7 @@ import {
 	fetchSemantics,
 	fetchSpaces,
 	deleteItemById,
+	searchSemantics,
 	resetError
 } from "../actions";
 
@@ -24,6 +25,9 @@ const mapDispatchToProps = (dispatch) => {
 		},
 		getAllSemantics: (space) => {
 			dispatch(fetchSemantics(space));
+		},
+		searchAllSemantics: (keyword) => {
+			dispatch(searchSemantics(keyword));
 		},
 		deleteItemById: (id) => {
 			dispatch(deleteItemById("semantics", id));

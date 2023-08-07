@@ -680,6 +680,27 @@ export function fetchSemantics(space) {
 	};
 }
 
+export function searchSemantics(keyword) {
+	let endpoint = `${config.semanticService}/search?text=${keyword}`;
+	return (dispatch: Dispatch) =>{
+		dispatch(loading(SEMANTIC_LOADING));
+		return fetch(endpoint, { mode: "cors", headers: getHeader() }).then((response) => {
+			dispatch(loadComplete(SEMANTIC_LOAD_COMPLETE));
+			if (response.status === 200) {
+				response.json().then((json) => {
+					json = json.map((item) => item["dc:title"]);
+					dispatch(receiveSemantics(RECEIVE_SEMANTICS, json));
+				});
+			} else if (response.status === 401) {
+				cookies.remove("Authorization");
+				dispatch(receiveSemantics(LOGIN_ERROR, []));
+			} else {
+				dispatch(receiveSemantics(RECEIVE_SEMANTICS, []));
+			}
+		});
+	};
+}
+
 export async function executeDatawolfWorkflowHelper(workflowid, creatorid, title, description, parameters, datasets) {
 	const datawolfUrl = `${config.dataWolf}executions`;
 	const dataToSubmit = {

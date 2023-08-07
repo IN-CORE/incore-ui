@@ -132,6 +132,7 @@ class SemanticViewer extends Component {
 			dataPerPage: 50,
 			searching: false,
 			searchText: "",
+			registeredSearchText: "",
 			authError: false,
 			loading:false,
 			selectedDataTyoe:"",
@@ -145,6 +146,8 @@ class SemanticViewer extends Component {
 		this.handleSpaceSelection = this.handleSpaceSelection.bind(this);
 		this.changeDataPerPage = this.changeDataPerPage.bind(this);
 		this.generateSemanticTable = this.generateSemanticTable.bind(this);
+		this.setSearchState = this.setSearchState.bind(this);
+		this.clickSearch = this.clickSearch.bind(this);
 		// this.handleKeyPressed = this.handleKeyPressed.bind(this);
 	}
 
@@ -224,18 +227,21 @@ class SemanticViewer extends Component {
 		this.setState({
 			selectedDataset: semantic,
 			semanticWindowClosed: false,
-			previewLoading: true
+			previewLoading: true,
+			semanticJSON: {}
 		});
 
 		try {
-			// Replace 'YOUR_JSON_URL' with the actual URL from which you want to fetch JSON data
 			let endpoint = `${config.semanticService}/${semantic}`;
-			const response = await fetch(endpoint, { mode: "cors", headers: getHeader(), contentType: "application/json" });
+			const response = await fetch(endpoint, {
+				mode: "cors",
+				headers: getHeader(),
+				contentType: "application/json"
+			});
 			const jsonData = await response.json();
-			// Once the JSON data is fetched, you can use it as needed
 			this.setState({
 				previewLoading: false,
-				semanticJSON: jsonData[0]
+				semanticJSON: jsonData
 			});
 		} catch (error) {
 			console.error("Error fetching JSON data:", error);
@@ -252,6 +258,19 @@ class SemanticViewer extends Component {
 			previewLoading:false,
 			semanticJSON: {}
 		});
+	}
+
+	async setSearchState() {
+		this.setState({
+			registeredSearchText: this.state.searchText,
+			searching: true,
+			selectedDataset: "",
+		});
+	}
+
+	async clickSearch() {
+		await this.setSearchState();
+		this.props.searchAllSemantics(this.state.registeredSearchText);
 	}
 
 	generateSemanticTable(){
@@ -332,16 +351,16 @@ class SemanticViewer extends Component {
 									onChange={(e) => {
 										this.setState({ searchText: e.target.value });
 									}}
-									// InputProps={{
-									// 	endAdornment: (
-									// 		<InputAdornment position="end">
-									// 			<IconButton onClick={this.clickSearch}>
-									// 				<SearchIcon fontSize="small" />
-									// 			</IconButton>
-									// 		</InputAdornment>
-									// 	),
-									// 	style: { fontSize: "12px" }
-									// }}
+									InputProps={{
+										endAdornment: (
+											<InputAdornment position="end">
+												<IconButton onClick={this.clickSearch}>
+													<SearchIcon fontSize="small" />
+												</IconButton>
+											</InputAdornment>
+										),
+										style: { fontSize: "12px" }
+									}}
 									className={classes.search}
 									margin="dense"
 								/>
