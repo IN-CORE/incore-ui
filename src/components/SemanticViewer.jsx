@@ -117,7 +117,13 @@ const styles = {
 		fontWeight: "bold",
 		fontSize: "1.1em",
 		backgroundColor: "#f5f5f5"
-	}
+	},
+	centredText: {
+		display: "flex",
+		justifyContent: "center",
+		alignItems: "center",
+		height: "100%",
+	},
 };
 
 String.prototype.capitalize = function () {
@@ -341,10 +347,13 @@ class SemanticViewer extends Component {
 		if (this.state.previewLoading) {
 			return null;
 		}
-		return this.state.semanticJSON["tableSchema"]["columns"].map((field) => {
+		const { classes } = this.props;
+		let row_count = 0;
+		let rows = this.state.semanticJSON["tableSchema"]["columns"].map((field) => {
 			if (field["name"] === "") {
 				return null;
 			}
+			row_count = row_count + 1;
 			return (
 				<TableRow key={field["name"]}>
 					<TableCell component="th" scope="row">
@@ -359,6 +368,34 @@ class SemanticViewer extends Component {
 				</TableRow>
 			);
 		});
+
+		if (row_count !== 0) {
+			return (
+				<div className={classes.metadata}>
+					<LoadingOverlay active={this.state.previewLoading} spinner text="Loading ...">
+						<Table size="small">
+							<TableHead>
+								<TableRow>
+									<TableCell className={classes.headerCell}>Name</TableCell>
+									<TableCell className={classes.headerCell} align="right">Titles</TableCell>
+									<TableCell className={classes.headerCell} align="right">Datatype</TableCell>
+									<TableCell className={classes.headerCell} align="right">Unit</TableCell>
+									<TableCell className={classes.headerCell} align="right">Required</TableCell>
+								</TableRow>
+							</TableHead>
+							<TableBody>{rows}</TableBody>
+						</Table>
+					</LoadingOverlay>
+				</div>
+			);
+		}
+		else{
+			return (
+				<Typography variant="h6" className={classes.centredText}>
+					No Semantic Schema available
+				</Typography>
+			);
+		}
 	}
 
 	render() {
@@ -466,29 +503,14 @@ class SemanticViewer extends Component {
 										<CloseIcon fontSize="small" />
 									</IconButton>
 									<div className={classes.paperHeader}>
-										<Typography variant="h6">Semantic</Typography>
+										<Typography variant="h4">Semantic Schema</Typography>
 									</div>
-									<Typography variant="subtitle1">Dataset Type - {this.state.selectedDataset}</Typography>
-									<div className={classes.metadata}>
-										<LoadingOverlay active={this.state.previewLoading} spinner text="Loading ...">
-											<Table size="small">
-												<TableHead>
-													<TableRow>
-														<TableCell className={classes.headerCell}>Name</TableCell>
-														<TableCell className={classes.headerCell} align="right">Titles</TableCell>
-														<TableCell className={classes.headerCell} align="right">Datatype</TableCell>
-														<TableCell className={classes.headerCell} align="right">Unit</TableCell>
-														<TableCell className={classes.headerCell} align="right">Required</TableCell>
-													</TableRow>
-												</TableHead>
-												<TableBody>
-													{
-														this.generateSemanticTable()
-													}
-												</TableBody>
-											</Table>
-										</LoadingOverlay>
-									</div>
+									<br/>
+									<Typography variant="h6">{this.state.selectedDataset}</Typography>
+									{this.state.semanticJSON["dc:description"] === "" ? null :
+										<Typography variant="subtitle1">{this.state.semanticJSON["dc:description"]}</Typography>}
+									<br/>
+									{this.generateSemanticTable()}
 								</Paper>
 							</Grid>}
 					</Grid>
