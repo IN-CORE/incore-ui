@@ -88,9 +88,6 @@ const styles = {
 		display: "inline-block",
 		margin: "auto 5px"
 	},
-	hide: {
-		display: "none"
-	},
 	paperFooter: {
 		padding: theme.spacing(2),
 		borderTop: "1px solid #eeeeee",
@@ -810,7 +807,6 @@ class DataViewer extends Component {
 							</Grid>
 
 							{/*lists*/}
-
 							<Grid
 								item
 								lg={this.state.selectedDataset && !this.state.metadataClosed ? 4 : 12}
@@ -838,85 +834,88 @@ class DataViewer extends Component {
 							</Grid>
 
 							{/*metadata*/}
-							<Grid
-								item
-								lg={8}
-								md={8}
-								xl={8}
-								xs={12}
-								className={this.state.selectedDataset ? null : classes.hide}
-							>
-								<Paper variant="outlined" className={classes.main}>
-									<IconButton
-										aria-label="Close"
-										onClick={this.closeMetadata}
-										className={classes.metadataCloseButton}
-									>
-										<CloseIcon fontSize="small" />
-									</IconButton>
-									{Object.keys(selected_dataset_detail).length > 0 ? (
-										<div>
-											<div className={classes.paperHeader}>
-												<Typography variant="subtitle1">Metadata</Typography>
-											</div>
-											<div className={classes.metadata}>
-												<Button
-													color="primary"
-													variant="contained"
-													className={classes.inlineButtons}
-													size="small"
-													onClick={this.exportJson}
-												>
-													Download Metadata
-												</Button>
-												<Button
-													color="primary"
-													variant="contained"
-													className={classes.inlineButtons}
-													size="small"
-													onClick={this.downloadDataset}
-												>
-													Download Dataset
-												</Button>
-												<Button
-													color="primary"
-													variant="contained"
-													className={classes.inlineButtons}
-													size="small"
-													onClick={this.preview}
-												>
-													Preview
-												</Button>
-												<CopyToClipboard text={this.state.selectedDataset.id}>
+							{ this.state.metadataClosed ?
+								<></>
+								:
+								<Grid
+									item
+									lg={8}
+									md={8}
+									xl={8}
+									xs={12}
+								>
+									<Paper variant="outlined" className={classes.main}>
+										<IconButton
+											aria-label="Close"
+											onClick={this.closeMetadata}
+											className={classes.metadataCloseButton}
+										>
+											<CloseIcon fontSize="small" />
+										</IconButton>
+										{Object.keys(selected_dataset_detail).length > 0 ? (
+											<div>
+												<div className={classes.paperHeader}>
+													<Typography variant="subtitle1">Metadata</Typography>
+												</div>
+												<div className={classes.metadata}>
+													<Button
+														color="primary"
+														variant="contained"
+														className={classes.inlineButtons}
+														size="small"
+														onClick={this.exportJson}
+													>
+														Download Metadata
+													</Button>
+													<Button
+														color="primary"
+														variant="contained"
+														className={classes.inlineButtons}
+														size="small"
+														onClick={this.downloadDataset}
+													>
+														Download Dataset
+													</Button>
+													<Button
+														color="primary"
+														variant="contained"
+														className={classes.inlineButtons}
+														size="small"
+														onClick={this.preview}
+													>
+														Preview
+													</Button>
+													<CopyToClipboard text={this.state.selectedDataset.id}>
+														<Button
+															color="secondary"
+															variant="contained"
+															className={classes.inlineButtons}
+															size="small"
+														>
+															Copy ID
+														</Button>
+													</CopyToClipboard>
 													<Button
 														color="secondary"
 														variant="contained"
 														className={classes.inlineButtons}
 														size="small"
+														onClick={this.onClickDelete}
 													>
-														Copy ID
+														DELETE
 													</Button>
-												</CopyToClipboard>
-												<Button
-													color="secondary"
-													variant="contained"
-													className={classes.inlineButtons}
-													size="small"
-													onClick={this.onClickDelete}
-												>
-													DELETE
-												</Button>
+												</div>
+												<div className={classes.metadata}>
+													<NestedInfoTable data={selected_dataset_detail} />
+												</div>
 											</div>
-											<div className={classes.metadata}>
-												<NestedInfoTable data={selected_dataset_detail} />
-											</div>
-										</div>
-									) : (
-										<div />
-									)}
-								</Paper>
+										) : (
+											<div />
+										)}
+									</Paper>
+								</Grid>
+							}
 							</Grid>
-						</Grid>
 						{/*version*/}
 						<Version />
 					</div>
