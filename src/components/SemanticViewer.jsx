@@ -265,7 +265,7 @@ class SemanticViewer extends Component {
 		});
 
 		try {
-			let endpoint = `${config.semanticService}/${semantic}`;
+			let endpoint = `${config.semanticServiceType}/${semantic}`;
 			const response = await fetch(endpoint, {
 				mode: "cors",
 				headers: getHeader(),
