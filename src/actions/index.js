@@ -655,8 +655,8 @@ export function receiveSemantics(type: string, json) {
 }
 
 // TODO - WIP
-export function fetchSemantics(space) {
-	let endpoint = `${config.semanticService}`;
+export function fetchSemantics(space, limit, offset) {
+	let endpoint = `${config.semanticService}?limit=${limit}&skip=${offset}`;
 
 	if (space !== null && space !== "All") {
 		endpoint = `${endpoint}&space=${space}`;

@@ -23,8 +23,8 @@ const mapDispatchToProps = (dispatch) => {
 		getAllSpaces: () => {
 			dispatch(fetchSpaces());
 		},
-		getAllSemantics: (space) => {
-			dispatch(fetchSemantics(space));
+		getAllSemantics: (space, limit, offset) => {
+			dispatch(fetchSemantics(space, limit, offset));
 		},
 		searchAllSemantics: (keyword) => {
 			dispatch(searchSemantics(keyword));

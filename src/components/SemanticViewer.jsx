@@ -130,6 +130,7 @@ class SemanticViewer extends Component {
 		this.state = {
 			selectedSpace: "All",
 			dataPerPage: 50,
+			offset:0,
 			searching: false,
 			searchText: "",
 			registeredSearchText: "",
@@ -148,7 +149,9 @@ class SemanticViewer extends Component {
 		this.generateSemanticTable = this.generateSemanticTable.bind(this);
 		this.setSearchState = this.setSearchState.bind(this);
 		this.clickSearch = this.clickSearch.bind(this);
-		// this.handleKeyPressed = this.handleKeyPressed.bind(this);
+		this.handleKeyPressed = this.handleKeyPressed.bind(this);
+		this.previous = this.previous.bind(this);
+		this.next = this.next.bind(this);
 	}
 
 	componentWillMount() {
@@ -166,7 +169,9 @@ class SemanticViewer extends Component {
 				},
 				function () {
 					this.props.getAllSemantics(
-						this.state.selectedSpace
+						this.state.selectedSpace,
+						this.state.dataPerPage,
+						this.state.offset
 					);
 					this.props.getAllSpaces();
 				}
@@ -202,11 +207,19 @@ class SemanticViewer extends Component {
 	handleSpaceSelection(event) {
 		this.setState(
 			{
-				selectedSpace: event.target.value
+				selectedSpace: event.target.value,
+				semanticWindowClosed: true,
+				pageNumber:1,
+				offset:0,
+				selectedDataset:"",
+				searching: false,
+				searchText: ""
 			},
 			function () {
 				this.props.getAllSemantics(
-					this.state.selectedSpace
+					this.state.selectedSpace,
+					this.state.dataPerPage,
+					this.state.offset
 				);
 			}
 		);
@@ -217,7 +230,11 @@ class SemanticViewer extends Component {
 				dataPerPage: event.target.value
 			},
 			function () {
-				// Code to limit amount of data spaces
+				this.props.getAllSemantics(
+					this.state.selectedSpace,
+					this.state.dataPerPage,
+					this.state.offset
+				);
 			}
 		);
 	}
@@ -228,7 +245,9 @@ class SemanticViewer extends Component {
 			selectedDataset: semantic,
 			semanticWindowClosed: false,
 			previewLoading: true,
-			semanticJSON: {}
+			semanticJSON: {},
+			offset:0,
+			pageNumber:1
 		});
 
 		try {
@@ -265,6 +284,7 @@ class SemanticViewer extends Component {
 			registeredSearchText: this.state.searchText,
 			searching: true,
 			selectedDataset: "",
+			semanticWindowClosed: true,
 		});
 	}
 
@@ -273,12 +293,56 @@ class SemanticViewer extends Component {
 		this.props.searchAllSemantics(this.state.registeredSearchText);
 	}
 
+	async handleKeyPressed(event) {
+		if (event.charCode === 13) {
+			// enter
+			event.preventDefault();
+			await this.setSearchState();
+			this.props.searchAllSemantics(this.state.registeredSearchText);
+		}
+	}
+
+	next(){
+		this.setState(
+			{
+				offset: this.state.pageNumber * this.state.dataPerPage,
+				pageNumber: this.state.pageNumber + 1,
+				semanticWindowClosed: true,
+				selectedDataset: ""
+			},
+			function () {
+				this.props.getAllSemantics(
+					this.state.selectedSpace,
+					this.state.dataPerPage,
+					this.state.offset
+				);
+			}
+		);
+	}
+
+	previous() {
+		this.setState(
+			{
+				offset: (this.state.pageNumber - 2) * this.state.dataPerPage,
+				pageNumber: this.state.pageNumber - 1,
+				semanticWindowClosed: true,
+				selectedDataset: ""
+			},
+			function () {
+				this.props.getAllSemantics(
+					this.state.selectedSpace,
+					this.state.dataPerPage,
+					this.state.offset
+				);
+			}
+		);
+	}
 	generateSemanticTable(){
 		if (this.state.previewLoading) {
 			return null;
 		}
 		return this.state.semanticJSON["tableSchema"]["columns"].map((field) => {
-			if (field["name"] === '') {
+			if (field["name"] === "") {
 				return null;
 			}
 			return (
@@ -290,7 +354,7 @@ class SemanticViewer extends Component {
 					<TableCell align="right">{field["datatype"]}</TableCell>
 					<TableCell align="right">{field["qudt:unit"]}</TableCell>
 					<TableCell align="right">
-						{field["required"] === '' ? "False" : "True"}
+						{field["required"] === "" ? "False" : "True"}
 					</TableCell>
 				</TableRow>
 			);
@@ -302,14 +366,14 @@ class SemanticViewer extends Component {
 
 		//list items
 		let list_items = "";
-		list_items = this.props.semantics.map((semantic,) => {
+		list_items = this.props.semantics.map((semantic) => {
 			return (
 				<ListItem
 					button
 					onClick={() => {
 						this.onClickDataset(semantic);
 					}}
-					// selected={semantic.id === this.state.semantic.id}
+					selected={semantic === this.state.selectedDataset}
 				>
 					<ListItemText primary={`${semantic}`} />
 					<SpaceChip item={semantic} selectedItem={this.state.selectedSemantic} />
@@ -391,42 +455,42 @@ class SemanticViewer extends Component {
 								</Paper>
 							</LoadingOverlay>
 						</Grid>
-						<Grid item lg={8} md={8} xl={8} xs={12}
-							  className={this.state.semanticWindowClosed ? classes.hide : null}>
-							<Paper variant="outlined" className={classes.main}>
-								<IconButton
-									aria-label="Close"
-									onClick={() => this.closeSemanticWindow()}
-									className={classes.semanticWindowCloseButton}
-								>
-									<CloseIcon fontSize="small" />
-								</IconButton>
-								<div className={classes.paperHeader}>
-									<Typography variant="h6">Semantic</Typography>
-								</div>
-								<Typography variant="subtitle1">Dataset Type - {this.state.selectedDataset}</Typography>
-								<div className={classes.metadata}>
-									<LoadingOverlay active={this.state.previewLoading} spinner text="Loading ...">
-										<Table size="small">
-											<TableHead>
-												<TableRow>
-													<TableCell className={classes.headerCell}>Name</TableCell>
-													<TableCell className={classes.headerCell} align="right">Titles</TableCell>
-													<TableCell className={classes.headerCell} align="right">Datatype</TableCell>
-													<TableCell className={classes.headerCell} align="right">Unit</TableCell>
-													<TableCell className={classes.headerCell} align="right">Required</TableCell>
-												</TableRow>
-											</TableHead>
-											<TableBody>
-												{
-													this.generateSemanticTable()
-												}
-											</TableBody>
-										</Table>
-									</LoadingOverlay>
-								</div>
-							</Paper>
-						</Grid>
+						{this.state.semanticWindowClosed ? null :
+							<Grid item lg={8} md={8} xl={8} xs={12}>
+								<Paper variant="outlined" className={classes.main}>
+									<IconButton
+										aria-label="Close"
+										onClick={() => this.closeSemanticWindow()}
+										className={classes.semanticWindowCloseButton}
+									>
+										<CloseIcon fontSize="small" />
+									</IconButton>
+									<div className={classes.paperHeader}>
+										<Typography variant="h6">Semantic</Typography>
+									</div>
+									<Typography variant="subtitle1">Dataset Type - {this.state.selectedDataset}</Typography>
+									<div className={classes.metadata}>
+										<LoadingOverlay active={this.state.previewLoading} spinner text="Loading ...">
+											<Table size="small">
+												<TableHead>
+													<TableRow>
+														<TableCell className={classes.headerCell}>Name</TableCell>
+														<TableCell className={classes.headerCell} align="right">Titles</TableCell>
+														<TableCell className={classes.headerCell} align="right">Datatype</TableCell>
+														<TableCell className={classes.headerCell} align="right">Unit</TableCell>
+														<TableCell className={classes.headerCell} align="right">Required</TableCell>
+													</TableRow>
+												</TableHead>
+												<TableBody>
+													{
+														this.generateSemanticTable()
+													}
+												</TableBody>
+											</Table>
+										</LoadingOverlay>
+									</div>
+								</Paper>
+							</Grid>}
 					</Grid>
 				</div>
 			);
