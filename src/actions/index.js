@@ -680,8 +680,8 @@ export function fetchSemantics(space, limit, offset) {
 	};
 }
 
-export function searchSemantics(keyword) {
-	let endpoint = `${config.semanticService}/search?text=${keyword}`;
+export function searchSemantics(keyword, limit, offset) {
+	let endpoint = `${config.semanticService}/search?text=${keyword}&limit=${limit}&skip=${offset}`;
 	return (dispatch: Dispatch) =>{
 		dispatch(loading(SEMANTIC_LOADING));
 		return fetch(endpoint, { mode: "cors", headers: getHeader() }).then((response) => {

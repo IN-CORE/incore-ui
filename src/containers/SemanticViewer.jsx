@@ -26,8 +26,8 @@ const mapDispatchToProps = (dispatch) => {
 		getAllSemantics: (space, limit, offset) => {
 			dispatch(fetchSemantics(space, limit, offset));
 		},
-		searchAllSemantics: (keyword) => {
-			dispatch(searchSemantics(keyword));
+		searchAllSemantics: (keyword, limit, offset) => {
+			dispatch(searchSemantics(keyword, limit, offset));
 		},
 		deleteItemById: (id) => {
 			dispatch(deleteItemById("semantics", id));

@@ -145,7 +145,7 @@ class SemanticViewer extends Component {
 			selectedDataTyoe:"",
 			pageNumber: 1,
 			semanticWindowClosed: true,
-			previewLoading:true,
+			previewLoading:false,
 			semanticJSON: {},
 		};
 
@@ -236,11 +236,19 @@ class SemanticViewer extends Component {
 				dataPerPage: event.target.value
 			},
 			function () {
-				this.props.getAllSemantics(
-					this.state.selectedSpace,
-					this.state.dataPerPage,
-					this.state.offset
-				);
+				if (this.state.searching) {
+					this.props.searchAllSemantics(
+						this.state.registeredSearchText,
+						this.state.dataPerPage,
+						this.state.offset
+					);
+				} else {
+					this.props.getAllSemantics(
+						this.state.selectedSpace,
+						this.state.dataPerPage,
+						this.state.offset
+					);
+				}
 			}
 		);
 	}
@@ -371,22 +379,18 @@ class SemanticViewer extends Component {
 
 		if (row_count !== 0) {
 			return (
-				<div className={classes.metadata}>
-					<LoadingOverlay active={this.state.previewLoading} spinner text="Loading ...">
-						<Table size="small">
-							<TableHead>
-								<TableRow>
-									<TableCell className={classes.headerCell}>Name</TableCell>
-									<TableCell className={classes.headerCell} align="right">Titles</TableCell>
-									<TableCell className={classes.headerCell} align="right">Datatype</TableCell>
-									<TableCell className={classes.headerCell} align="right">Unit</TableCell>
-									<TableCell className={classes.headerCell} align="right">Required</TableCell>
-								</TableRow>
-							</TableHead>
-							<TableBody>{rows}</TableBody>
-						</Table>
-					</LoadingOverlay>
-				</div>
+				<Table size="small">
+					<TableHead>
+						<TableRow>
+							<TableCell className={classes.headerCell}>Name</TableCell>
+							<TableCell className={classes.headerCell} align="right">Titles</TableCell>
+							<TableCell className={classes.headerCell} align="right">Datatype</TableCell>
+							<TableCell className={classes.headerCell} align="right">Unit</TableCell>
+							<TableCell className={classes.headerCell} align="right">Required</TableCell>
+						</TableRow>
+					</TableHead>
+					<TableBody>{rows}</TableBody>
+				</Table>
 			);
 		}
 		else{
@@ -447,7 +451,7 @@ class SemanticViewer extends Component {
 								<TextField
 									variant="outlined"
 									label="Search"
-									// onKeyPress={this.handleKeyPressed}
+									onKeyPress={this.handleKeyPressed}
 									value={this.state.searchText}
 									onChange={(e) => {
 										this.setState({ searchText: e.target.value });
@@ -487,6 +491,7 @@ class SemanticViewer extends Component {
 											dataPerPage={this.state.dataPerPage}
 											previous={this.previous}
 											next={this.next}
+											disabled={this.state.loading}
 										/>
 									</div>
 								</Paper>
@@ -510,7 +515,11 @@ class SemanticViewer extends Component {
 									{this.state.semanticJSON["dc:description"] === "" ? null :
 										<Typography variant="subtitle1">{this.state.semanticJSON["dc:description"]}</Typography>}
 									<br/>
-									{this.generateSemanticTable()}
+									<div className={classes.metadata}>
+										<LoadingOverlay active={this.state.previewLoading} spinner text="Loading ...">
+											{this.generateSemanticTable()}
+										</LoadingOverlay>
+									</div>
 								</Paper>
 							</Grid>}
 					</Grid>
