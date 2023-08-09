@@ -259,9 +259,7 @@ class SemanticViewer extends Component {
 			selectedDataset: semantic,
 			semanticWindowClosed: false,
 			previewLoading: true,
-			semanticJSON: {},
-			offset:0,
-			pageNumber:1
+			semanticJSON: {}
 		});
 
 		try {
@@ -499,7 +497,7 @@ class SemanticViewer extends Component {
 							<LoadingOverlay active={this.state.loading} spinner text="Loading ...">
 								<Paper variant="outlined" className={classes.main}>
 									<div className={classes.paperHeader}>
-										<Typography variant="subtitle1">Dataset</Typography>
+										<Typography variant="subtitle1">Semantics</Typography>
 									</div>
 									<List component="nav">{list_items}</List>
 									<div className={classes.paperFooter}>
@@ -526,12 +524,12 @@ class SemanticViewer extends Component {
 										<CloseIcon fontSize="small" />
 									</IconButton>
 									<div className={classes.paperHeader}>
-										<Typography variant="h4">Semantic Schema</Typography>
+										<Typography variant="subtitle1">Semantic Schema</Typography>
 									</div>
 									<br/>
-									<Typography variant="h6">{this.state.selectedDataset}</Typography>
+									<Typography variant="subtitle2"><strong>{this.state.selectedDataset}</strong></Typography>
 									{this.state.semanticJSON["dc:description"] === "" ? null :
-										<Typography variant="subtitle1">{this.state.semanticJSON["dc:description"]}</Typography>}
+										<Typography variant="body1">{this.state.semanticJSON["dc:description"]}</Typography>}
 									<br/>
 									<div className={classes.metadata}>
 										<LoadingOverlay active={this.state.previewLoading} spinner text="Loading ...">
