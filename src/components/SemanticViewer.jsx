@@ -299,12 +299,14 @@ class SemanticViewer extends Component {
 			searching: true,
 			selectedDataset: "",
 			semanticWindowClosed: true,
+			offset:0,
+			pageNumber:1
 		});
 	}
 
 	async clickSearch() {
 		await this.setSearchState();
-		this.props.searchAllSemantics(this.state.registeredSearchText);
+		this.props.searchAllSemantics(this.state.registeredSearchText, this.state.dataPerPage, this.state.offset);
 	}
 
 	async handleKeyPressed(event) {
@@ -312,7 +314,7 @@ class SemanticViewer extends Component {
 			// enter
 			event.preventDefault();
 			await this.setSearchState();
-			this.props.searchAllSemantics(this.state.registeredSearchText);
+			this.props.searchAllSemantics(this.state.registeredSearchText, this.state.dataPerPage, this.state.offset);
 		}
 	}
 
@@ -325,11 +327,19 @@ class SemanticViewer extends Component {
 				selectedDataset: ""
 			},
 			function () {
-				this.props.getAllSemantics(
-					this.state.selectedSpace,
-					this.state.dataPerPage,
-					this.state.offset
-				);
+				if (this.state.searching) {
+					this.props.searchAllSemantics(
+						this.state.registeredSearchText,
+						this.state.dataPerPage,
+						this.state.offset
+					);
+				} else {
+					this.props.getAllSemantics(
+						this.state.selectedSpace,
+						this.state.dataPerPage,
+						this.state.offset
+					);
+				}
 			}
 		);
 	}
@@ -343,11 +353,19 @@ class SemanticViewer extends Component {
 				selectedDataset: ""
 			},
 			function () {
-				this.props.getAllSemantics(
-					this.state.selectedSpace,
-					this.state.dataPerPage,
-					this.state.offset
-				);
+				if (this.state.searching) {
+					this.props.searchAllSemantics(
+						this.state.registeredSearchText,
+						this.state.dataPerPage,
+						this.state.offset
+					);
+				} else {
+					this.props.getAllSemantics(
+						this.state.selectedSpace,
+						this.state.dataPerPage,
+						this.state.offset
+					);
+				}
 			}
 		);
 	}
