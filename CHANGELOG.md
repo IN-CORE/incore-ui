@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 - Added support for new combined disaster (Tsunami + Earthquake) [#119](https://github.com/IN-CORE/incore-ui/issues/119)
-
+- Added a viewer for Semantics [#122](https://github.com/IN-CORE/incore-ui/issues/122)
 ### Fixed
 - When-user-has-no-usage-display-zero-instead-of-undefined [#110](https://github.com/IN-CORE/incore-ui/issues/110)
 - Github action to grab correct version when merged to main. [#115](https://github.com/IN-CORE/incore-ui/issues/115)
