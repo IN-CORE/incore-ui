@@ -15,6 +15,7 @@ config["spaceService"] = `${hostname}/space/api/spaces`;
 config["dfr3ServiceBase"] = `${hostname}/dfr3/api/`;
 config["fragilityService"] = `${hostname}/dfr3/api/fragilities`;
 config["hazardServiceBase"] = `${hostname}/hazard/api/`;
+config["semanticServiceBase"] = `${hostname}/semantics/api/`;
 config["authService"] = `${hostname}/auth/realms/In-core/protocol/openid-connect/token`;
 config["dataServiceBase"] = `${hostname}/data/api/`;
 config["dataService"] = `${hostname}/data/api/datasets`;

@@ -567,6 +567,8 @@ export const DFR3CURVE_LOADING = "DFR3CURVE_LOADING";
 export const DFR3CURVE_LOAD_COMPLETE = "DFR3CURVE_LOAD_COMPLETE";
 export const DFR3MAPPING_LOADING = "DFR3MAPPING_LOADING";
 export const DFR3MAPPING_LOAD_COMPLETE = "DFR3MAPPING_LOAD_COMPLETE";
+export const SEMANTIC_LOADING = "SEMANTIC_LOADING";
+export const SEMANTIC_LOAD_COMPLETE = "SEMANTIC_LOAD_COMPLETE";
 
 export function loading(component) {
 	return (dispatch: Dispatch) => {
@@ -635,6 +637,66 @@ export function getOutputDataset(executionId: String) {
 			type: RECEIVE_OUTPUT,
 			outputDatasetId: data[0],
 			file: data[1].replace(/"/g, "").split("\n")
+		});
+	};
+}
+
+// Semantic Functions
+export const RECEIVE_SEMANTICS = "RECEIVE_SEMANTICS";
+
+export function receiveSemantics(type: string, json) {
+	return (dispatch: Dispatch) => {
+		dispatch({
+			type: type,
+			semantics: json,
+			receivedAt: Date.now()
+		});
+	};
+}
+
+// TODO - WIP
+export function fetchSemantics(space, limit, offset) {
+	let endpoint = `${config.semanticServiceType}?limit=${limit}&skip=${offset}`;
+
+	if (space !== null && space !== "All") {
+		endpoint = `${endpoint}&space=${space}`;
+	}
+
+	return (dispatch: Dispatch) => {
+		dispatch(loading(SEMANTIC_LOADING));
+		return fetch(endpoint, { mode: "cors", headers: getHeader() }).then((response) => {
+			dispatch(loadComplete(SEMANTIC_LOAD_COMPLETE));
+			if (response.status === 200) {
+				response.json().then((json) => {
+					dispatch(receiveSemantics(RECEIVE_SEMANTICS, json));
+				});
+			} else if (response.status === 401) {
+				cookies.remove("Authorization");
+				dispatch(receiveSemantics(LOGIN_ERROR, []));
+			} else {
+				dispatch(receiveSemantics(RECEIVE_SEMANTICS, []));
+			}
+		});
+	};
+}
+
+export function searchSemantics(keyword, limit, offset) {
+	let endpoint = `${config.semanticServiceType}/search?text=${keyword}&limit=${limit}&skip=${offset}`;
+	return (dispatch: Dispatch) =>{
+		dispatch(loading(SEMANTIC_LOADING));
+		return fetch(endpoint, { mode: "cors", headers: getHeader() }).then((response) => {
+			dispatch(loadComplete(SEMANTIC_LOAD_COMPLETE));
+			if (response.status === 200) {
+				response.json().then((json) => {
+					json = json.map((item) => item["dc:title"]);
+					dispatch(receiveSemantics(RECEIVE_SEMANTICS, json));
+				});
+			} else if (response.status === 401) {
+				cookies.remove("Authorization");
+				dispatch(receiveSemantics(LOGIN_ERROR, []));
+			} else {
+				dispatch(receiveSemantics(RECEIVE_SEMANTICS, []));
+			}
 		});
 	};
 }
