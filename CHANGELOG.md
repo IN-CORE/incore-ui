@@ -10,9 +10,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Added support for new combined disaster (Tsunami + Earthquake) [#119](https://github.com/IN-CORE/incore-ui/issues/119)
 - Added a viewer for Semantics [#122](https://github.com/IN-CORE/incore-ui/issues/122)
+- Added clickable link in DataViewer to show semantic definition for datatype [#123](https://github.com/IN-CORE/incore-ui/pull/123)
+
 ### Fixed
 - When-user-has-no-usage-display-zero-instead-of-undefined [#110](https://github.com/IN-CORE/incore-ui/issues/110)
 - Github action to grab correct version when merged to main. [#115](https://github.com/IN-CORE/incore-ui/issues/115)
+- Improper functionality when close icon is clicked [#124](https://github.com/IN-CORE/incore-ui/issues/124)
 
 
 ## [1.6.0] - 2023-04-25

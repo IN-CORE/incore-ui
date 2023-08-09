@@ -87,9 +87,6 @@ const styles = {
 		display: "inline-block",
 		margin: "auto 5px"
 	},
-	hide: {
-		display: "none"
-	},
 	paperFooter: {
 		padding: theme.spacing(2),
 		borderTop: "1px solid #eeeeee",
@@ -1034,133 +1031,137 @@ class DFR3Viewer extends React.Component {
 										</Paper>
 									</LoadingOverlay>
 								</Grid>
-								<Grid
-									item
-									lg={8}
-									md={8}
-									xl={8}
-									xs={12}
-									className={this.state.selectedDFR3Curve ? null : classes.hide}
-								>
-									<Paper variant="outlined" className={classes.main}>
-										<IconButton
-											aria-label="Close"
-											onClick={this.closeMetadata}
-											className={classes.metadataCloseButton}
+								{
+									this.state.metadataClosed ?
+										<></>
+										:
+										<Grid
+											item
+											lg={8}
+											md={8}
+											xl={8}
+											xs={12}
 										>
-											<CloseIcon fontSize="small" />
-										</IconButton>
-										{Object.keys(selectedCurveDetail).length > 0 ? (
-											<div>
-												<div className={classes.paperHeader}>
-													<Typography variant="subtitle1">Metadata</Typography>
-												</div>
-												<div className={classes.metadata}>
-													<Button
-														color="primary"
-														variant="contained"
-														className={classes.inlineButtons}
-														size="small"
-														onClick={this.exportCurveJson}
-													>
-														Download Metadata
-													</Button>
-													{
-														// TODO: This should be updated with conditions for repair and restoration
-														//  curves when they are refactored to new equation based format
-														// 	cannot plot 3d refactored fragility curves yet
+											<Paper variant="outlined" className={classes.main}>
+												<IconButton
+													aria-label="Close"
+													onClick={this.closeMetadata}
+													className={classes.metadataCloseButton}
+												>
+													<CloseIcon fontSize="small" />
+												</IconButton>
+												{Object.keys(selectedCurveDetail).length > 0 ? (
+													<div>
+														<div className={classes.paperHeader}>
+															<Typography variant="subtitle1">Metadata</Typography>
+														</div>
+														<div className={classes.metadata}>
+															<Button
+																color="primary"
+																variant="contained"
+																className={classes.inlineButtons}
+																size="small"
+																onClick={this.exportCurveJson}
+															>
+																Download Metadata
+															</Button>
+															{
+																// TODO: This should be updated with conditions for repair and restoration
+																//  curves when they are refactored to new equation based format
+																// 	cannot plot 3d refactored fragility curves yet
 
-														(() => {
-															if (this.state.selectedDFR3Curve.fragilityCurves) {
-																if (
-																	this.state.selectedDFR3Curve.is3dPlot &&
-																	this.state.plotData3d.data.length > 0
-																) {
-																	return (
-																		<Button
-																			color="primary"
-																			variant="contained"
-																			className={classes.inlineButtons}
-																			size="small"
-																			onClick={this.preview}
-																		>
-																			Preview
-																		</Button>
-																	);
-																} else if (
-																	!this.state.selectedDFR3Curve.is3dPlot &&
-																	this.state.chartConfig.series.length > 0
-																) {
-																	return (
-																		<Button
-																			color="primary"
-																			variant="contained"
-																			className={classes.inlineButtons}
-																			size="small"
-																			onClick={this.preview}
-																		>
-																			Preview
-																		</Button>
-																	);
-																} else {
-																	return (
-																		<Button
-																			color="primary"
-																			variant="contained"
-																			className={classes.inlineButtons}
-																			size="small"
-																			disabled
-																		>
-																			Preview N/A
-																		</Button>
-																	);
-																}
-															} else {
-																return (
-																	<Button
-																		color="primary"
-																		variant="contained"
-																		className={classes.inlineButtons}
-																		size="small"
-																		disabled
-																	>
-																		Preview N/A
-																	</Button>
-																);
+																(() => {
+																	if (this.state.selectedDFR3Curve.fragilityCurves) {
+																		if (
+																			this.state.selectedDFR3Curve.is3dPlot &&
+																			this.state.plotData3d.data.length > 0
+																		) {
+																			return (
+																				<Button
+																					color="primary"
+																					variant="contained"
+																					className={classes.inlineButtons}
+																					size="small"
+																					onClick={this.preview}
+																				>
+																					Preview
+																				</Button>
+																			);
+																		} else if (
+																			!this.state.selectedDFR3Curve.is3dPlot &&
+																			this.state.chartConfig.series.length > 0
+																		) {
+																			return (
+																				<Button
+																					color="primary"
+																					variant="contained"
+																					className={classes.inlineButtons}
+																					size="small"
+																					onClick={this.preview}
+																				>
+																					Preview
+																				</Button>
+																			);
+																		} else {
+																			return (
+																				<Button
+																					color="primary"
+																					variant="contained"
+																					className={classes.inlineButtons}
+																					size="small"
+																					disabled
+																				>
+																					Preview N/A
+																				</Button>
+																			);
+																		}
+																	} else {
+																		return (
+																			<Button
+																				color="primary"
+																				variant="contained"
+																				className={classes.inlineButtons}
+																				size="small"
+																				disabled
+																			>
+																				Preview N/A
+																			</Button>
+																		);
+																	}
+																})()
 															}
-														})()
-													}
-													<CopyToClipboard text={this.state.selectedDFR3Curve.id}>
-														<Button
-															color="secondary"
-															variant="contained"
-															className={classes.inlineButtons}
-															size="small"
-														>
-															Copy ID
-														</Button>
-													</CopyToClipboard>
-													<Button
-														color="secondary"
-														variant="contained"
-														className={classes.inlineButtons}
-														size="small"
-														onClick={() => {
-															this.onClickDelete("curve");
-														}}
-													>
-														DELETE
-													</Button>
-												</div>
-												<div className={classes.metadata}>
-													<NestedInfoTable data={selectedCurveDetail} />
-												</div>
-											</div>
-										) : (
-											<div />
-										)}
-									</Paper>
-								</Grid>
+															<CopyToClipboard text={this.state.selectedDFR3Curve.id}>
+																<Button
+																	color="secondary"
+																	variant="contained"
+																	className={classes.inlineButtons}
+																	size="small"
+																>
+																	Copy ID
+																</Button>
+															</CopyToClipboard>
+															<Button
+																color="secondary"
+																variant="contained"
+																className={classes.inlineButtons}
+																size="small"
+																onClick={() => {
+																	this.onClickDelete("curve");
+																}}
+															>
+																DELETE
+															</Button>
+														</div>
+														<div className={classes.metadata}>
+															<NestedInfoTable data={selectedCurveDetail} />
+														</div>
+													</div>
+												) : (
+													<div />
+												)}
+											</Paper>
+										</Grid>
+								}
 
 								{/* Preview */}
 								{this.state.selectedDFR3Curve ? (
