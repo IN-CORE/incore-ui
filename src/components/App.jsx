@@ -406,16 +406,16 @@ class App extends Component {
 				>
 					Hazard Viewer
 				</MenuItem>
-				<MenuItem
-					className={classes.denseStyle}
-					onClick={() => {
-						this.handleViewerMenuClose();
-						browserHistory.push("/SemanticViewer");
-						fetch("/SemanticViewer");
-					}}
-				>
-					Semantic Viewer
-				</MenuItem>
+				{/*<MenuItem*/}
+				{/*	className={classes.denseStyle}*/}
+				{/*	onClick={() => {*/}
+				{/*		this.handleViewerMenuClose();*/}
+				{/*		browserHistory.push("/SemanticViewer");*/}
+				{/*		fetch("/SemanticViewer");*/}
+				{/*	}}*/}
+				{/*>*/}
+				{/*	Semantic Viewer*/}
+				{/*</MenuItem>*/}
 			</Menu>
 		);
 
