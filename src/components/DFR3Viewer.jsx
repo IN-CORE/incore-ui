@@ -896,9 +896,9 @@ class DFR3Viewer extends React.Component {
 											<MenuItem value="hurricaneWindfield" className={classes.denseStyle}>
 												Hurricane Windfield
 											</MenuItem>
-											<MenuItem value="earthquake%2btsunami" className={classes.denseStyle}>
-												Earthquake + Tsunami
-											</MenuItem>
+											{/*<MenuItem value="earthquake%2btsunami" className={classes.denseStyle}>*/}
+											{/*	Earthquake + Tsunami*/}
+											{/*</MenuItem>*/}
 											<MenuItem value="tsunami" className={classes.denseStyle}>
 												Tsunami
 											</MenuItem>
