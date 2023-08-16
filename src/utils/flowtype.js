@@ -64,6 +64,53 @@ export type FileDescriptor = {
 	md5sum: string;
 };
 
+// Semantic types
+export type SemanticId = {
+	timestamp: number;
+	date: number;
+};
+export type SemanticContext = {
+	"@language": string;
+	"gml": string;
+	"iwfs": string;
+	"xlink": string;
+	"xsd": string;
+	"qudt": string;
+	"unit": string;
+	"openvocab": string;
+
+}
+
+export type SemanticColumn = {
+	name: string;
+	titles: string;
+	"dc:description": string;
+	datatype: string;
+	required: string;
+	"qudt:unit": string;
+}
+
+export type Semantic = {
+	_id: SemanticId;
+	"@context": (string | SemanticContext)[];
+	"dc:license": {
+		"@id": string;
+	};
+	"dc:title": string;
+	"dc:description": string;
+	url: string;
+	"openvocab:versionnumber": string;
+	tableSchema: {
+		columns: SemanticColumn[];
+	}
+};
+
+export type Semantics = Semantic[];
+
+export type SemanticState = {
+	semantics: Semantics;
+};
+
 export type Dataset = {
 	id: string;
 	deleted: boolean;
