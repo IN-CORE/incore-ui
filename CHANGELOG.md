@@ -8,7 +8,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [1.7.0] - 2023-08-16
 
 ### Added
-- Added support for new combined disaster (Tsunami + Earthquake) [#119](https://github.com/IN-CORE/incore-ui/issues/119)
 - Added a viewer for Semantics [#122](https://github.com/IN-CORE/incore-ui/issues/122)
 - Added clickable link in DataViewer to show semantic definition for datatype [#123](https://github.com/IN-CORE/incore-ui/pull/123)
 
