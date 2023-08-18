@@ -45,6 +45,8 @@
     "react-router-redux": "~4.0.8",
     "redux": "~4.0.1",
     "redux-thunk": "~2.3.0",
+    "@rjsf/core": "^3.2.1",
+    "@rjsf/material-ui": "^3.2.1",
     "universal-cookie": "^4.0.2",
     "vis": "4.21.0",
     "whatwg-fetch": "2.0.2"

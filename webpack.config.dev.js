@@ -88,10 +88,6 @@ export default {
 					{ loader: 'postcss-loader', options: { postcssOptions: { plugins: ['autoprefixer'] } } },
 					{ loader: 'sass-loader', options: { sourceMap: true } }
 				]
-			},
-			{
-				test: /\.json$/,
-				loader: 'json-loader'
 			}
 		]
 	}
