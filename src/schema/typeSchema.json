@@ -2,8 +2,8 @@
   "schema": {
 	"type": "object",
 	"required": [
-	  "name",
-	  "description"
+	  "dc:title",
+	  "dc:description"
 	],
 	"properties": {
 	  "dc:title": {
@@ -14,17 +14,13 @@
 		"type": "string",
 		"title": "Description"
 	  },
-	  "url": {
-		"type": "string",
-		"title": "Url"
-	  },
 	  "openvocab:versionnumber": {
 		"type": "number",
 		"title": "Version Number",
 		"default": 1.0
 	  },
-	  "tableSchema":{
-		"title":"",
+	  "tableSchema": {
+		"title": "",
 		"type": "object",
 		"required": [
 		  "columns"
@@ -36,7 +32,11 @@
 			"items": {
 			  "type": "object",
 			  "required": [
-				"name", "titles", "dc:description", "datatype", "required", "qudt:unit"
+				"name",
+				"titles",
+				"dc:description",
+				"datatype",
+				"required"
 			  ],
 			  "properties": {
 				"name": {
@@ -51,19 +51,30 @@
 				  "type": "string",
 				  "title": "Column Description"
 				},
-				"datatype":{
+				"datatype": {
 				  "type": "string",
 				  "title": "Data Type",
 				  "enumNames": [],
-				  "enum": ["xsd:anyURI", "xsd:string", "xsd:dateTime", "xsd:boolean", "xsd:integer", "xsd:float",
-					"xsd:double", "xsd:decimal"],
-				  "default":"xsd:decimal"
+				  "enum": [
+					"xsd:anyURI",
+					"xsd:string",
+					"xsd:dateTime",
+					"xsd:boolean",
+					"xsd:integer",
+					"xsd:float",
+					"xsd:double",
+					"xsd:decimal"
+				  ],
+				  "default": "xsd:decimal"
 				},
 				"required": {
 				  "type": "string",
 				  "title": "Required",
-				  "enum": ["true", "false"],
-				  "default":"true"
+				  "enum": [
+					"true",
+					"false"
+				  ],
+				  "default": "true"
 				},
 				"qudt:unit": {
 				  "type": "string",
@@ -77,5 +88,9 @@
 	}
   },
   "uiSchema": {
+	"openvocab:versionnumber" :{
+	  "ui:widget": "hidden",
+	  "classNames": "hidden-widget"
+	}
   }
 }
