@@ -1,14 +1,21 @@
 import React, {useState} from "react";
 import ReactJson from "react-json-view";
 
-import {Box, Button} from "@material-ui/core";
+import {Box} from "@material-ui/core";
 
 import Form from "@rjsf/material-ui";
 import datasetSchema from "../../schema/typeSchema.json";
 import Grid from "@material-ui/core/Grid";
+import Button from "@material-ui/core/Button";
+import {postSemantics as postSemanticsAction} from "../../actions/index";
+import {useDispatch} from "react-redux";
 
 export const SemanticTypeBuilder = () => {
 	const [formData, setFormData] = useState();
+
+	// redux
+	const dispatch = useDispatch();
+	const postSemantics = (formData) => dispatch(postSemanticsAction(formData))
 
 	const onFormDataChanged = (formState) => {
 		const typeHeaders = {
@@ -37,9 +44,8 @@ export const SemanticTypeBuilder = () => {
 	}
 
 	const onFormDataSubmit = () => {
-		console.log(formData);
+		postSemantics(formData);
 	}
-
 
 	return (
 		<Box style={{display: "block", margin: "5em"}}>
@@ -52,6 +58,9 @@ export const SemanticTypeBuilder = () => {
 						onSubmit={onFormDataSubmit}
 						onChange={onFormDataChanged}
 					>
+						<Button color="inherit" variant="contained" type="submit">
+							Submit
+						</Button>
 					</Form>
 				</Grid>
 				<Grid item sm={12} md={6} lg={6} xl={6}>

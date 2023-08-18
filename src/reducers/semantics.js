@@ -4,6 +4,7 @@ import {
 	SEMANTIC_LOAD_COMPLETE,
 	LOGIN_ERROR,
 	RECEIVE_SEMANTICS,
+	POST_SEMANTICS,
 	DELETE_ITEM,
 	DELETE_ERROR,
 	RESET_ERROR
@@ -23,6 +24,8 @@ const semantics = (state:SemanticState = defaultState, action:SemanticAction) =>
 	switch(action.type) {
 	case RECEIVE_SEMANTICS:
 		return Object.assign({}, state, {semantics: action.semantics});
+	case POST_SEMANTICS:
+		return Object.assign({}, state, {semantics: [...state.semantics, action.semanticsItem]});
 	case DELETE_ITEM:
 		return Object.assign({}, state, {
 			semantics: state.semantics.filter(dataset => dataset.id !== action.item.id),
