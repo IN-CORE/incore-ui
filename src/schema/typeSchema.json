@@ -6,26 +6,76 @@
 	  "description"
 	],
 	"properties": {
-	  "name": {
+	  "dc:title": {
 		"type": "string",
-		"title": "Name"
+		"title": "Title"
 	  },
-	  "description": {
+	  "dc:description": {
 		"type": "string",
 		"title": "Description"
+	  },
+	  "url": {
+		"type": "string",
+		"title": "Url"
+	  },
+	  "openvocab:versionnumber": {
+		"type": "number",
+		"title": "Version Number",
+		"default": 1.0
+	  },
+	  "tableSchema":{
+		"title":"",
+		"type": "object",
+		"required": [
+		  "columns"
+		],
+		"properties": {
+		  "columns": {
+			"type": "array",
+			"title": "Table columns",
+			"items": {
+			  "type": "object",
+			  "required": [
+				"name", "titles", "dc:description", "datatype", "required", "qudt:unit"
+			  ],
+			  "properties": {
+				"name": {
+				  "type": "string",
+				  "title": "Column Name"
+				},
+				"titles": {
+				  "type": "string",
+				  "title": "Column Titles"
+				},
+				"dc:description": {
+				  "type": "string",
+				  "title": "Column Description"
+				},
+				"datatype":{
+				  "type": "string",
+				  "title": "Data Type",
+				  "enumNames": [],
+				  "enum": ["xsd:anyURI", "xsd:string", "xsd:dateTime", "xsd:boolean", "xsd:integer", "xsd:float",
+					"xsd:double", "xsd:decimal"],
+				  "default":"xsd:decimal"
+				},
+				"required": {
+				  "type": "string",
+				  "title": "Required",
+				  "enum": ["true", "false"],
+				  "default":"true"
+				},
+				"qudt:unit": {
+				  "type": "string",
+				  "title": "Unit"
+				}
+			  }
+			}
+		  }
+		}
 	  }
 	}
   },
   "uiSchema": {
-	"name": {
-	  "ui:autofocus": true,
-	  "ui:emptyValue": "",
-	  "ui:description": "Name of the dataset."
-	},
-	"description": {
-	  "ui:autofocus": true,
-	  "ui:emptyValue": "",
-	  "ui:description": "Description of a dataset."
-	}
   }
 }

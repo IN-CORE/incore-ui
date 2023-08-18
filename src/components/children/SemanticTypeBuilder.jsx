@@ -1,14 +1,17 @@
-import React from "react";
+import React, {useState} from "react";
 
-import { Box, Button } from "@material-ui/core";
+import {Box, Button, TextField} from "@material-ui/core";
 
 import Form from "@rjsf/material-ui";
 import datasetSchema from "../../schema/typeSchema.json";
 
 export const SemanticTypeBuilder = (
-	props
 ) => {
-	const { onSave } = props;
+	const [type, setType] = useState("");
+
+	const onSave = (formData) =>{
+		setType(formData);
+	}
 
 	return (
 		<Box style={{display:"block", margin:"5em auto", maxWidth:"60%"}}>
@@ -25,6 +28,9 @@ export const SemanticTypeBuilder = (
 					</Button>
 				</Box>
 			</Form>
+			<TextField>
+				{type}
+			</TextField>
 		</Box>
 	);
 };
