@@ -12,6 +12,7 @@ import {useDispatch} from "react-redux";
 import config from "../../app.config";
 import Cookies from "universal-cookie";
 import {browserHistory} from "react-router";
+import {exportJson} from "../../utils/common";
 
 const cookies = new Cookies();
 
@@ -71,8 +72,7 @@ export const SemanticTypeBuilder = () => {
 	if (authError) {
 		browserHistory.push("/login?origin=SemanticTypeBuilder");
 		return <></>;
-	}
-	else{
+	} else {
 		return (
 			<Box style={{display: "block", margin: "5em"}}>
 				<Grid container spacing={3}>
@@ -84,9 +84,16 @@ export const SemanticTypeBuilder = () => {
 							onSubmit={onFormDataSubmit}
 							onChange={onFormDataChanged}
 						>
-							<Button color="inherit" variant="contained" type="submit">
-								Submit
-							</Button>
+							<Box>
+								<Button color="primary" variant="contained" onClick={() => {
+									exportJson(formData, formData["dc:title"]);
+								}}>
+									Download
+								</Button>
+								<Button color="secondary" variant="contained" type="submit">
+									Submit
+								</Button>
+							</Box>
 						</Form>
 					</Grid>
 					<Grid item sm={12} md={6} lg={6} xl={6}>

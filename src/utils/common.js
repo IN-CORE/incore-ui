@@ -10,11 +10,11 @@ export function is3dCurve(DFR3Curve) {
 	return DFR3Curve.demandTypes !== undefined && DFR3Curve.demandTypes.length > 1;
 }
 
-export function exportJson(json) {
+export function exportJson(json, filename=null) {
 	let curveJSON = JSON.stringify(json, null, 4);
 	let blob = new Blob([curveJSON], {type: "application/json"});
 
-	const filename = `${json.id}.json`;
+	if (!filename) filename = `${json.id}.json`;
 
 	if (window.navigator.msSaveOrOpenBlob) {
 		window.navigator.msSaveBlob(blob, filename);
