@@ -33,6 +33,7 @@
     "@rjsf/core": "^3.2.1",
     "@rjsf/material-ui": "^3.2.1",
     "highcharts": "^9.1.0",
+    "jsonld": "^8.2.0",
     "jstat": "1.5.3",
     "jwt-decode": "^3.1.2",
     "mathjs": "^9.3.2",

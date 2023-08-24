@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import ReactJson from "react-json-view";
 
-import {Box} from "@material-ui/core";
+import {Box, InputLabel, MenuItem, Select} from "@material-ui/core";
 
 import Form from "@rjsf/material-ui";
 import datasetSchema from "../../schema/typeSchema.json";
@@ -12,13 +12,16 @@ import {useDispatch} from "react-redux";
 import config from "../../app.config";
 import Cookies from "universal-cookie";
 import {browserHistory} from "react-router";
-import {exportJson} from "../../utils/common";
+import {exportJson, exportString} from "../../utils/common";
+import * as jsonld from "jsonld";
 
 const cookies = new Cookies();
 
 export const SemanticTypeBuilder = () => {
 	const [formData, setFormData] = useState();
-	const [authError, setAuthError] = useState(false);
+	const [authError, setAuthError] = useState();
+	const [display, setDisplay] = useState();
+	const [mode, setMode] = useState("compact")
 
 	// redux
 	const dispatch = useDispatch();
@@ -39,34 +42,74 @@ export const SemanticTypeBuilder = () => {
 		}
 	}, []);
 
-	const onFormDataChanged = (formState) => {
+	useEffect(() => {
+		const processData = async () => {
+			try {
+				if (mode === "expand") {
+					const expanded = await jsonld.expand(formData);
+					setDisplay(expanded);
+				} else if (mode === "flatten") {
+					const flattened = await jsonld.flatten(formData);
+					setDisplay(flattened);
+				} else {
+					setDisplay(formData);
+				}
+			} catch (error) {
+				// Handle any errors that occur during JSON-LD processing
+				console.error("JSON-LD processing error:", error);
+			}
+		};
+
+		processData();
+
+	}, [mode, formData]);
+
+	const context = {
+		"@language": "en",
+		"dc": "http://purl.org/dc/terms/",
+		"gml": "https://schemas.opengis.net/gml/",
+		"wfs": "http://schemas.opengis.net/wfs/1.1.0/wfs.xsd",
+		"xlink": "http://www.w3.org/1999/xlink/",
+		"xsd": "http://www.w3.org/2001/XMLSchema#",
+		"qudt": "http://qudt.org/schema/qudt/",
+		"unit": "http://qudt.org/vocab/unit/",
+		"openvocab": "http://vocab.org/open/",
+		"rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+		"rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+		"dcat": "http://www.w3.org/ns/dcat#",
+		"prov": "http://www.w3.org/ns/prov#"
+	}
+
+	const onFormDataChanged = async (formState) => {
 		const typeHeaders = {
 			"@context": [
-				"http://www.w3.org/ns/csvw",
-				{
-					"@language": "en",
-					"gml": "http://www.opengis.net/gml/",
-					"iwfs": "http://www.ionicsoft.com/wfs/",
-					"xlink": "http://www.w3.org/1999/xlink/",
-					"xsd": "http://www.w3.org/2001/XMLSchema/",
-					"qudt": "http://qudt.org/2.0/schema/qudt/",
-					"unit": "http://qudt.org/vocab/unit/",
-					"openvocab": "http://vocab.org/open/"
-				}
+				"http://www.w3.org/ns/csvw#",
+				context
 			],
 			"dc:license": {
 				"@id": "http://opendefinition.org/licenses/cc-by/"
 			}
 		};
-
+		formState.formData["url"] = formState.formData["dc:title"];
 		const formDataWithHeaders = {...typeHeaders, ...formState.formData};
-		formDataWithHeaders["url"] = formDataWithHeaders["dc:title"];
-
 		setFormData(formDataWithHeaders);
 	}
 
 	const onFormDataSubmit = () => {
 		postSemantics(formData);
+	}
+
+	const onCanonizedDownload = async () => {
+		const canonized = await jsonld.canonize(formData, {
+			algorithm: 'URDNA2015',
+			format: 'application/n-quads'
+		});
+		exportString(canonized, `${formData["dc:title"]}-canonized`);
+	}
+
+	const onRDFDownload = async () => {
+		const nquads = await jsonld.toRDF(formData, {format: 'application/n-quads'});
+		exportString(nquads, `${formData["dc:title"]}-nquads`);
 	}
 
 	if (authError) {
@@ -85,20 +128,47 @@ export const SemanticTypeBuilder = () => {
 							onChange={onFormDataChanged}
 						>
 							<Box>
-								<Button color="primary" variant="contained" onClick={() => {
+								<Button color="primary"
+										variant="contained"
+										style={{ marginLeft: "0.5em" }}
+										onClick={() => {
 									exportJson(formData, formData["dc:title"]);
 								}}>
 									Download
 								</Button>
-								<Button color="secondary" variant="contained" type="submit">
+								<Button color="primary"
+										variant="contained"
+										style={{ marginLeft: "0.5em" }}
+										onClick={onCanonizedDownload}>
+									Download Canonized
+								</Button>
+								<Button color="primary"
+										variant="contained"
+										style={{ marginLeft: "0.5em" }}
+										onClick={onRDFDownload}>
+									Download RDF
+								</Button>
+								<Button color="secondary"
+										variant="contained"
+										style={{ marginLeft: "0.5em" }}
+										type="submit">
 									Submit
 								</Button>
 							</Box>
 						</Form>
 					</Grid>
 					<Grid item sm={12} md={6} lg={6} xl={6}>
+						<Box style={{width:"100%", padding: "1.5em 0"}}>
+							<InputLabel>Mode</InputLabel>
+							<Select value={mode}
+									onChange={(event)=>{setMode(event.target.value);}}>
+								<MenuItem key="compact" value="compact">Compact</MenuItem>
+								<MenuItem key="expand" value="expand">Expand</MenuItem>
+								<MenuItem key="flatten" value="flatten">Flatten</MenuItem>
+							</Select>
+						</Box>
 						<ReactJson
-							src={formData}
+							src={display}
 							theme="summerfruit:inverted"
 							displayObjectSize={false}
 							displayDataTypes={false}

@@ -27,6 +27,24 @@ export function exportJson(json, filename=null) {
 		document.body.removeChild(anchor);
 	}
 }
+
+export function exportString(string, filename=null) {
+	let blob = new Blob([string], {type: "text/plain"});
+
+	if (!filename) filename = `string.txt`;
+
+	if (window.navigator.msSaveOrOpenBlob) {
+		window.navigator.msSaveBlob(blob, filename);
+	} else {
+		let anchor = window.document.createElement("a");
+		anchor.href = window.URL.createObjectURL(blob);
+		anchor.download = filename;
+		document.body.appendChild(anchor);
+		anchor.click();
+		document.body.removeChild(anchor);
+	}
+}
+
 // get user token
 export function getCurrUserToken(){
 	if (!config.hostname.includes("localhost")){
