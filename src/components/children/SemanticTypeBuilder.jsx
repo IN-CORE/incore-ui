@@ -66,24 +66,24 @@ export const SemanticTypeBuilder = () => {
 
 	const context = {
 		"@language": "en",
-		"dc": "http://purl.org/dc/terms/",
+		"dc": "https://purl.org/dc/terms/",
 		"gml": "https://schemas.opengis.net/gml/",
-		"wfs": "http://schemas.opengis.net/wfs/1.1.0/wfs.xsd",
-		"xlink": "http://www.w3.org/1999/xlink/",
-		"xsd": "http://www.w3.org/2001/XMLSchema#",
-		"qudt": "http://qudt.org/schema/qudt/",
-		"unit": "http://qudt.org/vocab/unit/",
-		"openvocab": "http://vocab.org/open/",
-		"rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
-		"rdfs": "http://www.w3.org/2000/01/rdf-schema#",
-		"dcat": "http://www.w3.org/ns/dcat#",
-		"prov": "http://www.w3.org/ns/prov#"
+		"wfs": "https://schemas.opengis.net/wfs/1.1.0/wfs.xsd",
+		"xlink": "https://www.w3.org/1999/xlink/",
+		"xsd": "https://www.w3.org/2001/XMLSchema#",
+		"qudt": "https://qudt.org/schema/qudt/",
+		"unit": "https://qudt.org/vocab/unit/",
+		"openvocab": "https://vocab.org/open/",
+		"rdf": "https://www.w3.org/1999/02/22-rdf-syntax-ns#",
+		"rdfs": "https://www.w3.org/2000/01/rdf-schema#",
+		"dcat": "https://www.w3.org/ns/dcat#",
+		"prov": "https://www.w3.org/ns/prov#"
 	}
 
 	const onFormDataChanged = async (formState) => {
 		const typeHeaders = {
 			"@context": [
-				"http://www.w3.org/ns/csvw#",
+				"https://www.w3.org/ns/csvw#",
 				context
 			],
 			"dc:license": {
