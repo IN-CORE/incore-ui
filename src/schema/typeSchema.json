@@ -78,7 +78,8 @@
 				},
 				"qudt:unit": {
 				  "type": "string",
-				  "title": "Unit"
+				  "title": "Unit",
+				  "default": ""
 				}
 			  }
 			}
