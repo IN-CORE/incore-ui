@@ -114,6 +114,7 @@ export default function Profile(props) {
 	const [dataEntityPie, setDataEntityPie] = useState({});
 	const [dataFileSizePie, setDataFileSizePie] = useState({});
 	const [hazardEntityPie, setHazardEntityPie] = useState({});
+	const [dfr3EntityPie, setDfr3EntityPie] = useState({});
 	const [hazardFileSizePie, setHazardFileSizePie] = useState({});
 
 	// Get user information and determine which group to use
@@ -155,6 +156,9 @@ export default function Profile(props) {
 			let hazardPieChartConfig = configurePieCharts(allocations, usage, "hazardUsage");
 			setHazardEntityPie(hazardPieChartConfig["entity"]);
 			setHazardFileSizePie(hazardPieChartConfig["fileSize"]);
+
+			let dfr3PieChartConfig = configurePieCharts(allocations, usage, "dfr3Usage");
+			setDfr3EntityPie(dfr3PieChartConfig["entity"]);
 		}
 	}, [usage, allocations]);
 
@@ -193,7 +197,15 @@ export default function Profile(props) {
 			totalNumAllocated = allocations["total_number_of_hazards"] ?? 0;
 			totalBytesAllocated = allocations["total_file_size_of_hazard_datasets_byte"] ?? 0;
 			totalBytesTextAllocated = allocations["total_file_size_of_hazard_datasets"] ?? 0;
-		} else {
+		} if (type === "dfr3Usage"){
+			totalNum = usage["total_number_of_dfr3"] ?? 0;
+			totalFileSizeByte = 0;
+			totalFileSize = 0;
+			totalNumAllocated = allocations["total_number_of_dfr3"] ?? 0;
+			totalBytesAllocated = 0;
+			totalBytesTextAllocated = 0;
+		}
+		else {
 			console.log(`${type} not supported!`);
 		}
 
@@ -394,6 +406,25 @@ export default function Profile(props) {
 									xs={12}
 									style={{borderLeft: "solid 1px rgba(0, 0, 0, 0.12)"}}
 								>
+									{/*dfr3 services*/}
+									<Box className={classes.quotaSection}>
+										<Typography variant="h5">DFR3 Service</Typography>
+										<Typography variant="body1">Usage of DFR3 service</Typography>
+										<Box className={classes.groupPieContainer}>
+											<Box className={classes.pieChartContainer}>
+												{Object.keys(dfr3EntityPie).length > 0 ? (
+													<CustomHighChart
+														chartId="dfr3-entity"
+														configuration={dfr3EntityPie}
+														customClassName="piecharts-container"
+													/>
+												) : (
+													<></>
+												)}
+											</Box>
+										</Box>
+									</Box>
+									<Divider orientation="horizontal" />
 									<Box className={classes.quotaSection}>
 										<Typography variant="h5">IN-CORE Lab</Typography>
 										<Typography variant="body1">Usage of IN-CORE Lab</Typography>
