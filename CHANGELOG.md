@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 - Display DFR3 quota [#137](https://github.com/IN-CORE/incore-ui/issues/137)
+- Add a multi-hazard type Earthquake+Tsunami in DFR3 Viewer [#147](https://github.com/IN-CORE/incore-ui/issues/147)
 
 
 ## [1.7.0] - 2023-08-16
