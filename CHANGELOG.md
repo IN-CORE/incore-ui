@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 - Change api call logic from multiple to once [#144](https://github.com/IN-CORE/incore-ui/issues/144)
+- Add a multi-hazard type Earthquake+Tsunami in DFR3 Viewer [#147](https://github.com/IN-CORE/incore-ui/issues/147)
 
 
 ## [1.7.0] - 2023-08-16
