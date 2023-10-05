@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Add Semantic template link in Semantics viewer [#143](https://github.com/IN-CORE/incore-ui/issues/143)
 
 ### Changed
-- Change api call logic from multiple to once [#144](https://github.com/IN-CORE/incore-ui/issues/144)
+- Change Semantic type api call logic, get complete details at first load instead of fetching on the fly. [#144](https://github.com/IN-CORE/incore-ui/issues/144)
 - Add a multi-hazard type Earthquake+Tsunami in DFR3 Viewer [#147](https://github.com/IN-CORE/incore-ui/issues/147)
 
 

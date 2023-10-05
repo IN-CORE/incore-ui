@@ -429,7 +429,7 @@ class App extends Component {
 						fetch("/SemanticViewer");
 					}}
 				>
-					Semantic Viewer
+					Semantics Viewer
 				</MenuItem>
 			</Menu>
 		);
