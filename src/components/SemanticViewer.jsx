@@ -158,6 +158,7 @@ class SemanticViewer extends Component {
 		this.handleKeyPressed = this.handleKeyPressed.bind(this);
 		this.previous = this.previous.bind(this);
 		this.next = this.next.bind(this);
+		this.getFileExt = this.getFileExt.bind(this);
 	}
 
 	componentWillMount() {
@@ -261,21 +262,37 @@ class SemanticViewer extends Component {
 		});
 	};
 
+	getFileExt = (semanticColumns) => {
+		let ext = '.csv'
+		for (let i = 0; i < semanticColumns.length; i++ ){
+			if (semanticColumns[i]["name"] === "the_geom" || semanticColumns[i]["name"] === "geometry" || semanticColumns[i]["name"] === "geom") {
+				ext = '.zip'
+				return ext
+			}
+		}
+		return ext
+	}
+
 	async downloadTemplate() {
 		if (this.state.selectedSemanticType !== null || this.state.selectedSemanticType !== undefined) {
 			let semanticName = this.state.selectedSemanticType['dc:title'];
 
 			let url = `${config.semanticServiceType}/${semanticName}/template`;
-			semanticName = semanticName.replace(":", "_")
+
+			let semanticfName = semanticName.replace(":", "_") + this.getFileExt(this.state.selectedSemanticType["tableSchema"]["columns"])
 			let response = await fetch(url, { mode: "cors", headers: await getHeader() });
-	
+
 			if (response.ok) {
 				let blob = await response.blob();
 				if (window.navigator.msSaveOrOpenBlob) {
 					window.navigator.msSaveBlob(blob);
 				} else {
-					var file = window.URL.createObjectURL(blob);
-					window.location.assign(file)
+					let anchor = window.document.createElement("a");
+					anchor.href = window.URL.createObjectURL(blob);
+					anchor.download = semanticfName;
+					document.body.appendChild(anchor);
+					anchor.click();
+					document.body.removeChild(anchor);
 				}
 			} else if (response.status === 401) {
 				cookies.remove("Authorization");
