@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 - Display DFR3 quota [#137](https://github.com/IN-CORE/incore-ui/issues/137)
+- Add Semantic template link in Semantics viewer [#143](https://github.com/IN-CORE/incore-ui/issues/143)
+
+### Changed
+- Change api call logic from multiple to once [#144](https://github.com/IN-CORE/incore-ui/issues/144)
 
 
 ## [1.7.0] - 2023-08-16

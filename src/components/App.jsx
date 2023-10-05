@@ -287,7 +287,7 @@ class App extends Component {
 							variant="determinate"
 							className={classes.customProgressBar}
 							value={
-								((this.props.usage["total_file_size_of_datasets_byte"] ?? 0)/
+								((this.props.usage["total_file_size_of_datasets_byte"] ?? 0) /
 									this.props.allocations["total_file_size_of_datasets_byte"]) *
 								100
 							}
@@ -421,16 +421,16 @@ class App extends Component {
 				>
 					Hazard Viewer
 				</MenuItem>
-				{/*<MenuItem*/}
-				{/*	className={classes.denseStyle}*/}
-				{/*	onClick={() => {*/}
-				{/*		this.handleViewerMenuClose();*/}
-				{/*		browserHistory.push("/SemanticViewer");*/}
-				{/*		fetch("/SemanticViewer");*/}
-				{/*	}}*/}
-				{/*>*/}
-				{/*	Semantic Viewer*/}
-				{/*</MenuItem>*/}
+				<MenuItem
+					className={classes.denseStyle}
+					onClick={() => {
+						this.handleViewerMenuClose();
+						browserHistory.push("/SemanticViewer");
+						fetch("/SemanticViewer");
+					}}
+				>
+					Semantic Viewer
+				</MenuItem>
 			</Menu>
 		);
 

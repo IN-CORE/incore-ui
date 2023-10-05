@@ -656,7 +656,7 @@ export function receiveSemantics(type: string, json) {
 
 // TODO - WIP
 export function fetchSemantics(space, limit, offset) {
-	let endpoint = `${config.semanticServiceType}?limit=${limit}&skip=${offset}`;
+	let endpoint = `${config.semanticServiceType}?limit=${limit}&skip=${offset}&detail=true`;
 
 	if (space !== null && space !== "All") {
 		endpoint = `${endpoint}&space=${space}`;
@@ -688,7 +688,6 @@ export function searchSemantics(keyword, limit, offset) {
 			dispatch(loadComplete(SEMANTIC_LOAD_COMPLETE));
 			if (response.status === 200) {
 				response.json().then((json) => {
-					json = json.map((item) => item["dc:title"]);
 					dispatch(receiveSemantics(RECEIVE_SEMANTICS, json));
 				});
 			} else if (response.status === 401) {

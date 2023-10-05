@@ -150,6 +150,7 @@ class SemanticViewer extends Component {
 		};
 
 		this.onClickDataset = this.onClickDataset.bind(this);
+		this.downloadTemplate = this.downloadTemplate.bind(this);
 		this.handleSpaceSelection = this.handleSpaceSelection.bind(this);
 		this.changeDataPerPage = this.changeDataPerPage.bind(this);
 		this.generateSemanticTable = this.generateSemanticTable.bind(this);
@@ -256,31 +257,42 @@ class SemanticViewer extends Component {
 
 	onClickDataset = async (semantic) => {
 		this.setState({
-			selectedDataset: semantic,
+			selectedDataset: semantic["dc:title"],
 			semanticWindowClosed: false,
-			previewLoading: true,
-			semanticJSON: {}
+			previewLoading: false,
+			semanticJSON: semantic
 		});
-
-		try {
-			let endpoint = `${config.semanticServiceType}/${semantic}`;
-			const response = await fetch(endpoint, {
-				mode: "cors",
-				headers: getHeader(),
-				contentType: "application/json"
-			});
-			const jsonData = await response.json();
-			this.setState({
-				previewLoading: false,
-				semanticJSON: jsonData
-			});
-		} catch (error) {
-			console.error("Error fetching JSON data:", error);
-			this.setState({
-				previewLoading: false
-			});
-		}
 	};
+
+	async downloadTemplate() {
+		if (this.state.selectedDataset !== null || this.state.selectedDataset !== undefined) {
+			let semanticName = this.state.selectedDataset;
+			semanticName = semanticName.replace(":", "_")
+			// let filename = `${datasetId}.zip`;
+			let url = `${config.semanticServiceType}/${this.state.selectedDataset}/template`;
+	
+			let response = await fetch(url, { mode: "cors", headers: await getHeader() });
+	
+			if (response.ok) {
+				let blob = await response.blob();
+				if (window.navigator.msSaveOrOpenBlob) {
+					window.navigator.msSaveBlob(blob);
+				} else {
+					var file = window.URL.createObjectURL(blob);
+					window.location.assign(file)
+				}
+			} else if (response.status === 401) {
+				cookies.remove("Authorization");
+				this.setState({
+					authError: true
+				});
+			} else {
+				this.setState({
+					authError: false
+				});
+			}
+		}
+	}
 
 
 	closeSemanticWindow() {
@@ -430,10 +442,9 @@ class SemanticViewer extends Component {
 					onClick={() => {
 						this.onClickDataset(semantic);
 					}}
-					selected={semantic === this.state.selectedDataset}
+					selected={semantic['dc:title'] === this.state.selectedDataset}
 				>
-					<ListItemText primary={`${semantic}`} />
-					<SpaceChip item={semantic} selectedItem={this.state.selectedSemantic} />
+					<ListItemText primary={`${semantic['dc:title']}`} />
 				</ListItem>);
 		});
 
@@ -527,7 +538,23 @@ class SemanticViewer extends Component {
 										<Typography variant="subtitle1">Semantic Schema</Typography>
 									</div>
 									<br/>
-									<Typography variant="subtitle2"><strong>{this.state.selectedDataset}</strong></Typography>
+									<Grid container lg={8} md={8} xl={8} xs={12}>
+										<Grid item>
+											<Typography variant="subtitle2" sx={{mr: 2}}><strong>{this.state.selectedDataset}</strong></Typography>
+										</Grid>
+										<Grid item>
+
+											<Button
+												color="primary"
+												variant="contained"
+												className={classes.inlineButtons}
+												size="small"
+												onClick={this.downloadTemplate}
+											>
+												Download Template
+											</Button>
+										</Grid>
+									</Grid>
 									{this.state.semanticJSON["dc:description"] === "" ? null :
 										<Typography variant="body1">{this.state.semanticJSON["dc:description"]}</Typography>}
 									<br/>
