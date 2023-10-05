@@ -5,6 +5,7 @@ import Map from "./children/Map";
 import SpaceChip from "./children/SpaceChip";
 import {
 	Button,
+	Box,
 	Card,
 	CardContent,
 	Dialog,
@@ -563,14 +564,17 @@ class SemanticViewer extends Component {
 											</Button>
 										</Grid>
 										<Grid item xs={12}>
-											<Typography variant="subtitle2" sx={{mx: 2}}><strong>{this.state.selectedSemanticType['dc:title']}</strong></Typography>
+											<Box  sx={{mx: 1}}>
+												<Typography variant="subtitle2"><strong>{this.state.selectedSemanticType['dc:title']}</strong></Typography>
+											</Box>
 										</Grid>
 										{
 											this.state.selectedSemanticType["dc:description"] === "" ? 
 												null :
 												<Grid item xs={12}>
-													<Typography variant="body1">{this.state.selectedSemanticType["dc:description"]}</Typography>
-
+													<Box  sx={{mx: 1}}>
+														<Typography variant="body1">{this.state.selectedSemanticType["dc:description"]}</Typography>
+													</Box>
 												</Grid>
 										}
 									</Grid>
