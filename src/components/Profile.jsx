@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from "react";
-import { createMuiTheme, makeStyles } from "@material-ui/core/styles";
+import React, {useEffect, useState} from "react";
+import {createMuiTheme, makeStyles} from "@material-ui/core/styles";
 import {
 	Box,
+	Button,
 	Chip,
 	Divider,
 	Grid,
 	Link,
-	Paper,
-	Typography,
 	List,
 	ListItem,
-	ListItemText,
 	ListItemIcon,
-	Button
+	ListItemText,
+	Paper,
+	Typography
 } from "@material-ui/core";
 import Gravatar from "react-gravatar";
 
@@ -23,14 +23,14 @@ import MemoryIcon from "@material-ui/icons/Memory";
 import StorageIcon from "@material-ui/icons/Storage";
 import FileCopyOutlinedIcon from "@material-ui/icons/FileCopyOutlined";
 
-import { getCurrUserToken, getCurrUserInfo, determineUserGroup } from "../utils/common";
+import {determineUserGroup, getCurrUserInfo, getCurrUserToken} from "../utils/common";
 import config from "../app.config";
 import CustomHighChart from "./children/CustomHighChart";
 import chartConfig from "./config/ChartConfig";
 import Cookies from "universal-cookie";
-import { browserHistory } from "react-router";
+import {browserHistory} from "react-router";
 
-import { CopyToClipboard } from "react-copy-to-clipboard";
+import {CopyToClipboard} from "react-copy-to-clipboard";
 
 const cookies = new Cookies();
 
@@ -109,7 +109,7 @@ const useStyles = makeStyles({
 });
 
 export default function Profile(props) {
-	const { loginError, usage, getUsage, allocations, getAllocations } = props;
+	const {loginError, usage, getUsage, allocations, getAllocations} = props;
 	const [authError, setAuthError] = useState(false);
 	const [dataEntityPie, setDataEntityPie] = useState({});
 	const [dataFileSizePie, setDataFileSizePie] = useState({});
@@ -235,7 +235,7 @@ export default function Profile(props) {
 		defaultFileSizePieConfig["title"]["text"] = "File Size";
 		defaultFileSizePieConfig["subtitle"]["text"] = `Used ${totalFileSize} of ${totalBytesTextAllocated}`;
 
-		return { entity: defaultEntityPieConfig, fileSize: defaultFileSizePieConfig };
+		return {entity: defaultEntityPieConfig, fileSize: defaultFileSizePieConfig};
 	};
 
 	const classes = useStyles();
@@ -259,11 +259,11 @@ export default function Profile(props) {
 										rating="g"
 									/>
 									<Link href={config.setGravatarURL} target="_blank" className={classes.avatarEdit}>
-										<EditIcon fontSize="default" />
+										<EditIcon fontSize="default"/>
 									</Link>
 								</Box>
 							) : (
-								<img src="/public/profile.png" style={{ width: "100%" }} />
+								<img src="/public/profile.png" style={{width: "100%"}}/>
 							)}
 							<Box className={classes.profileSection}>
 								{userInfo["preferred_username"] !== undefined ? (
@@ -281,11 +281,11 @@ export default function Profile(props) {
 									</Typography>
 								) : null}
 								<Link href={config.resetPwURL} className={classes.profileLink} target="_blank">
-									<LockOpenIcon fontSize="small" className={classes.profileLinkIcon} />
+									<LockOpenIcon fontSize="small" className={classes.profileLinkIcon}/>
 									Forgot password?
 								</Link>
 							</Box>
-							<Divider orientation="horizontal" />
+							<Divider orientation="horizontal"/>
 							<Box className={classes.profileSection}>
 								{userInfo["groups"] !== undefined ? (
 									<>
@@ -304,7 +304,7 @@ export default function Profile(props) {
 									</>
 								) : null}
 							</Box>
-							<Divider orientation="horizontal" />
+							<Divider orientation="horizontal"/>
 							<Box className={classes.profileSection}>
 								<Typography variant="h6">Access Token</Typography>
 								{userInfo["exp"] !== undefined ? (
@@ -318,7 +318,7 @@ export default function Profile(props) {
 												fullWidth
 											>
 												<FileCopyOutlinedIcon
-													style={{ margin: "auto 5px", fontSize: "14px" }}
+													style={{margin: "auto 5px", fontSize: "14px"}}
 												/>
 												Copy Token to Clipboard
 											</Button>
@@ -366,7 +366,7 @@ export default function Profile(props) {
 											</Box>
 										</Box>
 									</Box>
-									<Divider orientation="horizontal" />
+									<Divider orientation="horizontal"/>
 									{/*Hazard services*/}
 									<Box className={classes.quotaSection}>
 										<Typography variant="h5">Hazard Service</Typography>
@@ -404,7 +404,7 @@ export default function Profile(props) {
 									md={12}
 									sm={12}
 									xs={12}
-									style={{ borderLeft: "solid 1px rgba(0, 0, 0, 0.12)" }}
+									style={{borderLeft: "solid 1px rgba(0, 0, 0, 0.12)"}}
 								>
 									{/*dfr3 services*/}
 									<Box className={classes.quotaSection}>
@@ -432,29 +432,34 @@ export default function Profile(props) {
 											<List>
 												<ListItem>
 													<ListItemIcon>
-														<ComputerIcon />
+														<ComputerIcon/>
 													</ListItemIcon>
 													{/*TODO this should read from a config file*/}
 													<ListItemText
-														primary={`${config["maxUsage"][group]["labUsage"]["vCPU"]} CPUs`}
+														primary={`${allocations.incoreLab
+														&& allocations.incoreLab.cpu
+														&& allocations.incoreLab.cpu.length > 0 ? allocations.incoreLab.cpu[1] : 2} CPUs`}
 													/>
 												</ListItem>
 												<ListItem>
 													<ListItemIcon>
-														<MemoryIcon />
+														<MemoryIcon/>
 													</ListItemIcon>
 													{/*TODO this should read from a config file*/}
 													<ListItemText
-														primary={`${config["maxUsage"][group]["labUsage"]["RAM"]} Memory`}
+														primary={`${allocations.incoreLab
+														&& allocations.incoreLab.mem
+														&& allocations.incoreLab.mem.length > 0 ? allocations.incoreLab.mem[1] : 4} GB Memory`}
 													/>
 												</ListItem>
 												<ListItem>
 													<ListItemIcon>
-														<StorageIcon />
+														<StorageIcon/>
 													</ListItemIcon>
 													{/*TODO this should read from a config file*/}
 													<ListItemText
-														primary={`${config["maxUsage"][group]["labUsage"]["Storage"]} Disk Storage`}
+														primary={`${allocations.incoreLab
+														&& allocations.incoreLab.disk ? allocations.incoreLab.disk : 2} GB Disk Storage`}
 													/>
 												</ListItem>
 											</List>

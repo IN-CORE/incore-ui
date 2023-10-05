@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+- Read IN-CORE lab quota from service endpoint [#141](https://github.com/IN-CORE/incore-ui/issues/141)
+
 ### Added
 - Display DFR3 quota [#137](https://github.com/IN-CORE/incore-ui/issues/137)
 - Add Semantic template link in Semantics viewer [#143](https://github.com/IN-CORE/incore-ui/issues/143)
