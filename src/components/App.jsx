@@ -287,7 +287,7 @@ class App extends Component {
 							variant="determinate"
 							className={classes.customProgressBar}
 							value={
-								((this.props.usage["total_file_size_of_datasets_byte"] ?? 0)/
+								((this.props.usage["total_file_size_of_datasets_byte"] ?? 0) /
 									this.props.allocations["total_file_size_of_datasets_byte"]) *
 								100
 							}
@@ -310,6 +310,21 @@ class App extends Component {
 						<Typography className={classes.fontLight} style={{ fontSize: "10px" }}>
 							Hazard {this.props.usage["total_file_size_of_hazard_datasets"] ?? 0} of{" "}
 							{this.props.allocations["total_file_size_of_hazard_datasets"]} used
+						</Typography>
+					</Box>
+					<Box className={classes.status}>
+						<LinearProgress
+							variant="determinate"
+							className={classes.customProgressBar}
+							value={
+								((this.props.usage["total_number_of_dfr3"] ?? 0) /
+									this.props.allocations["total_number_of_dfr3"]) *
+								100
+							}
+						/>
+						<Typography className={classes.fontLight} style={{ fontSize: "10px" }}>
+							DFR3 {this.props.usage["total_number_of_dfr3"] ?? 0} of{" "}
+							{this.props.allocations["total_number_of_dfr3"]} used
 						</Typography>
 					</Box>
 					<Divider orientation="horizontal" />
@@ -406,16 +421,16 @@ class App extends Component {
 				>
 					Hazard Viewer
 				</MenuItem>
-				{/*<MenuItem*/}
-				{/*	className={classes.denseStyle}*/}
-				{/*	onClick={() => {*/}
-				{/*		this.handleViewerMenuClose();*/}
-				{/*		browserHistory.push("/SemanticViewer");*/}
-				{/*		fetch("/SemanticViewer");*/}
-				{/*	}}*/}
-				{/*>*/}
-				{/*	Semantic Viewer*/}
-				{/*</MenuItem>*/}
+				<MenuItem
+					className={classes.denseStyle}
+					onClick={() => {
+						this.handleViewerMenuClose();
+						browserHistory.push("/SemanticViewer");
+						fetch("/SemanticViewer");
+					}}
+				>
+					Semantics Viewer
+				</MenuItem>
 			</Menu>
 		);
 

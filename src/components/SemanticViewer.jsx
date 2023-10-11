@@ -5,6 +5,7 @@ import Map from "./children/Map";
 import SpaceChip from "./children/SpaceChip";
 import {
 	Button,
+	Box,
 	Card,
 	CardContent,
 	Dialog,
@@ -44,6 +45,7 @@ import Datatype from "./children/Datatype";
 import ErrorMessage from "./children/ErrorMessage";
 import Confirmation from "./children/Confirmation";
 import LoadingOverlay from "react-loading-overlay";
+import semantics from "../reducers/semantics";
 
 const cookies = new Cookies();
 const redundantProp = ["deleted", "privileges", "spaces"];
@@ -142,14 +144,13 @@ class SemanticViewer extends Component {
 			registeredSearchText: "",
 			authError: false,
 			loading:false,
-			selectedDataTyoe:"",
+			selectedSemanticType: null,
 			pageNumber: 1,
 			semanticWindowClosed: true,
-			previewLoading:false,
-			semanticJSON: {},
 		};
 
-		this.onClickDataset = this.onClickDataset.bind(this);
+		this.onClickSemanticType = this.onClickSemanticType.bind(this);
+		this.downloadTemplate = this.downloadTemplate.bind(this);
 		this.handleSpaceSelection = this.handleSpaceSelection.bind(this);
 		this.changeDataPerPage = this.changeDataPerPage.bind(this);
 		this.generateSemanticTable = this.generateSemanticTable.bind(this);
@@ -158,6 +159,7 @@ class SemanticViewer extends Component {
 		this.handleKeyPressed = this.handleKeyPressed.bind(this);
 		this.previous = this.previous.bind(this);
 		this.next = this.next.bind(this);
+		this.getFileExt = this.getFileExt.bind(this);
 	}
 
 	componentWillMount() {
@@ -197,7 +199,7 @@ class SemanticViewer extends Component {
 	componentWillReceiveProps(nextProps) {
 		this.setState(
 			{
-				loading:nextProps.loading,
+				loading: nextProps.loading,
 				authError: nextProps.authError
 			}
 		);
@@ -217,7 +219,7 @@ class SemanticViewer extends Component {
 				semanticWindowClosed: true,
 				pageNumber:1,
 				offset:0,
-				selectedDataset:"",
+				selectedSemanticType: null,
 				searching: false,
 				searchText: ""
 			},
@@ -254,40 +256,63 @@ class SemanticViewer extends Component {
 	}
 
 
-	onClickDataset = async (semantic) => {
+	onClickSemanticType = async (semanticType) => {
 		this.setState({
-			selectedDataset: semantic,
+			selectedSemanticType: semanticType,
 			semanticWindowClosed: false,
-			previewLoading: true,
-			semanticJSON: {}
 		});
-
-		try {
-			let endpoint = `${config.semanticServiceType}/${semantic}`;
-			const response = await fetch(endpoint, {
-				mode: "cors",
-				headers: getHeader(),
-				contentType: "application/json"
-			});
-			const jsonData = await response.json();
-			this.setState({
-				previewLoading: false,
-				semanticJSON: jsonData
-			});
-		} catch (error) {
-			console.error("Error fetching JSON data:", error);
-			this.setState({
-				previewLoading: false
-			});
-		}
 	};
+
+	getFileExt = (semanticColumns) => {
+		let ext = '.csv'
+		for (let i = 0; i < semanticColumns.length; i++ ){
+			if (semanticColumns[i]["name"] === "the_geom" || semanticColumns[i]["name"] === "geometry" || semanticColumns[i]["name"] === "geom") {
+				ext = '.zip'
+				return ext
+			}
+		}
+		return ext
+	}
+
+	async downloadTemplate() {
+		if (this.state.selectedSemanticType !== null || this.state.selectedSemanticType !== undefined) {
+			let semanticName = this.state.selectedSemanticType['dc:title'];
+
+			let url = `${config.semanticServiceType}/${semanticName}/template`;
+
+			let semanticfName = semanticName.replace(":", "_") + this.getFileExt(this.state.selectedSemanticType["tableSchema"]["columns"])
+			let response = await fetch(url, { mode: "cors", headers: await getHeader() });
+
+			if (response.ok) {
+				let blob = await response.blob();
+				if (window.navigator.msSaveOrOpenBlob) {
+					window.navigator.msSaveBlob(blob);
+				} else {
+					let anchor = window.document.createElement("a");
+					anchor.href = window.URL.createObjectURL(blob);
+					anchor.download = semanticfName;
+					document.body.appendChild(anchor);
+					anchor.click();
+					document.body.removeChild(anchor);
+				}
+			} else if (response.status === 401) {
+				cookies.remove("Authorization");
+				this.setState({
+					authError: true
+				});
+			} else {
+				this.setState({
+					authError: false
+				});
+			}
+		}
+	}
 
 
 	closeSemanticWindow() {
 		this.setState({
 			semanticWindowClosed: true,
-			previewLoading:false,
-			semanticJSON: {}
+			selectedSemanticType: null
 		});
 	}
 
@@ -295,7 +320,7 @@ class SemanticViewer extends Component {
 		this.setState({
 			registeredSearchText: this.state.searchText,
 			searching: true,
-			selectedDataset: "",
+			selectedSemanticType: null,
 			semanticWindowClosed: true,
 			offset:0,
 			pageNumber:1
@@ -322,7 +347,7 @@ class SemanticViewer extends Component {
 				offset: this.state.pageNumber * this.state.dataPerPage,
 				pageNumber: this.state.pageNumber + 1,
 				semanticWindowClosed: true,
-				selectedDataset: ""
+				selectedSemanticType: null
 			},
 			function () {
 				if (this.state.searching) {
@@ -348,7 +373,7 @@ class SemanticViewer extends Component {
 				offset: (this.state.pageNumber - 2) * this.state.dataPerPage,
 				pageNumber: this.state.pageNumber - 1,
 				semanticWindowClosed: true,
-				selectedDataset: ""
+				selectedSemanticType: null
 			},
 			function () {
 				if (this.state.searching) {
@@ -368,12 +393,12 @@ class SemanticViewer extends Component {
 		);
 	}
 	generateSemanticTable(){
-		if (this.state.previewLoading) {
-			return null;
+		if (this.state.selectedSemanticType === null){
+			return;
 		}
 		const { classes } = this.props;
 		let row_count = 0;
-		let rows = this.state.semanticJSON["tableSchema"]["columns"].map((field) => {
+		let rows = this.state.selectedSemanticType["tableSchema"]["columns"].map((field) => {
 			if (field["name"] === "") {
 				return null;
 			}
@@ -428,12 +453,11 @@ class SemanticViewer extends Component {
 				<ListItem
 					button
 					onClick={() => {
-						this.onClickDataset(semantic);
+						this.onClickSemanticType(semantic);
 					}}
-					selected={semantic === this.state.selectedDataset}
+					selected={semantic['dc:title'] === (this.state.selectedSemanticType === null ? null : this.state.selectedSemanticType['dc:title'])}
 				>
-					<ListItemText primary={`${semantic}`} />
-					<SpaceChip item={semantic} selectedItem={this.state.selectedSemantic} />
+					<ListItemText primary={`${semantic['dc:title']}`} />
 				</ListItem>);
 		});
 
@@ -489,9 +513,9 @@ class SemanticViewer extends Component {
 						</Grid>
 						<Grid
 							item
-							lg={this.state.selectedDataset && !this.state.semanticWindowClosed ? 4 : 12}
-							md={this.state.selectedDataset && !this.state.semanticWindowClosed ? 4 : 12}
-							xl={this.state.selectedDataset && !this.state.semanticWindowClosed ? 4 : 12}
+							lg={this.state.selectedSemanticType && !this.state.semanticWindowClosed ? 4 : 12}
+							md={this.state.selectedSemanticType && !this.state.semanticWindowClosed ? 4 : 12}
+							xl={this.state.selectedSemanticType && !this.state.semanticWindowClosed ? 4 : 12}
 							xs={12}
 						>
 							<LoadingOverlay active={this.state.loading} spinner text="Loading ...">
@@ -527,14 +551,36 @@ class SemanticViewer extends Component {
 										<Typography variant="subtitle1">Semantic Schema</Typography>
 									</div>
 									<br/>
-									<Typography variant="subtitle2"><strong>{this.state.selectedDataset}</strong></Typography>
-									{this.state.semanticJSON["dc:description"] === "" ? null :
-										<Typography variant="body1">{this.state.semanticJSON["dc:description"]}</Typography>}
+									<Grid container spacing={2} lg={8} md={8} xl={8} xs={12}>
+										<Grid item>
+											<Button
+												color="primary"
+												variant="contained"
+												className={classes.inlineButtons}
+												size="small"
+												onClick={this.downloadTemplate}
+											>
+												Download Template
+											</Button>
+										</Grid>
+										<Grid item xs={12}>
+											<Box  sx={{mx: 1}}>
+												<Typography variant="subtitle2"><strong>{this.state.selectedSemanticType['dc:title']}</strong></Typography>
+											</Box>
+										</Grid>
+										{
+											this.state.selectedSemanticType["dc:description"] === "" ? 
+												null :
+												<Grid item xs={12}>
+													<Box  sx={{mx: 1}}>
+														<Typography variant="body1">{this.state.selectedSemanticType["dc:description"]}</Typography>
+													</Box>
+												</Grid>
+										}
+									</Grid>
 									<br/>
 									<div className={classes.metadata}>
-										<LoadingOverlay active={this.state.previewLoading} spinner text="Loading ...">
-											{this.generateSemanticTable()}
-										</LoadingOverlay>
+										{this.generateSemanticTable()}
 									</div>
 								</Paper>
 							</Grid>}

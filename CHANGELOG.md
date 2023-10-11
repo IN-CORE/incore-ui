@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.8.0] - 2023-10-11
+
+### Changed
+- Read IN-CORE lab quota from service endpoint [#141](https://github.com/IN-CORE/incore-ui/issues/141)
+- Change Semantic type api call logic, get complete details at first load instead of fetching on the fly. [#144](https://github.com/IN-CORE/incore-ui/issues/144)
+- Add a multi-hazard type Earthquake+Tsunami in DFR3 Viewer [#147](https://github.com/IN-CORE/incore-ui/issues/147)
+
+### Added
+- Display DFR3 quota [#137](https://github.com/IN-CORE/incore-ui/issues/137)
+- Add Semantic template link in Semantics viewer [#143](https://github.com/IN-CORE/incore-ui/issues/143)
+
+
 ## [1.7.0] - 2023-08-16
 
 ### Added
