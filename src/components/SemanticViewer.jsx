@@ -408,6 +408,7 @@ class SemanticViewer extends Component {
 					<TableCell component="th" scope="row">
 						{field["name"]}
 					</TableCell>
+					<TableCell align="right">{field["dc:description"]}</TableCell>
 					<TableCell align="right">{field["titles"]}</TableCell>
 					<TableCell align="right">{field["datatype"]}</TableCell>
 					<TableCell align="right">{field["qudt:unit"]}</TableCell>
@@ -424,6 +425,7 @@ class SemanticViewer extends Component {
 					<TableHead>
 						<TableRow>
 							<TableCell className={classes.headerCell}>Name</TableCell>
+							<TableCell className={classes.headerCell} align="right">Description</TableCell>
 							<TableCell className={classes.headerCell} align="right">Titles</TableCell>
 							<TableCell className={classes.headerCell} align="right">Datatype</TableCell>
 							<TableCell className={classes.headerCell} align="right">Unit</TableCell>
@@ -569,7 +571,7 @@ class SemanticViewer extends Component {
 											</Box>
 										</Grid>
 										{
-											this.state.selectedSemanticType["dc:description"] === "" ? 
+											this.state.selectedSemanticType["dc:description"] === "" ?
 												null :
 												<Grid item xs={12}>
 													<Box  sx={{mx: 1}}>
