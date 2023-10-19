@@ -429,7 +429,7 @@ class App extends Component {
 						fetch("/SemanticViewer");
 					}}
 				>
-					Semantics Viewer
+					Dataset Type Viewer
 				</MenuItem>
 			</Menu>
 		);
