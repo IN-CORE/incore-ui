@@ -472,6 +472,7 @@ class SemanticViewer extends Component {
 					<Grid container spacing={4}>
 						<Grid item lg={6} sm={6} xl={6} xs={12}>
 							<Paper variant="outlined" className={classes.filter}>
+								<Typography variant="h6">Filters</Typography>
 								<div className={classes.selectDiv}>
 									<Space
 										selectedSpace={this.state.selectedSpace}
