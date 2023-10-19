@@ -46,6 +46,7 @@ import ErrorMessage from "./children/ErrorMessage";
 import Confirmation from "./children/Confirmation";
 import LoadingOverlay from "react-loading-overlay";
 import semantics from "../reducers/semantics";
+import {exportJson} from "../utils/common";
 
 const cookies = new Cookies();
 const redundantProp = ["deleted", "privileges", "spaces"];
@@ -554,17 +555,49 @@ class SemanticViewer extends Component {
 										<Typography variant="subtitle1">Semantic Schema</Typography>
 									</div>
 									<br/>
-									<Grid container spacing={2} lg={8} md={8} xl={8} xs={12}>
-										<Grid item>
-											<Button
-												color="primary"
-												variant="contained"
-												className={classes.inlineButtons}
-												size="small"
-												onClick={this.downloadTemplate}
-											>
-												Download Template
-											</Button>
+									<Grid container spacing={2}>
+										<Grid item xs={12}>
+											<div className={classes.metadata}>
+												<Button
+													color="primary"
+													variant="contained"
+													className={classes.inlineButtons}
+													size="small"
+													onClick={this.downloadTemplate}
+												>
+													Download Template
+												</Button>
+												<Button
+													color="primary"
+													variant="contained"
+													className={classes.inlineButtons}
+													size="small"
+													onClick={() => {
+														exportJson(this.state.selectedSemanticType);
+													}}
+												>
+													Download Definition
+												</Button>
+												<CopyToClipboard text={this.state.selectedSemanticType["url"]}>
+													<Button
+														color="secondary"
+														variant="contained"
+														className={classes.inlineButtons}
+														size="small"
+													>
+														Copy Type
+													</Button>
+												</CopyToClipboard>
+												{/*<Button*/}
+												{/*	color="secondary"*/}
+												{/*	variant="contained"*/}
+												{/*	className={classes.inlineButtons}*/}
+												{/*	size="small"*/}
+												{/*	onClick={this.onClickDelete}*/}
+												{/*>*/}
+												{/*	DELETE*/}
+												{/*</Button>*/}
+											</div>
 										</Grid>
 										<Grid item xs={12}>
 											<Box  sx={{mx: 1}}>
