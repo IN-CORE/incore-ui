@@ -4,7 +4,8 @@ import {withStyles} from "@material-ui/core/styles";
 import Version from "./children/Version";
 import {getRepoVersion} from "../actions/index";
 import config from "../app.config";
-
+import Button from "@material-ui/core/Button";
+import MailOutlineIcon from "@material-ui/icons/MailOutline";
 
 const styles = (theme) => ({
 	root: {
@@ -343,16 +344,33 @@ class HomePage extends Component {
 						<Box className={classes.connectWithUs}>
 							<Typography>
 								Got questions or need assistance? Join us on&nbsp;
-								<Link href={config.slackInvitationLink} target="_blank"
-									  className={classes.link}>Slack</Link> and say hi in the
-								#general channel. For specific inquiries, head over to the #in-core channel or explore
-								our testbed-specific channels.
-								You can also reach out via&nbsp;
-								<Link href={`mailto:${config.mailingList}`} className={classes.link}>email</Link> or
-								check out our <Link href={config.incoreDocUrl} target="_blank"
-													className={classes.link}>documentation</Link>&nbsp;
-								for more information.
+								<Link href={config.slackInvitationLink} target="_blank" className={classes.link}>
+									Slack</Link> and say hi in the <b>#general</b> channel. For specific inquiries,
+								head over to the <b>#in-core</b> channel or explore our testbed-specific channels. You
+								can also reach out via&nbsp;<Link href={`mailto:${config.mailingList}`}
+															  className={classes.link}>email</Link> or check out
+								our <Link href={config.incoreDocUrl} target="_blank" className={classes.link}>
+								documentation</Link> for more information.
 							</Typography>
+							<Box style={{margin:"1em auto"}}>
+								<Button href={config.slackInvitationLink}
+										target="_blank"
+										variant="contained" color="primary"
+										className={classes.button}
+										style={{marginRight: "1em"}}
+								>
+									<img src="/public/slack-logo.png" style={{ height: "1em", marginRight: "8px"}}/>
+									Join Slack
+								</Button>
+								<Button href={`mailto:${config.mailingList}`}
+										variant="contained"
+										color="primary"
+										className={classes.button}
+										startIcon={<MailOutlineIcon />}
+								>
+									Email Us
+								</Button>
+							</Box>
 						</Box>
 
 						{/*if version exists, display version; otherwise just the text*/}
