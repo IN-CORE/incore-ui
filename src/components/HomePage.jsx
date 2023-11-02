@@ -345,7 +345,7 @@ class HomePage extends Component {
 							<Typography>
 								Got questions or need assistance? Join us on&nbsp;
 								<Link href={config.slackInvitationLink} target="_blank" className={classes.link}>
-									Slack</Link> and say hi in the <b>#general</b> channel. For specific inquiries,
+									Slack</Link> and say hi in the <b>#general</b> channel. For specific questions,
 								head over to the <b>#in-core</b> channel or explore our testbed-specific channels. You
 								can also reach out via&nbsp;<Link href={`mailto:${config.mailingList}`}
 															  className={classes.link}>email</Link> or check out
