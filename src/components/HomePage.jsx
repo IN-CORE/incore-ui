@@ -1,8 +1,11 @@
-import React, { Component } from "react";
-import { Chip, Container, Grid, Link, Typography } from "@material-ui/core";
-import { withStyles } from "@material-ui/core/styles";
+import React, {Component} from "react";
+import {Chip, Container, Grid, Link, Typography, Box} from "@material-ui/core";
+import {withStyles} from "@material-ui/core/styles";
 import Version from "./children/Version";
-import { getRepoVersion } from "../actions/index";
+import {getRepoVersion} from "../actions/index";
+import config from "../app.config";
+import Button from "@material-ui/core/Button";
+import MailOutlineIcon from "@material-ui/icons/MailOutline";
 
 const styles = (theme) => ({
 	root: {
@@ -60,6 +63,13 @@ const styles = (theme) => ({
 	more: {
 		textAlign: "center",
 		marginTop: theme.spacing(2)
+	},
+	connectWithUs: {
+		padding: "3em",
+		margin: "2em auto",
+		borderRadius: "0.5em",
+		background: "#eeeeee",
+		textAlign: "center"
 	},
 	versionSection: {
 		margin: theme.spacing(0.5)
@@ -286,51 +296,82 @@ class HomePage extends Component {
 	}
 
 	render() {
-		const { classes } = this.props;
+		const {classes} = this.props;
 
 		return (
 			<div>
 				{/*header*/}
 				<section className={classes.root}>
 					<Container className={classes.container}>
-						<img src="/public/resilience-logo.png" />
+						<img src="/public/resilience-logo.png"/>
 						<Typography color="inherit" align="center" variant="h5" className={classes.h5}>
 							{this.state.subTitle}
 						</Typography>
 						<Typography variant="body1" color="inherit" className={classes.more}>
 							The{" "}
-							<a href="https://www.nist.gov" className={classes.link} target="_blank">
+							<Link href="https://www.nist.gov" className={classes.link} target="_blank">
 								National Institute of Standards and Technology (NIST)
-							</a>{" "}
+							</Link>{" "}
 							funded the multi-university five-year{" "}
-							<a href="http://resilience.colostate.edu" className={classes.link} target="_blank">
+							<Link href="http://resilience.colostate.edu" className={classes.link} target="_blank">
 								Center of Excellence for Risk-Based Community Resilience Planning (CoE)
-							</a>
+							</Link>
 							, headquartered at{" "}
-							<a href="https://www.colostate.edu" className={classes.link} target="_blank">
+							<Link href="https://www.colostate.edu" className={classes.link} target="_blank">
 								Colorado State University
-							</a>
+							</Link>
 							, to develop the measurement science to support community resilience assessment. Measurement
 							science is implemented on a platform called{" "}
-							<a
+							<Link
 								href="http://resilience.colostate.edu/in_core.shtml"
 								className={classes.link}
 								target="_blank"
 							>
 								Interdependent Networked Community Resilience Modeling Environment (IN-CORE)
-							</a>
+							</Link>
 							. On IN-CORE, users can run scientific analyses that model the impact of natural hazards and
 							resiliency against the impact on communities. The IN-CORE platform is built on a{" "}
-							<a href="https://kubernetes.io" className={classes.link} target="_blank">
+							<Link href="https://kubernetes.io" className={classes.link} target="_blank">
 								Kubernetes cluster
-							</a>{" "}
+							</Link>{" "}
 							with
-							<a href="https://www.docker.com" className={classes.link} target="_blank">
+							<Link href="https://www.docker.com" className={classes.link} target="_blank">
 								{" "}
 								Docker
-							</a>{" "}
+							</Link>{" "}
 							container technology.
 						</Typography>
+
+						<Box className={classes.connectWithUs}>
+							<Typography>
+								Got questions or need assistance? Join us on&nbsp;
+								<Link href={config.slackInvitationLink} target="_blank" className={classes.link}>
+									Slack</Link> and say hi in the <b>#general</b> channel. For specific questions,
+								head over to the <b>#in-core</b> channel. You can also reach out via&nbsp;
+								<Link href={`mailto:${config.mailingList}`} className={classes.link}>email</Link> or
+								check out our <Link href={config.incoreDocUrl} target="_blank" className={classes.link}>
+								documentation</Link> for more information.
+							</Typography>
+							<Box style={{margin:"1em auto"}}>
+								<Button href={config.slackInvitationLink}
+										target="_blank"
+										variant="contained" color="primary"
+										className={classes.button}
+										style={{marginRight: "1em"}}
+								>
+									<img src="/public/slack-logo.png" style={{ height: "1em", marginRight: "8px"}}/>
+									Join Slack
+								</Button>
+								<Button href={`mailto:${config.mailingList}`}
+										variant="contained"
+										color="primary"
+										className={classes.button}
+										startIcon={<MailOutlineIcon />}
+								>
+									Email Us
+								</Button>
+							</Box>
+						</Box>
 
 						{/*if version exists, display version; otherwise just the text*/}
 						{this.state.githubVersions && this.state.githubVersions["in-core"] ? (
@@ -380,11 +421,11 @@ class HomePage extends Component {
 								</div>
 							))}
 						</div>
-						<div className={classes.backdrop} />
-						<div className={classes.background} />
+						<div className={classes.backdrop}/>
+						<div className={classes.background}/>
 					</Container>
 				</section>
-				<section className={classes.sectionLight} />
+				<section className={classes.sectionLight}/>
 				{/*products*/}
 				<section className={classes.sectionDark}>
 					<Container className={classes.sectionContainers}>
@@ -392,7 +433,7 @@ class HomePage extends Component {
 							{this.state.sections.map((section) => (
 								<Grid item xs={12} md={3}>
 									<div className={classes.item}>
-										<img className={classes.image} src={section.image} />
+										<img className={classes.image} src={section.image}/>
 										<div className={classes.title}>
 											{section.titles.map((title) => (
 												<Typography variant="h6">{title}</Typography>
@@ -421,9 +462,9 @@ class HomePage extends Component {
 										spacing={2}
 									>
 										<Grid item className={classes.icons}>
-											<a href={footerLogo.url} target="_blank">
-												<img src={footerLogo.image} className={classes.icon} />
-											</a>
+											<Link href={footerLogo.url} target="_blank">
+												<img src={footerLogo.image} className={classes.icon}/>
+											</Link>
 										</Grid>
 									</Grid>
 								</Grid>
@@ -431,7 +472,7 @@ class HomePage extends Component {
 						</Grid>
 					</Container>
 					{/*version*/}
-					<Version />
+					<Version/>
 				</section>
 			</div>
 		);

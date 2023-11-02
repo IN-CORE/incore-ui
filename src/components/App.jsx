@@ -353,6 +353,16 @@ class App extends Component {
 							this.handleProfileMenuClose();
 						}}
 					>
+						<Link href={config.slackInvitationLink} target="_blank" style={{ textDecoration: "none" }}>
+							Join Slack
+						</Link>
+					</MenuItem>
+					<MenuItem
+						className={classes.denseStyle}
+						onClick={() => {
+							this.handleProfileMenuClose();
+						}}
+					>
 						<Link href={config.tosURL} target="_blank" style={{ textDecoration: "none" }}>
 							Terms of Service
 						</Link>

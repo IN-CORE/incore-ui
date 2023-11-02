@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Added
+- Links to Slack channel and mailing list to the landing page [#160](https://github.com/IN-CORE/incore-ui/issues/160)
+
 ### Changed
 - Missing Filters title for both Data viewer and Semantics Viewer [#156](https://github.com/IN-CORE/incore-ui/issues/156)
 - Semantic viewer needs to show description [#157](https://github.com/IN-CORE/incore-ui/issues/157)
