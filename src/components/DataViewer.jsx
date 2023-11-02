@@ -757,6 +757,7 @@ class DataViewer extends Component {
 							{/*filters*/}
 							<Grid item lg={8} sm={8} xl={8} xs={12}>
 								<Paper variant="outlined" className={classes.filter}>
+									<Typography variant="h6">Filters</Typography>
 									<div className={classes.selectDiv}>
 										<Datatype
 											selectedDataType={this.state.selectedDataType}
