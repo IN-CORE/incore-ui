@@ -69,6 +69,7 @@ const styles = (theme) => ({
 		margin: "2em auto",
 		borderRadius: "0.5em",
 		background: "#eeeeee",
+		textAlign: "center"
 	},
 	versionSection: {
 		margin: theme.spacing(0.5)
