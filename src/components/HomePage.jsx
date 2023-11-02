@@ -346,10 +346,9 @@ class HomePage extends Component {
 								Got questions or need assistance? Join us on&nbsp;
 								<Link href={config.slackInvitationLink} target="_blank" className={classes.link}>
 									Slack</Link> and say hi in the <b>#general</b> channel. For specific questions,
-								head over to the <b>#in-core</b> channel or explore our testbed-specific channels. You
-								can also reach out via&nbsp;<Link href={`mailto:${config.mailingList}`}
-															  className={classes.link}>email</Link> or check out
-								our <Link href={config.incoreDocUrl} target="_blank" className={classes.link}>
+								head over to the <b>#in-core</b> channel. You can also reach out via&nbsp;
+								<Link href={`mailto:${config.mailingList}`} className={classes.link}>email</Link> or
+								check out our <Link href={config.incoreDocUrl} target="_blank" className={classes.link}>
 								documentation</Link> for more information.
 							</Typography>
 							<Box style={{margin:"1em auto"}}>
