@@ -46,6 +46,7 @@ import ErrorMessage from "./children/ErrorMessage";
 import Confirmation from "./children/Confirmation";
 import LoadingOverlay from "react-loading-overlay";
 import semantics from "../reducers/semantics";
+import {exportJson} from "../utils/common";
 
 const cookies = new Cookies();
 const redundantProp = ["deleted", "privileges", "spaces"];
@@ -408,6 +409,7 @@ class SemanticViewer extends Component {
 					<TableCell component="th" scope="row">
 						{field["name"]}
 					</TableCell>
+					<TableCell align="right">{field["dc:description"]}</TableCell>
 					<TableCell align="right">{field["titles"]}</TableCell>
 					<TableCell align="right">{field["datatype"]}</TableCell>
 					<TableCell align="right">{field["qudt:unit"]}</TableCell>
@@ -424,6 +426,7 @@ class SemanticViewer extends Component {
 					<TableHead>
 						<TableRow>
 							<TableCell className={classes.headerCell}>Name</TableCell>
+							<TableCell className={classes.headerCell} align="right">Description</TableCell>
 							<TableCell className={classes.headerCell} align="right">Titles</TableCell>
 							<TableCell className={classes.headerCell} align="right">Datatype</TableCell>
 							<TableCell className={classes.headerCell} align="right">Unit</TableCell>
@@ -470,6 +473,7 @@ class SemanticViewer extends Component {
 					<Grid container spacing={4}>
 						<Grid item lg={6} sm={6} xl={6} xs={12}>
 							<Paper variant="outlined" className={classes.filter}>
+								<Typography variant="h6">Filters</Typography>
 								<div className={classes.selectDiv}>
 									<Space
 										selectedSpace={this.state.selectedSpace}
@@ -551,17 +555,49 @@ class SemanticViewer extends Component {
 										<Typography variant="subtitle1">Semantic Schema</Typography>
 									</div>
 									<br/>
-									<Grid container spacing={2} lg={8} md={8} xl={8} xs={12}>
-										<Grid item>
-											<Button
-												color="primary"
-												variant="contained"
-												className={classes.inlineButtons}
-												size="small"
-												onClick={this.downloadTemplate}
-											>
-												Download Template
-											</Button>
+									<Grid container spacing={2}>
+										<Grid item xs={12}>
+											<div className={classes.metadata}>
+												<Button
+													color="primary"
+													variant="contained"
+													className={classes.inlineButtons}
+													size="small"
+													onClick={this.downloadTemplate}
+												>
+													Download Template
+												</Button>
+												<Button
+													color="primary"
+													variant="contained"
+													className={classes.inlineButtons}
+													size="small"
+													onClick={() => {
+														exportJson(this.state.selectedSemanticType);
+													}}
+												>
+													Download Definition
+												</Button>
+												<CopyToClipboard text={this.state.selectedSemanticType["url"]}>
+													<Button
+														color="secondary"
+														variant="contained"
+														className={classes.inlineButtons}
+														size="small"
+													>
+														Copy Type
+													</Button>
+												</CopyToClipboard>
+												{/*<Button*/}
+												{/*	color="secondary"*/}
+												{/*	variant="contained"*/}
+												{/*	className={classes.inlineButtons}*/}
+												{/*	size="small"*/}
+												{/*	onClick={this.onClickDelete}*/}
+												{/*>*/}
+												{/*	DELETE*/}
+												{/*</Button>*/}
+											</div>
 										</Grid>
 										<Grid item xs={12}>
 											<Box  sx={{mx: 1}}>
@@ -569,7 +605,7 @@ class SemanticViewer extends Component {
 											</Box>
 										</Grid>
 										{
-											this.state.selectedSemanticType["dc:description"] === "" ? 
+											this.state.selectedSemanticType["dc:description"] === "" ?
 												null :
 												<Grid item xs={12}>
 													<Box  sx={{mx: 1}}>
