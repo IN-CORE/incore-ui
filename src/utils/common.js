@@ -10,11 +10,11 @@ export function is3dCurve(DFR3Curve) {
 	return DFR3Curve.demandTypes !== undefined && DFR3Curve.demandTypes.length > 1;
 }
 
-export function exportJson(json) {
+export function exportJson(json, filename=null) {
 	let curveJSON = JSON.stringify(json, null, 4);
 	let blob = new Blob([curveJSON], {type: "application/json"});
 
-	const filename = `${json.id}.json`;
+	if (!filename) filename = `${json.id}.json`;
 
 	if (window.navigator.msSaveOrOpenBlob) {
 		window.navigator.msSaveBlob(blob, filename);
@@ -27,6 +27,24 @@ export function exportJson(json) {
 		document.body.removeChild(anchor);
 	}
 }
+
+export function exportString(string, filename=null) {
+	let blob = new Blob([string], {type: "text/plain"});
+
+	if (!filename) filename = `string.txt`;
+
+	if (window.navigator.msSaveOrOpenBlob) {
+		window.navigator.msSaveBlob(blob, filename);
+	} else {
+		let anchor = window.document.createElement("a");
+		anchor.href = window.URL.createObjectURL(blob);
+		anchor.download = filename;
+		document.body.appendChild(anchor);
+		anchor.click();
+		document.body.removeChild(anchor);
+	}
+}
+
 // get user token
 export function getCurrUserToken(){
 	if (!config.hostname.includes("localhost")){

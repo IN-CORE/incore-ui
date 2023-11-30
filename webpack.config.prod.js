@@ -109,7 +109,6 @@ export default {
 					"sass-loader"
 				]
 			},
-			{ test: /\.json$/, loader: "json-loader" }
 		]
 	},
 	optimization: {

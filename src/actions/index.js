@@ -52,6 +52,7 @@ export function receiveDatasets(type: string, json: Datasets) {
 
 export const RECEIVE_USAGE = "RECEIVE_USAGE";
 export const RECEIVE_LAB_USAGE = "RECEIVE_LAB_USAGE";
+
 export function receieveUsage(type, json) {
 	return (dispatch: Dispatch) => {
 		dispatch({
@@ -94,7 +95,7 @@ export function deleteItemById(resourceType, id) {
 		endpoint = `${config.hazardServiceBase}${resourceType}/${id}`;
 	}
 	return (dispatch: Dispatch) => {
-		return fetch(endpoint, { mode: "cors", method: "DELETE", headers: getHeader() }).then((response) => {
+		return fetch(endpoint, {mode: "cors", method: "DELETE", headers: getHeader()}).then((response) => {
 			if (response.status === 200) {
 				response.json().then((json) => {
 					dispatch(deleteItem(DELETE_ITEM, json));
@@ -176,8 +177,8 @@ export function fetchAnalyses() {
 		return fetch(endpoint, {
 			headers: getHeader()
 		})
-			.then((response) => response.json())
-			.then((json) => dispatch(receiveAnalyses(endpoint, json)));
+		.then((response) => response.json())
+		.then((json) => dispatch(receiveAnalyses(endpoint, json)));
 	};
 }
 
@@ -189,8 +190,8 @@ export function getAnalysisById(id: String) {
 		return fetch(endpoint, {
 			headers: getHeader()
 		})
-			.then((response) => response.json())
-			.then((json) => dispatch(receiveAnalysis(config.maestroService, json)));
+		.then((response) => response.json())
+		.then((json) => dispatch(receiveAnalysis(config.maestroService, json)));
 	};
 }
 
@@ -198,7 +199,7 @@ export function searchDatasets(keyword, limit, offset) {
 	let endpoint = `${config.dataService}/search?excludeHazard=true&limit=${limit}&skip=${offset}&text=${keyword}`;
 	return (dispatch: Dispatch) => {
 		dispatch(loading(DATA_LOADING));
-		return fetch(endpoint, { mode: "cors", headers: getHeader() }).then((response) => {
+		return fetch(endpoint, {mode: "cors", headers: getHeader()}).then((response) => {
 			dispatch(loadComplete(DATA_LOAD_COMPLETE));
 			if (response.status === 200) {
 				response.json().then((json) => {
@@ -225,7 +226,7 @@ export function fetchDatasets(dataType, space, limit, offset) {
 
 	return (dispatch: Dispatch) => {
 		dispatch(loading(DATA_LOADING));
-		return fetch(endpoint, { mode: "cors", headers: getHeader() }).then((response) => {
+		return fetch(endpoint, {mode: "cors", headers: getHeader()}).then((response) => {
 			dispatch(loadComplete(DATA_LOAD_COMPLETE));
 			if (response.status === 200) {
 				response.json().then((json) => {
@@ -244,7 +245,7 @@ export function fetchDatasets(dataType, space, limit, offset) {
 export function fetchUsage() {
 	let endpoint = `${config.spaceServiceBase}usage`;
 	return (dispatch: Dispatch) => {
-		return fetch(endpoint, { mode: "cors", headers: getHeader() }).then((response) => {
+		return fetch(endpoint, {mode: "cors", headers: getHeader()}).then((response) => {
 			if (response.status === 200) {
 				response.json().then((json) => {
 					dispatch(receieveUsage(RECEIVE_USAGE, json));
@@ -275,7 +276,7 @@ export function fetchLabUsage() {
 export function fetchSpaces() {
 	const endpoint = config.spaceService;
 	return (dispatch: Dispatch) => {
-		return fetch(endpoint, { mode: "cors", headers: getHeader() }).then((response) => {
+		return fetch(endpoint, {mode: "cors", headers: getHeader()}).then((response) => {
 			if (response.status === 200) {
 				response.json().then((json) => {
 					dispatch(receiveSpaces(RECEIVE_SPACES, json));
@@ -291,10 +292,11 @@ export function fetchSpaces() {
 }
 
 export const RECEIVE_ALLOCATIONS = "RECEIVE_ALLOCATIONS";
+
 export function fetchAllocations() {
 	const endpoint = `${config.spaceServiceBase}allocations`;
 	return (dispatch: Dispatch) => {
-		return fetch(endpoint, { mode: "cors", headers: getHeader() }).then((response) => {
+		return fetch(endpoint, {mode: "cors", headers: getHeader()}).then((response) => {
 			if (response.status === 200) {
 				response.json().then((json) => {
 					dispatch({
@@ -324,7 +326,7 @@ export function fetchAllocations() {
 export function fetchUniqueDatatypes() {
 	let endpoint = `${config.dataServiceBase}datatypes`;
 	return (dispatch: Dispatch) => {
-		return fetch(endpoint, { mode: "cors", headers: getHeader() }).then((response) => {
+		return fetch(endpoint, {mode: "cors", headers: getHeader()}).then((response) => {
 			if (response.status === 200) {
 				response.json().then((json) => {
 					dispatch(receiveDatatypes(RECEIVE_DATATYPES, json));
@@ -343,7 +345,7 @@ export function searchDFR3Curves(dfr3_type, keyword, limit, offset) {
 	let endpoint = `${config.dfr3ServiceBase}${dfr3_type}/search?limit=${limit}&skip=${offset}&text=${keyword}`;
 	return (dispatch: Dispatch) => {
 		dispatch(loading(DFR3CURVE_LOADING));
-		return fetch(endpoint, { mode: "cors", headers: getHeader() }).then((response) => {
+		return fetch(endpoint, {mode: "cors", headers: getHeader()}).then((response) => {
 			dispatch(loadComplete(DFR3CURVE_LOAD_COMPLETE));
 			if (response.status === 200) {
 				response.json().then((json) => {
@@ -372,7 +374,7 @@ export function fetchDFR3Curves(dfr3_type: string, space: string, inventory: str
 	}
 	return (dispatch: Dispatch) => {
 		dispatch(loading(DFR3CURVE_LOADING));
-		return fetch(endpoint, { mode: "cors", headers: getHeader() }).then((response) => {
+		return fetch(endpoint, {mode: "cors", headers: getHeader()}).then((response) => {
 			dispatch(loadComplete(DFR3CURVE_LOAD_COMPLETE));
 			if (response.status === 200) {
 				response.json().then((json) => {
@@ -420,7 +422,7 @@ export function fetchDFR3Mappings(dfr3_type: string, space: string, inventory: s
 
 	return (dispatch: Dispatch) => {
 		dispatch(loading(DFR3MAPPING_LOADING));
-		return fetch(endpoint, { mode: "cors", headers: getHeader() }).then((response) => {
+		return fetch(endpoint, {mode: "cors", headers: getHeader()}).then((response) => {
 			dispatch(loadComplete(DFR3MAPPING_LOAD_COMPLETE));
 			if (response.status === 200) {
 				response.json().then((json) => {
@@ -447,7 +449,7 @@ export function searchDFR3Mappings(dfr3_type, keyword, limit, offset) {
 
 	return (dispatch: Dispatch) => {
 		dispatch(loading(DFR3MAPPING_LOADING));
-		return fetch(endpoint, { mode: "cors", headers: getHeader() }).then((response) => {
+		return fetch(endpoint, {mode: "cors", headers: getHeader()}).then((response) => {
 			dispatch(loadComplete(DFR3MAPPING_LOAD_COMPLETE));
 			if (response.status === 200) {
 				response.json().then((json) => {
@@ -467,7 +469,7 @@ export function searchHazards(hazard_type, keyword, limit, offset) {
 	let endpoint = `${config.hazardServiceBase}${hazard_type}/search?limit=${limit}&skip=${offset}&text=${keyword}`;
 	return (dispatch: Dispatch) => {
 		dispatch(loading(HAZARD_LOADING));
-		return fetch(endpoint, { mode: "cors", headers: getHeader() }).then((response) => {
+		return fetch(endpoint, {mode: "cors", headers: getHeader()}).then((response) => {
 			dispatch(loadComplete(HAZARD_LOAD_COMPLETE));
 			if (response.status === 200) {
 				response.json().then((json) => {
@@ -490,7 +492,7 @@ export function fetchHazards(hazard_type: string, space: string, limit, offset) 
 	}
 	return (dispatch: Dispatch) => {
 		dispatch(loading(HAZARD_LOADING));
-		return fetch(endpoint, { mode: "cors", headers: getHeader() }).then((response) => {
+		return fetch(endpoint, {mode: "cors", headers: getHeader()}).then((response) => {
 			dispatch(loadComplete(HAZARD_LOAD_COMPLETE));
 			if (response.status === 200) {
 				response.json().then((json) => {
@@ -535,7 +537,7 @@ export function login(username, password) {
 	return async (dispatch: Dispatch) => {
 		const json = await loginHelper(username, password);
 		if (json["access_token"] !== undefined) {
-			cookies.set("Authorization", `bearer ${json["access_token"]}`, { maxAge: json["expires_in"] });
+			cookies.set("Authorization", `bearer ${json["access_token"]}`, {maxAge: json["expires_in"]});
 			return dispatch({
 				type: SET_USER,
 				Authorization: `bearer ${json["access_token"]}`
@@ -621,7 +623,7 @@ async function getOutputDatasetHelper(executionId: String) {
 	const fileId = outputDataset.fileDescriptors[0].id;
 
 	const fileDownloadUrl = `${config.dataServiceBase}files/${fileId}/blob`;
-	const fileBlob = await fetch(fileDownloadUrl, { method: "GET", mode: "CORS", headers: getHeader() });
+	const fileBlob = await fetch(fileDownloadUrl, {method: "GET", mode: "CORS", headers: getHeader()});
 
 	const fileText = await fileBlob.text();
 
@@ -664,7 +666,7 @@ export function fetchSemantics(space, limit, offset) {
 
 	return (dispatch: Dispatch) => {
 		dispatch(loading(SEMANTIC_LOADING));
-		return fetch(endpoint, { mode: "cors", headers: getHeader() }).then((response) => {
+		return fetch(endpoint, {mode: "cors", headers: getHeader()}).then((response) => {
 			dispatch(loadComplete(SEMANTIC_LOAD_COMPLETE));
 			if (response.status === 200) {
 				response.json().then((json) => {
@@ -682,9 +684,9 @@ export function fetchSemantics(space, limit, offset) {
 
 export function searchSemantics(keyword, limit, offset) {
 	let endpoint = `${config.semanticServiceType}/search?text=${keyword}&limit=${limit}&skip=${offset}`;
-	return (dispatch: Dispatch) =>{
+	return (dispatch: Dispatch) => {
 		dispatch(loading(SEMANTIC_LOADING));
-		return fetch(endpoint, { mode: "cors", headers: getHeader() }).then((response) => {
+		return fetch(endpoint, {mode: "cors", headers: getHeader()}).then((response) => {
 			dispatch(loadComplete(SEMANTIC_LOAD_COMPLETE));
 			if (response.status === 200) {
 				response.json().then((json) => {
@@ -695,6 +697,49 @@ export function searchSemantics(keyword, limit, offset) {
 				dispatch(receiveSemantics(LOGIN_ERROR, []));
 			} else {
 				dispatch(receiveSemantics(RECEIVE_SEMANTICS, []));
+			}
+		});
+	};
+}
+
+export const POST_SEMANTICS = "POST_SEMANTICS";
+
+export function postSemantics(formData) {
+	let endpoint = `${config.semanticServiceType}`;
+	let headers = getHeader();
+	headers.append("Content-Type", "application/json");
+
+	return (dispatch) => {
+		dispatch(loading(SEMANTIC_LOADING));
+		return fetch(endpoint, {
+			mode: "cors",
+			headers: headers,
+			method: "POST",
+			body: JSON.stringify(formData)
+		})
+		.then((response) => {
+			dispatch(loadComplete(SEMANTIC_LOAD_COMPLETE));
+			if (response.status === 200) {
+				response.json().then((json) => {
+					dispatch({
+						type: POST_SEMANTICS,
+						semanticsItem: json,
+						receivedAt: Date.now()
+					});
+				});
+			} else if (response.status === 401) {
+				cookies.remove("Authorization");
+				dispatch({
+					type: LOGIN_ERROR,
+					semanticsItem: {},
+					receivedAt: Date.now()
+				});
+			} else {
+				dispatch({
+					type: POST_SEMANTICS,
+					semanticsItem: {},
+					receivedAt: Date.now()
+				});
 			}
 		});
 	};
@@ -746,13 +791,13 @@ export function executeDatawolfWorkflow(workflowid, creatorid, title, descriptio
 export function getHeader() {
 	if (config.hostname.includes("localhost")) {
 		const headers = new Headers({
-			"x-auth-userinfo": `{"preferred_username":"${config.testUserInfo}"}`
+			"x-auth-userinfo": `{"preferred_username":"${config.testUserInfo}"}`,
 		});
 
 		return headers;
 	} else {
 		const headers = new Headers({
-			Authorization: cookies.get("Authorization")
+			Authorization: cookies.get("Authorization"),
 		});
 
 		return headers;

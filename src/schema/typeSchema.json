@@ -1,0 +1,97 @@
+{
+  "schema": {
+	"type": "object",
+	"required": [
+	  "dc:title",
+	  "dc:description"
+	],
+	"properties": {
+	  "dc:title": {
+		"type": "string",
+		"title": "Title"
+	  },
+	  "dc:description": {
+		"type": "string",
+		"title": "Description"
+	  },
+	  "openvocab:versionnumber": {
+		"type": "number",
+		"title": "Version Number",
+		"default": 1.0
+	  },
+	  "tableSchema": {
+		"title": "",
+		"type": "object",
+		"required": [
+		  "columns"
+		],
+		"properties": {
+		  "columns": {
+			"type": "array",
+			"title": "Table columns",
+			"items": {
+			  "type": "object",
+			  "required": [
+				"name",
+				"titles",
+				"dc:description",
+				"datatype",
+				"required"
+			  ],
+			  "properties": {
+				"name": {
+				  "type": "string",
+				  "title": "Column Name"
+				},
+				"titles": {
+				  "type": "string",
+				  "title": "Column Titles"
+				},
+				"dc:description": {
+				  "type": "string",
+				  "title": "Column Description"
+				},
+				"datatype": {
+				  "type": "string",
+				  "title": "Data Type",
+				  "enumNames": [],
+				  "enum": [
+					"xsd:anyURI",
+					"xsd:string",
+					"xsd:dateTime",
+					"xsd:boolean",
+					"xsd:integer",
+					"xsd:float",
+					"xsd:double",
+					"xsd:decimal"
+				  ],
+				  "default": "xsd:decimal"
+				},
+				"required": {
+				  "type": "string",
+				  "title": "Required",
+				  "enum": [
+					"true",
+					"false"
+				  ],
+				  "default": "true"
+				},
+				"qudt:unit": {
+				  "type": "string",
+				  "title": "Unit",
+				  "default": ""
+				}
+			  }
+			}
+		  }
+		}
+	  }
+	}
+  },
+  "uiSchema": {
+	"openvocab:versionnumber" :{
+	  "ui:widget": "hidden",
+	  "classNames": "hidden-widget"
+	}
+  }
+}
