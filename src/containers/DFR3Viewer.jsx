@@ -7,12 +7,13 @@ import {
 	searchDFR3Curves,
 	searchDFR3Mappings,
 	deleteItemById,
-	resetError
+	resetError, getItemById
 } from "../actions";
 
 const mapStateToProps = (state) => {
 	return {
 		dfr3Curves: state.dfr3Curve.dfr3Curves,
+		dfr3Curve: state.dfr3Curve.dfr3Curve,
 		deleteError: state.dfr3Curve.deleteError || state.dfr3Mapping.deleteError,
 		dfr3Mappings: state.dfr3Mapping.dfr3Mappings,
 		spaces: state.space.spaces,
@@ -41,6 +42,9 @@ const mapDispatchToProps = (dispatch) => {
 		},
 		deleteCurveItemById: (dfr3_type, id) => {
 			dispatch(deleteItemById(dfr3_type, id));
+		},
+		getCurveItemById: (dfr3_type, id) => {
+			dispatch(getItemById(dfr3_type, id));
 		},
 		deleteMappingItemById: (id) => {
 			dispatch(deleteItemById("mappings", id));

@@ -19,7 +19,6 @@ export default (
 		<Route path="Profile" component={Profile} />
 		<Route path="DataViewer" component={DataViewer} />
 		<Route path="DFR3Viewer" component={DFR3Viewer} />
-		<Route path="DFR3Viewer/:id" component={DFR3Viewer} />
 		<Route path="HazardViewer" component={HazardViewer} />
 		<Route path="SemanticViewer" component={SemanticViewer} />
 	</Route>

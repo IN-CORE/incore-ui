@@ -220,6 +220,10 @@ class DFR3Viewer extends React.Component {
 	}
 
 	componentDidMount() {
+		// if there is id; get ID and set according state
+		const { id, type } = this.props.location.query;
+		if (id && type) this.props.getCurveItemById(type, id);
+
 		// reset delete error
 		this.props.resetError();
 	}
@@ -230,6 +234,9 @@ class DFR3Viewer extends React.Component {
 			curvesLoading: nextProps.curvesLoading,
 			mappingsLoading: nextProps.mappingsLoading
 		});
+		if(nextProps.dfr3Curve !== {}){
+			this.onClickDFR3Curve(nextProps.dfr3Curve);
+		}
 	}
 
 	// TODO set state inside componentDidUpdate is bad practice!!
