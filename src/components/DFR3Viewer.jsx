@@ -222,20 +222,8 @@ class DFR3Viewer extends React.Component {
 	componentDidMount() {
 		// if there is id; get ID and set according state
 		const { id, type } = this.props.location.query;
-		if (id && type){
-			// get curve/mapping by id
+		if (id && type) {
 			this.props.getDFR3ItemById(type, id);
-			// flip to correct tab
-			this.setState({
-				selectedDFR3Type: type,
-				selectedInventory: "All",
-				selectedHazard: "All",
-				selectedSpace: "All",
-				searchText: "",
-				registeredSearchText: "",
-				searching: false,
-			});
-			// update tab
 			this.changeDFR3Type(type);
 		}
 
@@ -250,7 +238,6 @@ class DFR3Viewer extends React.Component {
 			mappingsLoading: nextProps.mappingsLoading
 		});
 		if(nextProps.dfr3Curve !== {}){
-			// select curve
 			this.onClickDFR3Curve(nextProps.dfr3Curve);
 		}
 	}
@@ -1161,6 +1148,20 @@ class DFR3Viewer extends React.Component {
 																	size="small"
 																>
 																	Copy ID
+																</Button>
+															</CopyToClipboard>
+															<CopyToClipboard text={
+																`${window.location.protocol}//${window.location.hostname}
+																${window.location.port ? ':' + window.location.port : ''}
+																/DFR3Viewer?type=${this.state.selectedDFR3Type}
+																&id=${this.state.selectedDFR3Curve.id}`}>
+																<Button
+																	color="secondary"
+																	variant="contained"
+																	className={classes.inlineButtons}
+																	size="small"
+																>
+																	Copy Shareable Link
 																</Button>
 															</CopyToClipboard>
 															<Button
