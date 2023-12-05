@@ -222,7 +222,22 @@ class DFR3Viewer extends React.Component {
 	componentDidMount() {
 		// if there is id; get ID and set according state
 		const { id, type } = this.props.location.query;
-		if (id && type) this.props.getDFR3ItemById(type, id);
+		if (id && type){
+			// get curve/mapping by id
+			this.props.getDFR3ItemById(type, id);
+			// flip to correct tab
+			this.setState({
+				selectedDFR3Type: type,
+				selectedInventory: "All",
+				selectedHazard: "All",
+				selectedSpace: "All",
+				searchText: "",
+				registeredSearchText: "",
+				searching: false,
+			});
+			// update tab
+			this.changeDFR3Type(type);
+		}
 
 		// reset delete error
 		this.props.resetError();
@@ -235,6 +250,7 @@ class DFR3Viewer extends React.Component {
 			mappingsLoading: nextProps.mappingsLoading
 		});
 		if(nextProps.dfr3Curve !== {}){
+			// select curve
 			this.onClickDFR3Curve(nextProps.dfr3Curve);
 		}
 	}
@@ -253,14 +269,14 @@ class DFR3Viewer extends React.Component {
 		}
 	}
 
-	changeDFR3Type(event) {
+	changeDFR3Type(type) {
 		this.setState(
 			{
 				searching: false,
 				searchText: "",
 				registeredSearchText: "",
 				selectedDFR3Curve: null,
-				selectedDFR3Type: event.target.value,
+				selectedDFR3Type: type,
 				pageNumber: 1,
 				offset: 0,
 				pageNumberMappings: 1,
@@ -858,7 +874,7 @@ class DFR3Viewer extends React.Component {
 										<InputLabel>Curve Type</InputLabel>
 										<Select
 											value={this.state.selectedDFR3Type}
-											onChange={this.changeDFR3Type}
+											onChange={(event)=> {this.changeDFR3Type(event.target.value);}}
 											className={classes.select}
 										>
 											<MenuItem
