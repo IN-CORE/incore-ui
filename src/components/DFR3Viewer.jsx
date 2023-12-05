@@ -222,7 +222,7 @@ class DFR3Viewer extends React.Component {
 	componentDidMount() {
 		// if there is id; get ID and set according state
 		const { id, type } = this.props.location.query;
-		if (id && type) this.props.getCurveItemById(type, id);
+		if (id && type) this.props.getDFR3ItemById(type, id);
 
 		// reset delete error
 		this.props.resetError();
@@ -488,7 +488,7 @@ class DFR3Viewer extends React.Component {
 	}
 
 	deleteMappingConfirmed() {
-		this.props.deleteMappingItemById(this.state.selectedMapping.id);
+		this.props.deleteDFR3ItemById("mappings", this.state.selectedMapping.id);
 		this.setState({
 			selectedMapping: "",
 			confirmOpen: false
@@ -496,7 +496,7 @@ class DFR3Viewer extends React.Component {
 	}
 
 	deleteCurveConfirmed() {
-		this.props.deleteCurveItemById(this.state.selectedDFR3Type, this.state.selectedDFR3Curve.id);
+		this.props.deleteDFR3ItemById(this.state.selectedDFR3Type, this.state.selectedDFR3Curve.id);
 		this.setState({
 			selectedDFR3Curve: "",
 			confirmOpen: false

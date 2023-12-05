@@ -40,14 +40,11 @@ const mapDispatchToProps = (dispatch) => {
 		searchAllDFR3Mappings: (dfr3_type, keyword, limit, offset) => {
 			dispatch(searchDFR3Mappings(dfr3_type, keyword, limit, offset));
 		},
-		deleteCurveItemById: (dfr3_type, id) => {
-			dispatch(deleteItemById(dfr3_type, id));
-		},
-		getCurveItemById: (dfr3_type, id) => {
+		getDFR3ItemById: (dfr3_type, id) => {
 			dispatch(getItemById(dfr3_type, id));
 		},
-		deleteMappingItemById: (id) => {
-			dispatch(deleteItemById("mappings", id));
+		deleteDFR3ItemById: (dfr3_type, id) => {
+			dispatch(deleteItemById(dfr3_type, id));
 		},
 		resetError: () => {
 			dispatch(resetError);
