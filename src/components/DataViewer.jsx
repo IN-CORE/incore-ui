@@ -215,7 +215,7 @@ class DataViewer extends Component {
 			loading: nextProps.loading
 		});
 
-		if(nextProps.hazard !== {}){
+		if(nextProps.dataset !== {} && nextProps.dataset !== this.props.dataset) {
 			this.onClickDataset(nextProps.dataset);
 		}
 	}
@@ -835,7 +835,7 @@ class DataViewer extends Component {
 															className={classes.inlineButtons}
 															size="small"
 														>
-															Copy Shareable Link
+															Copy Link
 														</Button>
 													</CopyToClipboard>
 													<Button

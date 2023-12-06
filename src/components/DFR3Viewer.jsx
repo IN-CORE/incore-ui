@@ -248,8 +248,16 @@ class DFR3Viewer extends React.Component {
 			mappingsLoading: nextProps.mappingsLoading
 		});
 		const { isMapping } = this.props.location.query;
-		if(nextProps.dfr3Curve !== {}){
-			isMapping ? this.onClickDFR3Mapping(nextProps.dfr3Mapping) : this.onClickDFR3Curve(nextProps.dfr3Curve);
+
+		if(nextProps.dfr3Curve !== {} && nextProps.dfr3Curve !== this.props.dfr3Curve){
+			if (isMapping) {
+				if (nextProps.dfr3Mapping !== this.props.dfr3Mapping) {
+					this.onClickDFR3Mapping(nextProps.dfr3Mapping)
+				}
+			}
+			else{
+				this.onClickDFR3Curve(nextProps.dfr3Curve);
+			}
 		}
 	}
 
@@ -1172,7 +1180,7 @@ class DFR3Viewer extends React.Component {
 																	className={classes.inlineButtons}
 																	size="small"
 																>
-																	Copy Shareable Link
+																	Copy Link
 																</Button>
 															</CopyToClipboard>
 															<Button
@@ -1348,7 +1356,7 @@ class DFR3Viewer extends React.Component {
 																className={classes.inlineButtons}
 																size="small"
 															>
-																Copy Shareable Link
+																Copy Link
 															</Button>
 														</CopyToClipboard>
 														<Button

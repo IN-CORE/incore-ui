@@ -197,7 +197,7 @@ class HazardViewer extends Component {
 			loading: nextProps.loading
 		});
 
-		if(nextProps.hazard !== {}){
+		if(nextProps.hazard !== {} && nextProps.hazard !== this.props.hazard) {
 			this.onClickHazard(nextProps.hazard);
 		}
 	}
@@ -548,8 +548,6 @@ class HazardViewer extends Component {
 										<Select
 											value={this.state.selectedHazardType}
 											onChange={(event) => {
-												// reset selected item
-												this.props.resetGetItem();
 												this.changeHazardType(event.target.value);
 											}}
 											className={classes.select}
@@ -713,7 +711,7 @@ class HazardViewer extends Component {
 																className={classes.inlineButtons}
 																size="small"
 															>
-																Copy Shareable Link
+																Copy Link
 															</Button>
 														</CopyToClipboard>
 														<Button
