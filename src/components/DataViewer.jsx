@@ -122,7 +122,7 @@ class DataViewer extends Component {
 		this.state = {
 			selectedDataType: "All",
 			selectedSpace: "All",
-			selectedDataset: "",
+			selectedDataset: null,
 			selectedDatasetFormat: "",
 			fileData: "",
 			fileExtension: "",
@@ -177,6 +177,13 @@ class DataViewer extends Component {
 					authError: false
 				},
 				function () {
+					// if there is id; get ID and set according state
+					const { id } = this.props.location.query;
+					if (id){
+						this.props.getItemById(id);
+					}
+
+					// get all datasets
 					this.props.getAllDatasets(
 						this.state.selectedDataType,
 						this.state.selectedSpace,
@@ -198,12 +205,6 @@ class DataViewer extends Component {
 	}
 
 	componentDidMount() {
-		// if there is id; get ID and set according state
-		const { id } = this.props.location.query;
-		if (id){
-			this.props.getItemById(id);
-		}
-
 		// reset delete error
 		this.props.resetError();
 	}

@@ -191,23 +191,32 @@ class DFR3Viewer extends React.Component {
 					authError: false
 				},
 				function () {
+					// if there is id; get ID and set according state
+					const { id, type } = this.props.location.query;
+					if (id && type) {
+						this.props.getDFR3ItemById(type, id);
+						this.changeDFR3Type(type);
+					}
+					// if not get all curves
+					else {
+						this.props.getAllDFR3Curves(
+							this.state.selectedDFR3Type,
+							this.state.selectedSpace,
+							this.state.selectedInventory,
+							this.state.selectedHazard,
+							this.state.dataPerPage,
+							this.state.offset
+						);
+						this.props.getAllDFR3Mappings(
+							this.state.selectedDFR3Type,
+							this.state.selectedSpace,
+							this.state.selectedInventory,
+							this.state.selectedHazard,
+							this.state.dataPerPage,
+							this.state.offsetMappings
+						);
+					}
 					this.props.getAllSpaces();
-					this.props.getAllDFR3Curves(
-						this.state.selectedDFR3Type,
-						this.state.selectedSpace,
-						this.state.selectedInventory,
-						this.state.selectedHazard,
-						this.state.dataPerPage,
-						this.state.offset
-					);
-					this.props.getAllDFR3Mappings(
-						this.state.selectedDFR3Type,
-						this.state.selectedSpace,
-						this.state.selectedInventory,
-						this.state.selectedHazard,
-						this.state.dataPerPage,
-						this.state.offsetMappings
-					);
 				}
 			);
 		}
@@ -220,13 +229,6 @@ class DFR3Viewer extends React.Component {
 	}
 
 	componentDidMount() {
-		// if there is id; get ID and set according state
-		const { id, type } = this.props.location.query;
-		if (id && type) {
-			this.props.getDFR3ItemById(type, id);
-			this.changeDFR3Type(type);
-		}
-
 		// reset delete error
 		this.props.resetError();
 	}
