@@ -248,14 +248,13 @@ class DFR3Viewer extends React.Component {
 			mappingsLoading: nextProps.mappingsLoading
 		});
 		const { isMapping } = this.props.location.query;
-
-		if(nextProps.dfr3Curve !== {} && nextProps.dfr3Curve !== this.props.dfr3Curve){
-			if (isMapping) {
-				if (next.dfr3Mapping !== {} && nextProps.dfr3Mapping !== this.props.dfr3Mapping) {
-					this.onClickDFR3Mapping(nextProps.dfr3Mapping)
-				}
+		if (isMapping) {
+			if (nextProps.dfr3Mapping !== {} && nextProps.dfr3Mapping !== this.props.dfr3Mapping) {
+				this.onClickDFR3Mapping(nextProps.dfr3Mapping);
 			}
-			else{
+		}
+		else{
+			if(nextProps.dfr3Curve !== {} && nextProps.dfr3Curve !== this.props.dfr3Curve){
 				this.onClickDFR3Curve(nextProps.dfr3Curve);
 			}
 		}
