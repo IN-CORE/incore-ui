@@ -7,7 +7,7 @@ import {
 	deleteItemById,
 	getItemById,
 	resetError,
-	resetGetItemById,
+	resetGetItem,
 } from "../actions";
 
 const mapStateToProps = (state) => {
@@ -38,8 +38,8 @@ const mapDispatchToProps = (dispatch) => {
 		getItemById: (hazard_type, id) => {
 			dispatch(getItemById(hazard_type, id));
 		},
-		resetGetDFR3ItemById: () => {
-			dispatch(resetGetItemById());
+		resetGetItem: () => {
+			dispatch(resetGetItem());
 		},
 		resetError: () => {
 			dispatch(resetError);

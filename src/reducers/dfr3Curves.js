@@ -1,4 +1,13 @@
-import {DFR3CURVE_LOADING, DFR3CURVE_LOAD_COMPLETE, RECEIVE_DFR3_CURVES, DELETE_ITEM, GET_ITEM, DELETE_ERROR, RESET_ERROR} from "../actions";
+import {
+	DFR3CURVE_LOADING,
+	DFR3CURVE_LOAD_COMPLETE,
+	RECEIVE_DFR3_CURVES,
+	DELETE_ITEM,
+	GET_ITEM,
+	DELETE_ERROR,
+	RESET_ERROR,
+	RESET_GET_ITEM
+} from "../actions";
 import {DFR3CurvesState, DFR3Curve} from "../utils/flowtype";
 
 type DFR3Action = {
@@ -24,6 +33,8 @@ const dfr3Curves = (state: DFR3CurvesState = defaultState, action: DFR3Action) =
 	case `${GET_ITEM}_RESTORATIONS`:
 		return Object.assign({}, state, {dfr3Curve: action.item});
 	case `${GET_ITEM}_REPAIRS`:
+		return Object.assign({}, state, {dfr3Curve: action.item});
+	case RESET_GET_ITEM:
 		return Object.assign({}, state, {dfr3Curve: action.item});
 	case DELETE_ERROR:
 		return Object.assign({}, state, {dfr3Curves:state.dfr3Curves, deleteError:true});

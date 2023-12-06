@@ -547,7 +547,11 @@ class HazardViewer extends Component {
 										<InputLabel>Hazard Type</InputLabel>
 										<Select
 											value={this.state.selectedHazardType}
-											onChange={(event) => {this.changeHazardType(event.target.value);}}
+											onChange={(event) => {
+												// reset selected item
+												this.props.resetGetItem();
+												this.changeHazardType(event.target.value);
+											}}
 											className={classes.select}
 										>
 											<MenuItem

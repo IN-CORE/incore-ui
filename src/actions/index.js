@@ -122,10 +122,11 @@ export function getItemById(resourceType, id) {
 	};
 }
 
-export function c(){
+export const RESET_GET_ITEM = "RESET_GET_ITEM";
+export function resetGetItem(){
 		return (dispatch: Dispatch) => {
 			dispatch({
-				type: GET_ITEM,
+				type: RESET_GET_ITEM,
 				item: {},
 				receivedAt: Date.now()
 			});
