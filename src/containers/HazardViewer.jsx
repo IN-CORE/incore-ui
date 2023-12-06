@@ -1,6 +1,14 @@
 import { connect } from "react-redux";
 import HazardViewerComponent from "../components/HazardViewer";
-import { fetchHazards, fetchSpaces, searchHazards, deleteItemById, getItemById, resetError, } from "../actions";
+import {
+	fetchHazards,
+	fetchSpaces,
+	searchHazards,
+	deleteItemById,
+	getItemById,
+	resetError,
+	resetGetItemById,
+} from "../actions";
 
 const mapStateToProps = (state) => {
 	return {
@@ -29,6 +37,9 @@ const mapDispatchToProps = (dispatch) => {
 		},
 		getItemById: (hazard_type, id) => {
 			dispatch(getItemById(hazard_type, id));
+		},
+		resetGetDFR3ItemById: () => {
+			dispatch(resetGetItemById());
 		},
 		resetError: () => {
 			dispatch(resetError);

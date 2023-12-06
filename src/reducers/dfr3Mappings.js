@@ -27,7 +27,7 @@ const dfr3Mappings = (state: DFR3MappingsState = defaultState, action: dfr3Actio
 			dfr3Mappings: state.dfr3Mappings.filter(dfr3Mapping => dfr3Mapping.id !== action.item.id),
 			deleteError: false
 		});
-	case GET_ITEM:
+	case `${GET_ITEM}_MAPPINGS`:
 		return Object.assign({}, state, {dfr3Mapping: action.item});
 	case DELETE_ERROR:
 		return Object.assign({}, state, {dfr3Mappings: state.dfr3Mappings, deleteError: true});

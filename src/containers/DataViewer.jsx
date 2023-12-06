@@ -7,7 +7,7 @@ import {
 	searchDatasets,
 	deleteItemById,
 	getItemById,
-	resetError
+	resetError, resetGetItemById
 } from "../actions";
 
 const mapStateToProps = (state) => {
@@ -41,6 +41,9 @@ const mapDispatchToProps = (dispatch) => {
 		},
 		getItemById: (id) => {
 			dispatch(getItemById("datasets", id));
+		},
+		resetGetItemById: () => {
+			dispatch(resetGetItemById());
 		},
 		resetError: () => {
 			dispatch(resetError);

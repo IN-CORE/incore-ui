@@ -28,7 +28,15 @@ const hazards = (state: HazardState = defaultState, action: HazardAction) => {
 			hazards: state.hazards.filter(hazard => hazard.id !== action.item.id),
 			deleteError: false
 		});
-	case GET_ITEM:
+	case `${GET_ITEM}_EARTHQUAKES`:
+		return Object.assign({}, state, {hazard: action.item});
+	case `${GET_ITEM}_FLOODS`:
+		return Object.assign({}, state, {hazard: action.item});
+	case `${GET_ITEM}_HURRICANES`:
+		return Object.assign({}, state, {hazard: action.item});
+	case `${GET_ITEM}_TORNADOES`:
+		return Object.assign({}, state, {hazard: action.item});
+	case `${GET_ITEM}_TSUNAMIS`:
 		return Object.assign({}, state, {hazard: action.item});
 	case DELETE_ERROR:
 		return Object.assign({}, state, {hazards:state.hazards, deleteError:true});

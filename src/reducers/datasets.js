@@ -6,7 +6,8 @@ import {
 	RECEIVE_DATASETS,
 	DELETE_ITEM,
 	DELETE_ERROR,
-	RESET_ERROR, GET_ITEM
+	RESET_ERROR,
+	GET_ITEM
 } from "../actions";
 import {DatasetState, Datasets, Dataset} from "../utils/flowtype";
 
@@ -29,7 +30,7 @@ const datasets = (state:DatasetState = defaultState, action:DatasetAction) => {
 			datasets: state.datasets.filter(dataset => dataset.id !== action.item.id),
 			deleteError: false
 		});
-	case GET_ITEM:
+	case `${GET_ITEM}_DATASETS`:
 		return Object.assign({}, state, {dataset: action.item});
 	case DELETE_ERROR:
 		return Object.assign({}, state, {datasets:state.datasets, deleteError:true});

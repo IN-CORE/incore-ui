@@ -99,7 +99,7 @@ export function getItemById(resourceType, id) {
 			if (response.status === 200) {
 				response.json().then((json) => {
 					dispatch({
-						type: GET_ITEM,
+						type: `${GET_ITEM}_${resourceType.toUpperCase()}`,
 						item: json,
 						receivedAt: Date.now()
 					});
@@ -120,6 +120,16 @@ export function getItemById(resourceType, id) {
 			}
 		});
 	};
+}
+
+export function c(){
+		return (dispatch: Dispatch) => {
+			dispatch({
+				type: GET_ITEM,
+				item: {},
+				receivedAt: Date.now()
+			});
+	}
 }
 
 export function deleteItemById(resourceType, id) {

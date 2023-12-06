@@ -19,7 +19,11 @@ const dfr3Curves = (state: DFR3CurvesState = defaultState, action: DFR3Action) =
 			dfr3Curves: state.dfr3Curves.filter(dfr3Curve => dfr3Curve.id !== action.item.id),
 			deleteError: false
 		});
-	case GET_ITEM:
+	case `${GET_ITEM}_FRAGILITIES`:
+		return Object.assign({}, state, {dfr3Curve: action.item});
+	case `${GET_ITEM}_RESTORATIONS`:
+		return Object.assign({}, state, {dfr3Curve: action.item});
+	case `${GET_ITEM}_REPAIRS`:
 		return Object.assign({}, state, {dfr3Curve: action.item});
 	case DELETE_ERROR:
 		return Object.assign({}, state, {dfr3Curves:state.dfr3Curves, deleteError:true});

@@ -7,7 +7,7 @@ import {
 	searchDFR3Curves,
 	searchDFR3Mappings,
 	deleteItemById,
-	resetError, getItemById
+	resetError, getItemById, resetGetItemById
 } from "../actions";
 
 const mapStateToProps = (state) => {
@@ -46,6 +46,9 @@ const mapDispatchToProps = (dispatch) => {
 		},
 		deleteDFR3ItemById: (dfr3_type, id) => {
 			dispatch(deleteItemById(dfr3_type, id));
+		},
+		resetGetDFR3ItemById: () => {
+			dispatch(resetGetItemById());
 		},
 		resetError: () => {
 			dispatch(resetError);
