@@ -160,12 +160,21 @@ class HazardViewer extends Component {
 				},
 				function () {
 					this.props.getAllSpaces();
-					this.props.getAllHazards(
-						this.state.selectedHazardType,
-						this.state.selectedSpace,
-						this.state.dataPerPage,
-						this.state.offset
-					);
+					// if there is id; get ID and set according state
+					const { id, type } = this.props.location.query;
+					if (id && type) {
+						this.props.getItemById(type, id);
+						this.changeHazardType(type);
+					}
+					// if not get all curves
+					else {
+						this.props.getAllHazards(
+							this.state.selectedHazardType,
+							this.state.selectedSpace,
+							this.state.dataPerPage,
+							this.state.offset
+						);
+					}
 				}
 			);
 		}
@@ -187,6 +196,10 @@ class HazardViewer extends Component {
 			authError: nextProps.authError,
 			loading: nextProps.loading
 		});
+
+		if(nextProps.hazard !== {}){
+			this.onClickHazard(nextProps.hazard);
+		}
 	}
 
 	// TODO set state inside component did up date is bad practice!!
@@ -198,12 +211,12 @@ class HazardViewer extends Component {
 		}
 	}
 
-	changeHazardType(event) {
+	changeHazardType(hazardType) {
 		this.setState(
 			{
 				pageNumber: 1,
 				offset: 0,
-				selectedHazardType: event.target.value,
+				selectedHazardType: hazardType,
 				selectedHazard: "",
 				selectedHazardDatasetId: "",
 				searchText: "",
@@ -244,8 +257,7 @@ class HazardViewer extends Component {
 		);
 	}
 
-	onClickHazard(hazardId) {
-		const hazard = this.props.hazards.find((hazard) => hazard.id === hazardId);
+	onClickHazard(hazard) {
 		this.setState({
 			selectedHazard: hazard,
 			selectedHazardDatasetId: "",
@@ -481,7 +493,7 @@ class HazardViewer extends Component {
 						return (
 							<ListItem
 								button
-								onClick={() => this.onClickHazard(hazard.id)}
+								onClick={() => this.onClickHazard(hazard)}
 								key={hazard.id}
 								selected={hazard.id === this.state.selectedHazard.id}
 							>
@@ -535,7 +547,7 @@ class HazardViewer extends Component {
 										<InputLabel>Hazard Type</InputLabel>
 										<Select
 											value={this.state.selectedHazardType}
-											onChange={this.changeHazardType}
+											onChange={(event) => {this.changeHazardType(event.target.value);}}
 											className={classes.select}
 										>
 											<MenuItem
@@ -684,6 +696,20 @@ class HazardViewer extends Component {
 																size="small"
 															>
 																Copy ID
+															</Button>
+														</CopyToClipboard>
+														<CopyToClipboard text={
+															`${window.location.protocol}//${window.location.hostname}
+																${window.location.port ? ':' + window.location.port : ''}
+																/HazardViewer?type=${this.state.selectedHazardType}
+																&id=${this.state.selectedHazard.id}`}>
+															<Button
+																color="secondary"
+																variant="contained"
+																className={classes.inlineButtons}
+																size="small"
+															>
+																Copy Shareable Link
 															</Button>
 														</CopyToClipboard>
 														<Button
