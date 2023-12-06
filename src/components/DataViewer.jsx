@@ -596,7 +596,7 @@ class DataViewer extends Component {
 		let file_list = "";
 		let file_contents = "";
 		let right_column = "";
-		if (this.state.selectedDataset) {
+		if (this.state.selectedDataset && this.state.selectedDataset.fileDescriptors && this.state.selectedDataset.fileDescriptors.length > 0) {
 			// file list
 			file_list = this.state.selectedDataset.fileDescriptors.map((file_descriptor) => (
 				<ListItem
