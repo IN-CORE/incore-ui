@@ -49,7 +49,7 @@ jobs:
 
           # calculate the version and all tags
           if [ "$BRANCH" == "main" ]; then
-            VERSION="$(awk '/^# \[/ { print $2; exit }' CHANGELOG.md | sed -e 's/\[//' -e 's/\]//')"
+            VERSION=$(grep '"version"' package.json | sed 's/.*"\([0-9\.]*\)", *$/\1/')
             tags="latest"
             oldversion=""
             tmpversion="${VERSION}"
