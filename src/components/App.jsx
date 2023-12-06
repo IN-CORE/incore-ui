@@ -405,41 +405,41 @@ class App extends Component {
 					className={classes.denseStyle}
 					onClick={() => {
 						this.handleViewerMenuClose();
+						browserHistory.push("/DFR3Viewer");
+						fetch("/DFR3Viewer");
 					}}
 				>
-					<Link href="/DFR3Viewer" style={{ textDecoration: "none" }}>
-						DFR3 Viewer
-					</Link>
+					DFR3 Viewer
 				</MenuItem>
 				<MenuItem
 					className={classes.denseStyle}
 					onClick={() => {
 						this.handleViewerMenuClose();
+						browserHistory.push("/DataViewer");
+						fetch("/DataViewer");
 					}}
 				>
-					<Link href="/DataViewer" style={{ textDecoration: "none" }}>
-						Data Viewer
-					</Link>
+					Data Viewer
 				</MenuItem>
 				<MenuItem
 					className={classes.denseStyle}
 					onClick={() => {
 						this.handleViewerMenuClose();
+						browserHistory.push("/HazardViewer");
+						fetch("/HazardViewer");
 					}}
 				>
-					<Link href="/HazardViewer" style={{ textDecoration: "none" }}>
-						Hazard Viewer
-					</Link>
+					Hazard Viewer
 				</MenuItem>
 				<MenuItem
 					className={classes.denseStyle}
 					onClick={() => {
 						this.handleViewerMenuClose();
+						browserHistory.push("/SemanticViewer");
+						fetch("/SemanticViewer");
 					}}
 				>
-					<Link href="/SemanticViewer" style={{ textDecoration: "none" }}>
-						Dataset Type Viewer
-					</Link>
+					Dataset Type Viewer
 				</MenuItem>
 			</Menu>
 		);
