@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 
 ### Security
+- Bump http-cache-semantics from 4.1.0 to 4.1.1 [#103](https://github.com/IN-CORE/incore-ui/pull/103)
 - Bump Browser-Sync version to 2.29.3 [#165](https://github.com/IN-CORE/incore-ui/pull/165)
 
 
