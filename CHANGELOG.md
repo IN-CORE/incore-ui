@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## [Unreleased]
+
+### Security
+- Bump Browser-Sync version to 2.29.3 [#165](https://github.com/IN-CORE/incore-ui/pull/165)
+
+
 ## [1.9.0] - 2023-11-09
 
 ### Added
