@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+
+### Security
+- Upgrade webpack to 5.76.0 [#109](https://github.com/IN-CORE/incore-ui/pull/109)
+
 
 ## [1.9.0] - 2023-11-09
 
