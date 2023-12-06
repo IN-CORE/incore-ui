@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## [Unreleased]
+
+### Security
+- Bump http-cache-semantics from 4.1.0 to 4.1.1 [#103](https://github.com/IN-CORE/incore-ui/pull/103)
+
+
 ## [1.9.0] - 2023-11-09
 
 ### Added
