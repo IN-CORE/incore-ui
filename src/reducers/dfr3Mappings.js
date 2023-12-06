@@ -5,7 +5,7 @@ import {
 	DFR3MAPPING_LOADING, GET_ITEM,
 	LOGIN_ERROR,
 	RECEIVE_DFR3_MAPPINGS,
-	RESET_ERROR, RESET_GET_ITEM
+	RESET_ERROR
 } from "../actions";
 import {DFR3Mappings, DFR3MappingsState} from "../utils/flowtype";
 
@@ -28,8 +28,6 @@ const dfr3Mappings = (state: DFR3MappingsState = defaultState, action: dfr3Actio
 			deleteError: false
 		});
 	case `${GET_ITEM}_MAPPINGS`:
-		return Object.assign({}, state, {dfr3Mapping: action.item});
-	case RESET_GET_ITEM:
 		return Object.assign({}, state, {dfr3Mapping: action.item});
 	case DELETE_ERROR:
 		return Object.assign({}, state, {dfr3Mappings: state.dfr3Mappings, deleteError: true});

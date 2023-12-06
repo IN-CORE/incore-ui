@@ -122,17 +122,6 @@ export function getItemById(resourceType, id) {
 	};
 }
 
-export const RESET_GET_ITEM = "RESET_GET_ITEM";
-export function resetGetItem(){
-		return (dispatch: Dispatch) => {
-			dispatch({
-				type: RESET_GET_ITEM,
-				item: {},
-				receivedAt: Date.now()
-			});
-	}
-}
-
 export function deleteItemById(resourceType, id) {
 	let endpoint = "";
 	if (resourceType === "datasets") {

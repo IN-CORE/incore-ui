@@ -47,9 +47,6 @@ const mapDispatchToProps = (dispatch) => {
 		deleteDFR3ItemById: (dfr3_type, id) => {
 			dispatch(deleteItemById(dfr3_type, id));
 		},
-		resetGetItemById: () => {
-			dispatch(resetGetItem());
-		},
 		resetError: () => {
 			dispatch(resetError);
 		}

@@ -6,7 +6,7 @@ import {
 	DELETE_ITEM,
 	DELETE_ERROR,
 	RESET_ERROR,
-	GET_ITEM, RESET_GET_ITEM
+	GET_ITEM
 } from "../actions";
 import {HazardState, Hazards} from "../utils/flowtype";
 
@@ -38,7 +38,7 @@ const hazards = (state: HazardState = defaultState, action: HazardAction) => {
 		return Object.assign({}, state, {hazard: action.item});
 	case `${GET_ITEM}_TSUNAMIS`:
 		return Object.assign({}, state, {hazard: action.item});
-	case RESET_GET_ITEM:
+	case `${GET_ITEM}_HURRICANEWINDFIELDS`:
 		return Object.assign({}, state, {hazard: action.item});
 	case DELETE_ERROR:
 		return Object.assign({}, state, {hazards:state.hazards, deleteError:true});
