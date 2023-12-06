@@ -6,12 +6,14 @@ import {
 	fetchUniqueDatatypes,
 	searchDatasets,
 	deleteItemById,
+	getItemById,
 	resetError
 } from "../actions";
 
 const mapStateToProps = (state) => {
 	return {
 		datasets: state.data.datasets,
+		dataset: state.data.dataset,
 		deleteError: state.data.deleteError,
 		spaces: state.space.spaces,
 		datatypes: state.datatype.datatypes,
@@ -36,6 +38,9 @@ const mapDispatchToProps = (dispatch) => {
 		},
 		deleteItemById: (id) => {
 			dispatch(deleteItemById("datasets", id));
+		},
+		getItemById: (id) => {
+			dispatch(getItemById("datasets", id));
 		},
 		resetError: () => {
 			dispatch(resetError);

@@ -1,9 +1,19 @@
-import {HAZARD_LOAD_COMPLETE, HAZARD_LOADING, LOGIN_ERROR, RECEIVE_HAZARDS, DELETE_ITEM, DELETE_ERROR, RESET_ERROR} from "../actions";
+import {
+	HAZARD_LOAD_COMPLETE,
+	HAZARD_LOADING,
+	LOGIN_ERROR,
+	RECEIVE_HAZARDS,
+	DELETE_ITEM,
+	DELETE_ERROR,
+	RESET_ERROR,
+	GET_ITEM
+} from "../actions";
 import {HazardState, Hazards} from "../utils/flowtype";
 
 type HazardAction = {
 	type: RECEIVE_HAZARDS,
 	hazards: Hazards,
+	hazard:Hazard,
 	item: Object,
 	loading: boolean
 }
@@ -18,6 +28,8 @@ const hazards = (state: HazardState = defaultState, action: HazardAction) => {
 			hazards: state.hazards.filter(hazard => hazard.id !== action.item.id),
 			deleteError: false
 		});
+	case GET_ITEM:
+		return Object.assign({}, state, {hazard: action.item});
 	case DELETE_ERROR:
 		return Object.assign({}, state, {hazards:state.hazards, deleteError:true});
 	case RESET_ERROR:
