@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+
+### Added
+- Allow id to routers and copying sharing link of any object [#145](https://github.com/IN-CORE/incore-ui/issues/145)
+
 
 ## [1.9.0] - 2023-11-09
 
