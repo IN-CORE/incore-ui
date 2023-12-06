@@ -495,7 +495,7 @@ class HazardViewer extends Component {
 								button
 								onClick={() => this.onClickHazard(hazard)}
 								key={hazard.id}
-								selected={hazard.id === this.state.selectedHazard.id}
+								selected={this.state.selectedHazard ? hazard.id === this.state.selectedHazard.id: false}
 							>
 								<ListItemText>{hazard.name ? `${hazard.name}` : `${hazard.id}`}</ListItemText>
 								<SpaceChip item={hazard} selectedItem={this.state.selectedHazard} />

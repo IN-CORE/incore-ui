@@ -192,10 +192,14 @@ class DFR3Viewer extends React.Component {
 				},
 				function () {
 					// if there is id; get ID and set according state
-					const { id, type } = this.props.location.query;
+					const { id, type, isMapping } = this.props.location.query;
 					if (id && type) {
-						this.props.getDFR3ItemById(type, id);
 						this.changeDFR3Type(type);
+						this.props.getDFR3ItemById(type, id);
+						// if it's mapping, further switch to the mapping tab
+						if (isMapping){
+							this.handleTabChange(null, 1)
+						}
 					}
 					// if not get all curves
 					else {
@@ -239,8 +243,9 @@ class DFR3Viewer extends React.Component {
 			curvesLoading: nextProps.curvesLoading,
 			mappingsLoading: nextProps.mappingsLoading
 		});
+		const { isMapping } = this.props.location.query;
 		if(nextProps.dfr3Curve !== {}){
-			this.onClickDFR3Curve(nextProps.dfr3Curve);
+			isMapping ? this.onClickDFR3Mapping(nextProps.dfr3Curve) : this.onClickDFR3Curve(nextProps.dfr3Curve);
 		}
 	}
 
@@ -1323,6 +1328,20 @@ class DFR3Viewer extends React.Component {
 															size="small"
 														>
 															Copy ID
+														</Button>
+													</CopyToClipboard>
+													<CopyToClipboard text={
+														`${window.location.protocol}//${window.location.hostname}
+																${window.location.port ? ':' + window.location.port : ''}
+																/DFR3Viewer?type=${this.state.selectedDFR3Type}
+																&id=${this.state.selectedMapping.id}&isMapping=${true}`}>
+														<Button
+															color="secondary"
+															variant="contained"
+															className={classes.inlineButtons}
+															size="small"
+														>
+															Copy Shareable Link
 														</Button>
 													</CopyToClipboard>
 													<Button
