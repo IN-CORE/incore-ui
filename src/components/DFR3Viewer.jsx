@@ -195,10 +195,14 @@ class DFR3Viewer extends React.Component {
 					const { id, type, isMapping } = this.props.location.query;
 					if (id && type) {
 						this.changeDFR3Type(type);
-						this.props.getDFR3ItemById(type, id);
-						// if it's mapping, further switch to the mapping tab
 						if (isMapping){
-							this.handleTabChange(null, 1)
+							// if it's mapping, further switch to the mapping tab
+							this.handleTabChange(null, 1);
+							this.props.getDFR3ItemById("mappings", id);
+						}
+						else{
+							this.handleTabChange(null, 0);
+							this.props.getDFR3ItemById(type, id);
 						}
 					}
 					// if not get all curves
@@ -245,7 +249,7 @@ class DFR3Viewer extends React.Component {
 		});
 		const { isMapping } = this.props.location.query;
 		if(nextProps.dfr3Curve !== {}){
-			isMapping ? this.onClickDFR3Mapping(nextProps.dfr3Curve) : this.onClickDFR3Curve(nextProps.dfr3Curve);
+			isMapping ? this.onClickDFR3Mapping(nextProps.dfr3Mapping) : this.onClickDFR3Curve(nextProps.dfr3Curve);
 		}
 	}
 

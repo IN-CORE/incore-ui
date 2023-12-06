@@ -16,6 +16,7 @@ const mapStateToProps = (state) => {
 		dfr3Curve: state.dfr3Curve.dfr3Curve,
 		deleteError: state.dfr3Curve.deleteError || state.dfr3Mapping.deleteError,
 		dfr3Mappings: state.dfr3Mapping.dfr3Mappings,
+		dfr3Mapping: state.dfr3Mapping.dfr3Mapping,
 		spaces: state.space.spaces,
 		authError: state.user.loginError,
 		curvesLoading: state.dfr3Curve.loading,
