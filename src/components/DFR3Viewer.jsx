@@ -1289,82 +1289,86 @@ class DFR3Viewer extends React.Component {
 									</LoadingOverlay>
 								</Grid>
 
-								<Grid
-									item
-									lg={8}
-									md={8}
-									xl={8}
-									xs={12}
-									className={this.state.selectedMapping ? null : classes.hide}
-								>
-									<Paper variant="outlined" className={classes.main}>
-										<IconButton
-											aria-label="Close"
-											onClick={this.closeMetadata}
-											className={classes.metadataCloseButton}
-										>
-											<CloseIcon fontSize="small" />
-										</IconButton>
-										{Object.keys(selectedMappingDetails).length > 0 ? (
-											<div>
-												<div className={classes.paperHeader}>
-													<Typography variant="subtitle1">Metadata</Typography>
-												</div>
-												<div className={classes.metadata}>
-													<Button
-														color="primary"
-														variant="contained"
-														className={classes.inlineButtons}
-														size="small"
-														onClick={this.exportMappingJson}
-													>
-														Download Metadata
-													</Button>
-													<CopyToClipboard text={this.state.selectedMapping.id}>
+								{this.state.metadataClosed ?
+									<></>
+									:
+									<Grid
+										item
+										lg={8}
+										md={8}
+										xl={8}
+										xs={12}
+										className={this.state.selectedMapping ? null : classes.hide}
+									>
+										<Paper variant="outlined" className={classes.main}>
+											<IconButton
+												aria-label="Close"
+												onClick={this.closeMetadata}
+												className={classes.metadataCloseButton}
+											>
+												<CloseIcon fontSize="small" />
+											</IconButton>
+											{Object.keys(selectedMappingDetails).length > 0 ? (
+												<div>
+													<div className={classes.paperHeader}>
+														<Typography variant="subtitle1">Metadata</Typography>
+													</div>
+													<div className={classes.metadata}>
+														<Button
+															color="primary"
+															variant="contained"
+															className={classes.inlineButtons}
+															size="small"
+															onClick={this.exportMappingJson}
+														>
+															Download Metadata
+														</Button>
+														<CopyToClipboard text={this.state.selectedMapping.id}>
+															<Button
+																color="secondary"
+																variant="contained"
+																className={classes.inlineButtons}
+																size="small"
+															>
+																Copy ID
+															</Button>
+														</CopyToClipboard>
+														<CopyToClipboard text={
+															`${window.location.protocol}//${window.location.hostname}
+																	${window.location.port ? ':' + window.location.port : ''}
+																	/DFR3Viewer?type=${this.state.selectedDFR3Type}
+																	&id=${this.state.selectedMapping.id}&isMapping=${true}`}>
+															<Button
+																color="secondary"
+																variant="contained"
+																className={classes.inlineButtons}
+																size="small"
+															>
+																Copy Shareable Link
+															</Button>
+														</CopyToClipboard>
 														<Button
 															color="secondary"
 															variant="contained"
 															className={classes.inlineButtons}
 															size="small"
+															onClick={() => {
+																this.onClickDelete("mapping");
+															}}
 														>
-															Copy ID
+															DELETE
 														</Button>
-													</CopyToClipboard>
-													<CopyToClipboard text={
-														`${window.location.protocol}//${window.location.hostname}
-																${window.location.port ? ':' + window.location.port : ''}
-																/DFR3Viewer?type=${this.state.selectedDFR3Type}
-																&id=${this.state.selectedMapping.id}&isMapping=${true}`}>
-														<Button
-															color="secondary"
-															variant="contained"
-															className={classes.inlineButtons}
-															size="small"
-														>
-															Copy Shareable Link
-														</Button>
-													</CopyToClipboard>
-													<Button
-														color="secondary"
-														variant="contained"
-														className={classes.inlineButtons}
-														size="small"
-														onClick={() => {
-															this.onClickDelete("mapping");
-														}}
-													>
-														DELETE
-													</Button>
+													</div>
+													<div className={classes.metadata}>
+														<NestedInfoTable data={selectedMappingDetails} />
+													</div>
 												</div>
-												<div className={classes.metadata}>
-													<NestedInfoTable data={selectedMappingDetails} />
-												</div>
-											</div>
-										) : (
-											<div />
-										)}
-									</Paper>
-								</Grid>
+											) : (
+												<div />
+											)}
+										</Paper>
+									</Grid>
+								}
 							</Grid>
 						) : (
 							<div />
