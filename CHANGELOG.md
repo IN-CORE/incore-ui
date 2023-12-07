@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## [Unreleased]
+
+### Security
+- Bump loader-utils from 2.0.2 to 2.0.4 [#98](https://github.com/IN-CORE/incore-ui/pull/98)
+- Bump json5 from 1.0.1 to 1.0.2 [#101](https://github.com/IN-CORE/incore-ui/pull/101)
+- Bump http-cache-semantics from 4.1.0 to 4.1.1 [#103](https://github.com/IN-CORE/incore-ui/pull/103)
+- Bump webpack from 5.74.0 to 5.76.0 [#109](https://github.com/IN-CORE/incore-ui/pull/109)
+- Bump Browser-Sync version to 2.29.3 [#165](https://github.com/IN-CORE/incore-ui/pull/165)
+
+
 ## [1.9.0] - 2023-11-09
 
 ### Added
