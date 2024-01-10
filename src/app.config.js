@@ -41,5 +41,6 @@ config["playbookImageDetails"] = [
 config["mailingList"] = "incore-dev@lists.illinois.edu";
 config["slackInvitationLink"] = "https://bit.ly/in-core";
 config["slackWorkspaceLink"] = "https://in-core.slack.com";
+config["githubRelease"] = "https://github.com/IN-CORE/IN-CORE/releases/tag/";
 
 export default config;

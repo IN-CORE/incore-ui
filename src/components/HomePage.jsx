@@ -19,7 +19,6 @@ const styles = (theme) => ({
 	root: {
 		color: theme.palette.primary,
 		position: "relative",
-		display: "flex",
 		alignItems: "center",
 		[theme.breakpoints.up("sm")]: {
 			minHeight: 400,
@@ -222,7 +221,7 @@ const styles = (theme) => ({
 	},
 	versionText: {
 		textAlign: "center",
-		color: "#6D6D6D"
+		color: "#6D6D6D",
 	}
 });
 
@@ -374,7 +373,9 @@ class HomePage extends Component {
 									</IconButton>
 								</Typography>
 								<Typography variant="subtitle1" style={{ textAlign: "center" }}>
-									Current Version: {this.state.githubVersions["in-core"]}
+									<Link href={config.githubRelease + this.state.githubVersions["in-core"]}>
+										Current Version: {this.state.githubVersions["in-core"]}
+									</Link>
 								</Typography>
 							</div>
 							<Collapse in={this.state.open}>
