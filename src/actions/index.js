@@ -1,5 +1,3 @@
-// @flow
-
 import Cookies from "universal-cookie";
 import config from "../app.config";
 
