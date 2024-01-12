@@ -8,18 +8,10 @@ import {
 	DELETE_ERROR,
 	RESET_ERROR
 } from "../actions";
-import {SemanticState, Semantics, Semantic} from "../utils/flowtype";
-
-type SemanticAction = {
-	type: RECEIVE_SEMANTICS,
-	semantics: Semantics,
-	item: Semantic,
-	loading: boolean
-}
 
 const defaultState = {semantics: [], loading: false};
 
-const semantics = (state:SemanticState = defaultState, action:SemanticAction) => {
+const semantics = (state = defaultState, action) => {
 	switch(action.type) {
 	case RECEIVE_SEMANTICS:
 		return Object.assign({}, state, {semantics: action.semantics});

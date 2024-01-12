@@ -7,17 +7,10 @@ import {
 	RECEIVE_DFR3_MAPPINGS,
 	RESET_ERROR
 } from "../actions";
-import {DFR3Mappings, DFR3MappingsState} from "../utils/flowtype";
 
-type dfr3Action = {
-	type: RECEIVE_DFR3_MAPPINGS,
-	dfr3Mappings: DFR3Mappings[],
-	item: DFR3Mappings,
-	loading: boolean
-}
 const defaultState = {dfr3Mappings: [], loading: false};
 
-const dfr3Mappings = (state: DFR3MappingsState = defaultState, action: dfr3Action) => {
+const dfr3Mappings = (state = defaultState, action) => {
 	switch (action.type) {
 	case RECEIVE_DFR3_MAPPINGS:
 		return Object.assign({}, state, {dfr3Mappings: action.dfr3Mappings});
