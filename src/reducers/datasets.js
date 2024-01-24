@@ -8,18 +8,10 @@ import {
 	DELETE_ERROR,
 	RESET_ERROR
 } from "../actions";
-import {DatasetState, Datasets, Dataset} from "../utils/flowtype";
-
-type DatasetAction = {
-	type: RECEIVE_DATASETS,
-	datasets: Datasets,
-	item: Dataset,
-	loading: boolean
-}
 
 const defaultState = {datasets: [], loading: false};
 
-const datasets = (state:DatasetState = defaultState, action:DatasetAction) => {
+const datasets = (state = defaultState, action) => {
 	switch(action.type) {
 	case RECEIVE_DATASETS:
 		return Object.assign({}, state, {datasets: action.datasets});
