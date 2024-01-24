@@ -2,7 +2,7 @@ import {
 	DELETE_ERROR,
 	DELETE_ITEM,
 	DFR3MAPPING_LOAD_COMPLETE,
-	DFR3MAPPING_LOADING,
+	DFR3MAPPING_LOADING, GET_ITEM,
 	LOGIN_ERROR,
 	RECEIVE_DFR3_MAPPINGS,
 	RESET_ERROR
@@ -12,6 +12,7 @@ import {DFR3Mappings, DFR3MappingsState} from "../utils/flowtype";
 type dfr3Action = {
 	type: RECEIVE_DFR3_MAPPINGS,
 	dfr3Mappings: DFR3Mappings[],
+	dfr3Mapping: DFR3Mappings,
 	item: DFR3Mappings,
 	loading: boolean
 }
@@ -26,6 +27,8 @@ const dfr3Mappings = (state: DFR3MappingsState = defaultState, action: dfr3Actio
 			dfr3Mappings: state.dfr3Mappings.filter(dfr3Mapping => dfr3Mapping.id !== action.item.id),
 			deleteError: false
 		});
+	case `${GET_ITEM}_MAPPINGS`:
+		return Object.assign({}, state, {dfr3Mapping: action.item});
 	case DELETE_ERROR:
 		return Object.assign({}, state, {dfr3Mappings: state.dfr3Mappings, deleteError: true});
 	case RESET_ERROR:

@@ -191,23 +191,40 @@ class DFR3Viewer extends React.Component {
 					authError: false
 				},
 				function () {
+					// if there is id; get ID and set according state
+					const { id, type, isMapping } = this.props.location.query;
+					if (id && type) {
+						this.changeDFR3Type(type);
+						if (isMapping){
+							// if it's mapping, further switch to the mapping tab
+							this.handleTabChange(null, 1);
+							this.props.getDFR3ItemById("mappings", id);
+						}
+						else{
+							this.handleTabChange(null, 0);
+							this.props.getDFR3ItemById(type, id);
+						}
+					}
+					// if not get all curves
+					else {
+						this.props.getAllDFR3Curves(
+							this.state.selectedDFR3Type,
+							this.state.selectedSpace,
+							this.state.selectedInventory,
+							this.state.selectedHazard,
+							this.state.dataPerPage,
+							this.state.offset
+						);
+						this.props.getAllDFR3Mappings(
+							this.state.selectedDFR3Type,
+							this.state.selectedSpace,
+							this.state.selectedInventory,
+							this.state.selectedHazard,
+							this.state.dataPerPage,
+							this.state.offsetMappings
+						);
+					}
 					this.props.getAllSpaces();
-					this.props.getAllDFR3Curves(
-						this.state.selectedDFR3Type,
-						this.state.selectedSpace,
-						this.state.selectedInventory,
-						this.state.selectedHazard,
-						this.state.dataPerPage,
-						this.state.offset
-					);
-					this.props.getAllDFR3Mappings(
-						this.state.selectedDFR3Type,
-						this.state.selectedSpace,
-						this.state.selectedInventory,
-						this.state.selectedHazard,
-						this.state.dataPerPage,
-						this.state.offsetMappings
-					);
 				}
 			);
 		}
@@ -230,6 +247,17 @@ class DFR3Viewer extends React.Component {
 			curvesLoading: nextProps.curvesLoading,
 			mappingsLoading: nextProps.mappingsLoading
 		});
+		const { isMapping } = this.props.location.query;
+		if (isMapping) {
+			if (nextProps.dfr3Mapping !== {} && nextProps.dfr3Mapping !== this.props.dfr3Mapping) {
+				this.onClickDFR3Mapping(nextProps.dfr3Mapping);
+			}
+		}
+		else{
+			if(nextProps.dfr3Curve !== {} && nextProps.dfr3Curve !== this.props.dfr3Curve){
+				this.onClickDFR3Curve(nextProps.dfr3Curve);
+			}
+		}
 	}
 
 	// TODO set state inside componentDidUpdate is bad practice!!
@@ -246,14 +274,14 @@ class DFR3Viewer extends React.Component {
 		}
 	}
 
-	changeDFR3Type(event) {
+	changeDFR3Type(type) {
 		this.setState(
 			{
 				searching: false,
 				searchText: "",
 				registeredSearchText: "",
 				selectedDFR3Curve: null,
-				selectedDFR3Type: event.target.value,
+				selectedDFR3Type: type,
 				pageNumber: 1,
 				offset: 0,
 				pageNumberMappings: 1,
@@ -481,7 +509,7 @@ class DFR3Viewer extends React.Component {
 	}
 
 	deleteMappingConfirmed() {
-		this.props.deleteMappingItemById(this.state.selectedMapping.id);
+		this.props.deleteDFR3ItemById("mappings", this.state.selectedMapping.id);
 		this.setState({
 			selectedMapping: "",
 			confirmOpen: false
@@ -489,7 +517,7 @@ class DFR3Viewer extends React.Component {
 	}
 
 	deleteCurveConfirmed() {
-		this.props.deleteCurveItemById(this.state.selectedDFR3Type, this.state.selectedDFR3Curve.id);
+		this.props.deleteDFR3ItemById(this.state.selectedDFR3Type, this.state.selectedDFR3Curve.id);
 		this.setState({
 			selectedDFR3Curve: "",
 			confirmOpen: false
@@ -851,7 +879,7 @@ class DFR3Viewer extends React.Component {
 										<InputLabel>Curve Type</InputLabel>
 										<Select
 											value={this.state.selectedDFR3Type}
-											onChange={this.changeDFR3Type}
+											onChange={(event)=> {this.changeDFR3Type(event.target.value);}}
 											className={classes.select}
 										>
 											<MenuItem
@@ -1140,6 +1168,20 @@ class DFR3Viewer extends React.Component {
 																	Copy ID
 																</Button>
 															</CopyToClipboard>
+															<CopyToClipboard text={
+																`${window.location.protocol}//${window.location.hostname}
+																${window.location.port ? ':' + window.location.port : ''}
+																/DFR3Viewer?type=${this.state.selectedDFR3Type}
+																&id=${this.state.selectedDFR3Curve.id}`}>
+																<Button
+																	color="secondary"
+																	variant="contained"
+																	className={classes.inlineButtons}
+																	size="small"
+																>
+																	Copy Link
+																</Button>
+															</CopyToClipboard>
 															<Button
 																color="secondary"
 																variant="contained"
@@ -1258,68 +1300,86 @@ class DFR3Viewer extends React.Component {
 									</LoadingOverlay>
 								</Grid>
 
-								<Grid
-									item
-									lg={8}
-									md={8}
-									xl={8}
-									xs={12}
-									className={this.state.selectedMapping ? null : classes.hide}
-								>
-									<Paper variant="outlined" className={classes.main}>
-										<IconButton
-											aria-label="Close"
-											onClick={this.closeMetadata}
-											className={classes.metadataCloseButton}
-										>
-											<CloseIcon fontSize="small" />
-										</IconButton>
-										{Object.keys(selectedMappingDetails).length > 0 ? (
-											<div>
-												<div className={classes.paperHeader}>
-													<Typography variant="subtitle1">Metadata</Typography>
-												</div>
-												<div className={classes.metadata}>
-													<Button
-														color="primary"
-														variant="contained"
-														className={classes.inlineButtons}
-														size="small"
-														onClick={this.exportMappingJson}
-													>
-														Download Metadata
-													</Button>
-													<CopyToClipboard text={this.state.selectedMapping.id}>
+								{this.state.metadataClosed ?
+									<></>
+									:
+									<Grid
+										item
+										lg={8}
+										md={8}
+										xl={8}
+										xs={12}
+										className={this.state.selectedMapping ? null : classes.hide}
+									>
+										<Paper variant="outlined" className={classes.main}>
+											<IconButton
+												aria-label="Close"
+												onClick={this.closeMetadata}
+												className={classes.metadataCloseButton}
+											>
+												<CloseIcon fontSize="small" />
+											</IconButton>
+											{Object.keys(selectedMappingDetails).length > 0 ? (
+												<div>
+													<div className={classes.paperHeader}>
+														<Typography variant="subtitle1">Metadata</Typography>
+													</div>
+													<div className={classes.metadata}>
+														<Button
+															color="primary"
+															variant="contained"
+															className={classes.inlineButtons}
+															size="small"
+															onClick={this.exportMappingJson}
+														>
+															Download Metadata
+														</Button>
+														<CopyToClipboard text={this.state.selectedMapping.id}>
+															<Button
+																color="secondary"
+																variant="contained"
+																className={classes.inlineButtons}
+																size="small"
+															>
+																Copy ID
+															</Button>
+														</CopyToClipboard>
+														<CopyToClipboard text={
+															`${window.location.protocol}//${window.location.hostname}
+																	${window.location.port ? ':' + window.location.port : ''}
+																	/DFR3Viewer?type=${this.state.selectedDFR3Type}
+																	&id=${this.state.selectedMapping.id}&isMapping=${true}`}>
+															<Button
+																color="secondary"
+																variant="contained"
+																className={classes.inlineButtons}
+																size="small"
+															>
+																Copy Link
+															</Button>
+														</CopyToClipboard>
 														<Button
 															color="secondary"
 															variant="contained"
 															className={classes.inlineButtons}
 															size="small"
+															onClick={() => {
+																this.onClickDelete("mapping");
+															}}
 														>
-															Copy ID
+															DELETE
 														</Button>
-													</CopyToClipboard>
-													<Button
-														color="secondary"
-														variant="contained"
-														className={classes.inlineButtons}
-														size="small"
-														onClick={() => {
-															this.onClickDelete("mapping");
-														}}
-													>
-														DELETE
-													</Button>
+													</div>
+													<div className={classes.metadata}>
+														<NestedInfoTable data={selectedMappingDetails} />
+													</div>
 												</div>
-												<div className={classes.metadata}>
-													<NestedInfoTable data={selectedMappingDetails} />
-												</div>
-											</div>
-										) : (
-											<div />
-										)}
-									</Paper>
-								</Grid>
+											) : (
+												<div />
+											)}
+										</Paper>
+									</Grid>
+								}
 							</Grid>
 						) : (
 							<div />

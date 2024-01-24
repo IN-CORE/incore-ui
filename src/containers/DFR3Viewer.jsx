@@ -7,14 +7,16 @@ import {
 	searchDFR3Curves,
 	searchDFR3Mappings,
 	deleteItemById,
-	resetError
+	resetError, getItemById
 } from "../actions";
 
 const mapStateToProps = (state) => {
 	return {
 		dfr3Curves: state.dfr3Curve.dfr3Curves,
+		dfr3Curve: state.dfr3Curve.dfr3Curve,
 		deleteError: state.dfr3Curve.deleteError || state.dfr3Mapping.deleteError,
 		dfr3Mappings: state.dfr3Mapping.dfr3Mappings,
+		dfr3Mapping: state.dfr3Mapping.dfr3Mapping,
 		spaces: state.space.spaces,
 		authError: state.user.loginError,
 		curvesLoading: state.dfr3Curve.loading,
@@ -39,11 +41,11 @@ const mapDispatchToProps = (dispatch) => {
 		searchAllDFR3Mappings: (dfr3_type, keyword, limit, offset) => {
 			dispatch(searchDFR3Mappings(dfr3_type, keyword, limit, offset));
 		},
-		deleteCurveItemById: (dfr3_type, id) => {
-			dispatch(deleteItemById(dfr3_type, id));
+		getDFR3ItemById: (dfr3_type, id) => {
+			dispatch(getItemById(dfr3_type, id));
 		},
-		deleteMappingItemById: (id) => {
-			dispatch(deleteItemById("mappings", id));
+		deleteDFR3ItemById: (dfr3_type, id) => {
+			dispatch(deleteItemById(dfr3_type, id));
 		},
 		resetError: () => {
 			dispatch(resetError);

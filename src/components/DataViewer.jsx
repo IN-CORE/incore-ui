@@ -122,7 +122,7 @@ class DataViewer extends Component {
 		this.state = {
 			selectedDataType: "All",
 			selectedSpace: "All",
-			selectedDataset: "",
+			selectedDataset: null,
 			selectedDatasetFormat: "",
 			fileData: "",
 			fileExtension: "",
@@ -177,6 +177,13 @@ class DataViewer extends Component {
 					authError: false
 				},
 				function () {
+					// if there is id; get ID and set according state
+					const { id } = this.props.location.query;
+					if (id){
+						this.props.getItemById(id);
+					}
+
+					// get all datasets
 					this.props.getAllDatasets(
 						this.state.selectedDataType,
 						this.state.selectedSpace,
@@ -207,6 +214,10 @@ class DataViewer extends Component {
 			authError: nextProps.authError,
 			loading: nextProps.loading
 		});
+
+		if(nextProps.dataset !== {} && nextProps.dataset !== this.props.dataset) {
+			this.onClickDataset(nextProps.dataset);
+		}
 	}
 
 	componentDidUpdate(prevProps, prevState) {
@@ -267,11 +278,10 @@ class DataViewer extends Component {
 		);
 	}
 
-	onClickDataset(datasetId) {
-		const dataset = this.props.datasets.find((dataset) => dataset.id === datasetId);
+	onClickDataset(dataset) {
 		this.setState({
 			selectedDataset: dataset,
-			selectedDatasetFormat: dataset.format,
+			selectedDatasetFormat: dataset ? dataset.format: "",
 			fileData: "",
 			fileExtension: "",
 			metadataClosed: false
@@ -533,123 +543,42 @@ class DataViewer extends Component {
 		let list_items = "";
 		if (this.props.datasets.length > 0) {
 			list_items = this.props.datasets.map((dataset) => {
-				if (dataset.format === "table") {
-					return (
-						<ListItem
-							button
-							onClick={() => this.onClickDataset(dataset.id)}
-							selected={dataset.id === this.state.selectedDataset.id}
-						>
-							<Tooltip title="Table">
-								<ListItemIcon>
-									<TableIcon fontSize="small" />
-								</ListItemIcon>
-							</Tooltip>
-							<ListItemText primary={`${dataset.title} - ${dataset.creator.capitalize()}`} />
+				return (
+					<ListItem
+						button
+						onClick={() => this.onClickDataset(dataset)}
+						selected={this.state.selectedDataset? dataset.id === this.state.selectedDataset.id: false}
+					>
+						<Tooltip title={
+							dataset.format === "table" ? "Table" :
+								dataset.format === "textFiles" ? "Text File":
+									dataset.format === "shapefile"
+									|| dataset.format.toLowerCase() === "raster"
+									|| dataset.format.toLowerCase().includes("geotif")? "Shapefile" :
+										dataset.format === "mapping" ? "Mapping" :
+											dataset.format === "fragility" ? "DFR3Curves" :
+												dataset.format === "Network" ? "Network" :
+													"Unknown Type"
+						}>
+							<ListItemIcon>
+								{
+									dataset.format === "table" ? <TableIcon fontSize="small" /> :
+										dataset.format === "textFiles" ? <TextIcon fontSize="small" /> :
+											dataset.format === "shapefile"
+											|| dataset.format.toLowerCase() === "raster"
+											|| dataset.format.toLowerCase().includes("geotif")? <MapIcon fontSize="small" /> :
+												dataset.format === "mapping" ? <MappingIcon fontSize="small" /> :
+													dataset.format === "fragility" ? <ChartIcon fontSize="small" /> :
+														dataset.format === "Network" ? <NetworkIcon fontSize="small" /> :
+															<UnknownIcon fontSize="small" />
+								}
+
+							</ListItemIcon>
+						</Tooltip>
+						<ListItemText primary={`${dataset.title} - ${dataset.creator.capitalize()}`} />
 							<SpaceChip item={dataset} selectedItem={this.state.selectedDataset} />
-						</ListItem>
-					);
-				} else if (dataset.format === "textFiles") {
-					return (
-						<ListItem
-							button
-							onClick={() => this.onClickDataset(dataset.id)}
-							selected={dataset.id === this.state.selectedDataset.id}
-						>
-							<Tooltip title="Text File">
-								<ListItemIcon>
-									<TextIcon fontSize="small" />
-								</ListItemIcon>
-							</Tooltip>
-							<ListItemText primary={`${dataset.title} - ${dataset.creator.capitalize()}`} />
-							<SpaceChip item={dataset} selectedItem={this.state.selectedDataset} />
-						</ListItem>
-					);
-				} else if (
-					dataset.format.toLowerCase() === "shapefile" ||
-					dataset.format.toLowerCase() === "raster" ||
-					dataset.format.toLowerCase().includes("geotif")
-				) {
-					return (
-						<ListItem
-							button
-							onClick={() => this.onClickDataset(dataset.id)}
-							selected={dataset.id === this.state.selectedDataset.id}
-						>
-							<Tooltip title="Shapefile">
-								<ListItemIcon>
-									<MapIcon fontSize="small" />
-								</ListItemIcon>
-							</Tooltip>
-							<ListItemText primary={`${dataset.title} - ${dataset.creator.capitalize()}`} />
-							<SpaceChip item={dataset} selectedItem={this.state.selectedDataset} />
-						</ListItem>
-					);
-				} else if (dataset.format === "mapping") {
-					return (
-						<ListItem
-							button
-							onClick={() => this.onClickDataset(dataset.id)}
-							selected={dataset.id === this.state.selectedDataset.id}
-						>
-							<Tooltip title="Mapping">
-								<ListItemIcon>
-									<MappingIcon fontSize="small" />
-								</ListItemIcon>
-							</Tooltip>
-							<ListItemText primary={`${dataset.title} - ${dataset.creator.capitalize()}`} />
-							<SpaceChip item={dataset} selectedItem={this.state.selectedDataset} />
-						</ListItem>
-					);
-				} else if (dataset.format === "fragility") {
-					return (
-						<ListItem
-							button
-							onClick={() => this.onClickDataset(dataset.id)}
-							selected={dataset.id === this.state.selectedDataset.id}
-						>
-							<Tooltip title="DFR3Curves">
-								<ListItemIcon>
-									<ChartIcon fontSize="small" />
-								</ListItemIcon>
-							</Tooltip>
-							<ListItemText primary={`${dataset.title} - ${dataset.creator.capitalize()}`} />
-							<SpaceChip item={dataset} selectedItem={this.state.selectedDataset} />
-						</ListItem>
-					);
-				} else if (dataset.format === "Network") {
-					return (
-						<ListItem
-							button
-							onClick={() => this.onClickDataset(dataset.id)}
-							selected={dataset.id === this.state.selectedDataset.id}
-						>
-							<Tooltip title="Network">
-								<ListItemIcon>
-									<NetworkIcon fontSize="small" />
-								</ListItemIcon>
-							</Tooltip>
-							<ListItemText primary={`${dataset.title} - ${dataset.creator.capitalize()}`} />
-							<SpaceChip item={dataset} selectedItem={this.state.selectedDataset} />
-						</ListItem>
-					);
-				} else {
-					return (
-						<ListItem
-							button
-							onClick={() => this.onClickDataset(dataset.id)}
-							selected={dataset.id === this.state.selectedDataset.id}
-						>
-							<Tooltip title="Unknown Type">
-								<ListItemIcon>
-									<UnknownIcon fontSize="small" />
-								</ListItemIcon>
-							</Tooltip>
-							<ListItemText primary={`${dataset.title} - ${dataset.creator.capitalize()}`} />
-							<SpaceChip item={dataset} selectedItem={this.state.selectedDataset} />
-						</ListItem>
-					);
-				}
+					</ListItem>
+				);
 			});
 		}
 
@@ -667,7 +596,7 @@ class DataViewer extends Component {
 		let file_list = "";
 		let file_contents = "";
 		let right_column = "";
-		if (this.state.selectedDataset) {
+		if (this.state.selectedDataset && this.state.selectedDataset.fileDescriptors && this.state.selectedDataset.fileDescriptors.length > 0) {
 			// file list
 			file_list = this.state.selectedDataset.fileDescriptors.map((file_descriptor) => (
 				<ListItem
@@ -894,6 +823,19 @@ class DataViewer extends Component {
 															size="small"
 														>
 															Copy ID
+														</Button>
+													</CopyToClipboard>
+													<CopyToClipboard text={
+														`${window.location.protocol}//${window.location.hostname}
+																${window.location.port ? ':' + window.location.port : ''}
+																/DataViewer?id=${this.state.selectedDataset.id}`}>
+														<Button
+															color="secondary"
+															variant="contained"
+															className={classes.inlineButtons}
+															size="small"
+														>
+															Copy Link
 														</Button>
 													</CopyToClipboard>
 													<Button
