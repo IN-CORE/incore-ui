@@ -221,7 +221,7 @@ const styles = (theme) => ({
 	},
 	versionText: {
 		textAlign: "center",
-		color: "#6D6D6D",
+		color: "#6D6D6D"
 	}
 });
 
