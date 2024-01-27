@@ -80,6 +80,7 @@ const styles = (theme) => ({
 		textAlign: "left"
 	},
 	more: {
+		fontSize: "16px",
 		textAlign: "center",
 		marginTop: theme.spacing(2)
 	},
@@ -180,6 +181,10 @@ const styles = (theme) => ({
 		"textAlign": "left",
 		"marginLeft": theme.spacing(4),
 		"fontSize": "16px",
+		"fontFamily": "Work Sans, sans-serif",
+		"fontWeight": "400",
+		"lineHeight": "1.5",
+		"letterSpacing": "0.00938em",
 
 		"& pre": {
 			backgroundColor: "#f5f5f5",
@@ -319,7 +324,7 @@ class HomePage extends Component {
 				<section className={classes.root}>
 					<Container className={classes.container}>
 						<img src="/public/resilience-logo.png" />
-						<Typography color="inherit" align="center" variant="h6" className={classes.caption}>
+						<Typography color="inherit" align="center" variant="h5" className={classes.caption}>
 							{this.state.subTitle}
 						</Typography>
 						{/*Intro block*/}
@@ -367,7 +372,8 @@ class HomePage extends Component {
 									style={{ cursor: "pointer", textAlign: "center" }}
 									onClick={this.toggleCollapse}
 								>
-									What&apos;s new in <span className="greenText">IN-CORE 4.8?</span>
+									What&apos;s new in{" "}
+									<span className="greenText">IN-CORE {this.state.githubVersions["in-core"]}?</span>
 									<IconButton>
 										{this.state.open ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
 									</IconButton>
@@ -429,8 +435,8 @@ class HomePage extends Component {
 										<Link href={config.pyIncoreDocUrl} target="_blank" className={classes.link}>
 											pyincore
 										</Link>
-										&nbsp;pyincore, a python package that contains service classes to connect with
-										IN-CORE web services and functionalities for IN-CORE analyses.
+										, a python package that contains service classes to connect with IN-CORE web
+										services and functionalities for IN-CORE analyses.
 										<pre>
 											<code>
 												conda config --add channels conda-forge{"\n"}
@@ -446,6 +452,7 @@ class HomePage extends Component {
 										alignSelf="center"
 										className={classes.button}
 										startIcon={<HowToRegIcon />}
+										target={"_blank"}
 										href={config.signUpURL}
 									>
 										Sign up for IN-CORE
@@ -471,6 +478,7 @@ class HomePage extends Component {
 										variant="contained"
 										color="primary"
 										alignSelf="center"
+										target={"_blank"}
 										href={config.incoreDocUrl}
 										className={classes.button}
 										startIcon={<BookIcon />}
@@ -481,6 +489,7 @@ class HomePage extends Component {
 										variant="contained"
 										color="primary"
 										alignSelf="center"
+										target={"_blank"}
 										href={config.incoreTutorialUrl}
 										className={classes.button}
 										startIcon={<SchoolIcon />}
@@ -493,19 +502,20 @@ class HomePage extends Component {
 							<div>
 								<h2>Get Help</h2>
 								<p>
-									Got questions or need assistance? There are three ways to reach out for help:&nbsp;
+									Got questions or need assistance? There are three ways to reach out for help review
+									our:&nbsp;
 									<Link href={config.incoreFAQUrl} target="_blank" className={classes.link}>
-										review our FAQs for the most common questions
+										FAQs
 									</Link>
-									, &nbsp;
+									&nbsp;for the most common questions, join the&nbsp;
 									<Link href={config.slackInvitationLink} target="_blank" className={classes.link}>
-										join the IN-CORE Slack channel
+										IN-CORE Slack channel
 									</Link>
 									, or&nbsp;
 									<Link href={`mailto:${config.mailingList}`} className={classes.link}>
-										email our dev team
+										email
 									</Link>
-									.
+									&nbsp;our dev team.
 								</p>
 								<div className={classes.buttonDiv}>
 									<Button
@@ -523,7 +533,6 @@ class HomePage extends Component {
 										variant="contained"
 										color="primary"
 										className={classes.button}
-										style={{ marginRight: "1em" }}
 									>
 										<img
 											src="/public/slack-logo.png"
@@ -541,7 +550,6 @@ class HomePage extends Component {
 										Email Us
 									</Button>
 								</div>
-								<Divider />
 							</div>
 						</div>
 					</Container>
