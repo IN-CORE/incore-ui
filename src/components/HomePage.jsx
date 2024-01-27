@@ -520,6 +520,7 @@ class HomePage extends Component {
 								<div className={classes.buttonDiv}>
 									<Button
 										href={config.incoreFAQUrl}
+										target="_blank"
 										variant="contained"
 										color="primary"
 										className={classes.button}
