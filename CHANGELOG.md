@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 - Remodel the landing page [#170](https://github.com/IN-CORE/incore-ui/issues/170)
+- Hazard viewer previewing hazard datasets [#172](https://github.com/IN-CORE/incore-ui/pull/172)
 
 ## [1.9.1] - 2023-12-14
 

@@ -35,7 +35,6 @@ class NestedInfoTable extends React.Component {
 			return regexErgo.test(datatype) || regexIncore.test(datatype);
 		};
 		const renderDataRows = (data, classes, onClick) => {
-			const keysToExclude = ["hazardDatasets", "rasterDataset", "datasetId"];
 			return Object.keys(data).map((key) => {
 				if (key === "hazardDatasets" && data[key].length > 0) {
 					return (
@@ -64,52 +63,6 @@ class NestedInfoTable extends React.Component {
 											);
 										}
 									})}
-								</List>
-							</TableCell>
-						</TableRow>
-					);
-				} else if (key === "rasterDataset" && data[key] && data[key].datasetId) {
-					return (
-						<TableRow key={key}>
-							<TableCell className={classes.rowHeaderCell}>{key}</TableCell>
-							<TableCell>
-								<List>
-									<ListItem key={data[key].datasetId}>
-										<Button
-											color="primary"
-											variant="contained"
-											size="small"
-											className={classes.inlineButtons}
-											onClick={() => onClick(data[key].datasetId)}
-										>
-											Preview
-										</Button>
-										{data[key].datasetId}
-									</ListItem>
-									<Divider />
-								</List>
-							</TableCell>
-						</TableRow>
-					);
-				} else if (key === "datasetId" && data[key]) {
-					return (
-						<TableRow key={key}>
-							<TableCell className={classes.rowHeaderCell}>{key}</TableCell>
-							<TableCell>
-								<List>
-									<ListItem key={data[key]}>
-										<Button
-											color="primary"
-											variant="contained"
-											size="small"
-											className={classes.inlineButtons}
-											onClick={() => onClick(data[key])}
-										>
-											Preview
-										</Button>
-										{data[key]}
-									</ListItem>
-									<Divider />
 								</List>
 							</TableCell>
 						</TableRow>

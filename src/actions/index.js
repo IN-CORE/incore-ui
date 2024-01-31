@@ -1,5 +1,3 @@
-// @flow
-
 import Cookies from "universal-cookie";
 import config from "../app.config";
 
@@ -16,8 +14,8 @@ export const resetError = {
 	type: RESET_ERROR
 };
 
-export function receiveAnalyses(api: string, json: AnalysesMetadata) {
-	return (dispatch: Dispatch) => {
+export function receiveAnalyses(api, json) {
+	return (dispatch) => {
 		dispatch({
 			type: RECEIVE_ANALYSES,
 			analyses: json,
@@ -28,8 +26,8 @@ export function receiveAnalyses(api: string, json: AnalysesMetadata) {
 
 export const RECEIVE_ANALYSIS = "RECEIVE_ANALYSIS";
 
-export function receiveAnalysis(api: string, json: Analysis) {
-	return (dispatch: Dispatch) => {
+export function receiveAnalysis(api, json) {
+	return (dispatch) => {
 		dispatch({
 			type: RECEIVE_ANALYSIS,
 			analysis: json,
@@ -40,8 +38,8 @@ export function receiveAnalysis(api: string, json: Analysis) {
 
 export const RECEIVE_DATASETS = "RECEIVE_DATASETS";
 
-export function receiveDatasets(type: string, json: Datasets) {
-	return (dispatch: Dispatch) => {
+export function receiveDatasets(type, json) {
+	return (dispatch) => {
 		dispatch({
 			type: type,
 			datasets: json,
@@ -53,7 +51,7 @@ export function receiveDatasets(type: string, json: Datasets) {
 export const RECEIVE_USAGE = "RECEIVE_USAGE";
 export const RECEIVE_LAB_USAGE = "RECEIVE_LAB_USAGE";
 export function receieveUsage(type, json) {
-	return (dispatch: Dispatch) => {
+	return (dispatch) => {
 		dispatch({
 			type: type,
 			usage: json,
@@ -62,8 +60,8 @@ export function receieveUsage(type, json) {
 	};
 }
 
-export function deleteItem(type: string, json) {
-	return (dispatch: Dispatch) => {
+export function deleteItem(type, json) {
+	return (dispatch) => {
 		dispatch({
 			type: type,
 			item: json,
@@ -93,7 +91,7 @@ export function deleteItemById(resourceType, id) {
 	) {
 		endpoint = `${config.hazardServiceBase}${resourceType}/${id}`;
 	}
-	return (dispatch: Dispatch) => {
+	return (dispatch) => {
 		return fetch(endpoint, { mode: "cors", method: "DELETE", headers: getHeader() }).then((response) => {
 			if (response.status === 200) {
 				response.json().then((json) => {
@@ -111,8 +109,8 @@ export function deleteItemById(resourceType, id) {
 
 export const RECEIVE_HAZARDS = "RECEIVE_HAZARDS";
 
-export function receiveHazards(type: string, json: Hazards) {
-	return (dispatch: Dispatch) => {
+export function receiveHazards(type, json) {
+	return (dispatch) => {
 		dispatch({
 			type: type,
 			hazards: json,
@@ -123,8 +121,8 @@ export function receiveHazards(type: string, json: Hazards) {
 
 export const RECEIVE_DFR3_CURVES = "RECEIVE_DFR3_CURVES";
 
-export function receiveDFR3Curves(type: string, json: DFR3Curves) {
-	return (dispatch: Dispatch) => {
+export function receiveDFR3Curves(type, json) {
+	return (dispatch) => {
 		dispatch({
 			type: type,
 			dfr3Curves: json,
@@ -135,8 +133,8 @@ export function receiveDFR3Curves(type: string, json: DFR3Curves) {
 
 export const RECEIVE_DFR3_MAPPINGS = "RECEIVE_DFR3_MAPPINGS";
 
-export function receiveDFR3Mappings(type: string, json: DFR3Mappings) {
-	return (dispatch: Dispatch) => {
+export function receiveDFR3Mappings(type, json) {
+	return (dispatch) => {
 		dispatch({
 			type: type,
 			dfr3Mappings: json,
@@ -147,8 +145,8 @@ export function receiveDFR3Mappings(type: string, json: DFR3Mappings) {
 
 export const RECEIVE_SPACES = "RECEIVE_SPACES";
 
-export function receiveSpaces(type: string, json) {
-	return (dispatch: Dispatch) => {
+export function receiveSpaces(type, json) {
+	return (dispatch) => {
 		dispatch({
 			type: type,
 			spaces: json,
@@ -159,8 +157,8 @@ export function receiveSpaces(type: string, json) {
 
 export const RECEIVE_DATATYPES = "RECEIVE_DATATYPES";
 
-export function receiveDatatypes(type: string, json) {
-	return (dispatch: Dispatch) => {
+export function receiveDatatypes(type, json) {
+	return (dispatch) => {
 		dispatch({
 			type: type,
 			datatypes: json,
@@ -172,7 +170,7 @@ export function receiveDatatypes(type: string, json) {
 export function fetchAnalyses() {
 	const endpoint = `${config.maestroService}/api/analyses?full=false`;
 
-	return (dispatch: Dispatch) => {
+	return (dispatch) => {
 		return fetch(endpoint, {
 			headers: getHeader()
 		})
@@ -181,11 +179,11 @@ export function fetchAnalyses() {
 	};
 }
 
-export function getAnalysisById(id: String) {
+export function getAnalysisById(id) {
 	//TODO: Move to a configuration file
 	const endpoint = `${config.maestroService}/api/analyses/${id}`;
 
-	return (dispatch: Dispatch) => {
+	return (dispatch) => {
 		return fetch(endpoint, {
 			headers: getHeader()
 		})
@@ -196,7 +194,7 @@ export function getAnalysisById(id: String) {
 
 export function searchDatasets(keyword, limit, offset) {
 	let endpoint = `${config.dataService}/search?excludeHazard=true&limit=${limit}&skip=${offset}&text=${keyword}`;
-	return (dispatch: Dispatch) => {
+	return (dispatch) => {
 		dispatch(loading(DATA_LOADING));
 		return fetch(endpoint, { mode: "cors", headers: getHeader() }).then((response) => {
 			dispatch(loadComplete(DATA_LOAD_COMPLETE));
@@ -223,7 +221,7 @@ export function fetchDatasets(dataType, space, limit, offset) {
 		endpoint = `${endpoint}&space=${space}`;
 	}
 
-	return (dispatch: Dispatch) => {
+	return (dispatch) => {
 		dispatch(loading(DATA_LOADING));
 		return fetch(endpoint, { mode: "cors", headers: getHeader() }).then((response) => {
 			dispatch(loadComplete(DATA_LOAD_COMPLETE));
@@ -243,7 +241,7 @@ export function fetchDatasets(dataType, space, limit, offset) {
 
 export function fetchUsage() {
 	let endpoint = `${config.spaceServiceBase}usage`;
-	return (dispatch: Dispatch) => {
+	return (dispatch) => {
 		return fetch(endpoint, { mode: "cors", headers: getHeader() }).then((response) => {
 			if (response.status === 200) {
 				response.json().then((json) => {
@@ -261,7 +259,7 @@ export function fetchUsage() {
 
 export function fetchLabUsage() {
 	// TODO implment
-	return (dispatch: Dispatch) => {
+	return (dispatch) => {
 		let json = {
 			user: "commresilience",
 			total_number_of_datasets: 50,
@@ -274,7 +272,7 @@ export function fetchLabUsage() {
 
 export function fetchSpaces() {
 	const endpoint = config.spaceService;
-	return (dispatch: Dispatch) => {
+	return (dispatch) => {
 		return fetch(endpoint, { mode: "cors", headers: getHeader() }).then((response) => {
 			if (response.status === 200) {
 				response.json().then((json) => {
@@ -293,7 +291,7 @@ export function fetchSpaces() {
 export const RECEIVE_ALLOCATIONS = "RECEIVE_ALLOCATIONS";
 export function fetchAllocations() {
 	const endpoint = `${config.spaceServiceBase}allocations`;
-	return (dispatch: Dispatch) => {
+	return (dispatch) => {
 		return fetch(endpoint, { mode: "cors", headers: getHeader() }).then((response) => {
 			if (response.status === 200) {
 				response.json().then((json) => {
@@ -323,7 +321,7 @@ export function fetchAllocations() {
 
 export function fetchUniqueDatatypes() {
 	let endpoint = `${config.dataServiceBase}datatypes`;
-	return (dispatch: Dispatch) => {
+	return (dispatch) => {
 		return fetch(endpoint, { mode: "cors", headers: getHeader() }).then((response) => {
 			if (response.status === 200) {
 				response.json().then((json) => {
@@ -341,7 +339,7 @@ export function fetchUniqueDatatypes() {
 
 export function searchDFR3Curves(dfr3_type, keyword, limit, offset) {
 	let endpoint = `${config.dfr3ServiceBase}${dfr3_type}/search?limit=${limit}&skip=${offset}&text=${keyword}`;
-	return (dispatch: Dispatch) => {
+	return (dispatch) => {
 		dispatch(loading(DFR3CURVE_LOADING));
 		return fetch(endpoint, { mode: "cors", headers: getHeader() }).then((response) => {
 			dispatch(loadComplete(DFR3CURVE_LOAD_COMPLETE));
@@ -359,7 +357,7 @@ export function searchDFR3Curves(dfr3_type, keyword, limit, offset) {
 	};
 }
 
-export function fetchDFR3Curves(dfr3_type: string, space: string, inventory: string, hazard: string, limit, offset) {
+export function fetchDFR3Curves(dfr3_type, space, inventory, hazard, limit, offset) {
 	let endpoint = `${config.dfr3ServiceBase}${dfr3_type}?limit=${limit}&skip=${offset}`;
 	if (space !== null && space !== "All") {
 		endpoint = `${endpoint}&space=${space}`;
@@ -370,7 +368,7 @@ export function fetchDFR3Curves(dfr3_type: string, space: string, inventory: str
 	if (hazard !== null && hazard !== "All") {
 		endpoint = `${endpoint}&hazard=${hazard}`;
 	}
-	return (dispatch: Dispatch) => {
+	return (dispatch) => {
 		dispatch(loading(DFR3CURVE_LOADING));
 		return fetch(endpoint, { mode: "cors", headers: getHeader() }).then((response) => {
 			dispatch(loadComplete(DFR3CURVE_LOAD_COMPLETE));
@@ -389,7 +387,7 @@ export function fetchDFR3Curves(dfr3_type: string, space: string, inventory: str
 }
 
 //TODO: Move this to app.config?
-export function getMappingTypeFromDFR3Url(dfr3_type: string) {
+export function getMappingTypeFromDFR3Url(dfr3_type) {
 	switch (dfr3_type.toLowerCase()) {
 		case "fragilities":
 			return "fragility";
@@ -400,7 +398,7 @@ export function getMappingTypeFromDFR3Url(dfr3_type: string) {
 	}
 }
 
-export function fetchDFR3Mappings(dfr3_type: string, space: string, inventory: string, hazard: string, limit, offset) {
+export function fetchDFR3Mappings(dfr3_type, space, inventory, hazard, limit, offset) {
 	let endpoint = `${config.dfr3ServiceBase}mappings?limit=${limit}&skip=${offset}`;
 
 	if (dfr3_type !== null && dfr3_type !== "All") {
@@ -418,7 +416,7 @@ export function fetchDFR3Mappings(dfr3_type: string, space: string, inventory: s
 		endpoint = `${endpoint}&hazard=${hazard}`;
 	}
 
-	return (dispatch: Dispatch) => {
+	return (dispatch) => {
 		dispatch(loading(DFR3MAPPING_LOADING));
 		return fetch(endpoint, { mode: "cors", headers: getHeader() }).then((response) => {
 			dispatch(loadComplete(DFR3MAPPING_LOAD_COMPLETE));
@@ -445,7 +443,7 @@ export function searchDFR3Mappings(dfr3_type, keyword, limit, offset) {
 		endpoint = `${endpoint}&mappingType=${dfr3_type}`;
 	}
 
-	return (dispatch: Dispatch) => {
+	return (dispatch) => {
 		dispatch(loading(DFR3MAPPING_LOADING));
 		return fetch(endpoint, { mode: "cors", headers: getHeader() }).then((response) => {
 			dispatch(loadComplete(DFR3MAPPING_LOAD_COMPLETE));
@@ -465,7 +463,7 @@ export function searchDFR3Mappings(dfr3_type, keyword, limit, offset) {
 
 export function searchHazards(hazard_type, keyword, limit, offset) {
 	let endpoint = `${config.hazardServiceBase}${hazard_type}/search?limit=${limit}&skip=${offset}&text=${keyword}`;
-	return (dispatch: Dispatch) => {
+	return (dispatch) => {
 		dispatch(loading(HAZARD_LOADING));
 		return fetch(endpoint, { mode: "cors", headers: getHeader() }).then((response) => {
 			dispatch(loadComplete(HAZARD_LOAD_COMPLETE));
@@ -483,12 +481,12 @@ export function searchHazards(hazard_type, keyword, limit, offset) {
 	};
 }
 
-export function fetchHazards(hazard_type: string, space: string, limit, offset) {
+export function fetchHazards(hazard_type, space, limit, offset) {
 	let endpoint = `${config.hazardServiceBase}${hazard_type}?limit=${limit}&skip=${offset}`;
 	if (space !== null && space !== "All") {
 		endpoint = `${endpoint}&space=${space}`;
 	}
-	return (dispatch: Dispatch) => {
+	return (dispatch) => {
 		dispatch(loading(HAZARD_LOADING));
 		return fetch(endpoint, { mode: "cors", headers: getHeader() }).then((response) => {
 			dispatch(loadComplete(HAZARD_LOAD_COMPLETE));
@@ -532,7 +530,7 @@ export const LOGIN_ERROR = "LOGIN_ERROR";
 export const SET_USER = "SET_USER";
 
 export function login(username, password) {
-	return async (dispatch: Dispatch) => {
+	return async (dispatch) => {
 		const json = await loginHelper(username, password);
 		if (json["access_token"] !== undefined) {
 			cookies.set("Authorization", `bearer ${json["access_token"]}`, { maxAge: json["expires_in"] });
@@ -551,7 +549,7 @@ export function login(username, password) {
 export const LOGOUT = "LOGOUT";
 
 export function logout() {
-	return (dispatch: Dispatch) => {
+	return (dispatch) => {
 		cookies.remove("Authorization");
 		return dispatch({
 			type: LOGOUT
@@ -571,7 +569,7 @@ export const SEMANTIC_LOADING = "SEMANTIC_LOADING";
 export const SEMANTIC_LOAD_COMPLETE = "SEMANTIC_LOAD_COMPLETE";
 
 export function loading(component) {
-	return (dispatch: Dispatch) => {
+	return (dispatch) => {
 		return dispatch({
 			type: component
 		});
@@ -579,7 +577,7 @@ export function loading(component) {
 }
 
 export function loadComplete(component) {
-	return (dispatch: Dispatch) => {
+	return (dispatch) => {
 		return dispatch({
 			type: component
 		});
@@ -592,7 +590,7 @@ export function receiveDatawolfResponse(json) {
 	// Get the id of the layers in geoserver to display in the map
 	// Get the info from a table to display
 
-	return (dispatch: Dispatch) => {
+	return (dispatch) => {
 		dispatch({
 			type: RECEIVE_EXECUTION_ID,
 			executionId: json,
@@ -601,7 +599,7 @@ export function receiveDatawolfResponse(json) {
 	};
 }
 
-async function getOutputDatasetHelper(executionId: String) {
+async function getOutputDatasetHelper(executionId) {
 	const datawolfUrl = `${config.dataWolf}executions/${executionId}`;
 	const headers = getDatawolfHeader();
 	const datawolf_execution_fetch = await fetch(datawolfUrl, {
@@ -630,8 +628,8 @@ async function getOutputDatasetHelper(executionId: String) {
 
 export const RECEIVE_OUTPUT = "RECEIVE_OUTPUT";
 
-export function getOutputDataset(executionId: String) {
-	return async (dispatch: Dispatch) => {
+export function getOutputDataset(executionId) {
+	return async (dispatch) => {
 		const data = await getOutputDatasetHelper(executionId);
 		dispatch({
 			type: RECEIVE_OUTPUT,
@@ -644,8 +642,8 @@ export function getOutputDataset(executionId: String) {
 // Semantic Functions
 export const RECEIVE_SEMANTICS = "RECEIVE_SEMANTICS";
 
-export function receiveSemantics(type: string, json) {
-	return (dispatch: Dispatch) => {
+export function receiveSemantics(type, json) {
+	return (dispatch) => {
 		dispatch({
 			type: type,
 			semantics: json,
@@ -662,7 +660,7 @@ export function fetchSemantics(space, limit, offset) {
 		endpoint = `${endpoint}&space=${space}`;
 	}
 
-	return (dispatch: Dispatch) => {
+	return (dispatch) => {
 		dispatch(loading(SEMANTIC_LOADING));
 		return fetch(endpoint, { mode: "cors", headers: getHeader() }).then((response) => {
 			dispatch(loadComplete(SEMANTIC_LOAD_COMPLETE));
@@ -682,7 +680,7 @@ export function fetchSemantics(space, limit, offset) {
 
 export function searchSemantics(keyword, limit, offset) {
 	let endpoint = `${config.semanticServiceType}/search?text=${keyword}&limit=${limit}&skip=${offset}`;
-	return (dispatch: Dispatch) =>{
+	return (dispatch) =>{
 		dispatch(loading(SEMANTIC_LOADING));
 		return fetch(endpoint, { mode: "cors", headers: getHeader() }).then((response) => {
 			dispatch(loadComplete(SEMANTIC_LOAD_COMPLETE));
@@ -726,7 +724,7 @@ export async function executeDatawolfWorkflowHelper(workflowid, creatorid, title
 }
 
 export function executeDatawolfWorkflow(workflowid, creatorid, title, description, parameters, datasets) {
-	return async (dispatch: Dispatch) => {
+	return async (dispatch) => {
 		const json = await executeDatawolfWorkflowHelper(
 			workflowid,
 			creatorid,
