@@ -21,6 +21,7 @@ import ErrorMessage from "./children/ErrorMessage";
 import { determineUserGroup, getCurrUserInfo } from "../utils/common";
 import Gravatar from "react-gravatar";
 
+
 global.__base = `${__dirname}/`;
 
 const theme = createMuiTheme({
@@ -238,7 +239,7 @@ class App extends Component {
 		let group;
 
 		let contents = (
-			<Button color="inherit" href={"login"} className={classes.smallButton}>
+			<Button color="inherit" onClick={() => browserHistory.push("/Login")} className={classes.smallButton}>
 				Login
 			</Button>
 		);
@@ -382,7 +383,7 @@ class App extends Component {
 						className={classes.denseStyle}
 						onClick={() => {
 							this.handleProfileMenuClose();
-							this.logout();
+							browserHistory.push("/Logout");
 						}}
 					>
 						Log Out

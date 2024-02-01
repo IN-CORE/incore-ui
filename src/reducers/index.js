@@ -8,6 +8,7 @@ import spaces from "./spaces";
 import datatypes from "./datatypes";
 import semantics from "./semantics";
 import usage from "./usage";
+import auth from "./auth";
 import user from "./user.ts";
 
 const rootReducer = combineReducers({
@@ -20,7 +21,8 @@ const rootReducer = combineReducers({
 	space: spaces,
 	user: user,
 	datatype: datatypes,
-	semantics: semantics
+	semantics: semantics,
+	auth: auth
 });
 
 export default rootReducer;

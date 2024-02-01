@@ -48,6 +48,8 @@ import LoadingOverlay from "react-loading-overlay";
 import semantics from "../reducers/semantics";
 import {exportJson} from "../utils/common";
 
+import withAuth from "../utils/withAuth";
+
 const cookies = new Cookies();
 const redundantProp = ["deleted", "privileges", "spaces"];
 const theme = createMuiTheme();
@@ -464,8 +466,12 @@ class SemanticViewer extends Component {
 				</ListItem>);
 		});
 
+		// TODO: Change to a keycloak error check
+		console.log(this.props.isAuthenticated);
 		if (this.state.authError) {
-			browserHistory.push("/login?origin=SemanticViewer");
+			// browserHistory.push("/login?origin=SemanticViewer");
+			console.log(this.props.auth);
+			console.log("Authentication error");
 			return null;
 		} else {
 			return (
@@ -628,4 +634,4 @@ class SemanticViewer extends Component {
 }
 
 
-export default withStyles(styles)(SemanticViewer);
+export default withAuth(withStyles(styles)(SemanticViewer));

@@ -1,13 +1,14 @@
 import { connect } from "react-redux";
 import AppComponent from "../components/App";
-import { fetchAllocations, fetchUsage, fetchLabUsage, logout } from "../actions";
+import {fetchAllocations, fetchUsage, fetchLabUsage, logout, authLoginSuccess} from "../actions";
 
 const mapStateToProps = (state) => {
 	return {
-		Authorization: state.user.Authorization,
+		Authorization: state.auth.token,
 		usage: state.usage.usage,
 		labUsage: state.usage.labUsage,
-		allocations: state.usage.allocations
+		allocations: state.usage.allocations,
+		isAuthenticated: state.auth.isAuthenticated
 	};
 };
 
@@ -25,6 +26,9 @@ const mapDispatchToProps = (dispatch) => {
 		},
 		getAllocations: () => {
 			dispatch(fetchAllocations());
+		},
+		loginSuccess: (token, refreshToken) => {
+			dispatch(authLoginSuccess(token, refreshToken));
 		}
 	};
 };

@@ -557,6 +557,36 @@ export function logout() {
 	};
 }
 
+// Keycloak Actions
+export const AUTH_LOGIN_SUCCESS = "AUTH_LOGIN_SUCCESS";
+export function authLoginSuccess(token, refreshToken) {
+	if (token !== undefined) {
+		// TODO - Need to set the maxAge to the expiration time of the token
+		cookies.set("Authorization", `bearer ${token}`, { maxAge: 3600 });
+		return (dispatch) => {
+			return dispatch({
+				type: AUTH_LOGIN_SUCCESS,
+				payload: {
+					token: token,
+					refreshToken: refreshToken
+				}
+			});
+		};
+	}
+}
+
+export const AUTH_LOGOUT = "AUTH_LOGOUT";
+export function authLogout() {
+	cookies.remove("Authorization");
+	return (dispatch) => {
+		return dispatch({
+			type: AUTH_LOGOUT
+		});
+	};
+}
+
+
+
 export const DATA_LOADING = "DATA_LOADING";
 export const DATA_LOAD_COMPLETE = "DATA_LOAD_COMPLETE";
 export const HAZARD_LOADING = "HAZARD_LOADING";

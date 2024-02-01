@@ -45,6 +45,8 @@ import ErrorMessage from "./children/ErrorMessage";
 import Confirmation from "./children/Confirmation";
 import LoadingOverlay from "react-loading-overlay";
 
+import withAuth from "../utils/withAuth";
+
 const cookies = new Cookies();
 const redundantProp = ["deleted", "privileges", "spaces"];
 const theme = createMuiTheme();
@@ -953,4 +955,4 @@ class DataViewer extends Component {
 	}
 }
 
-export default withStyles(styles)(DataViewer);
+export default withAuth(withStyles(styles)(DataViewer));
