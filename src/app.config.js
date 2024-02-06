@@ -9,8 +9,10 @@ config["pyIncoreDocUrl"] = `${hostname}/doc/pyincore/index.html`;
 config["pyIncoreVizDocUrl"] = `${hostname}/doc/pyincore_viz/index.html`;
 config["pyIncoreDataDocUrl"] = `${hostname}/doc/pyincore_data/index.html`;
 config["incoreDocUrl"] = `${hostname}/doc/incore/introduction.html`;
+config["incoreTutorialUrl"] = `${hostname}/doc/incore/tutorials.html`;
+config["incoreFAQUrl"] = `${hostname}/doc/incore/faq.html`;
 config["swaggerUrl"] = `${hostname}/doc/api/`;
-config["webVersion"] = "1.9.1";
+config["webVersion"] = "1.10.0";
 config["spaceServiceBase"] = `${hostname}/space/api/`;
 config["spaceService"] = `${hostname}/space/api/spaces`;
 config["dfr3ServiceBase"] = `${hostname}/dfr3/api/`;
@@ -39,5 +41,6 @@ config["playbookImageDetails"] = [
 config["mailingList"] = "incore-dev@lists.illinois.edu";
 config["slackInvitationLink"] = "https://bit.ly/in-core";
 config["slackWorkspaceLink"] = "https://in-core.slack.com";
+config["githubRelease"] = "https://github.com/IN-CORE/IN-CORE/releases/tag/";
 
 export default config;
