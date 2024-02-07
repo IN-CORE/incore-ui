@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - Remodel the landing page [#170](https://github.com/IN-CORE/incore-ui/issues/170)
 - Hazard viewer previewing hazard datasets [#172](https://github.com/IN-CORE/incore-ui/pull/172)
+- Using keycloak's login page instead of custom login page [#174](https://github.com/IN-CORE/incore-ui/issues/174)
 
 ## [1.9.1] - 2023-12-14
 
