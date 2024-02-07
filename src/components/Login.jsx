@@ -11,7 +11,7 @@ const styles = {
 		display: "flex",
 		justifyContent: "center",
 		alignItems: "center",
-		height: "100vh" // Use full view height to center vertically in the viewport
+		height: "100vh"
 	}
 };
 
@@ -28,14 +28,15 @@ const Login = ({ location }) => {
 				});
 
 				await keycloak.loadUserInfo();
-				console.log(keycloak);
-				const tokenValidity = keycloak.tokenParsed.exp * 1000 - Date.now();
-				console.log(tokenValidity);
+				// TODO: Double check if this is the right way to calculate token validity
+				const tokenValidity = (keycloak.tokenParsed.exp - keycloak.tokenParsed.iat) * 1000;
+				console.log("keycloak", keycloak);
+				console.log("token", keycloak.token);
 				const authJSON = {
 					token: keycloak.token,
 					tokenValidity: tokenValidity
 				};
-				dispatch(login(keycloak.token, keycloak.tokenParsed));
+				dispatch(login(authJSON));
 				if (location.query["origin"] === undefined) {
 					browserHistory.push("/");
 				} else {

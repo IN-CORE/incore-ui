@@ -553,7 +553,7 @@ export function login(authJSON) {
 			cookies.set("Authorization", `bearer ${authJSON.token}`, { maxAge: authJSON.tokenValidity });
 			return dispatch({
 				type: SET_USER,
-				Authorization: `bearer ${authJSON.token}`
+				Authorization: `bearer ${authJSON["token"]}`
 			});
 		} else {
 			return dispatch({

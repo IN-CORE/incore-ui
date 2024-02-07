@@ -9,7 +9,7 @@ const styles = {
 		display: "flex",
 		justifyContent: "center",
 		alignItems: "center",
-		height: "100vh" // Use full view height to center vertically in the viewport
+		height: "100vh"
 	}
 };
 
