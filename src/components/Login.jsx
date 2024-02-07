@@ -30,8 +30,6 @@ const Login = ({ location }) => {
 				await keycloak.loadUserInfo();
 				// TODO: Double check if this is the right way to calculate token validity
 				const tokenValidity = (keycloak.tokenParsed.exp - keycloak.tokenParsed.iat) * 1000;
-				console.log("keycloak", keycloak);
-				console.log("token", keycloak.token);
 				const authJSON = {
 					token: keycloak.token,
 					tokenValidity: tokenValidity
@@ -43,6 +41,8 @@ const Login = ({ location }) => {
 					browserHistory.push(location.query["origin"]);
 				}
 			} catch (error) {
+				// Dispatches auth error
+				dispatch(login());
 				console.log("Login error", error);
 			}
 		};

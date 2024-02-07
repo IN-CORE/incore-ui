@@ -2,7 +2,8 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../actions";
 import keycloak from "../utils/keycloak";
-import {CircularProgress} from "@material-ui/core";
+import { CircularProgress } from "@material-ui/core";
+import config from "../app.config";
 
 const styles = {
 	container: {
@@ -16,6 +17,11 @@ const styles = {
 const Logout = () => {
 	const dispatch = useDispatch();
 	React.useEffect(() => {
+		// For local development, the hostname is set to localhost:3000
+		const redirectUri =
+			config.hostname !== undefined && config.hostname !== "" && config.hostname !== null
+				? config.hostname
+				: "http://localhost:3000/";
 		const keycloakLogout = async () => {
 			try {
 				if (keycloak.authenticated === undefined) {
@@ -26,10 +32,9 @@ const Logout = () => {
 
 					await keycloak.loadUserInfo();
 				}
-				console.log(keycloak);
 				dispatch(logout());
 				keycloak.logout({
-					redirectUri: "http://localhost:3000"
+					redirectUri: redirectUri
 				});
 			} catch (error) {
 				console.log("Logout error", error);
