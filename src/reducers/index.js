@@ -6,6 +6,7 @@ import dfr3Curves from "./dfr3Curves.ts";
 import dfr3Mappings from "./dfr3Mappings";
 import spaces from "./spaces";
 import datatypes from "./datatypes";
+import semantics from "./semantics";
 import usage from "./usage";
 import user from "./user.ts";
 
@@ -18,7 +19,8 @@ const rootReducer = combineReducers({
 	dfr3Mapping: dfr3Mappings,
 	space: spaces,
 	user: user,
-	datatype: datatypes
+	datatype: datatypes,
+	semantics: semantics
 });
 
 export default rootReducer;

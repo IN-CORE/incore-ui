@@ -100,9 +100,6 @@ const useStyles = makeStyles(() => ({
 		display: "inline-block",
 		margin: "auto 5px"
 	},
-	hide: {
-		display: "none"
-	},
 	paperFooter: {
 		padding: theme.spacing(2),
 		borderTop: "1px solid #eeeeee",
@@ -682,77 +679,81 @@ const DataViewer = () => {
 						</Grid>
 
 						{/*metadata*/}
-						<Grid item lg={8} md={8} xl={8} xs={12} className={selectedDataset ? null : classes.hide}>
-							<Paper variant="outlined" className={classes.main}>
-								<IconButton
-									aria-label="Close"
-									onClick={handleCloseMetadata}
-									className={classes.metadataCloseButton}
-								>
-									<CloseIcon fontSize="small" />
-								</IconButton>
-								{Object.keys(selected_dataset_detail).length > 0 ? (
-									<div>
-										<div className={classes.paperHeader}>
-											<Typography variant="subtitle1">Metadata</Typography>
-										</div>
-										<div className={classes.metadata}>
-											<Button
-												color="primary"
-												variant="contained"
-												className={classes.inlineButtons}
-												size="small"
-												onClick={exportJson}
-											>
-												Download Metadata
-											</Button>
-											<Button
-												color="primary"
-												variant="contained"
-												className={classes.inlineButtons}
-												size="small"
-												onClick={downloadDataset}
-											>
-												Download Dataset
-											</Button>
-											<Button
-												color="primary"
-												variant="contained"
-												className={classes.inlineButtons}
-												size="small"
-												onClick={handlePreviewOpen}
-											>
-												Preview
-											</Button>
-											<CopyToClipboard text={selectedDataset.id}>
+						{metadataClosed ? (
+							<></>
+						) : (
+							<Grid item lg={8} md={8} xl={8} xs={12}>
+								<Paper variant="outlined" className={classes.main}>
+									<IconButton
+										aria-label="Close"
+										onClick={handleCloseMetadata}
+										className={classes.metadataCloseButton}
+									>
+										<CloseIcon fontSize="small" />
+									</IconButton>
+									{Object.keys(selected_dataset_detail).length > 0 ? (
+										<div>
+											<div className={classes.paperHeader}>
+												<Typography variant="subtitle1">Metadata</Typography>
+											</div>
+											<div className={classes.metadata}>
+												<Button
+													color="primary"
+													variant="contained"
+													className={classes.inlineButtons}
+													size="small"
+													onClick={exportJson}
+												>
+													Download Metadata
+												</Button>
+												<Button
+													color="primary"
+													variant="contained"
+													className={classes.inlineButtons}
+													size="small"
+													onClick={downloadDataset}
+												>
+													Download Dataset
+												</Button>
+												<Button
+													color="primary"
+													variant="contained"
+													className={classes.inlineButtons}
+													size="small"
+													onClick={handlePreviewOpen}
+												>
+													Preview
+												</Button>
+												<CopyToClipboard text={selectedDataset.id}>
+													<Button
+														color="secondary"
+														variant="contained"
+														className={classes.inlineButtons}
+														size="small"
+													>
+														Copy ID
+													</Button>
+												</CopyToClipboard>
 												<Button
 													color="secondary"
 													variant="contained"
 													className={classes.inlineButtons}
 													size="small"
+													onClick={onClickDelete}
 												>
-													Copy ID
+													DELETE
 												</Button>
-											</CopyToClipboard>
-											<Button
-												color="secondary"
-												variant="contained"
-												className={classes.inlineButtons}
-												size="small"
-												onClick={onClickDelete}
-											>
-												DELETE
-											</Button>
+											</div>
+											<div className={classes.metadata}>
+												<NestedInfoTable data={selected_dataset_detail} />
+											</div>
 										</div>
-										<div className={classes.metadata}>
-											<NestedInfoTable data={selected_dataset_detail} />
-										</div>
-									</div>
-								) : (
-									<div />
-								)}
-							</Paper>
-						</Grid>
+									) : (
+										<div />
+									)}
+								</Paper>
+							</Grid>
+						)}
 					</Grid>
 					{/*version*/}
 					<Version />

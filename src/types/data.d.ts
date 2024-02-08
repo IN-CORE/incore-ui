@@ -118,15 +118,6 @@ interface VisualizationParameters {
 	amplifyHazard: boolean;
 }
 
-interface RasterDataset {
-	hazardType: string;
-	datasetId: string;
-	demandType: string;
-	demandUnits: string;
-	period: number;
-	eqParameters: EqParameters;
-}
-
 interface DeterministicEarthquake {
 	eqType: string;
 	id: string;
@@ -138,7 +129,7 @@ interface DeterministicEarthquake {
 	visualizationParameters: VisualizationParameters;
 	defaultSiteClass: string;
 	siteAmplicfication: string;
-	rasterDataset: RasterDataset;
+	hazardDatasets: HazardDataset[];
 }
 
 interface ProbabilisticEarthquake {
@@ -175,8 +166,8 @@ interface Tornado {
 	tornadoParameters: TornadoParameters;
 	tornadoWidth: number[];
 	efBoxes: EfBox[];
-	tornadoDatasetId: string;
 	privileges: Privileges;
+	hazardDatasets: HazardDataset[];
 }
 
 /* Hurricane */

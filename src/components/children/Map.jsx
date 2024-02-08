@@ -16,7 +16,7 @@ let tileAttribution = "Tiles © <a href=\"https://services.arcgisonline.com/ArcG
 	"rest/services/NatGeo_World_Map/MapServer\">ArcGIS</a> &mdash; National Geographic, Esri, DeLorme, NAVTEQ, " +
 	"UNEP-WCMC, USGS, NASA, ESA, METI, NRCAN, GEBCO, NOAA, iPC";
 
-async function fetchExtent(name: string) {
+async function fetchExtent(name) {
 
 	let parser = new WMSCapabilities();
 	try {

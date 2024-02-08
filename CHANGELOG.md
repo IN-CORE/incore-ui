@@ -5,6 +5,68 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.10.0] - 2024-02-07
+
+### Changed
+- Remodel the landing page [#170](https://github.com/IN-CORE/incore-ui/issues/170)
+- Hazard viewer previewing hazard datasets [#172](https://github.com/IN-CORE/incore-ui/pull/172)
+
+## [1.9.1] - 2023-12-14
+
+### Security
+- Bump loader-utils from 2.0.2 to 2.0.4 [#98](https://github.com/IN-CORE/incore-ui/pull/98)
+- Bump json5 from 1.0.1 to 1.0.2 [#101](https://github.com/IN-CORE/incore-ui/pull/101)
+- Bump http-cache-semantics from 4.1.0 to 4.1.1 [#103](https://github.com/IN-CORE/incore-ui/pull/103)
+- Bump webpack from 5.74.0 to 5.76.0 [#109](https://github.com/IN-CORE/incore-ui/pull/109)
+- Bump Browser-Sync version to 2.29.3 [#165](https://github.com/IN-CORE/incore-ui/pull/165)
+
+
+## [1.9.0] - 2023-11-09
+
+### Added
+- Links to Slack channel and mailing list to the landing page [#160](https://github.com/IN-CORE/incore-ui/issues/160)
+
+### Changed
+- Missing Filters title for both Data viewer and Semantics Viewer [#156](https://github.com/IN-CORE/incore-ui/issues/156)
+- Semantic viewer needs to show description [#157](https://github.com/IN-CORE/incore-ui/issues/157)
+
+
+## [1.8.0] - 2023-10-11
+
+### Changed
+- Read IN-CORE lab quota from service endpoint [#141](https://github.com/IN-CORE/incore-ui/issues/141)
+- Change Semantic type api call logic, get complete details at first load instead of fetching on the fly. [#144](https://github.com/IN-CORE/incore-ui/issues/144)
+- Add a multi-hazard type Earthquake+Tsunami in DFR3 Viewer [#147](https://github.com/IN-CORE/incore-ui/issues/147)
+
+### Added
+- Display DFR3 quota [#137](https://github.com/IN-CORE/incore-ui/issues/137)
+- Add Semantic template link in Semantics viewer [#143](https://github.com/IN-CORE/incore-ui/issues/143)
+
+
+## [1.7.0] - 2023-08-16
+
+### Added
+- Added a viewer for Semantics [#122](https://github.com/IN-CORE/incore-ui/issues/122)
+- Added clickable link in DataViewer to show semantic definition for datatype [#123](https://github.com/IN-CORE/incore-ui/pull/123)
+
+### Fixed
+- When-user-has-no-usage-display-zero-instead-of-undefined [#110](https://github.com/IN-CORE/incore-ui/issues/110)
+- Github action to grab correct version when merged to main. [#115](https://github.com/IN-CORE/incore-ui/issues/115)
+- Improper functionality when close icon is clicked [#124](https://github.com/IN-CORE/incore-ui/issues/124)
+
+
+## [1.6.0] - 2023-04-25
+### Changed
+- Change the getVersionTags scripts to get tags from the central IN-CORE repository.[#104](https://github.com/IN-CORE/incore-ui/issues/104)
+
+
+## [1.5.0] - 2023-03-15
+### Changed
+- builds are done on amd64 and then artifact copied to different platforms.
+
+### Added
+- Add Community playbook landing page. [#72](https://github.com/IN-CORE/incore-ui/issues/72)
+
 
 ## [1.4.0] - 2022-11-16
 ### Added

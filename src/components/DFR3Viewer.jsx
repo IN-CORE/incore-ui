@@ -98,9 +98,6 @@ const useStyles = makeStyles(() => ({
 		display: "inline-block",
 		margin: "auto 5px"
 	},
-	hide: {
-		display: "none"
-	},
 	paperFooter: {
 		padding: theme.spacing(2),
 		borderTop: "1px solid #eeeeee",
@@ -634,6 +631,9 @@ const DFR3Viewer = () => {
 										<MenuItem value="hurricaneWindfield" className={classes.denseStyle}>
 											Hurricane Windfield
 										</MenuItem>
+										<MenuItem value="earthquake%2btsunami" className={classes.denseStyle}>
+											Earthquake + Tsunami
+										</MenuItem>
 										<MenuItem value="tsunami" className={classes.denseStyle}>
 											Tsunami
 										</MenuItem>
@@ -761,67 +761,89 @@ const DFR3Viewer = () => {
 									</Paper>
 								</LoadingOverlay>
 							</Grid>
-							<Grid item lg={8} md={8} xl={8} xs={12} className={selectedDFR3Curve ? null : classes.hide}>
-								<Paper variant="outlined" className={classes.main}>
-									<IconButton
-										aria-label="Close"
-										onClick={handleCloseMetadata}
-										className={classes.metadataCloseButton}
-									>
-										<CloseIcon fontSize="small" />
-									</IconButton>
-									{Object.keys(selectedCurveDetail).length > 0 ? (
-										<div>
-											<div className={classes.paperHeader}>
-												<Typography variant="subtitle1">Metadata</Typography>
-											</div>
-											<div className={classes.metadata}>
-												<Button
-													color="primary"
-													variant="contained"
-													className={classes.inlineButtons}
-													size="small"
-													onClick={exportCurveJson}
-												>
-													Download Metadata
-												</Button>
-												{
-													// TODO: This should be updated with conditions for repair and restoration
-													//  curves when they are refactored to new equation based format
-													// 	cannot plot 3d refactored fragility curves yet
+							{metadataClosed ? (
+								<></>
+							) : (
+								<Grid
+									item
+									lg={8}
+									md={8}
+									xl={8}
+									xs={12}
+								>
+									<Paper variant="outlined" className={classes.main}>
+										<IconButton
+											aria-label="Close"
+											onClick={handleCloseMetadata}
+											className={classes.metadataCloseButton}
+										>
+											<CloseIcon fontSize="small" />
+										</IconButton>
+										{Object.keys(selectedCurveDetail).length > 0 ? (
+											<div>
+												<div className={classes.paperHeader}>
+													<Typography variant="subtitle1">Metadata</Typography>
+												</div>
+												<div className={classes.metadata}>
+													<Button
+														color="primary"
+														variant="contained"
+														className={classes.inlineButtons}
+														size="small"
+														onClick={exportCurveJson}
+													>
+														Download Metadata
+													</Button>
+													{
+														// TODO: This should be updated with conditions for repair and restoration
+														//  curves when they are refactored to new equation based format
+														// 	cannot plot 3d refactored fragility curves yet
 
-													(() => {
-														if (selectedDFR3Curve.fragilityCurves) {
-															if (
-																selectedDFR3Curve.is3dPlot &&
-																plotData3D.data.length > 0
-															) {
-																return (
-																	<Button
-																		color="primary"
-																		variant="contained"
-																		className={classes.inlineButtons}
-																		size="small"
-																		onClick={handlePreviewOpen}
-																	>
-																		Preview
-																	</Button>
-																);
-															} else if (
-																!selectedDFR3Curve.is3dPlot &&
-																chartConfigVar.series.length > 0
-															) {
-																return (
-																	<Button
-																		color="primary"
-																		variant="contained"
-																		className={classes.inlineButtons}
-																		size="small"
-																		onClick={handlePreviewOpen}
-																	>
-																		Preview
-																	</Button>
-																);
+														(() => {
+															if (selectedDFR3Curve.fragilityCurves) {
+																if (
+																	selectedDFR3Curve.is3dPlot &&
+																	plotData3D.data.length > 0
+																) {
+																	return (
+																		<Button
+																			color="primary"
+																			variant="contained"
+																			className={classes.inlineButtons}
+																			size="small"
+																			onClick={handlePreviewOpen}
+																		>
+																			Preview
+																		</Button>
+																	);
+																} else if (
+																	!selectedDFR3Curve.is3dPlot &&
+																	chartConfigVar.series.length > 0
+																) {
+																	return (
+																		<Button
+																			color="primary"
+																			variant="contained"
+																			className={classes.inlineButtons}
+																			size="small"
+																			onClick={handlePreviewOpen}
+																		>
+																			Preview
+																		</Button>
+																	);
+																} else {
+																	return (
+																		<Button
+																			color="primary"
+																			variant="contained"
+																			className={classes.inlineButtons}
+																			size="small"
+																			disabled
+																		>
+																			Preview N/A
+																		</Button>
+																	);
+																}
 															} else {
 																return (
 																	<Button
@@ -835,53 +857,40 @@ const DFR3Viewer = () => {
 																	</Button>
 																);
 															}
-														} else {
-															return (
-																<Button
-																	color="primary"
-																	variant="contained"
-																	className={classes.inlineButtons}
-																	size="small"
-																	disabled
-																>
-																	Preview N/A
-																</Button>
-															);
-														}
-													})()
-												}
-												<CopyToClipboard text={selectedDFR3Curve.id}>
+														})()
+													}
+													<CopyToClipboard text={selectedDFR3Curve.id}>
+														<Button
+															color="secondary"
+															variant="contained"
+															className={classes.inlineButtons}
+															size="small"
+														>
+															Copy ID
+														</Button>
+													</CopyToClipboard>
 													<Button
 														color="secondary"
 														variant="contained"
 														className={classes.inlineButtons}
 														size="small"
+														onClick={() => {
+															onClickDelete("curve");
+														}}
 													>
-														Copy ID
+														DELETE
 													</Button>
-												</CopyToClipboard>
-												<Button
-													color="secondary"
-													variant="contained"
-													className={classes.inlineButtons}
-													size="small"
-													onClick={() => {
-														onClickDelete("curve");
-													}}
-												>
-													DELETE
-												</Button>
+												</div>
+												<div className={classes.metadata}>
+													<NestedInfoTable data={selectedCurveDetail} />
+												</div>
 											</div>
-											<div className={classes.metadata}>
-												<NestedInfoTable data={selectedCurveDetail} />
-											</div>
-										</div>
-									) : (
-										<div />
-									)}
-								</Paper>
-							</Grid>
-
+										) : (
+											<div />
+										)}
+									</Paper>
+								</Grid>
+							)}
 							{/* Preview */}
 							{selectedDFR3Curve ? (
 								<Dialog
