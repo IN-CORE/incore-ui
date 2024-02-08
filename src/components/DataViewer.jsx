@@ -225,7 +225,7 @@ const DataViewer = () => {
 	};
 
 	const handleConfirmed = () => {
-		deleteItemById("datasets", id)(dispatch);
+		deleteItemById("datasets", selectedDataset.id)(dispatch);
 		setSelectedDataset("");
 		setSelectedDatasetFormat("");
 		setFileData("");

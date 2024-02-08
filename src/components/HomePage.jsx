@@ -324,7 +324,7 @@ const HomePage = () => {
 		"Run your scientific analyses that model the impact of natural hazards on a community and the \
 		resilience of those communities."
 	);
-	const [githubVersions, setGithubVersions] = React.useState({});
+	const [githubVersions, setGithubVersions] = React.useState(null);
 	const [footerLogos, setFooterLogos] = React.useState([
 		{
 			image: "/public/CSU-logo.png",
@@ -352,9 +352,11 @@ const HomePage = () => {
 	const classes = useStyles();
 
 	React.useEffect(() => {
-		const getGitRepoVerison = async () => await getRepoVersion();
-		setGithubVersions(getGitRepoVerison());
-	});
+		getRepoVersion().then((data) => {
+			setGithubVersions(data);
+		});
+		
+	}, []);
 
 	return (
 		<div>
@@ -410,12 +412,12 @@ const HomePage = () => {
 								onClick={toggleCollapse}
 							>
 								What&apos;s new in{" "}
-								<span className="greenText">IN-CORE {githubVersions["in-core"]}?</span>
+								<span className="greenText">IN-CORE {githubVersions !== null ? githubVersions["in-core"]: ""}?</span>
 								<IconButton>{open ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}</IconButton>
 							</Typography>
 							<Typography variant="subtitle1" style={{ textAlign: "center" }}>
-								<Link href={config.githubRelease + githubVersions["in-core"]}>
-									Current Version: {githubVersions["in-core"]}
+								<Link href={config.githubRelease + (githubVersions !== null ? githubVersions["in-core"]: "")}>
+									Current Version: {githubVersions !== null ? githubVersions["in-core"]: ""}
 								</Link>
 							</Typography>
 						</div>
