@@ -43,4 +43,11 @@ config["slackInvitationLink"] = "https://bit.ly/in-core";
 config["slackWorkspaceLink"] = "https://in-core.slack.com";
 config["githubRelease"] = "https://github.com/IN-CORE/IN-CORE/releases/tag/";
 
+// Keycloak configuration
+config["keycloakConfig"] = {
+	url: "http://localhost:8080/auth",
+	realm: "In-core",
+	clientId: "react-auth"
+};
+
 export default config;

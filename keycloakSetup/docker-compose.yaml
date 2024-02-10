@@ -1,0 +1,17 @@
+version: '3.7'
+
+services:
+    keycloak:
+        image: quay.io/keycloak/keycloak:17.0.1-legacy
+        environment:
+            - KEYCLOAK_USER=admin
+            - KEYCLOAK_PASSWORD=admin
+        volumes:
+            - keycloak_data:/opt/jboss/keycloak/standalone/data
+            - ./keycloakThemes/incore-theme:/opt/jboss/keycloak/themes/incore-theme:rw
+        ports:
+            - 8080:8080
+        restart: always
+
+volumes:
+    keycloak_data:
