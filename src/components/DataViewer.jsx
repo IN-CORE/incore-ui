@@ -180,7 +180,7 @@ const DataViewer = () => {
 		}
 	}, [messageOpen]);
 
-	const setSelectionParameters = () => {
+	const resetSelectionParameters = () => {
 		setPageNumber(1);
 		setOffset(0);
 		setSelectedDataset("");
@@ -194,16 +194,15 @@ const DataViewer = () => {
 
 	const changeDatasetType = (event) => {
 		setSelectedDataType(event.target.value);
-		setSelectionParameters();
+		resetSelectionParameters();
 	};
 
 	const changeSpaceSelection = (event) => {
 		setSelectedSpace(event.target.value);
-		setSelectionParameters();
+		resetSelectionParameters();
 	};
 
 	React.useEffect(() => {
-		console.log("Fired 1");
 		fetchDatasets(selectedDataType, selectedSpace, dataPerPage, offset)(dispatch);
 	}, [selectedDataType, selectedSpace]);
 
@@ -263,7 +262,6 @@ const DataViewer = () => {
 	};
 
 	React.useEffect(() => {
-		console.log("Fired 2");
 		if (registeredSearchText !== "") {
 			searchDatasets(registeredSearchText, dataPerPage, offset)(dispatch);
 		}

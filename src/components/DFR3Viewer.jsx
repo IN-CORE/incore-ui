@@ -4,7 +4,6 @@ import { browserHistory } from "react-router";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import LoadingOverlay from "react-loading-overlay";
 
-// import ThreeDimensionalPlot from "./children/ThreeDimensionalPlot";
 import "whatwg-fetch";
 import {
 	Button,
@@ -224,7 +223,7 @@ const DFR3Viewer = () => {
 		)(dispatch);
 	}, [selectedDFR3Type, selectedInventory, selectedSpace, selectedHazard]);
 
-	const setCommonParameters = () => {
+	const resetCommonParameters = () => {
 		setSearching(false);
 		setSearchText("");
 		setRegisteredSearchText("");
@@ -237,23 +236,23 @@ const DFR3Viewer = () => {
 	};
 
 	const handleDFR3TypeChange = (event) => {
-		setCommonParameters();
+		resetCommonParameters();
 		setSelectedDFR3Type(event.target.value);
 		setMetadataClosed(false);
 	};
 
 	const handleInventoryTypeChange = (event) => {
-		setCommonParameters();
+		resetCommonParameters();
 		setSelectedInventory(event.target.value);
 	};
 
 	const handleHazardTypeChange = (event) => {
-		setCommonParameters();
+		resetCommonParameters();
 		setSelectedHazard(event.target.value);
 	};
 
 	const handleSpaceChange = (event) => {
-		setCommonParameters();
+		resetCommonParameters();
 		setSelectedSpace(event.target.value);
 	};
 
@@ -425,7 +424,6 @@ const DFR3Viewer = () => {
 	};
 
 	React.useEffect(() => {
-		console.log(dataPerPage);
 		if (registeredSearchText !== "" && searching) {
 			searchDFR3Mappings(selectedDFR3Type, registeredSearchText, dataPerPage, offsetMappings)(dispatch);
 		} else {
@@ -441,7 +439,6 @@ const DFR3Viewer = () => {
 	}, [offsetMappings, pageNumberMappings, dataPerPage]);
 
 	React.useEffect(() => {
-		console.log(dataPerPage);
 		if (registeredSearchText !== "" && searching) {
 			searchDFR3Curves(selectedDFR3Type, registeredSearchText, dataPerPage, offset)(dispatch);
 		} else {
@@ -517,9 +514,6 @@ const DFR3Viewer = () => {
 	let curvesWithInfo = [];
 	if (curveList.length > 0) {
 		curveList.map((DFR3Curve) => {
-			if (is3dCurve(DFR3Curve)){
-				console.log(DFR3Curve.id)
-			}
 			curvesWithInfo.push(DFR3Curve);
 		});
 	}

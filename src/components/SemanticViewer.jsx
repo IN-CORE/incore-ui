@@ -282,7 +282,7 @@ class SemanticViewer extends Component {
 			let url = `${config.semanticServiceType}/${semanticName}/template`;
 
 			let semanticfName = semanticName.replace(":", "_") + this.getFileExt(this.state.selectedSemanticType["tableSchema"]["columns"])
-			let response = await fetch(url, { mode: "cors", headers: await getHeader() });
+			let response = await fetch(url, { mode: "cors", headers: getHeader() });
 
 			if (response.ok) {
 				let blob = await response.blob();
