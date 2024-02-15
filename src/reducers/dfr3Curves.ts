@@ -2,13 +2,14 @@ import {
 	DFR3CURVE_LOADING,
 	DFR3CURVE_LOAD_COMPLETE,
 	RECEIVE_DFR3_CURVES,
+	LOGIN_ERROR,
 	DELETE_ITEM,
 	DELETE_ERROR,
 	RESET_ERROR
 } from "../actions";
 import { dfr3CurvesStateInitialValue } from "../store/states";
 
-const dfr3Curves = (state: DFR3State = dfr3CurvesStateInitialValue, action: DFR3Action) => {
+const dfr3Curves = (state: DFR3CurveState = dfr3CurvesStateInitialValue, action: DFR3CurvesAction) => {
 	switch (action.type) {
 		case RECEIVE_DFR3_CURVES:
 			return {
@@ -31,6 +32,11 @@ const dfr3Curves = (state: DFR3State = dfr3CurvesStateInitialValue, action: DFR3
 			return {
 				...state,
 				deleteError: false
+			};
+		case LOGIN_ERROR:
+			return {
+				...state,
+				dfr3Curves: []
 			};
 		case DFR3CURVE_LOADING:
 			return {

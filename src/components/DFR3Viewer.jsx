@@ -164,6 +164,7 @@ const DFR3Viewer = () => {
 	const dfr3Curves = useSelector((state) => state.dfr3Curve.dfr3Curves);
 	const dfr3Mappings = useSelector((state) => state.dfr3Mapping.dfr3Mappings);
 
+
 	React.useEffect(() => {
 		// check if logged in
 		let authorization = cookies.get("Authorization");
@@ -510,15 +511,19 @@ const DFR3Viewer = () => {
 		setMetadataClosed(true);
 	};
 
+
 	// curve list
-	let curveList = dfr3Curves;
+	const curveList = [...dfr3Curves];
 	let curvesWithInfo = [];
 	if (curveList.length > 0) {
 		curveList.map((DFR3Curve) => {
-			DFR3Curve["is3dPlot"] = is3dCurve(DFR3Curve);
+			if (is3dCurve(DFR3Curve)){
+				console.log(DFR3Curve.id)
+			}
 			curvesWithInfo.push(DFR3Curve);
 		});
 	}
+
 
 	// selected Curves
 	let selectedCurveDetail = {};
@@ -802,7 +807,7 @@ const DFR3Viewer = () => {
 														(() => {
 															if (selectedDFR3Curve.fragilityCurves) {
 																if (
-																	selectedDFR3Curve.is3dPlot &&
+																	is3dCurve(selectedDFR3Curve) &&
 																	plotData3D.data.length > 0
 																) {
 																	return (
@@ -817,7 +822,7 @@ const DFR3Viewer = () => {
 																		</Button>
 																	);
 																} else if (
-																	!selectedDFR3Curve.is3dPlot &&
+																	!is3dCurve(selectedDFR3Curve) &&
 																	chartConfigVar.series.length > 0
 																) {
 																	return (
@@ -908,7 +913,7 @@ const DFR3Viewer = () => {
 										>
 											<CloseIcon fontSize="small" />
 										</IconButton>
-										{selectedDFR3Curve.is3dPlot ? (
+										{is3dCurve(selectedDFR3Curve) ? (
 											<div>
 												<Typography variant="h6">{plotData3D.title}</Typography>
 												<ThreeDimensionalPlot

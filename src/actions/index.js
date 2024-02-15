@@ -18,8 +18,7 @@ export function receiveAnalyses(api, json) {
 	return (dispatch) => {
 		dispatch({
 			type: RECEIVE_ANALYSES,
-			analyses: json,
-			receivedAt: Date.now()
+			analyses: json
 		});
 	};
 }
@@ -30,8 +29,7 @@ export function receiveAnalysis(api, json) {
 	return (dispatch) => {
 		dispatch({
 			type: RECEIVE_ANALYSIS,
-			analysis: json,
-			receivedAt: Date.now()
+			analysis: json
 		});
 	};
 }
@@ -42,8 +40,7 @@ export function receiveDatasets(type, json) {
 	return (dispatch) => {
 		dispatch({
 			type: type,
-			datasets: json,
-			receivedAt: Date.now()
+			datasets: json
 		});
 	};
 }
@@ -54,8 +51,7 @@ export function receieveUsage(type, json) {
 	return (dispatch) => {
 		dispatch({
 			type: type,
-			usage: json,
-			receivedAt: Date.now()
+			usage: json
 		});
 	};
 }
@@ -64,8 +60,7 @@ export function deleteItem(type, json) {
 	return (dispatch) => {
 		dispatch({
 			type: type,
-			item: json,
-			receivedAt: Date.now()
+			item: json
 		});
 	};
 }
@@ -113,8 +108,7 @@ export function receiveHazards(type, json) {
 	return (dispatch) => {
 		dispatch({
 			type: type,
-			hazards: json,
-			recievedAt: Date.now()
+			hazards: json
 		});
 	};
 }
@@ -125,8 +119,7 @@ export function receiveDFR3Curves(type, json) {
 	return (dispatch) => {
 		dispatch({
 			type: type,
-			dfr3Curves: json,
-			recievedAt: Date.now()
+			dfr3Curves: json
 		});
 	};
 }
@@ -137,8 +130,7 @@ export function receiveDFR3Mappings(type, json) {
 	return (dispatch) => {
 		dispatch({
 			type: type,
-			dfr3Mappings: json,
-			recievedAt: Date.now()
+			dfr3Mappings: json
 		});
 	};
 }
@@ -149,8 +141,7 @@ export function receiveSpaces(type, json) {
 	return (dispatch) => {
 		dispatch({
 			type: type,
-			spaces: json,
-			receivedAt: Date.now()
+			spaces: json
 		});
 	};
 }
@@ -161,8 +152,7 @@ export function receiveDatatypes(type, json) {
 	return (dispatch) => {
 		dispatch({
 			type: type,
-			datatypes: json,
-			receivedAt: Date.now()
+			datatypes: json
 		});
 	};
 }
@@ -298,7 +288,7 @@ export function fetchAllocations() {
 					dispatch({
 						type: RECEIVE_ALLOCATIONS,
 						allocations: json,
-						receivedAt: Date.now()
+	
 					});
 				});
 			} else if (response.status === 401) {
@@ -306,13 +296,13 @@ export function fetchAllocations() {
 				dispatch({
 					type: LOGIN_ERROR,
 					usage: {},
-					receivedAt: Date.now()
+
 				});
 			} else {
 				dispatch({
 					type: RECEIVE_ALLOCATIONS,
 					usage: {},
-					receivedAt: Date.now()
+
 				});
 			}
 		});
@@ -340,9 +330,9 @@ export function fetchUniqueDatatypes() {
 export function searchDFR3Curves(dfr3_type, keyword, limit, offset) {
 	let endpoint = `${config.dfr3ServiceBase}${dfr3_type}/search?limit=${limit}&skip=${offset}&text=${keyword}`;
 	return (dispatch) => {
-		dispatch(loading(DFR3CURVE_LOADING));
+		loading(DFR3CURVE_LOADING)(dispatch)
 		return fetch(endpoint, { mode: "cors", headers: getHeader() }).then((response) => {
-			dispatch(loadComplete(DFR3CURVE_LOAD_COMPLETE));
+			loadComplete(DFR3CURVE_LOAD_COMPLETE)(dispatch)
 			if (response.status === 200) {
 				response.json().then((json) => {
 					dispatch(receiveDFR3Curves(RECEIVE_DFR3_CURVES, json));
@@ -369,9 +359,9 @@ export function fetchDFR3Curves(dfr3_type, space, inventory, hazard, limit, offs
 		endpoint = `${endpoint}&hazard=${hazard}`;
 	}
 	return (dispatch) => {
-		dispatch(loading(DFR3CURVE_LOADING));
+		loading(DFR3CURVE_LOADING)(dispatch)
 		return fetch(endpoint, { mode: "cors", headers: getHeader() }).then((response) => {
-			dispatch(loadComplete(DFR3CURVE_LOAD_COMPLETE));
+			loadComplete(DFR3CURVE_LOAD_COMPLETE)(dispatch)
 			if (response.status === 200) {
 				response.json().then((json) => {
 					dispatch(receiveDFR3Curves(RECEIVE_DFR3_CURVES, json));
@@ -417,9 +407,9 @@ export function fetchDFR3Mappings(dfr3_type, space, inventory, hazard, limit, of
 	}
 
 	return (dispatch) => {
-		dispatch(loading(DFR3MAPPING_LOADING));
+		loading(DFR3MAPPING_LOADING)(dispatch)
 		return fetch(endpoint, { mode: "cors", headers: getHeader() }).then((response) => {
-			dispatch(loadComplete(DFR3MAPPING_LOAD_COMPLETE));
+			loadComplete(DFR3MAPPING_LOAD_COMPLETE)(dispatch)
 			if (response.status === 200) {
 				response.json().then((json) => {
 					dispatch(receiveDFR3Mappings(RECEIVE_DFR3_MAPPINGS, json));
@@ -444,9 +434,9 @@ export function searchDFR3Mappings(dfr3_type, keyword, limit, offset) {
 	}
 
 	return (dispatch) => {
-		dispatch(loading(DFR3MAPPING_LOADING));
+		loading(DFR3MAPPING_LOADING)(dispatch)
 		return fetch(endpoint, { mode: "cors", headers: getHeader() }).then((response) => {
-			dispatch(loadComplete(DFR3MAPPING_LOAD_COMPLETE));
+			loadComplete(DFR3MAPPING_LOAD_COMPLETE)(dispatch)
 			if (response.status === 200) {
 				response.json().then((json) => {
 					dispatch(receiveDFR3Mappings(RECEIVE_DFR3_MAPPINGS, json));
@@ -593,8 +583,7 @@ export function receiveDatawolfResponse(json) {
 	return (dispatch) => {
 		dispatch({
 			type: RECEIVE_EXECUTION_ID,
-			executionId: json,
-			receivedAt: Date.now()
+			executionId: json
 		});
 	};
 }
@@ -646,8 +635,7 @@ export function receiveSemantics(type, json) {
 	return (dispatch) => {
 		dispatch({
 			type: type,
-			semantics: json,
-			receivedAt: Date.now()
+			semantics: json
 		});
 	};
 }
@@ -735,8 +723,7 @@ export function executeDatawolfWorkflow(workflowid, creatorid, title, descriptio
 		);
 		return dispatch({
 			type: RECEIVE_EXECUTION_ID,
-			executionId: json,
-			receivedAt: Date.now()
+			executionId: json
 		});
 	};
 }

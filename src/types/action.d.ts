@@ -23,11 +23,11 @@ interface DeleteDatasetItemAction {
 	item: Dataset;
 }
 
-interface DeleteDatasetErrorAction {
+interface DeleteErrorAction {
 	type: "DELETE_ERROR";
 }
 
-interface ResetDeleteErrorAction {
+interface ResetErrorAction {
 	type: "RESET_ERROR";
 }
 
@@ -43,7 +43,7 @@ type DatasetAction =
 	| ReceiveDatasetsAction
 	| DeleteDatasetItemAction
 	| DeleteErrorAction
-	| ResetDeleteErrorAction
+	| ResetErrorAction
 	| LoginErrorUserAction
 	| DatasetLoadingAction
 	| DatasetLoadedAction;
@@ -58,14 +58,6 @@ interface DeleteDFR3CurveItemAction {
 	item: DFR3Curve;
 }
 
-interface DeleteDFR3ErrorAction {
-	type: "DELETE_ERROR";
-}
-
-interface ResetDeleteDFR3ErrorAction {
-	type: "RESET_ERROR";
-}
-
 interface DFR3CurveLoadingAction {
 	type: "DFR3CURVE_LOADING";
 }
@@ -74,10 +66,40 @@ interface DFR3CurveLoadedAction {
 	type: "DFR3CURVE_LOAD_COMPLETE";
 }
 
-type DFR3Action =
+type DFR3CurvesAction =
 	| ReceiveDFR3CurvesAction
 	| DeleteDFR3CurveItemAction
-	| DeleteDFR3ErrorAction
-	| ResetDeleteDFR3ErrorAction
+	| DeleteErrorAction
+	| ResetErrorAction
+	| LoginErrorUserAction
 	| DFR3CurveLoadingAction
 	| DFR3CurveLoadedAction;
+
+interface ReceiveDFR3MappingsAction {
+	type: "RECEIVE_DFR3_MAPPINGS";
+	dfr3Mappings: DFR3Mappings;
+}
+
+interface DeleteDFR3MappingItemAction {
+	type: "DELETE_ITEM";
+	item: DFR3Mapping;
+}
+
+interface DFR3MappingLoadingAction {
+	type: "DFR3MAPPING_LOADING";
+}
+
+interface DFR3MappingLoadedAction {
+	type: "DFR3MAPPING_LOAD_COMPLETE";
+}
+
+type DFR3MappingsAction =
+	| ReceiveDFR3MappingsAction
+	| DeleteDFR3MappingItemAction
+	| DeleteErrorAction
+	| ResetErrorAction
+	| LoginErrorUserAction
+	| DFR3MappingLoadingAction
+	| DFR3MappingLoadedAction;
+
+
