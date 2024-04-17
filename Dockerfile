@@ -8,6 +8,7 @@ WORKDIR /usr/src/app
 # specify which service to use
 ARG INCORE_REMOTE_HOSTNAME=""
 ENV INCORE_REMOTE_HOSTNAME=${INCORE_REMOTE_HOSTNAME}
+ENV GA_KEY=${GA_KEY}
 
 # copy only package for caching purposes
 COPY package*.json /usr/src/app/
