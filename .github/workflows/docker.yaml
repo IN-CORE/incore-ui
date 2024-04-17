@@ -29,10 +29,6 @@ jobs:
       packages: write
 
     steps:
-      - name: Debug GA_KEY
-        run:
-            echo "GA_KEY value: ${{ secrets.GA_KEY }}"
-             
       # checkout source code
       - uses: actions/checkout@v3
 
@@ -115,6 +111,11 @@ jobs:
           echo "DOCKERHUB_PUSH=${DOCKERHUB_PUSH}" >> $GITHUB_ENV
           echo "NCSAHUB_PUSH=${NCSAHUB_PUSH}" >> $GITHUB_ENV
           echo "IMAGES=${IMAGES}" >> $GITHUB_ENV
+
+      # Add debug step here to print the value of GA_KEY
+      - name: Debug GA_KEY
+        run:
+            echo "GA_KEY value: ${{ secrets.GA_KEY }}"
 
       # setup docker build
       - name: Set up QEMU
