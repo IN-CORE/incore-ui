@@ -165,6 +165,7 @@ jobs:
             VERSION=${{ env.VERSION }}
             BUILDNUMBER=${{ github.run_number }}
             GITSHA1=${{ github.sha  }}
+            GA_KEY: ${{ secrets.GA_KEY }}
 
       # this will update the README of the dockerhub repo
       - name: Docker Hub Description
