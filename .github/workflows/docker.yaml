@@ -114,7 +114,7 @@ jobs:
 
       # Add debug step here to print the value of GA_KEY
       - name: Debug GA_KEY
-        run:
+        run: |
             echo "GA_KEY value: ${{ secrets.GA_KEY }}"
 
       # setup docker build
