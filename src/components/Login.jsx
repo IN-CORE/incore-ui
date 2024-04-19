@@ -20,9 +20,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import config from "../app.config";
 
 import { login } from "../actions";
-import ReactGA from "react-ga";
-
-ReactGA.initialize('G-VT38KCDFTM');
 
 const cookies = new Cookies();
 

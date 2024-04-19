@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import ReactGA from "react-ga";
 import {
 	AppBar,
 	Box,
@@ -21,8 +20,6 @@ import config from "../app.config";
 import ErrorMessage from "./children/ErrorMessage";
 import { determineUserGroup, getCurrUserInfo } from "../utils/common";
 import Gravatar from "react-gravatar";
-
-ReactGA.initialize('G-VT38KCDFTM');
 
 global.__base = `${__dirname}/`;
 
@@ -167,9 +164,6 @@ class App extends Component {
 			this.props.getAllocations();
 			this.props.getUsage();
 		}
-
-		// add Google anlytics
-		ReactGA.pageview(window.location.pathname + window.location.search);
 	}
 
 	componentDidUpdate(prevProps) {

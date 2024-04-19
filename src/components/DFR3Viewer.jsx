@@ -42,9 +42,6 @@ import LoadingOverlay from "react-loading-overlay";
 
 import { fetchPlot } from "../actions/plotting";
 import ThreeDimensionalPlot from "./children/ThreeDimensionalPlot";
-import ReactGA from "react-ga";
-
-ReactGA.initialize('G-VT38KCDFTM');
 
 const cookies = new Cookies();
 const redundantProp = ["legacyId", "privileges", "creator", "is3dPlot", "spaces"];
@@ -223,9 +220,6 @@ class DFR3Viewer extends React.Component {
 	}
 
 	componentDidMount() {
-		// add Google anlytics
-		ReactGA.pageview(window.location.pathname + window.location.search);
-
 		// reset delete error
 		this.props.resetError();
 	}

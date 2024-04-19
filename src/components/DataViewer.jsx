@@ -44,9 +44,6 @@ import Datatype from "./children/Datatype";
 import ErrorMessage from "./children/ErrorMessage";
 import Confirmation from "./children/Confirmation";
 import LoadingOverlay from "react-loading-overlay";
-import ReactGA from 'react-ga';
-
-ReactGA.initialize('G-VT38KCDFTM');
 
 const cookies = new Cookies();
 const redundantProp = ["deleted", "privileges", "spaces"];
@@ -201,8 +198,6 @@ class DataViewer extends Component {
 	}
 
 	componentDidMount() {
-		// send info to Google Analytics
-		ReactGA.pageview(window.location.pathname + window.location.search);
 		// reset delete error
 		this.props.resetError();
 	}

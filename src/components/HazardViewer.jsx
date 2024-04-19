@@ -34,9 +34,6 @@ import ErrorMessage from "./children/ErrorMessage";
 import SpaceChip from "./children/SpaceChip";
 import Confirmation from "./children/Confirmation";
 import LoadingOverlay from "react-loading-overlay";
-import ReactGA from "react-ga";
-
-ReactGA.initialize('G-VT38KCDFTM');
 
 const cookies = new Cookies();
 
@@ -181,9 +178,6 @@ class HazardViewer extends Component {
 	}
 
 	componentDidMount() {
-		// add Google anlytics
-		ReactGA.pageview(window.location.pathname + window.location.search);
-
 		// reset delete error
 		this.props.resetError();
 	}
