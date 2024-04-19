@@ -17,6 +17,9 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import config from "../app.config";
 import Version from "./children/Version";
+import ReactGA from "react-ga";
+
+ReactGA.initialize('G-VT38KCDFTM');
 
 const useStyles = makeStyles((theme) => ({
 	root: {

@@ -31,6 +31,9 @@ import Cookies from "universal-cookie";
 import {browserHistory} from "react-router";
 
 import {CopyToClipboard} from "react-copy-to-clipboard";
+import ReactGA from "react-ga";
+
+ReactGA.initialize('G-VT38KCDFTM');
 
 const cookies = new Cookies();
 
