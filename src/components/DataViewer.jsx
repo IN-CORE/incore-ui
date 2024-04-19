@@ -347,6 +347,12 @@ class DataViewer extends Component {
 
 	async onClickFileDescriptor(selected_dataset_id, file_descriptor_id, file_name) {
 		const url = `${config.dataServiceBase}files/${file_descriptor_id}/blob`;
+		// Call trackEvent to track the dataset selection event
+		trackEvent(
+			"FileDescriptor Selection",
+			"Select FileDescriptor",
+			`FileDescriptor ${file_descriptor_id} Selected`
+		);
 
 		let response = await fetch(url, { method: "GET", mode: "cors", headers: getHeader() });
 

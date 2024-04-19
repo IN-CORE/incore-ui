@@ -14,6 +14,7 @@ import SchoolIcon from "@material-ui/icons/School";
 import QuestionAnswerIcon from "@material-ui/icons/QuestionAnswer";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
+import { trackPageview, trackEvent } from "./analytics";
 
 const styles = (theme) => ({
 	root: {
@@ -247,6 +248,9 @@ class HomePage extends Component {
 	};
 
 	async componentDidMount() {
+		// Call trackPageview to track page view
+		trackPageview(window.location.pathname);
+
 		let repos = [
 			{
 				title: "pyIncore",

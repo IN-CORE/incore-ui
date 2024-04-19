@@ -47,6 +47,7 @@ import Confirmation from "./children/Confirmation";
 import LoadingOverlay from "react-loading-overlay";
 import semantics from "../reducers/semantics";
 import {exportJson} from "../utils/common";
+import { trackPageview, trackEvent } from "./analytics";
 
 const cookies = new Cookies();
 const redundantProp = ["deleted", "privileges", "spaces"];
@@ -193,6 +194,9 @@ class SemanticViewer extends Component {
 	}
 
 	componentDidMount() {
+		// Call trackPageview to track page view
+		trackPageview(window.location.pathname);
+
 		// reset delete error
 		this.props.resetError();
 	}
@@ -258,6 +262,9 @@ class SemanticViewer extends Component {
 
 
 	onClickSemanticType = async (semanticType) => {
+		// Call trackEvent to track the dataset selection event
+		trackEvent("Semantics Selection", "Select Semantics", `${semanticType} Selected`);
+
 		this.setState({
 			selectedSemanticType: semanticType,
 			semanticWindowClosed: false,
