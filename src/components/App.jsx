@@ -20,6 +20,9 @@ import config from "../app.config";
 import ErrorMessage from "./children/ErrorMessage";
 import { determineUserGroup, getCurrUserInfo } from "../utils/common";
 import Gravatar from "react-gravatar";
+import { initializeGA } from './analytics';
+
+initializeGA();
 
 global.__base = `${__dirname}/`;
 

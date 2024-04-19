@@ -12,6 +12,10 @@ import configureStore from "./store/configureStore";
 import "./styles/styles.scss";
 import { syncHistoryWithStore } from "react-router-redux";
 
+import { initializeGA } from "./components/analytics";
+
+initializeGA();
+
 const store = configureStore();
 
 // Create an enhanced history that syncs navigation events with the store
