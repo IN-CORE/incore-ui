@@ -17,7 +17,6 @@ import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
 
 const styles = (theme) => ({
 	root: {
-		color: theme.palette.primary,
 		position: "relative",
 		alignItems: "center",
 		[theme.breakpoints.up("sm")]: {
@@ -26,11 +25,11 @@ const styles = (theme) => ({
 		}
 	},
 	container: {
-		marginTop: theme.spacing(3),
-		marginBottom: theme.spacing(10),
+		padding: "0 0",
 		display: "flex",
 		flexDirection: "column",
-		alignItems: "center"
+		alignItems: "center",
+		maxWidth:"100%"
 	},
 	backdrop: {
 		position: "absolute",
@@ -63,25 +62,21 @@ const styles = (theme) => ({
 		fontWeight: "bold",
 		color: theme.palette.primary
 	},
+	intro: {
+		padding: "5em 25em 5em 25em",
+		textAlign: "left",
+		lineHeight: "1.5em",
+		backgroundColor:"#ffffff"
+	},
 	caption: {
 		marginTop: theme.spacing(2),
-		marginLeft: theme.spacing(10),
-		marginRight: theme.spacing(10),
-		fontWeight: "bold"
-	},
-	intro: {
-		margin: "1em auto 2em auto",
-		textAlign: "left",
-		lineHeight: "1.5em"
-	},
-	h6: {
-		fontWeight: "bold",
 		marginBottom: theme.spacing(4),
-		textAlign: "left"
+		textAlign: "left",
+		fontWeight: "bold"
 	},
 	more: {
 		fontSize: "16px",
-		textAlign: "center",
+		textAlign: "left",
 		marginTop: theme.spacing(2)
 	},
 	connectWithUs: {
@@ -117,9 +112,8 @@ const styles = (theme) => ({
 		backgroundColor: "#ffffff"
 	},
 	link: {
-		color: theme.palette.secondary.main,
-		textDecoration: "none",
-		fontWeight: "bold"
+		color: theme.palette.primary.main,
+		textDecoration: "underline"
 	},
 	sectionContainers: {
 		marginTop: theme.spacing(15),
@@ -172,6 +166,9 @@ const styles = (theme) => ({
 	listItem: {
 		paddingTop: theme.spacing(0.5),
 		paddingBottom: theme.spacing(0.5)
+	},
+	versionBlock:{
+		marginTop: "5em"
 	},
 	infoBlock: {
 		"display": "flex",
@@ -323,12 +320,12 @@ class HomePage extends Component {
 				{/*header*/}
 				<section className={classes.root}>
 					<Container className={classes.container}>
-						<img src="/public/resilience-logo.png" style={{width:"40em", padding: "5em"}}/>
-						<Typography color="inherit" align="center" variant="h5" className={classes.caption}>
-							{this.state.subTitle}
-						</Typography>
 						{/*Intro block*/}
 						<div className={classes.intro}>
+							<img src="/public/resilience-logo.png" style={{width:"40em", padding: "4em 0", display:"block", margin:"auto"}}/>
+							<Typography color="inherit" align="left" variant="h5" className={classes.caption}>
+								{this.state.subTitle}
+							</Typography>
 							<Typography variant="body1" color="inherit" className={classes.more}>
 								The{" "}
 								<Link href="https://www.nist.gov" className={classes.link} target="_blank">
@@ -365,7 +362,7 @@ class HomePage extends Component {
 							</Typography>
 						</div>
 						{/*Version Block*/}
-						<div>
+						<div className={classes.versionBlock}>
 							<div>
 								<Typography
 									variant="h5"
