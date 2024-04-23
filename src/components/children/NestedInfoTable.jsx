@@ -6,7 +6,8 @@ import config from "../../app.config";
 const styles = {
 	inlineButtons: {
 		display: "inline-block",
-		margin: "auto 5px"
+		margin: "auto 5px",
+		color: "#ffffff"
 	},
 	rowHeaderCell: {
 		minWidth: "30%",

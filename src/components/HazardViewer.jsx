@@ -78,7 +78,8 @@ const styles = {
 	},
 	inlineButtons: {
 		display: "inline-block",
-		margin: "auto 5px"
+		margin: "auto 5px",
+		color: "#ffffff"
 	},
 	paperFooter: {
 		padding: theme.spacing(2),
