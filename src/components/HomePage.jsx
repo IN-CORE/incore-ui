@@ -63,7 +63,7 @@ const styles = (theme) => ({
 		color: theme.palette.primary
 	},
 	intro: {
-		padding: "5% 25% 15% 25%",
+		padding: "5% 20% 8% 20%",
 		textAlign: "left",
 		lineHeight: "1.5em",
 		backgroundColor:"#ffffff"

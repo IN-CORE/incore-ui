@@ -1304,6 +1304,7 @@ class DFR3Viewer extends React.Component {
 														color="primary"
 														variant="outlined"
 														className={classes.inlineButtons}
+														style={{float: "right", color: "red", borderColor: "red"}}
 														size="small"
 														onClick={() => {
 															this.onClickDelete("mapping");
