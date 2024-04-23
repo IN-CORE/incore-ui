@@ -7,7 +7,6 @@ const styles = {
 	inlineButtons: {
 		display: "inline-block",
 		margin: "auto 5px",
-		color: "#ffffff"
 	},
 	rowHeaderCell: {
 		minWidth: "30%",
