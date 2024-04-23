@@ -3,7 +3,7 @@
 import ReactGA from 'react-ga';
 
 export const initializeGA = () => {
-    ReactGA.initialize('G-VT38KCDFTM');
+    ReactGA.initialize(process.env.GA_KEY);
 };
 
 export const trackPageview = (path) => {
