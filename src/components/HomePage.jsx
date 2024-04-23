@@ -323,7 +323,7 @@ class HomePage extends Component {
 				{/*header*/}
 				<section className={classes.root}>
 					<Container className={classes.container}>
-						<img src="/public/resilience-logo.png" />
+						<img src="/public/resilience-logo.png" style={{width:"40em", padding: "5em"}}/>
 						<Typography color="inherit" align="center" variant="h5" className={classes.caption}>
 							{this.state.subTitle}
 						</Typography>

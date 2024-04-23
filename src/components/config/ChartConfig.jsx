@@ -83,7 +83,7 @@ let pieChartConfig = {
 			},
 			colors: [
 				"#dadada",
-				"#18381b"
+				"#1B2D45"
 			],
 			states:{
 				hover:{
