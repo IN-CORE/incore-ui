@@ -63,7 +63,7 @@ const styles = (theme) => ({
 		color: theme.palette.primary
 	},
 	intro: {
-		padding: "5% 25%",
+		padding: "5% 25% 15% 25%",
 		textAlign: "left",
 		lineHeight: "1.5em",
 		backgroundColor:"#ffffff"
@@ -171,18 +171,18 @@ const styles = (theme) => ({
 		marginTop: "5em"
 	},
 	infoBlock: {
-		"display": "flex",
-		"flexDirection": "column",
-		"justifyContent": "center",
-		"alignItems": "center",
-		"textAlign": "left",
-		"marginLeft": theme.spacing(4),
-		"fontSize": "16px",
-		"fontFamily": "Work Sans, sans-serif",
-		"fontWeight": "400",
-		"lineHeight": "1.5",
-		"letterSpacing": "0.00938em",
-
+		padding: "5% 5%",
+		display: "flex",
+		flexDirection: "column",
+		justifyContent: "center",
+		alignItems: "center",
+		textAlign: "left",
+		marginLeft: theme.spacing(4),
+		fontSize: "16px",
+		fontFamily: "Work Sans, sans-serif",
+		fontWeight: "400",
+		lineHeight: "1.5",
+		letterSpacing: "0.00938em",
 		"& pre": {
 			backgroundColor: "#f5f5f5",
 			border: "1px solid #ddd",
