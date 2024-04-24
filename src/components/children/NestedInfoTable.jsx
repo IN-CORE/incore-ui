@@ -6,7 +6,7 @@ import config from "../../app.config";
 const styles = {
 	inlineButtons: {
 		display: "inline-block",
-		margin: "auto 5px"
+		margin: "auto 5px",
 	},
 	rowHeaderCell: {
 		minWidth: "30%",
@@ -109,7 +109,7 @@ class NestedInfoTable extends React.Component {
 								<TableCell>
 									<a
 										href={`${config.semanticServiceType}/${data[key]}`}
-										style={{ color: "#e8a114" }}
+										style={{ color: "#8998AB" }}
 										target="_blank"
 										rel="noopener noreferrer"
 									>
