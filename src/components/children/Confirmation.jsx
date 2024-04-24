@@ -18,8 +18,8 @@ function Confirmation(props) {
 					variant="contained"
 					size="small"
 					onClick={handleConfirmed}>{actionBtnName}</Button>
-				<Button color="secondary"
-					variant="contained"
+				<Button color="primary"
+					variant="outlined"
 					size="small"
 					onClick={handleCanceled}>Cancel</Button>
 			</DialogActions>
