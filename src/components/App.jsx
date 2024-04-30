@@ -26,10 +26,10 @@ global.__base = `${__dirname}/`;
 const theme = createMuiTheme({
 	palette: {
 		primary: {
-			main: "#18381b"
+			main: "#1B2D45"
 		},
 		secondary: {
-			main: "#e8a114"
+			main: "#8998AB"
 		},
 		third: {
 			main: "#333333"

@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+
+## [1.11.0] - 2024-04-30
+
+### Changed
+- New IN-CORE logo and color palette [#193](https://github.com/IN-CORE/incore-ui/issues/193)
+
 ## [1.10.0] - 2024-02-07
 
 ### Changed

@@ -86,7 +86,7 @@ const styles = {
 	},
 	inlineButtons: {
 		display: "inline-block",
-		margin: "auto 5px"
+		margin: "auto 5px",
 	},
 	paperFooter: {
 		padding: theme.spacing(2),
@@ -888,8 +888,8 @@ class DataViewer extends Component {
 													</Button>
 													<CopyToClipboard text={this.state.selectedDataset.id}>
 														<Button
-															color="secondary"
-															variant="contained"
+															color="primary"
+															variant="outlined"
 															className={classes.inlineButtons}
 															size="small"
 														>
@@ -897,9 +897,10 @@ class DataViewer extends Component {
 														</Button>
 													</CopyToClipboard>
 													<Button
-														color="secondary"
-														variant="contained"
+														color="primary"
+														variant="outlined"
 														className={classes.inlineButtons}
+														style={{float: "right", color: "red", borderColor: "red"}}
 														size="small"
 														onClick={this.onClickDelete}
 													>
