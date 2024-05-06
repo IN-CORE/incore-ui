@@ -5,5 +5,5 @@ FROM busybox
 WORKDIR /app
 
 # copy your incore theme files into the container
-COPY keycloakThems/incore-theme /app/keycloak_theme
+COPY keycloakThemes/incore-theme /app/keycloak_theme
 
