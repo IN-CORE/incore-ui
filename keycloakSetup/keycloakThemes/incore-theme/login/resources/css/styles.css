@@ -34,7 +34,7 @@ input[type=password]:hover,
 input[type=password]:focus,
 input[type=password]:focus-visible,
 input[type=password]:active {
-    border: 1px solid #1c427d;
+    border: 1px solid #666786FF;
 }
 
 /*Submit buttons*/
@@ -50,7 +50,7 @@ input[type=submit] {
     padding: 12px;
     font-size: 16px;
     color: #ffffff;
-    background-color: #142B15;
+    background-color: #1B2D45;
     box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
     width: 100%;
 }
@@ -59,21 +59,28 @@ input[type=submit]:hover,
 input[type=submit]:focus,
 input[type=submit]:focus-visible,
 input[type=submit]:active {
-    background-color: #0E1E0F;
+    background-color: #191A21FF;
 }
 
 /* Change content to change the title of the page*/
 div#kc-header {
     width: 100%;
-    background-color: #142B15;
+    background-color: #1B2D45;
+    color: "#fff";
     display: flex;
-    padding: 13px 45px;
+    align-items: center;
+    /* padding: 13px 45px; */
 }
 
 div#kc-header::after {
-    content: url(../img/incore-logo-reversed.svg);
+    content: '';
+    background-image: url(../img/resilience-logo.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    margin-left: 50px;
+    margin-bottom: 5px;
 	width: 100%;
-	height: 100%;
+	height: 48px;
 }
 
 /*Sign in to your account*/
@@ -82,12 +89,19 @@ header {
     text-align: center;
 }
 
-header::after {
-    content: url("../img/incore-logo.svg");
+header::before {
+    content: '';
+    display: block;
+    margin: auto;
+    background-image: url(../img/resilience-logo.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 161px;
 }
 
 h1 {
-    display: none;
+    display: block;
 }
 
 div#kc-content {

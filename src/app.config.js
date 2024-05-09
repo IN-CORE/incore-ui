@@ -45,8 +45,8 @@ config["githubRelease"] = "https://github.com/IN-CORE/IN-CORE/releases/tag/";
 
 // Keycloak configuration
 config["keycloakConfig"] = {
-	// url: "http://localhost:8080/auth",
-	url: `${hostname}/auth/`,
+	url: "http://localhost:8080/auth/",
+	// url: `${hostname}/auth/`,
 	realm: "In-core",
 	clientId: "react-auth"
 };
