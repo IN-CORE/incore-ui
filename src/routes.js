@@ -9,13 +9,11 @@ import SemanticViewer from "./containers/SemanticViewer";
 import HazardViewer from "./containers/HazardViewer";
 import HomePage from "./components/HomePage";
 import Login from "./components/Login";
-import Logout from "./components/Logout";
 import Profile from "./containers/Profile";
 export default (
 	<Route path="/" component={App}>
 		<IndexRoute component={HomePage} />
 		<Route path="Login" component={Login} />
-		<Route path="Logout" component={Logout} />
 		<Route path="playbook" component={Playbook} />
 		<Route path="Profile" component={Profile} />
 		<Route path="DataViewer" component={DataViewer} />

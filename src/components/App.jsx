@@ -16,6 +16,7 @@ import { createMuiTheme, MuiThemeProvider, withStyles } from "@material-ui/core/
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { browserHistory } from "react-router";
+import keycloak from "../utils/keycloak";
 import config from "../app.config";
 import ErrorMessage from "./children/ErrorMessage";
 import { determineUserGroup, getCurrUserInfo } from "../utils/common";
@@ -138,7 +139,6 @@ class App extends Component {
 			error: "",
 			messageOpen: true
 		};
-		this.logout = this.logout.bind(this);
 		this.handleProfileMenuOpen = this.handleProfileMenuOpen.bind(this);
 		this.handleViewerMenuOpen = this.handleViewerMenuOpen.bind(this);
 		this.handleHelpMenuOpen = this.handleHelpMenuOpen.bind(this);
@@ -146,6 +146,7 @@ class App extends Component {
 		this.closeErrorMessage = this.closeErrorMessage.bind(this);
 		this.handleViewerMenuClose = this.handleViewerMenuClose.bind(this);
 		this.handleHelpMenuClose = this.handleHelpMenuClose.bind(this);
+		this.handleKeycloakLogout = this.handleKeycloakLogout.bind(this);
 	}
 
 	componentWillMount() {
@@ -179,12 +180,19 @@ class App extends Component {
 		}
 	}
 
-	logout() {
-		this.props.logout();
-		browserHistory.push("/");
-		this.setState({
-			profileMenuOpen: false
-		});
+	handleKeycloakLogout() {
+		const redirectUri = `${location.origin}/`
+			// config.hostname !== undefined && config.hostname !== "" && config.hostname !== null
+			// 	? `${config.hostname}/`
+			// 	: `${location.origin}/`;
+		try {
+			this.props.logout();
+			keycloak.logout({
+				redirectUri: redirectUri
+			});
+		} catch (error) {
+			console.log("Logout error", error);
+		}
 	}
 
 	handleProfileMenuOpen(event) {
@@ -382,7 +390,7 @@ class App extends Component {
 						className={classes.denseStyle}
 						onClick={() => {
 							this.handleProfileMenuClose();
-							browserHistory.push("/Logout");
+							this.handleKeycloakLogout();
 						}}
 					>
 						Log Out
