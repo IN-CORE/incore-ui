@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+
+### Changed
+- Replace Incore Login Page with keycloak login page [#174](https://github.com/IN-CORE/incore-ui/issues/174)
+
 
 ## [1.11.0] - 2024-04-30
 
