@@ -7,7 +7,9 @@ WORKDIR /usr/src/app
 
 # specify which service to use
 ARG INCORE_REMOTE_HOSTNAME=""
+ARG GA_KEY
 ENV INCORE_REMOTE_HOSTNAME=${INCORE_REMOTE_HOSTNAME}
+ENV GA_KEY=${GA_KEY}
 
 # copy only package for caching purposes
 COPY package*.json /usr/src/app/
@@ -32,7 +34,6 @@ RUN apk add --no-cache jq
 
 COPY --from=builder /usr/src/app/dist/ /usr/share/nginx/html/
 COPY src/public /usr/share/nginx/html/public/
-COPY src/config /usr/share/nginx/html/config/
 COPY landing.conf /etc/nginx/conf.d/default.conf
 
 WORKDIR /usr/share/nginx/html/tags
