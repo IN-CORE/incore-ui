@@ -26,6 +26,7 @@ export default {
 			'process.env': {
 				NODE_ENV: JSON.stringify('development'),
 				INCORE_REMOTE_HOSTNAME: JSON.stringify(process.env.INCORE_REMOTE_HOSTNAME),
+				GA_KEY: JSON.stringify(process.env.GA_KEY)
 			},
 			'__DEV__': true
 		}),
