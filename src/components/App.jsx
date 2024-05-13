@@ -182,9 +182,6 @@ class App extends Component {
 
 	handleKeycloakLogout() {
 		const redirectUri = `${location.origin}/`
-			// config.hostname !== undefined && config.hostname !== "" && config.hostname !== null
-			// 	? `${config.hostname}/`
-			// 	: `${location.origin}/`;
 		try {
 			this.props.logout();
 			keycloak.logout({
