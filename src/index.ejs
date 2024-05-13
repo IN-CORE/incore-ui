@@ -13,27 +13,18 @@
   <!-- Google tag (gtag.js) -->
     <!-- Fetch environment-specific configuration at runtime -->
     <script>
-		// Fetch the runtime configuration
-		fetch('/config/config.json')
-		.then(response => response.json())
-		.then(config => {
-			// Create the script tag for Google Tag Manager
+		// Fetch and execute the analytics script
+		fetch('/config/googleAnalytics.js')
+		.then(response => response.text())
+		.then(scriptContent => {
 			const scriptTag = document.createElement('script');
-			scriptTag.async = true;
-			scriptTag.src = `https://www.googletagmanager.com/gtag/js?id=${config.GA_KEY}`;
+			scriptTag.textContent = scriptContent;
 			document.head.appendChild(scriptTag);
-
-			// Initialize Google Analytics
-			window.dataLayer = window.dataLayer || [];
-
-			function gtag() { dataLayer.push(arguments); }
-
-			gtag('js', new Date());
-			gtag('config', config.GA_KEY);
 		})
-		.catch(error => console.error('Failed to load configuration:', error));
+		.catch(error => console.error('Failed to load analytics script:', error));
     </script>
-  <% if (htmlWebpackPlugin.options.trackJSToken) { %>
+
+<% if (htmlWebpackPlugin.options.trackJSToken) { %>
   <script>window._trackJs = {token: '<%= htmlWebpackPlugin.options.trackJSToken %>'};</script>
   <script src="https://d2zah9y47r7bi2.cloudfront.net/releases/current/tracker.js"></script>
   <% } %>
