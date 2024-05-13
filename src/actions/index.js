@@ -529,23 +529,6 @@ export const loginHelper = async (username, password) => {
 export const LOGIN_ERROR = "LOGIN_ERROR";
 export const SET_USER = "SET_USER";
 
-// export function login(username, password) {
-// 	return async (dispatch) => {
-// 		const json = await loginHelper(username, password);
-// 		if (json["access_token"] !== undefined) {
-// 			cookies.set("Authorization", `bearer ${json["access_token"]}`, { maxAge: json["expires_in"] });
-// 			return dispatch({
-// 				type: SET_USER,
-// 				Authorization: `bearer ${json["access_token"]}`
-// 			});
-// 		} else {
-// 			return dispatch({
-// 				type: LOGIN_ERROR
-// 			});
-// 		}
-// 	};
-// }
-
 export function login(authJSON) {
 	return (dispatch) => {
 		if (authJSON !== undefined) {

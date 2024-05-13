@@ -43,7 +43,7 @@ const Login = ({ location }) => {
 			} catch (error) {
 				// Dispatches auth error
 				dispatch(login());
-				console.log("Login error", error);
+				console.error("Login error", error);
 			}
 		};
 		keycloakLogin();

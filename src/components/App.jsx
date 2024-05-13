@@ -188,7 +188,7 @@ class App extends Component {
 				redirectUri: redirectUri
 			});
 		} catch (error) {
-			console.log("Logout error", error);
+			console.error("Logout error", error);
 		}
 	}
 

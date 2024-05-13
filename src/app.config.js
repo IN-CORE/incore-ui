@@ -48,7 +48,7 @@ config["keycloakConfig"] = {
 	// url: "http://localhost:8080/auth/", // for testing locally
 	url: `${hostname}/auth/`,
 	realm: "In-core",
-	clientId: "react-auth"
+	clientId: config["client_id"]
 };
 
 export default config;
