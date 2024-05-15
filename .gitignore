@@ -42,4 +42,4 @@ dist
 # Mac files
 .DS_Store
 
-keycloakSetup/docker-compose.yml
+keycloakSetup/docker-compose.yaml
