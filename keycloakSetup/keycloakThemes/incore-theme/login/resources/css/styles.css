@@ -176,6 +176,10 @@ div#kc-header-wrapper {
     display: none;
 }
 
+.pf-c-button{
+    display: none;
+}
+
 div#kc-registration {
     font-size: 16px;
     margin-bottom: 20px;
