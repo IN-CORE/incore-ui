@@ -36,3 +36,4 @@ COPY src/config /usr/share/nginx/html/config/
 COPY landing.conf /etc/nginx/conf.d/default.conf
 
 WORKDIR /usr/share/nginx/html/tags
+
