@@ -86,7 +86,7 @@ const styles = {
 	},
 	inlineButtons: {
 		display: "inline-block",
-		margin: "auto 5px"
+		margin: "auto 5px",
 	},
 	paperFooter: {
 		padding: theme.spacing(2),
@@ -1145,8 +1145,8 @@ class DFR3Viewer extends React.Component {
 															}
 															<CopyToClipboard text={this.state.selectedDFR3Curve.id}>
 																<Button
-																	color="secondary"
-																	variant="contained"
+																	color="primary"
+																	variant="outlined"
 																	className={classes.inlineButtons}
 																	size="small"
 																>
@@ -1154,9 +1154,10 @@ class DFR3Viewer extends React.Component {
 																</Button>
 															</CopyToClipboard>
 															<Button
-																color="secondary"
-																variant="contained"
+																color="primary"
+																variant="outlined"
 																className={classes.inlineButtons}
+																style={{float: "right", color: "red", borderColor: "red"}}
 																size="small"
 																onClick={() => {
 																	this.onClickDelete("curve");
@@ -1304,8 +1305,8 @@ class DFR3Viewer extends React.Component {
 													</Button>
 													<CopyToClipboard text={this.state.selectedMapping.id}>
 														<Button
-															color="secondary"
-															variant="contained"
+															color="primary"
+															variant="outlined"
 															className={classes.inlineButtons}
 															size="small"
 														>
@@ -1313,9 +1314,10 @@ class DFR3Viewer extends React.Component {
 														</Button>
 													</CopyToClipboard>
 													<Button
-														color="secondary"
-														variant="contained"
+														color="primary"
+														variant="outlined"
 														className={classes.inlineButtons}
+														style={{float: "right", color: "red", borderColor: "red"}}
 														size="small"
 														onClick={() => {
 															this.onClickDelete("mapping");
