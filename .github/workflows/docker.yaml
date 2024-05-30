@@ -58,11 +58,9 @@ jobs:
               tags="${tags} ${tmpversion}"
               tmpversion=${tmpversion%.*}
             done
-            GA_KEY="${{ secrets.GA_KEY }}"
           else
             VERSION="$BRANCH"
             tags="$BRANCH"
-            GA_KEY="${{ secrets.GA_KEY_DEV }}"
           fi
 
           # should we push to dockerhub, and is there a README
@@ -102,13 +100,11 @@ jobs:
           # save the results in env
           echo "BRANCH=${BRANCH}"
           echo "VERSION=${VERSION}"
-          echo "GA_KEY=${GA_KEY}"
           echo "DOCKERHUB_README=${DOCKERHUB_README}"
           echo "DOCKERHUB_PUSH=${DOCKERHUB_PUSH}"
           echo "NCSAHUB_PUSH=${NCSAHUB_PUSH}"
           echo "IMAGES=${IMAGES}"
 
-          echo "GA_KEY=${GA_KEY}" >> $GITHUB_ENV
           echo "BRANCH=${BRANCH}" >> $GITHUB_ENV
           echo "VERSION=${VERSION}" >> $GITHUB_ENV
           echo "DOCKERHUB_README=${DOCKERHUB_README}" >> $GITHUB_ENV
@@ -131,7 +127,6 @@ jobs:
           echo "Status:    ${{ steps.buildx.outputs.status }}"
           echo "Flags:     ${{ steps.buildx.outputs.flags }}"
           echo "Platforms: ${{ steps.buildx.outputs.platforms }}"
-          echo "GA_KEY:    ${{ env.GA_KEY }}"
 
       # login to registries
       - name: Login to DockerHub
@@ -170,7 +165,6 @@ jobs:
             VERSION=${{ env.VERSION }}
             BUILDNUMBER=${{ github.run_number }}
             GITSHA1=${{ github.sha  }}
-            GA_KEY=${{ env.GA_KEY }}
 
       # this will update the README of the dockerhub repo
       - name: Docker Hub Description

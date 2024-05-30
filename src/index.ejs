@@ -11,19 +11,24 @@
     To track JavaScript errors via TrackJS, sign up for a free trial at TrackJS.com and enter your token in /webpack.config.prod.js on line 55.
    -->
   <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=<%= process.env.GA_KEY %>"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+    <!-- Fetch environment-specific configuration at runtime -->
+    <script>
+		// Fetch and execute the analytics script
+		fetch('/config/googleAnalytics.js')
+		.then(response => response.text())
+		.then(scriptContent => {
+			const scriptTag = document.createElement('script');
+			scriptTag.textContent = scriptContent;
+			document.head.appendChild(scriptTag);
+		})
+		.catch(error => console.error('Failed to load analytics script:', error));
+    </script>
 
-    gtag('config', '<%= process.env.GA_KEY %>');
-  </script>
-  <% if (htmlWebpackPlugin.options.trackJSToken) { %>
+<% if (htmlWebpackPlugin.options.trackJSToken) { %>
   <script>window._trackJs = {token: '<%= htmlWebpackPlugin.options.trackJSToken %>'};</script>
   <script src="https://d2zah9y47r7bi2.cloudfront.net/releases/current/tracker.js"></script>
   <% } %>
-  
+
   <meta http-equiv="X-UA-Compatible" content='no-cache'>
   <meta charset="utf-8"/>
   <title>IN-CORE</title>
