@@ -90,7 +90,7 @@ const styles = {
 	},
 	inlineButtons: {
 		display: "inline-block",
-		margin: "auto 5px"
+		margin: "auto 5px",
 	},
 	hide: {
 		display: "none"
@@ -587,8 +587,8 @@ class SemanticViewer extends Component {
 												</Button>
 												<CopyToClipboard text={this.state.selectedSemanticType["url"]}>
 													<Button
-														color="secondary"
-														variant="contained"
+														color="primary"
+														variant="outlined"
 														className={classes.inlineButtons}
 														size="small"
 													>
@@ -596,8 +596,8 @@ class SemanticViewer extends Component {
 													</Button>
 												</CopyToClipboard>
 												{/*<Button*/}
-												{/*	color="secondary"*/}
-												{/*	variant="contained"*/}
+												{/*	color="primary"*/}
+												{/*	variant="outlined"*/}
 												{/*	className={classes.inlineButtons}*/}
 												{/*	size="small"*/}
 												{/*	onClick={this.onClickDelete}*/}
