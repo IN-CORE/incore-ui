@@ -20,6 +20,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import config from "../app.config";
 
 import { login } from "../actions";
+import { trackPageview, trackEvent } from "./analytics";
+
 
 const cookies = new Cookies();
 
@@ -55,6 +57,11 @@ const Login = ({ location }) => {
 	const loginError = useSelector((state) => state.user.loginError);
 	const loginSuccess = useSelector((state) => state.user.loginSuccess);
 	const Authorization = useSelector((state) => state.user.Authorization);
+
+	React.useEffect(() => {
+		// Track page view when the component mounts
+		trackPageview(window.location.pathname);
+	}, []);
 
 	React.useEffect(() => {
 		if (loginError) {
