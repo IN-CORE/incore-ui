@@ -44,6 +44,7 @@ import Datatype from "./children/Datatype";
 import ErrorMessage from "./children/ErrorMessage";
 import Confirmation from "./children/Confirmation";
 import LoadingOverlay from "react-loading-overlay";
+import { trackPageview, trackEvent } from "./analytics";
 
 const cookies = new Cookies();
 const redundantProp = ["deleted", "privileges", "spaces"];
@@ -198,6 +199,9 @@ class DataViewer extends Component {
 	}
 
 	componentDidMount() {
+		// Call trackPageview to track page view
+		trackPageview(window.location.pathname);
+
 		// reset delete error
 		this.props.resetError();
 	}
@@ -269,6 +273,8 @@ class DataViewer extends Component {
 
 	onClickDataset(datasetId) {
 		const dataset = this.props.datasets.find((dataset) => dataset.id === datasetId);
+		// Call trackEvent to track the dataset selection event
+		trackEvent("Dataset Selection", "Select Dataset", `Dataset ${datasetId} Selected`);
 		this.setState({
 			selectedDataset: dataset,
 			selectedDatasetFormat: dataset.format,
@@ -279,6 +285,8 @@ class DataViewer extends Component {
 	}
 
 	onClickDelete() {
+		// Call trackEvent to track the delete event
+		trackEvent("Button Click", "Delete", "Delete Button Clicked");
 		this.setState({
 			confirmOpen: true
 		});
@@ -339,6 +347,12 @@ class DataViewer extends Component {
 
 	async onClickFileDescriptor(selected_dataset_id, file_descriptor_id, file_name) {
 		const url = `${config.dataServiceBase}files/${file_descriptor_id}/blob`;
+		// Call trackEvent to track the dataset selection event
+		trackEvent(
+			"FileDescriptor Selection",
+			"Select FileDescriptor",
+			`FileDescriptor ${file_descriptor_id} Selected`
+		);
 
 		let response = await fetch(url, { method: "GET", mode: "cors", headers: getHeader() });
 

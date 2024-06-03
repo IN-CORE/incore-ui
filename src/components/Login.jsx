@@ -5,6 +5,8 @@ import { CircularProgress } from "@material-ui/core";
 
 import { login } from "../actions";
 import keycloak from "../utils/keycloak";
+import { trackPageview, trackEvent } from "./analytics";
+
 
 const styles = {
 	container: {
@@ -45,7 +47,10 @@ const Login = ({ location }) => {
 				dispatch(login());
 				console.error("Login error", error);
 			}
-		};
+
+		// Track page view when the component mounts
+		trackPageview(window.location.pathname);
+	}
 		keycloakLogin();
 	}, []);
 

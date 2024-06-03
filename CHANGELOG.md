@@ -7,9 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Added
+- Google Analytics code for site analysis [#191](https://github.com/IN-CORE/incore-ui/issues/191)
+
 ### Changed
 - Replace Incore Login Page with keycloak login page [#174](https://github.com/IN-CORE/incore-ui/issues/174)
-
 
 ## [1.11.0] - 2024-04-30
 

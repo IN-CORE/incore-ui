@@ -17,6 +17,8 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import config from "../app.config";
 import Version from "./children/Version";
+import { trackPageview, trackEvent } from "./analytics";
+
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -89,6 +91,11 @@ const Playbook = ({ location }) => {
 			url: "http://www.ncsa.illinois.edu/"
 		}
 	];
+
+	React.useEffect(() => {
+		// Track page view when the component mounts
+		trackPageview(window.location.pathname);
+	}, []);
 
 	const getCard = (image) => {
 		return (

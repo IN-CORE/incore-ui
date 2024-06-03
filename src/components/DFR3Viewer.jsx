@@ -42,6 +42,7 @@ import LoadingOverlay from "react-loading-overlay";
 
 import { fetchPlot } from "../actions/plotting";
 import ThreeDimensionalPlot from "./children/ThreeDimensionalPlot";
+import { trackPageview, trackEvent } from "./analytics";
 
 const cookies = new Cookies();
 const redundantProp = ["legacyId", "privileges", "creator", "is3dPlot", "spaces"];
@@ -220,6 +221,9 @@ class DFR3Viewer extends React.Component {
 	}
 
 	componentDidMount() {
+		// Call trackPageview to track page view
+		trackPageview(window.location.pathname);
+
 		// reset delete error
 		this.props.resetError();
 	}
@@ -455,6 +459,9 @@ class DFR3Viewer extends React.Component {
 			[plotConfig2d, error] = await this.generate2dPlotData(DFR3Curve);
 		}
 
+		// Call trackEvent to track the dataset selection event
+		trackEvent("DFR3 Curve Selection", "Select DFR3 Curve", `DFR3 Curve ${DFR3Curve.id} Selected`);
+
 		this.setState({
 			chartConfig: plotConfig2d,
 			plotData3d: plotData3d,
@@ -467,6 +474,9 @@ class DFR3Viewer extends React.Component {
 	}
 
 	onClickDFR3Mapping(DFR3Mapping) {
+		// Call trackEvent to track the dataset selection event
+		trackEvent("DFR3 Mapping Selection", "Select DFR3 Mapping", `DFR3 Mapping ${DFR3Mapping.id} Selected`);
+
 		this.setState({
 			selectedMapping: DFR3Mapping,
 			metadataClosed: false
@@ -474,6 +484,9 @@ class DFR3Viewer extends React.Component {
 	}
 
 	onClickDelete(deleteType) {
+		// Call trackEvent to track the delete event
+		trackEvent("Button Click", "Delete", "Delete Button Clicked");
+
 		this.setState({
 			confirmOpen: true,
 			deleteType: deleteType
