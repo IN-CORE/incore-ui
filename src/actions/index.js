@@ -529,14 +529,14 @@ export const loginHelper = async (username, password) => {
 export const LOGIN_ERROR = "LOGIN_ERROR";
 export const SET_USER = "SET_USER";
 
-export function login(username, password) {
-	return async (dispatch) => {
-		const json = await loginHelper(username, password);
-		if (json["access_token"] !== undefined) {
-			cookies.set("Authorization", `bearer ${json["access_token"]}`, { maxAge: json["expires_in"] });
+export function login(authJSON) {
+	return (dispatch) => {
+		if (authJSON !== undefined) {
+			// TODO: Add expiration time
+			cookies.set("Authorization", `bearer ${authJSON.token}`, { maxAge: authJSON.tokenValidity });
 			return dispatch({
 				type: SET_USER,
-				Authorization: `bearer ${json["access_token"]}`
+				Authorization: `bearer ${authJSON["token"]}`
 			});
 		} else {
 			return dispatch({
@@ -545,7 +545,6 @@ export function login(username, password) {
 		}
 	};
 }
-
 export const LOGOUT = "LOGOUT";
 
 export function logout() {
