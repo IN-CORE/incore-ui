@@ -12,7 +12,7 @@ config["incoreDocUrl"] = `${hostname}/doc/incore/introduction.html`;
 config["incoreTutorialUrl"] = `${hostname}/doc/incore/tutorials.html`;
 config["incoreFAQUrl"] = `${hostname}/doc/incore/faq.html`;
 config["swaggerUrl"] = `${hostname}/doc/api/`;
-config["webVersion"] = "1.11.0";
+config["webVersion"] = "1.12.0";
 config["spaceServiceBase"] = `${hostname}/space/api/`;
 config["spaceService"] = `${hostname}/space/api/spaces`;
 config["dfr3ServiceBase"] = `${hostname}/dfr3/api/`;
@@ -42,5 +42,13 @@ config["mailingList"] = "incore-dev@lists.illinois.edu";
 config["slackInvitationLink"] = "https://bit.ly/in-core";
 config["slackWorkspaceLink"] = "https://in-core.slack.com";
 config["githubRelease"] = "https://github.com/IN-CORE/IN-CORE/releases/tag/";
+
+// Keycloak configuration
+config["keycloakConfig"] = {
+	// url: "http://localhost:8080/", // for testing locally
+	url: `${hostname}/auth/`,
+	realm: "In-core",
+	clientId: config["client_id"]
+};
 
 export default config;

@@ -10,7 +10,21 @@
     This is an example of how to add features to index.html for only one environment.
     To track JavaScript errors via TrackJS, sign up for a free trial at TrackJS.com and enter your token in /webpack.config.prod.js on line 55.
    -->
-  <% if (htmlWebpackPlugin.options.trackJSToken) { %>
+  <!-- Google tag (gtag.js) -->
+    <!-- Fetch environment-specific configuration at runtime -->
+    <script>
+		// Fetch and execute the analytics script
+		fetch('/config/googleAnalytics.js')
+		.then(response => response.text())
+		.then(scriptContent => {
+			const scriptTag = document.createElement('script');
+			scriptTag.textContent = scriptContent;
+			document.head.appendChild(scriptTag);
+		})
+		.catch(error => console.error('Failed to load analytics script:', error));
+    </script>
+
+<% if (htmlWebpackPlugin.options.trackJSToken) { %>
   <script>window._trackJs = {token: '<%= htmlWebpackPlugin.options.trackJSToken %>'};</script>
   <script src="https://d2zah9y47r7bi2.cloudfront.net/releases/current/tracker.js"></script>
   <% } %>
