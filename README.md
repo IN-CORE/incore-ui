@@ -41,3 +41,4 @@ To update the tags:
 ```
 docker exec frontend /getVersionTags.sh
 ```
+
