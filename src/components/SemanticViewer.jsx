@@ -47,6 +47,7 @@ import Confirmation from "./children/Confirmation";
 import LoadingOverlay from "react-loading-overlay";
 import semantics from "../reducers/semantics";
 import {exportJson} from "../utils/common";
+import { trackPageview, trackEvent } from "./analytics";
 
 const cookies = new Cookies();
 const redundantProp = ["deleted", "privileges", "spaces"];
@@ -89,7 +90,7 @@ const styles = {
 	},
 	inlineButtons: {
 		display: "inline-block",
-		margin: "auto 5px"
+		margin: "auto 5px",
 	},
 	hide: {
 		display: "none"
@@ -193,6 +194,9 @@ class SemanticViewer extends Component {
 	}
 
 	componentDidMount() {
+		// Call trackPageview to track page view
+		trackPageview(window.location.pathname);
+
 		// reset delete error
 		this.props.resetError();
 	}
@@ -258,6 +262,9 @@ class SemanticViewer extends Component {
 
 
 	onClickSemanticType = async (semanticType) => {
+		// Call trackEvent to track the dataset selection event
+		trackEvent("Semantics Selection", "Select Semantics", `${semanticType} Selected`);
+
 		this.setState({
 			selectedSemanticType: semanticType,
 			semanticWindowClosed: false,
@@ -580,8 +587,8 @@ class SemanticViewer extends Component {
 												</Button>
 												<CopyToClipboard text={this.state.selectedSemanticType["url"]}>
 													<Button
-														color="secondary"
-														variant="contained"
+														color="primary"
+														variant="outlined"
 														className={classes.inlineButtons}
 														size="small"
 													>
@@ -589,8 +596,8 @@ class SemanticViewer extends Component {
 													</Button>
 												</CopyToClipboard>
 												{/*<Button*/}
-												{/*	color="secondary"*/}
-												{/*	variant="contained"*/}
+												{/*	color="primary"*/}
+												{/*	variant="outlined"*/}
 												{/*	className={classes.inlineButtons}*/}
 												{/*	size="small"*/}
 												{/*	onClick={this.onClickDelete}*/}

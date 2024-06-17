@@ -55,6 +55,7 @@ import {
 	deleteItemById,
 	resetError
 } from "../actions";
+import { trackPageview, trackEvent } from "./analytics";
 
 const cookies = new Cookies();
 const redundantProp = ["deleted", "privileges", "spaces"];
@@ -98,7 +99,7 @@ const useStyles = makeStyles(() => ({
 	},
 	inlineButtons: {
 		display: "inline-block",
-		margin: "auto 5px"
+		margin: "auto 5px",
 	},
 	paperFooter: {
 		padding: theme.spacing(2),
@@ -170,6 +171,9 @@ const DataViewer = () => {
 			dispatch({ type: "LOGIN_ERROR" });
 		}
 		dispatch(resetError);
+
+		// Call trackPageview to track page view
+		trackPageview(window.location.pathname);
 	}, []);
 
 	React.useEffect(() => {
@@ -207,6 +211,8 @@ const DataViewer = () => {
 	}, [selectedDataType, selectedSpace]);
 
 	const onClickDataset = (datasetId) => {
+		// Call trackEvent to track the dataset selection event
+		trackEvent("Dataset Selection", "Select Dataset", `Dataset ${datasetId} Selected`);
 		const dataset = datasets.find((dataset) => dataset.id === datasetId);
 		setSelectedDataset(dataset);
 		setSelectedDatasetFormat(dataset.format);
@@ -216,6 +222,8 @@ const DataViewer = () => {
 	};
 
 	const onClickDelete = () => {
+		// Call trackEvent to track the delete event
+		trackEvent("Button Click", "Delete", "Delete Button Clicked");
 		setConfirmOpen(true);
 	};
 
@@ -269,6 +277,12 @@ const DataViewer = () => {
 
 	const onClickFileDescriptor = async (selected_dataset_id, file_descriptor_id, file_name) => {
 		const url = `${config.dataServiceBase}files/${file_descriptor_id}/blob`;
+		// Call trackEvent to track the dataset selection event
+		trackEvent(
+			"FileDescriptor Selection",
+			"Select FileDescriptor",
+			`FileDescriptor ${file_descriptor_id} Selected`
+		);
 
 		let response = await fetch(url, { method: "GET", mode: "cors", headers: getHeader() });
 
@@ -724,9 +738,10 @@ const DataViewer = () => {
 												</Button>
 												<CopyToClipboard text={selectedDataset.id}>
 													<Button
-														color="secondary"
-														variant="contained"
+														color="primary"
+														variant="outlined"
 														className={classes.inlineButtons}
+														style={{float: "right", color: "red", borderColor: "red"}}
 														size="small"
 													>
 														Copy ID

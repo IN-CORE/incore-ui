@@ -14,10 +14,10 @@ import SchoolIcon from "@material-ui/icons/School";
 import QuestionAnswerIcon from "@material-ui/icons/QuestionAnswer";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
+import { trackPageview, trackEvent } from "./analytics";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
-		color: theme.palette.primary,
 		position: "relative",
 		alignItems: "center",
 		[theme.breakpoints.up("sm")]: {
@@ -26,11 +26,11 @@ const useStyles = makeStyles((theme) => ({
 		}
 	},
 	container: {
-		marginTop: theme.spacing(3),
-		marginBottom: theme.spacing(10),
+		padding: "0 0",
 		display: "flex",
 		flexDirection: "column",
-		alignItems: "center"
+		alignItems: "center",
+		maxWidth:"100%"
 	},
 	backdrop: {
 		position: "absolute",
@@ -63,25 +63,21 @@ const useStyles = makeStyles((theme) => ({
 		fontWeight: "bold",
 		color: theme.palette.primary
 	},
+	intro: {
+		padding: "5% 20% 8% 20%",
+		textAlign: "left",
+		lineHeight: "1.5em",
+		backgroundColor:"#ffffff"
+	},
 	caption: {
 		marginTop: theme.spacing(2),
-		marginLeft: theme.spacing(10),
-		marginRight: theme.spacing(10),
-		fontWeight: "bold"
-	},
-	intro: {
-		margin: "1em auto 2em auto",
-		textAlign: "left",
-		lineHeight: "1.5em"
-	},
-	h6: {
-		fontWeight: "bold",
 		marginBottom: theme.spacing(4),
-		textAlign: "left"
+		textAlign: "left",
+		fontWeight: "bold"
 	},
 	more: {
 		fontSize: "16px",
-		textAlign: "center",
+		textAlign: "left",
 		marginTop: theme.spacing(2)
 	},
 	connectWithUs: {
@@ -117,9 +113,8 @@ const useStyles = makeStyles((theme) => ({
 		backgroundColor: "#ffffff"
 	},
 	link: {
-		color: theme.palette.secondary.main,
-		textDecoration: "none",
-		fontWeight: "bold"
+		color: theme.palette.primary.main,
+		textDecoration: "underline"
 	},
 	sectionContainers: {
 		marginTop: theme.spacing(15),
@@ -173,19 +168,22 @@ const useStyles = makeStyles((theme) => ({
 		paddingTop: theme.spacing(0.5),
 		paddingBottom: theme.spacing(0.5)
 	},
+	versionBlock:{
+		marginTop: "5em"
+	},
 	infoBlock: {
-		"display": "flex",
-		"flexDirection": "column",
-		"justifyContent": "center",
-		"alignItems": "center",
-		"textAlign": "left",
-		"marginLeft": theme.spacing(4),
-		"fontSize": "16px",
-		"fontFamily": "Work Sans, sans-serif",
-		"fontWeight": "400",
-		"lineHeight": "1.5",
-		"letterSpacing": "0.00938em",
-
+		padding: "5% 5%",
+		display: "flex",
+		flexDirection: "column",
+		justifyContent: "center",
+		alignItems: "center",
+		textAlign: "left",
+		marginLeft: theme.spacing(4),
+		fontSize: "16px",
+		fontFamily: "Work Sans, sans-serif",
+		fontWeight: "400",
+		lineHeight: "1.5",
+		letterSpacing: "0.00938em",
 		"& pre": {
 			backgroundColor: "#f5f5f5",
 			border: "1px solid #ddd",
@@ -355,7 +353,8 @@ const HomePage = () => {
 		getRepoVersion().then((data) => {
 			setGithubVersions(data);
 		});
-		
+		// Call trackPageview to track page view
+		trackPageview(window.location.pathname);
 	}, []);
 
 	return (
@@ -363,7 +362,7 @@ const HomePage = () => {
 			{/*header*/}
 			<section className={classes.root}>
 				<Container className={classes.container}>
-					<img src="/public/resilience-logo.png" />
+					<img src="/public/resilience-logo.png"  style={{width:"40em", padding: "4em 0", display:"block", margin:"auto"}} />
 					<Typography color="inherit" align="center" variant="h5" className={classes.caption}>
 						{subtitle}
 					</Typography>
@@ -404,7 +403,7 @@ const HomePage = () => {
 						</Typography>
 					</div>
 					{/*Version Block*/}
-					<div>
+					<div className={classes.versionBlock}>
 						<div>
 							<Typography
 								variant="h5"

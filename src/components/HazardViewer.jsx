@@ -34,6 +34,7 @@ import ErrorMessage from "./children/ErrorMessage";
 import SpaceChip from "./children/SpaceChip";
 import Confirmation from "./children/Confirmation";
 import LoadingOverlay from "react-loading-overlay";
+import { trackPageview, trackEvent } from "./analytics";
 
 const cookies = new Cookies();
 
@@ -78,7 +79,7 @@ const styles = {
 	},
 	inlineButtons: {
 		display: "inline-block",
-		margin: "auto 5px"
+		margin: "auto 5px",
 	},
 	paperFooter: {
 		padding: theme.spacing(2),
@@ -178,6 +179,9 @@ class HazardViewer extends Component {
 	}
 
 	componentDidMount() {
+		// Call trackPageview to track page view
+		trackPageview(window.location.pathname);
+
 		// reset delete error
 		this.props.resetError();
 	}
@@ -246,6 +250,10 @@ class HazardViewer extends Component {
 
 	onClickHazard(hazardId) {
 		const hazard = this.props.hazards.find((hazard) => hazard.id === hazardId);
+
+		// Call trackEvent to track the dataset selection event
+		trackEvent("Hazard Selection", "Select Hazard", `Hazard ${hazardId} Selected`);
+
 		this.setState({
 			selectedHazard: hazard,
 			selectedHazardDatasetId: "",
@@ -254,6 +262,9 @@ class HazardViewer extends Component {
 	}
 
 	onClickDelete() {
+		// Call trackEvent to track the dataset selection event
+		trackEvent("Button Click", "Delete", "Delete Button Clicked");
+
 		this.setState({
 			confirmOpen: true
 		});
@@ -678,8 +689,8 @@ class HazardViewer extends Component {
 														</Button>
 														<CopyToClipboard text={this.state.selectedHazard.id}>
 															<Button
-																color="secondary"
-																variant="contained"
+																color="primary"
+																variant="outlined"
 																className={classes.inlineButtons}
 																size="small"
 															>
@@ -687,9 +698,10 @@ class HazardViewer extends Component {
 															</Button>
 														</CopyToClipboard>
 														<Button
-															color="secondary"
-															variant="contained"
+															color="primary"
+															variant="outlined"
 															className={classes.inlineButtons}
+															style={{float: "right", color: "red", borderColor: "red"}}
 															size="small"
 															onClick={this.onClickDelete}
 														>

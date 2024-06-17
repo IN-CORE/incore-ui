@@ -31,6 +31,7 @@ import Cookies from "universal-cookie";
 import {browserHistory} from "react-router";
 
 import {CopyToClipboard} from "react-copy-to-clipboard";
+import { trackPageview, trackEvent } from "./analytics";
 
 const cookies = new Cookies();
 
@@ -122,6 +123,9 @@ export default function Profile(props) {
 	const group = determineUserGroup(userInfo);
 
 	useEffect(() => {
+		// Track page view when the component mounts
+		trackPageview(window.location.pathname);
+		
 		// check if logged in
 		let authorization = cookies.get("Authorization");
 

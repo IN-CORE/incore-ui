@@ -16,20 +16,24 @@ import { createMuiTheme, MuiThemeProvider, withStyles } from "@material-ui/core/
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { browserHistory } from "react-router";
+import keycloak from "../utils/keycloak";
 import config from "../app.config";
 import ErrorMessage from "./children/ErrorMessage";
 import { determineUserGroup, getCurrUserInfo } from "../utils/common";
 import Gravatar from "react-gravatar";
+import { initializeGA } from './analytics';
+
+initializeGA();
 
 global.__base = `${__dirname}/`;
 
 const theme = createMuiTheme({
 	palette: {
 		primary: {
-			main: "#18381b"
+			main: "#1B2D45"
 		},
 		secondary: {
-			main: "#e8a114"
+			main: "#8998AB"
 		},
 		third: {
 			main: "#333333"
@@ -138,7 +142,6 @@ class App extends Component {
 			error: "",
 			messageOpen: true
 		};
-		this.logout = this.logout.bind(this);
 		this.handleProfileMenuOpen = this.handleProfileMenuOpen.bind(this);
 		this.handleViewerMenuOpen = this.handleViewerMenuOpen.bind(this);
 		this.handleHelpMenuOpen = this.handleHelpMenuOpen.bind(this);
@@ -146,6 +149,7 @@ class App extends Component {
 		this.closeErrorMessage = this.closeErrorMessage.bind(this);
 		this.handleViewerMenuClose = this.handleViewerMenuClose.bind(this);
 		this.handleHelpMenuClose = this.handleHelpMenuClose.bind(this);
+		this.handleKeycloakLogout = this.handleKeycloakLogout.bind(this);
 	}
 
 	componentWillMount() {
@@ -179,12 +183,16 @@ class App extends Component {
 		}
 	}
 
-	logout() {
-		this.props.logout();
-		browserHistory.push("/");
-		this.setState({
-			profileMenuOpen: false
-		});
+	handleKeycloakLogout() {
+		const redirectUri = `${location.origin}/`
+		try {
+			this.props.logout();
+			keycloak.logout({
+				redirectUri: redirectUri
+			});
+		} catch (error) {
+			console.error("Logout error", error);
+		}
 	}
 
 	handleProfileMenuOpen(event) {
@@ -238,7 +246,7 @@ class App extends Component {
 		let group;
 
 		let contents = (
-			<Button color="inherit" href={"login"} className={classes.smallButton}>
+			<Button color="inherit" onClick={() => browserHistory.push("/Login")} className={classes.smallButton}>
 				Login
 			</Button>
 		);
@@ -382,7 +390,7 @@ class App extends Component {
 						className={classes.denseStyle}
 						onClick={() => {
 							this.handleProfileMenuClose();
-							this.logout();
+							this.handleKeycloakLogout();
 						}}
 					>
 						Log Out

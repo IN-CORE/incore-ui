@@ -40,6 +40,7 @@ import DFR3MappingsGroupList from "./children/DFR3MappingsGroupList";
 import CustomHighChart from "./children/CustomHighChart";
 import NestedInfoTable from "./children/NestedInfoTable";
 import ThreeDimensionalPlot from "./children/ThreeDimensionalPlot";
+import { trackPageview, trackEvent } from "./analytics";
 
 import {
 	fetchDFR3Curves,
@@ -95,7 +96,7 @@ const useStyles = makeStyles(() => ({
 	},
 	inlineButtons: {
 		display: "inline-block",
-		margin: "auto 5px"
+		margin: "auto 5px",
 	},
 	paperFooter: {
 		padding: theme.spacing(2),
@@ -192,6 +193,8 @@ const DFR3Viewer = () => {
 			dispatch({ type: "LOGIN_ERROR" });
 		}
 		dispatch(resetError);
+		// Call trackPageview to track page view
+		trackPageview(window.location.pathname);
 	}, []);
 
 	React.useEffect(() => {
@@ -359,6 +362,9 @@ const DFR3Viewer = () => {
 			[plotConfig2d, error] = await generate2dPlotData(DFR3Curve);
 		}
 
+		// Call trackEvent to track the dataset selection event
+		trackEvent("DFR3 Curve Selection", "Select DFR3 Curve", `DFR3 Curve ${DFR3Curve.id} Selected`);
+
 		setChartConfigVar(plotConfig2d);
 		setPlotData3D(plotData3d);
 		setSelectedDFR3Curve(DFR3Curve);
@@ -369,11 +375,15 @@ const DFR3Viewer = () => {
 	};
 
 	const onClickDFR3Mapping = (DFR3Mapping) => {
+		// Call trackEvent to track the dataset selection event
+		trackEvent("DFR3 Mapping Selection", "Select DFR3 Mapping", `DFR3 Mapping ${DFR3Mapping.id} Selected`);
 		setSelectedMapping(DFR3Mapping);
 		setMetadataClosed(false);
 	};
 
 	const onClickDelete = (deleteType) => {
+		// Call trackEvent to track the delete event
+		trackEvent("Button Click", "Delete", "Delete Button Clicked");
 		setConfirmOpen(true);
 		setDeleteType(deleteType);
 	};
@@ -860,8 +870,8 @@ const DFR3Viewer = () => {
 													}
 													<CopyToClipboard text={selectedDFR3Curve.id}>
 														<Button
-															color="secondary"
-															variant="contained"
+															color="primary"
+															variant="outlined"
 															className={classes.inlineButtons}
 															size="small"
 														>
@@ -869,9 +879,10 @@ const DFR3Viewer = () => {
 														</Button>
 													</CopyToClipboard>
 													<Button
-														color="secondary"
-														variant="contained"
+														color="primary"
+														variant="outlined"
 														className={classes.inlineButtons}
+														style={{float: "right", color: "red", borderColor: "red"}}
 														size="small"
 														onClick={() => {
 															onClickDelete("curve");

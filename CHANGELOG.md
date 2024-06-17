@@ -10,6 +10,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - Convert DataViewer and DFR3Viewer into Functional based components. [#183](https://github.com/IN-CORE/incore-ui/issues/183)
 
+## [1.12.0] - 2024-06-13
+
+### Added
+- Google Analytics code for site analysis [#191](https://github.com/IN-CORE/incore-ui/issues/191)
+
+### Changed
+- Replace Incore Login Page with keycloak login page [#174](https://github.com/IN-CORE/incore-ui/issues/174)
+
+## [1.11.0] - 2024-04-30
+
+### Changed
+- New IN-CORE logo and color palette [#193](https://github.com/IN-CORE/incore-ui/issues/193)
+
 ## [1.10.0] - 2024-02-07
 
 ### Changed
