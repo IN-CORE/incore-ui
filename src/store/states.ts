@@ -8,3 +8,9 @@ export const userStateInitialValue: UserState = {
 	loginError: false,
 	loginSuccess: false
 };
+
+export const datasetsStateInitialValue: DatasetState = { datasets: [], loading: false, deleteError: false };
+
+export const dfr3CurvesStateInitialValue: DFR3CurveState = { dfr3Curves: [], loading: false, deleteError: false };
+
+export const dfr3MappingsStateInitialValue: DFR3MappingState = { dfr3Mappings: [], loading: false, deleteError: false };
