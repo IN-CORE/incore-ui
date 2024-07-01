@@ -21,11 +21,6 @@ export const Forbidden = () => {
 						Please wait for the administrator to grant you access.
 					</Typography>
 					<Typography variant="body1" paragraph>
-						<Link href="/" variant="body1">
-							Home
-						</Link>
-					</Typography>
-					<Typography variant="body1" paragraph>
 						<Link href={config.slackInvitationLink} target="_blank">
 							Join Slack channel
 						</Link>
