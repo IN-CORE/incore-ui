@@ -145,6 +145,7 @@ class SemanticViewer extends Component {
 			searchText: "",
 			registeredSearchText: "",
 			authError: false,
+			forbidden: false,
 			loading:false,
 			selectedSemanticType: null,
 			pageNumber: 1,
@@ -205,7 +206,8 @@ class SemanticViewer extends Component {
 		this.setState(
 			{
 				loading: nextProps.loading,
-				authError: nextProps.authError
+				authError: nextProps.authError,
+				forbidden: nextProps.forbidden
 			}
 		);
 	}
@@ -474,7 +476,12 @@ class SemanticViewer extends Component {
 		if (this.state.authError) {
 			browserHistory.push("/login?origin=SemanticViewer");
 			return null;
-		} else {
+		}
+		else if (this.state.forbidden) {
+			browserHistory.push("/forbidden");
+			return null;
+		}
+		else {
 			return (
 				<div className={classes.root}>
 					<Grid container spacing={4}>

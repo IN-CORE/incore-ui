@@ -133,6 +133,7 @@ class DFR3Viewer extends React.Component {
 			chartConfig: chartConfig.DFR3Config,
 			plotData3d: {},
 			authError: false,
+			forbidden: false,
 			spaces: [],
 			preview: false,
 			offset: 0,
@@ -189,7 +190,7 @@ class DFR3Viewer extends React.Component {
 		) {
 			this.setState(
 				{
-					authError: false
+					authError: false,
 				},
 				function () {
 					this.props.getAllSpaces();
@@ -231,6 +232,7 @@ class DFR3Viewer extends React.Component {
 	componentWillReceiveProps(nextProps) {
 		this.setState({
 			authError: nextProps.authError,
+			forbidden: nextProps.forbidden,
 			curvesLoading: nextProps.curvesLoading,
 			mappingsLoading: nextProps.mappingsLoading
 		});
@@ -825,7 +827,12 @@ class DFR3Viewer extends React.Component {
 		if (this.state.authError) {
 			browserHistory.push("/login?origin=DFR3Viewer");
 			return null;
-		} else {
+		}
+		else if (this.state.forbidden){
+			browserHistory.push("/forbidden");
+			return null;
+		}
+		else {
 			return (
 				<div>
 					{/*error message display inside viewer*/}
