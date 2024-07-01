@@ -4,6 +4,7 @@ import {
 	DFR3MAPPING_LOAD_COMPLETE,
 	DFR3MAPPING_LOADING,
 	LOGIN_ERROR,
+	FORBIDDEN,
 	RECEIVE_DFR3_MAPPINGS,
 	RESET_ERROR
 } from "../actions";
@@ -25,6 +26,8 @@ const dfr3Mappings = (state = defaultState, action) => {
 		return Object.assign({}, state, {deleteError: false});
 	case LOGIN_ERROR:
 		return Object.assign({}, state, {dfr3Mappings: [], Authorization: "", loginError: true});
+	case FORBIDDEN:
+		return Object.assign({}, state, {dfr3Mappings: [], Authorization: "", forbidden: true});
 	case DFR3MAPPING_LOADING:
 		return Object.assign({}, state, {...state, loading: true});
 	case DFR3MAPPING_LOAD_COMPLETE:

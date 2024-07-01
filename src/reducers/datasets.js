@@ -3,6 +3,7 @@ import {
 	DATA_LOADING,
 	DATA_LOAD_COMPLETE,
 	LOGIN_ERROR,
+	FORBIDDEN,
 	RECEIVE_DATASETS,
 	DELETE_ITEM,
 	DELETE_ERROR,
@@ -26,6 +27,8 @@ const datasets = (state = defaultState, action) => {
 		return Object.assign({}, state, {deleteError:false});
 	case LOGIN_ERROR:
 		return Object.assign({}, state, {datasets: [], Authorization: "", loginError: true});
+	case FORBIDDEN:
+		return Object.assign({}, state, {datasets: [], Authorization: "", forbidden: true});
 	case DATA_LOADING:
 		return Object.assign({}, state, {...state, loading: true});
 	case DATA_LOAD_COMPLETE:

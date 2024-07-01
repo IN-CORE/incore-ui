@@ -10,7 +10,7 @@ export const Forbidden = () => {
 				direction="column"
 				alignItems="center"
 				justifyContent="center"
-				style={{ minHeight: "40vh"}}
+				style={{ minHeight: "50vh"}}
 			>
 				<Grid item xs={4}>
 					<Typography variant="h3" paragraph>

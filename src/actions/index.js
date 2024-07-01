@@ -100,6 +100,9 @@ export function deleteItemById(resourceType, id) {
 			} else if (response.status === 401) {
 				cookies.remove("Authorization");
 				dispatch(deleteItem(LOGIN_ERROR, []));
+			} else if (response.status === 403) {
+				cookies.remove("Authorization");
+				dispatch(deleteItem(FORBIDDEN, []));
 			} else {
 				dispatch(deleteItem(DELETE_ERROR, null));
 			}
@@ -205,6 +208,10 @@ export function searchDatasets(keyword, limit, offset) {
 			} else if (response.status === 401) {
 				cookies.remove("Authorization");
 				dispatch(receiveDatasets(LOGIN_ERROR, []));
+			}
+			else if (response.status === 403) {
+				cookies.remove("Authorization");
+				dispatch(receiveDatasets(FORBIDDEN, []));
 			} else {
 				dispatch(receiveDatasets(RECEIVE_DATASETS, []));
 			}
@@ -232,6 +239,10 @@ export function fetchDatasets(dataType, space, limit, offset) {
 			} else if (response.status === 401) {
 				cookies.remove("Authorization");
 				dispatch(receiveDatasets(LOGIN_ERROR, []));
+			}
+			else if (response.status === 403) {
+				cookies.remove("Authorization");
+				dispatch(receiveDatasets(FORBIDDEN, []));
 			} else {
 				dispatch(receiveDatasets(RECEIVE_DATASETS, []));
 			}
@@ -250,6 +261,10 @@ export function fetchUsage() {
 			} else if (response.status === 401) {
 				cookies.remove("Authorization");
 				dispatch(receieveUsage(LOGIN_ERROR, {}));
+			}
+			else if (response.status === 403) {
+				cookies.remove("Authorization");
+				dispatch(receieveUsage(FORBIDDEN, []));
 			} else {
 				dispatch(receieveUsage(RECEIVE_USAGE, {}));
 			}
@@ -281,6 +296,10 @@ export function fetchSpaces() {
 			} else if (response.status === 401) {
 				cookies.remove("Authorization");
 				dispatch(receiveSpaces(LOGIN_ERROR, []));
+			}
+			else if (response.status === 403) {
+				cookies.remove("Authorization");
+				dispatch(receiveSpaces(FORBIDDEN, []));
 			} else {
 				dispatch(receiveSpaces(RECEIVE_SPACES, []));
 			}
@@ -308,6 +327,14 @@ export function fetchAllocations() {
 					usage: {},
 					receivedAt: Date.now()
 				});
+			}
+			else if (response.status === 403) {
+				cookies.remove("Authorization");
+				dispatch({
+					type: FORBIDDEN,
+					usage: {},
+					receivedAt: Date.now()
+				});
 			} else {
 				dispatch({
 					type: RECEIVE_ALLOCATIONS,
@@ -330,6 +357,10 @@ export function fetchUniqueDatatypes() {
 			} else if (response.status === 401) {
 				cookies.remove("Authorization");
 				dispatch(receiveDatatypes(LOGIN_ERROR, []));
+			}
+			else if (response.status === 403) {
+				cookies.remove("Authorization");
+				dispatch(receiveDatatypes(FORBIDDEN, []));
 			} else {
 				dispatch(receiveDatatypes(RECEIVE_DATATYPES, []));
 			}
@@ -350,6 +381,10 @@ export function searchDFR3Curves(dfr3_type, keyword, limit, offset) {
 			} else if (response.status === 401) {
 				cookies.remove("Authorization");
 				dispatch(receiveDFR3Curves(LOGIN_ERROR, []));
+			}
+			else if (response.status === 403) {
+				cookies.remove("Authorization");
+				dispatch(receiveDFR3Curves(FORBIDDEN, []));
 			} else {
 				dispatch(receiveDFR3Curves(RECEIVE_DFR3_CURVES, []));
 			}
@@ -379,6 +414,10 @@ export function fetchDFR3Curves(dfr3_type, space, inventory, hazard, limit, offs
 			} else if (response.status === 401) {
 				cookies.remove("Authorization");
 				dispatch(receiveDFR3Curves(LOGIN_ERROR, []));
+			}
+			else if (response.status === 403) {
+				cookies.remove("Authorization");
+				dispatch(receiveDFR3Curves(FORBIDDEN, []));
 			} else {
 				dispatch(receiveDFR3Curves(RECEIVE_DFR3_CURVES, []));
 			}
@@ -427,6 +466,10 @@ export function fetchDFR3Mappings(dfr3_type, space, inventory, hazard, limit, of
 			} else if (response.status === 401) {
 				cookies.remove("Authorization");
 				dispatch(receiveDFR3Mappings(LOGIN_ERROR, []));
+			}
+			else if (response.status === 403) {
+				cookies.remove("Authorization");
+				dispatch(receiveDFR3Mappings(FORBIDDEN, []));
 			} else {
 				dispatch(receiveDFR3Mappings(RECEIVE_DFR3_MAPPINGS, []));
 			}
@@ -454,6 +497,10 @@ export function searchDFR3Mappings(dfr3_type, keyword, limit, offset) {
 			} else if (response.status === 401) {
 				cookies.remove("Authorization");
 				dispatch(receiveDFR3Mappings(LOGIN_ERROR, []));
+			}
+			else if (response.status === 403) {
+				cookies.remove("Authorization");
+				dispatch(receiveDFR3Mappings(FORBIDDEN, []));
 			} else {
 				dispatch(receiveDFR3Mappings(RECEIVE_DFR3_MAPPINGS, []));
 			}
@@ -474,6 +521,10 @@ export function searchHazards(hazard_type, keyword, limit, offset) {
 			} else if (response.status === 401) {
 				cookies.remove("Authorization");
 				dispatch(receiveHazards(LOGIN_ERROR, []));
+			}
+			else if (response.status === 403) {
+				cookies.remove("Authorization");
+				dispatch(receiveHazards(FORBIDDEN, []));
 			} else {
 				dispatch(receiveHazards(RECEIVE_HAZARDS, []));
 			}
@@ -497,6 +548,10 @@ export function fetchHazards(hazard_type, space, limit, offset) {
 			} else if (response.status === 401) {
 				cookies.remove("Authorization");
 				dispatch(receiveHazards(LOGIN_ERROR, []));
+			}
+			else if (response.status === 403) {
+				cookies.remove("Authorization");
+				dispatch(receiveHazards(FORBIDDEN, []));
 			} else {
 				dispatch(receiveHazards(RECEIVE_HAZARDS, []));
 			}
@@ -527,6 +582,7 @@ export const loginHelper = async (username, password) => {
 };
 
 export const LOGIN_ERROR = "LOGIN_ERROR";
+export const FORBIDDEN = "FORBIDDEN";
 export const SET_USER = "SET_USER";
 
 export function login(authJSON) {
