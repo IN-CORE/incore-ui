@@ -6,5 +6,6 @@ const cookies = new Cookies();
 export const userStateInitialValue: UserState = {
 	Authorization: cookies.get("Authorization"),
 	loginError: false,
-	loginSuccess: false
+	loginSuccess: false,
+	forbidden: false
 };

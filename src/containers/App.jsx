@@ -7,7 +7,8 @@ const mapStateToProps = (state) => {
 		Authorization: state.user.Authorization,
 		usage: state.usage.usage,
 		labUsage: state.usage.labUsage,
-		allocations: state.usage.allocations
+		allocations: state.usage.allocations,
+		forbidden: state.usage.forbidden || state.user.forbidden,
 	};
 };
 

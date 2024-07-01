@@ -253,7 +253,8 @@ class App extends Component {
 		let profileMenu = <></>;
 		if (
 			config.hostname.includes("localhost") ||
-			(this.props.Authorization !== "" && this.props.Authorization !== undefined)
+			(this.props.Authorization !== "" && this.props.Authorization !== undefined) ||
+			this.props.forbidden // forbidden should stay login
 		) {
 			const userInfo = getCurrUserInfo();
 			group = determineUserGroup(userInfo);

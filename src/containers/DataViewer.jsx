@@ -16,6 +16,7 @@ const mapStateToProps = (state) => {
 		spaces: state.space.spaces,
 		datatypes: state.datatype.datatypes,
 		authError: state.user.loginError,
+		forbidden: state.user.forbidden || state.data.forbidden || state.dataType.forbidden || state.space.forbidden,
 		loading: state.data.loading
 	};
 };

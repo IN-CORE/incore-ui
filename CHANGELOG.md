@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+
+### Changed
+- Restrict unapproved user from performing any action or accessing any resources. [#206](https://github.com/IN-CORE/incore-ui/issues/206)
+
 ## [1.12.0] - 2024-06-13
 
 ### Added

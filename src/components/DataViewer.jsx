@@ -131,6 +131,7 @@ class DataViewer extends Component {
 			registeredSearchText: "",
 			searching: false,
 			authError: false,
+			forbidden: false,
 			preview: false,
 			offset: 0,
 			pageNumber: 1,
@@ -209,6 +210,7 @@ class DataViewer extends Component {
 	componentWillReceiveProps(nextProps) {
 		this.setState({
 			authError: nextProps.authError,
+			forbidden: nextProps.forbidden,
 			loading: nextProps.loading
 		});
 	}
@@ -749,7 +751,12 @@ class DataViewer extends Component {
 		if (this.state.authError) {
 			browserHistory.push("/login?origin=DataViewer");
 			return null;
-		} else {
+		}
+		else if (this.state.forbidden){
+			browserHistory.push("/forbidden");
+			return null;
+		}
+		else {
 			return (
 				<div>
 					{/*error message display inside viewer*/}

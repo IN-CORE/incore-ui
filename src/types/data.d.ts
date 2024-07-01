@@ -278,4 +278,5 @@ interface UserState {
 	Authorization: string;
 	loginError: boolean;
 	loginSuccess: boolean;
+	forbidden: boolean;
 }

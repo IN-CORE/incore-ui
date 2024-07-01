@@ -10,6 +10,7 @@ import HazardViewer from "./containers/HazardViewer";
 import HomePage from "./components/HomePage";
 import Login from "./components/Login";
 import Profile from "./containers/Profile";
+import {Forbidden} from "./components/Forbidden";
 export default (
 	<Route path="/" component={App}>
 		<IndexRoute component={HomePage} />
@@ -21,5 +22,6 @@ export default (
 		<Route path="DFR3Viewer/:id" component={DFR3Viewer} />
 		<Route path="HazardViewer" component={HazardViewer} />
 		<Route path="SemanticViewer" component={SemanticViewer} />
+		<Route path="Forbidden" component={Forbidden} />
 	</Route>
 );

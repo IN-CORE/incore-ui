@@ -11,4 +11,8 @@ interface LogoutUserAction {
 	type: "LOGOUT";
 }
 
-type UserAction = LoginUserAction | LoginErrorUserAction | LogoutUserAction;
+interface ForbiddenUserAction {
+	type: "FORBIDDEN";
+}
+
+type UserAction = LoginUserAction | LoginErrorUserAction | LogoutUserAction | ForbiddenUserAction;
