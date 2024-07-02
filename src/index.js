@@ -14,16 +14,20 @@ import { syncHistoryWithStore } from "react-router-redux";
 
 import { initializeGA } from "./components/analytics";
 
-initializeGA();
+const startApp = async () => {
+	await initializeGA();
 
-const store = configureStore();
+	const store = configureStore();
 
-// Create an enhanced history that syncs navigation events with the store
-const history = syncHistoryWithStore(browserHistory, store);
+	// Create an enhanced history that syncs navigation events with the store
+	const history = syncHistoryWithStore(browserHistory, store);
 
-render(
-	<Provider store={store}>
-		<Router history={history} routes={routes} />
-	</Provider>,
-	document.getElementById("app")
-);
+	render(
+		<Provider store={store}>
+			<Router history={history} routes={routes} />
+		</Provider>,
+		document.getElementById("app")
+	);
+};
+
+startApp();
