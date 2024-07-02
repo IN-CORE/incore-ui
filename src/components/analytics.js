@@ -7,7 +7,6 @@ export const initializeGA = async () => {
         const response = await fetch("/config/config.json");
         const config = await response.json();
         ReactGA.initialize(config.GA_KEY);
-        console.log("Google Analytics initialized with key:", config.GA_KEY);
     } catch (error) {
         console.error("Failed to fetch Google Analytics Keys:", error);
     }
