@@ -291,6 +291,23 @@ const DFR3Viewer = () => {
 		if (registeredSearchText !== "") {
 			searchDFR3Curves(selectedDFR3Type, registeredSearchText, dataPerPage, offset)(dispatch);
 			searchDFR3Mappings(selectedDFR3Type, registeredSearchText, dataPerPage, offsetMappings)(dispatch);
+		} else if (registeredSearchText === "") {
+			fetchDFR3Curves(
+				selectedDFR3Type,
+				selectedSpace,
+				selectedInventory,
+				selectedHazard,
+				dataPerPage,
+				offset
+			)(dispatch);
+			fetchDFR3Mappings(
+				selectedDFR3Type,
+				selectedSpace,
+				selectedInventory,
+				selectedHazard,
+				dataPerPage,
+				offsetMappings
+			)(dispatch);
 		}
 	}, [registeredSearchText]);
 
