@@ -96,7 +96,7 @@ const useStyles = makeStyles(() => ({
 	},
 	inlineButtons: {
 		display: "inline-block",
-		margin: "auto 5px",
+		margin: "auto 5px"
 	},
 	paperFooter: {
 		padding: theme.spacing(2),
@@ -163,7 +163,6 @@ const DFR3Viewer = () => {
 	const spaces = useSelector((state) => state.space.spaces);
 	const dfr3Curves = useSelector((state) => state.dfr3Curve.dfr3Curves);
 	const dfr3Mappings = useSelector((state) => state.dfr3Mapping.dfr3Mappings);
-
 
 	React.useEffect(() => {
 		// check if logged in
@@ -278,7 +277,7 @@ const DFR3Viewer = () => {
 	};
 
 	const handleKeyPressed = (event) => {
-		if (event.charCode === 13) {
+		if (event.keyCode === 13) {
 			event.preventDefault();
 			setSearchState();
 		}
@@ -356,9 +355,9 @@ const DFR3Viewer = () => {
 		let message = "Something is wrong with this DFR3 Curve definition. We cannot display its preview.";
 		let error = "";
 
-		if (DFR3Curve.fragilityCurves && DFR3Curve.is3dPlot) {
+		if (DFR3Curve.fragilityCurves && is3dCurve(DFR3Curve)) {
 			[plotData3d, error] = await generate3dPlotData(DFR3Curve);
-		} else if (DFR3Curve.fragilityCurves && !DFR3Curve.is3dPlot) {
+		} else if (DFR3Curve.fragilityCurves && !is3dCurve(DFR3Curve)) {
 			[plotConfig2d, error] = await generate2dPlotData(DFR3Curve);
 		}
 
@@ -518,7 +517,6 @@ const DFR3Viewer = () => {
 		setMetadataClosed(true);
 	};
 
-
 	// curve list
 	const curveList = [...dfr3Curves];
 	let curvesWithInfo = [];
@@ -527,7 +525,6 @@ const DFR3Viewer = () => {
 			curvesWithInfo.push(DFR3Curve);
 		});
 	}
-
 
 	// selected Curves
 	let selectedCurveDetail = {};
@@ -710,7 +707,7 @@ const DFR3Viewer = () => {
 								<TextField
 									variant="outlined"
 									label="Search"
-									onKeyPress={handleKeyPressed}
+									onKeyDown={handleKeyPressed}
 									value={searchText}
 									onChange={(e) => {
 										setSearchText(e.target.value);
@@ -773,13 +770,7 @@ const DFR3Viewer = () => {
 							{metadataClosed ? (
 								<></>
 							) : (
-								<Grid
-									item
-									lg={8}
-									md={8}
-									xl={8}
-									xs={12}
-								>
+								<Grid item lg={8} md={8} xl={8} xs={12}>
 									<Paper variant="outlined" className={classes.main}>
 										<IconButton
 											aria-label="Close"
@@ -812,6 +803,7 @@ const DFR3Viewer = () => {
 															if (selectedDFR3Curve.fragilityCurves) {
 																if (
 																	is3dCurve(selectedDFR3Curve) &&
+																	plotData3D.data &&
 																	plotData3D.data.length > 0
 																) {
 																	return (
@@ -882,7 +874,7 @@ const DFR3Viewer = () => {
 														color="primary"
 														variant="outlined"
 														className={classes.inlineButtons}
-														style={{float: "right", color: "red", borderColor: "red"}}
+														style={{ float: "right", color: "red", borderColor: "red" }}
 														size="small"
 														onClick={() => {
 															onClickDelete("curve");
@@ -1016,8 +1008,8 @@ const DFR3Viewer = () => {
 												</Button>
 												<CopyToClipboard text={selectedMapping.id}>
 													<Button
-														color="secondary"
-														variant="contained"
+														color="primary"
+														variant="outlined"
 														className={classes.inlineButtons}
 														size="small"
 													>
@@ -1025,9 +1017,10 @@ const DFR3Viewer = () => {
 													</Button>
 												</CopyToClipboard>
 												<Button
-													color="secondary"
-													variant="contained"
+													color="primary"
+													variant="outlined"
 													className={classes.inlineButtons}
+													style={{ float: "right", color: "red", borderColor: "red" }}
 													size="small"
 													onClick={() => {
 														onClickDelete("mapping");

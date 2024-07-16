@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
 		display: "flex",
 		flexDirection: "column",
 		alignItems: "center",
-		maxWidth:"100%"
+		maxWidth: "100%"
 	},
 	backdrop: {
 		position: "absolute",
@@ -67,7 +67,7 @@ const useStyles = makeStyles((theme) => ({
 		padding: "5% 20% 8% 20%",
 		textAlign: "left",
 		lineHeight: "1.5em",
-		backgroundColor:"#ffffff"
+		backgroundColor: "#ffffff"
 	},
 	caption: {
 		marginTop: theme.spacing(2),
@@ -168,22 +168,22 @@ const useStyles = makeStyles((theme) => ({
 		paddingTop: theme.spacing(0.5),
 		paddingBottom: theme.spacing(0.5)
 	},
-	versionBlock:{
+	versionBlock: {
 		marginTop: "5em"
 	},
 	infoBlock: {
-		padding: "5% 5%",
-		display: "flex",
-		flexDirection: "column",
-		justifyContent: "center",
-		alignItems: "center",
-		textAlign: "left",
-		marginLeft: theme.spacing(4),
-		fontSize: "16px",
-		fontFamily: "Work Sans, sans-serif",
-		fontWeight: "400",
-		lineHeight: "1.5",
-		letterSpacing: "0.00938em",
+		"padding": "5% 5%",
+		"display": "flex",
+		"flexDirection": "column",
+		"justifyContent": "center",
+		"alignItems": "center",
+		"textAlign": "left",
+		"marginLeft": theme.spacing(4),
+		"fontSize": "16px",
+		"fontFamily": "Work Sans, sans-serif",
+		"fontWeight": "400",
+		"lineHeight": "1.5",
+		"letterSpacing": "0.00938em",
 		"& pre": {
 			backgroundColor: "#f5f5f5",
 			border: "1px solid #ddd",
@@ -362,11 +362,15 @@ const HomePage = () => {
 			{/*header*/}
 			<section className={classes.root}>
 				<Container className={classes.container}>
-					<img src="/public/resilience-logo.png"  style={{width:"40em", padding: "4em 0", display:"block", margin:"auto"}} />
-					<Typography color="inherit" align="center" variant="h5" className={classes.caption}>
-						{subtitle}
-					</Typography>
+					{/*Intro block*/}
 					<div className={classes.intro}>
+						<img
+							src="/public/resilience-logo.png"
+							style={{ width: "40em", padding: "4em 0", display: "block", margin: "auto" }}
+						/>
+						<Typography color="inherit" align="center" variant="h5" className={classes.caption}>
+							{subtitle}
+						</Typography>
 						<Typography variant="body1" color="inherit" className={classes.more}>
 							The{" "}
 							<Link href="https://www.nist.gov" className={classes.link} target="_blank">
@@ -411,12 +415,19 @@ const HomePage = () => {
 								onClick={toggleCollapse}
 							>
 								What&apos;s new in{" "}
-								<span className="greenText">IN-CORE {githubVersions !== null ? githubVersions["in-core"]: ""}?</span>
+								<span className="greenText">
+									IN-CORE {githubVersions !== null ? githubVersions["in-core"] : ""}?
+								</span>
 								<IconButton>{open ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}</IconButton>
 							</Typography>
 							<Typography variant="subtitle1" style={{ textAlign: "center" }}>
-								<Link href={config.githubRelease + (githubVersions !== null ? githubVersions["in-core"]: "")}>
-									Current Version: {githubVersions !== null ? githubVersions["in-core"]: ""}
+								<Link
+									href={
+										config.githubRelease +
+										(githubVersions !== null ? githubVersions["in-core"] : "")
+									}
+								>
+									Current Version: {githubVersions !== null ? githubVersions["in-core"] : ""}
 								</Link>
 							</Typography>
 						</div>
