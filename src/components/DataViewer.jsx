@@ -741,7 +741,6 @@ const DataViewer = () => {
 														color="primary"
 														variant="outlined"
 														className={classes.inlineButtons}
-														style={{float: "right", color: "red", borderColor: "red"}}
 														size="small"
 													>
 														Copy ID
@@ -749,9 +748,10 @@ const DataViewer = () => {
 												</CopyToClipboard>
 												<Button
 													color="secondary"
-													variant="contained"
+													variant="outlined"
 													className={classes.inlineButtons}
 													size="small"
+													style={{float: "right", color: "red", borderColor: "red"}}
 													onClick={onClickDelete}
 												>
 													DELETE
