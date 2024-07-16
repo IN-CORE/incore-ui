@@ -207,22 +207,24 @@ const DFR3Viewer = () => {
 	}, [messageOpen]);
 
 	React.useEffect(() => {
-		fetchDFR3Curves(
-			selectedDFR3Type,
-			selectedSpace,
-			selectedInventory,
-			selectedHazard,
-			dataPerPage,
-			offset
-		)(dispatch);
-		fetchDFR3Mappings(
-			selectedDFR3Type,
-			selectedSpace,
-			selectedInventory,
-			selectedHazard,
-			dataPerPage,
-			offsetMappings
-		)(dispatch);
+		if (!searching){
+			fetchDFR3Curves(
+				selectedDFR3Type,
+				selectedSpace,
+				selectedInventory,
+				selectedHazard,
+				dataPerPage,
+				offset
+			)(dispatch);
+			fetchDFR3Mappings(
+				selectedDFR3Type,
+				selectedSpace,
+				selectedInventory,
+				selectedHazard,
+				dataPerPage,
+				offsetMappings
+			)(dispatch);
+		}
 	}, [selectedDFR3Type, selectedInventory, selectedSpace, selectedHazard]);
 
 	const resetCommonParameters = () => {
@@ -291,7 +293,7 @@ const DFR3Viewer = () => {
 		if (registeredSearchText !== "") {
 			searchDFR3Curves(selectedDFR3Type, registeredSearchText, dataPerPage, offset)(dispatch);
 			searchDFR3Mappings(selectedDFR3Type, registeredSearchText, dataPerPage, offsetMappings)(dispatch);
-		} else if (registeredSearchText === "") {
+		} else if (registeredSearchText === "" && searching) {
 			fetchDFR3Curves(
 				selectedDFR3Type,
 				selectedSpace,

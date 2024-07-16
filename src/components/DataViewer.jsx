@@ -207,7 +207,9 @@ const DataViewer = () => {
 	};
 
 	React.useEffect(() => {
-		fetchDatasets(selectedDataType, selectedSpace, dataPerPage, offset)(dispatch);
+		if (!searching) {
+			fetchDatasets(selectedDataType, selectedSpace, dataPerPage, offset)(dispatch);
+		}
 	}, [selectedDataType, selectedSpace]);
 
 	const onClickDataset = (datasetId) => {
@@ -259,7 +261,7 @@ const DataViewer = () => {
 	};
 
 	const handleKeyPressed = (event) => {
-		if (event.charCode === 13) {
+		if (event.keyCode === 13) {
 			event.preventDefault();
 			setSearchState();
 		}
@@ -272,6 +274,8 @@ const DataViewer = () => {
 	React.useEffect(() => {
 		if (registeredSearchText !== "") {
 			searchDatasets(registeredSearchText, dataPerPage, offset)(dispatch);
+		} else if (registeredSearchText === "" && searching) {
+			fetchDatasets(selectedDataType, selectedSpace, dataPerPage, offset)(dispatch);
 		}
 	}, [registeredSearchText]);
 
@@ -641,7 +645,7 @@ const DataViewer = () => {
 								<TextField
 									variant="outlined"
 									label="Search"
-									onKeyPress={handleKeyPressed}
+									onKeyDown={handleKeyPressed}
 									value={searchText}
 									onChange={(e) => {
 										setSearchText(e.target.value);
