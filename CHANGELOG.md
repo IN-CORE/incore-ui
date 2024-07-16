@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - Convert DataViewer and DFR3Viewer into Functional based components. [#183](https://github.com/IN-CORE/incore-ui/issues/183)
 
+### Fixed
+- Google Analytics warning for not being loading as frist component [#208](https://github.com/IN-CORE/incore-ui/issues/208)
+
 ## [1.12.0] - 2024-06-13
 
 ### Added
