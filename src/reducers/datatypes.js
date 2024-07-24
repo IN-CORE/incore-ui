@@ -1,4 +1,4 @@
-import {FORBIDDEN, LOGIN_ERROR, RECEIVE_DATATYPES} from "../actions";
+import {LOGIN_ERROR, RECEIVE_DATATYPES} from "../actions";
 
 const defaultState = {datatypes: []};
 

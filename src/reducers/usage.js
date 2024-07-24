@@ -2,7 +2,7 @@ import {
 	RECEIVE_USAGE,
 	LOGIN_ERROR,
 	RECEIVE_LAB_USAGE,
-	RECEIVE_ALLOCATIONS, FORBIDDEN
+	RECEIVE_ALLOCATIONS
 } from "../actions";
 
 const defaultState = {

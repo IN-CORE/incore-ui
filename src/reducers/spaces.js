@@ -1,4 +1,4 @@
-import {FORBIDDEN, LOGIN_ERROR, RECEIVE_SPACES} from "../actions";
+import {LOGIN_ERROR, RECEIVE_SPACES} from "../actions";
 
 const defaultState = {spaces: []};
 
