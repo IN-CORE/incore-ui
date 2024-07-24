@@ -168,45 +168,6 @@ export function receiveDatatypes(type, json) {
 	};
 }
 
-export function fetchAnalyses() {
-	const endpoint = `${config.maestroService}/api/analyses?full=false`;
-
-	return (dispatch) => {
-		return fetch(endpoint, {
-			headers: getHeader()
-		})
-		.catch((error) => {
-			dispatch({
-				type: FORBIDDEN,
-				usage: {},
-				receivedAt: Date.now(),
-			});
-		})
-		.then((response) => response.json())
-		.then((json) => dispatch(receiveAnalyses(endpoint, json)));
-	};
-}
-
-export function getAnalysisById(id) {
-	//TODO: Move to a configuration file
-	const endpoint = `${config.maestroService}/api/analyses/${id}`;
-
-	return (dispatch) => {
-		return fetch(endpoint, {
-			headers: getHeader()
-		})
-		.catch((error) => {
-			dispatch({
-				type: FORBIDDEN,
-				usage: {},
-				receivedAt: Date.now(),
-			});
-		})
-		.then((response) => response.json())
-		.then((json) => dispatch(receiveAnalysis(config.maestroService, json)));
-	};
-}
-
 export function searchDatasets(keyword, limit, offset) {
 	let endpoint = `${config.dataService}/search?excludeHazard=true&limit=${limit}&skip=${offset}&text=${keyword}`;
 	return (dispatch) => {
@@ -392,7 +353,15 @@ export function fetchAllocations() {
 export function fetchUniqueDatatypes() {
 	let endpoint = `${config.dataServiceBase}datatypes`;
 	return (dispatch) => {
-		return fetch(endpoint, {mode: "cors", headers: getHeader()}).then((response) => {
+		return fetch(endpoint, {mode: "cors", headers: getHeader()})
+		.catch((error) => {
+			dispatch({
+				type: FORBIDDEN,
+				usage: {},
+				receivedAt: Date.now(),
+			});
+		})
+		.then((response) => {
 			if (response.status === 200) {
 				response.json().then((json) => {
 					dispatch(receiveDatatypes(RECEIVE_DATATYPES, json));
@@ -413,7 +382,15 @@ export function searchDFR3Curves(dfr3_type, keyword, limit, offset) {
 	let endpoint = `${config.dfr3ServiceBase}${dfr3_type}/search?limit=${limit}&skip=${offset}&text=${keyword}`;
 	return (dispatch) => {
 		loading(DFR3CURVE_LOADING)(dispatch);
-		return fetch(endpoint, { mode: "cors", headers: getHeader() }).then((response) => {
+		return fetch(endpoint, { mode: "cors", headers: getHeader() })
+		.catch((error) => {
+			dispatch({
+				type: FORBIDDEN,
+				usage: {},
+				receivedAt: Date.now(),
+			});
+		})
+		.then((response) => {
 			loadComplete(DFR3CURVE_LOAD_COMPLETE)(dispatch)
 			if (response.status === 200) {
 				response.json().then((json) => {
@@ -444,7 +421,15 @@ export function fetchDFR3Curves(dfr3_type, space, inventory, hazard, limit, offs
 	}
 	return (dispatch) => {
 		loading(DFR3CURVE_LOADING)(dispatch);
-		return fetch(endpoint, { mode: "cors", headers: getHeader() }).then((response) => {
+		return fetch(endpoint, { mode: "cors", headers: getHeader() })
+		.catch((error) => {
+			dispatch({
+				type: FORBIDDEN,
+				usage: {},
+				receivedAt: Date.now(),
+			});
+		})
+		.then((response) => {
 			loadComplete(DFR3CURVE_LOAD_COMPLETE)(dispatch);
 			if (response.status === 200) {
 				response.json().then((json) => {
@@ -494,7 +479,15 @@ export function fetchDFR3Mappings(dfr3_type, space, inventory, hazard, limit, of
 
 	return (dispatch) => {
 		loading(DFR3MAPPING_LOADING)(dispatch);
-		return fetch(endpoint, { mode: "cors", headers: getHeader() }).then((response) => {
+		return fetch(endpoint, { mode: "cors", headers: getHeader() })
+		.catch((error) => {
+			dispatch({
+				type: FORBIDDEN,
+				usage: {},
+				receivedAt: Date.now(),
+			});
+		})
+		.then((response) => {
 			loadComplete(DFR3MAPPING_LOAD_COMPLETE)(dispatch);
 			if (response.status === 200) {
 				response.json().then((json) => {
@@ -523,7 +516,15 @@ export function searchDFR3Mappings(dfr3_type, keyword, limit, offset) {
 
 	return (dispatch) => {
 		loading(DFR3MAPPING_LOADING)(dispatch);
-		return fetch(endpoint, { mode: "cors", headers: getHeader() }).then((response) => {
+		return fetch(endpoint, { mode: "cors", headers: getHeader() })
+		.catch((error) => {
+			dispatch({
+				type: FORBIDDEN,
+				usage: {},
+				receivedAt: Date.now(),
+			});
+		})
+		.then((response) => {
 			loadComplete(DFR3MAPPING_LOAD_COMPLETE)(dispatch);
 			if (response.status === 200) {
 				response.json().then((json) => {
@@ -545,7 +546,15 @@ export function searchHazards(hazard_type, keyword, limit, offset) {
 	let endpoint = `${config.hazardServiceBase}${hazard_type}/search?limit=${limit}&skip=${offset}&text=${keyword}`;
 	return (dispatch) => {
 		dispatch(loading(HAZARD_LOADING));
-		return fetch(endpoint, {mode: "cors", headers: getHeader()}).then((response) => {
+		return fetch(endpoint, {mode: "cors", headers: getHeader()})
+		.catch((error) => {
+			dispatch({
+				type: FORBIDDEN,
+				usage: {},
+				receivedAt: Date.now(),
+			});
+		})
+		.then((response) => {
 			dispatch(loadComplete(HAZARD_LOAD_COMPLETE));
 			if (response.status === 200) {
 				response.json().then((json) => {
@@ -570,7 +579,15 @@ export function fetchHazards(hazard_type, space, limit, offset) {
 	}
 	return (dispatch) => {
 		dispatch(loading(HAZARD_LOADING));
-		return fetch(endpoint, {mode: "cors", headers: getHeader()}).then((response) => {
+		return fetch(endpoint, {mode: "cors", headers: getHeader()})
+		.catch((error) => {
+			dispatch({
+				type: FORBIDDEN,
+				usage: {},
+				receivedAt: Date.now(),
+			});
+		})
+		.then((response) => {
 			dispatch(loadComplete(HAZARD_LOAD_COMPLETE));
 			if (response.status === 200) {
 				response.json().then((json) => {
@@ -587,28 +604,6 @@ export function fetchHazards(hazard_type, space, limit, offset) {
 		});
 	};
 }
-
-export const loginHelper = async (username, password) => {
-	const endpoint = config.authService;
-	let formData = [
-		`${encodeURIComponent("grant_type")}=${encodeURIComponent("password")}`,
-		`${encodeURIComponent("username")}=${encodeURIComponent(username)}`,
-		`${encodeURIComponent("password")}=${encodeURIComponent(password)}`,
-		`${encodeURIComponent("client_id")}=${encodeURIComponent(config.client_id)}`
-	];
-
-	const tokenRequest = await fetch(endpoint, {
-		method: "POST",
-		headers: {
-			"Content-Type": "application/x-www-form-urlencoded"
-		},
-		body: formData.join("&")
-	});
-
-	const tokens = await tokenRequest.json();
-
-	return tokens;
-};
 
 export const LOGIN_ERROR = "LOGIN_ERROR";
 export const FORBIDDEN = "FORBIDDEN";
@@ -683,46 +678,6 @@ export function receiveDatawolfResponse(json) {
 	};
 }
 
-async function getOutputDatasetHelper(executionId) {
-	const datawolfUrl = `${config.dataWolf}executions/${executionId}`;
-	const headers = getDatawolfHeader();
-	const datawolf_execution_fetch = await fetch(datawolfUrl, {
-		method: "GET",
-		headers: headers
-	});
-
-	const datawolfExecution = await datawolf_execution_fetch.json();
-
-	const output_dataset_id = datawolfExecution.datasets["7774de32-481f-48dd-8223-d9cdf16eaec1"];
-	const endpoint = `${config.dataService}/${output_dataset_id}`;
-	const output_dataset = await fetch(endpoint, {
-		headers: getHeader()
-	});
-
-	const outputDataset = await output_dataset.json();
-	const fileId = outputDataset.fileDescriptors[0].id;
-
-	const fileDownloadUrl = `${config.dataServiceBase}files/${fileId}/blob`;
-	const fileBlob = await fetch(fileDownloadUrl, {method: "GET", mode: "CORS", headers: getHeader()});
-
-	const fileText = await fileBlob.text();
-
-	return [outputDataset.id, fileText];
-}
-
-export const RECEIVE_OUTPUT = "RECEIVE_OUTPUT";
-
-export function getOutputDataset(executionId) {
-	return async (dispatch) => {
-		const data = await getOutputDatasetHelper(executionId);
-		dispatch({
-			type: RECEIVE_OUTPUT,
-			outputDatasetId: data[0],
-			file: data[1].replace(/"/g, "").split("\n")
-		});
-	};
-}
-
 // Semantic Functions
 export const RECEIVE_SEMANTICS = "RECEIVE_SEMANTICS";
 
@@ -745,7 +700,15 @@ export function fetchSemantics(space, limit, offset) {
 
 	return (dispatch) => {
 		dispatch(loading(SEMANTIC_LOADING));
-		return fetch(endpoint, {mode: "cors", headers: getHeader()}).then((response) => {
+		return fetch(endpoint, {mode: "cors", headers: getHeader()})
+		.catch((error) => {
+			dispatch({
+				type: FORBIDDEN,
+				usage: {},
+				receivedAt: Date.now(),
+			});
+		})
+		.then((response) => {
 			dispatch(loadComplete(SEMANTIC_LOAD_COMPLETE));
 			if (response.status === 200) {
 				response.json().then((json) => {
@@ -754,6 +717,8 @@ export function fetchSemantics(space, limit, offset) {
 			} else if (response.status === 401) {
 				cookies.remove("Authorization");
 				dispatch(receiveSemantics(LOGIN_ERROR, []));
+			} else if (response.status === 403) {
+				dispatch(receiveSemantics(FORBIDDEN, []));
 			} else {
 				dispatch(receiveSemantics(RECEIVE_SEMANTICS, []));
 			}
@@ -765,7 +730,15 @@ export function searchSemantics(keyword, limit, offset) {
 	let endpoint = `${config.semanticServiceType}/search?text=${keyword}&limit=${limit}&skip=${offset}`;
 	return (dispatch) => {
 		dispatch(loading(SEMANTIC_LOADING));
-		return fetch(endpoint, {mode: "cors", headers: getHeader()}).then((response) => {
+		return fetch(endpoint, {mode: "cors", headers: getHeader()})
+		.catch((error) => {
+			dispatch({
+				type: FORBIDDEN,
+				usage: {},
+				receivedAt: Date.now(),
+			});
+		})
+		.then((response) => {
 			dispatch(loadComplete(SEMANTIC_LOAD_COMPLETE));
 			if (response.status === 200) {
 				response.json().then((json) => {
@@ -774,51 +747,11 @@ export function searchSemantics(keyword, limit, offset) {
 			} else if (response.status === 401) {
 				cookies.remove("Authorization");
 				dispatch(receiveSemantics(LOGIN_ERROR, []));
+			} else if (response.status === 403) {
+			dispatch(receiveSemantics(FORBIDDEN, []));
 			} else {
 				dispatch(receiveSemantics(RECEIVE_SEMANTICS, []));
 			}
-		});
-	};
-}
-
-export async function executeDatawolfWorkflowHelper(workflowid, creatorid, title, description, parameters, datasets) {
-	const datawolfUrl = `${config.dataWolf}executions`;
-	const dataToSubmit = {
-		title: title,
-		parameters: parameters,
-		datasets: datasets,
-		workflowId: workflowid,
-		creatorId: creatorid,
-		description: description
-	};
-	const headers = getDatawolfHeader();
-	headers.append("Content-Type", "application/json");
-
-	const datawolfExecution = await fetch(datawolfUrl, {
-		method: "POST",
-		headers: headers,
-		body: JSON.stringify(dataToSubmit),
-		credentials: "include"
-	});
-
-	const executionId = await datawolfExecution.text();
-
-	return executionId;
-}
-
-export function executeDatawolfWorkflow(workflowid, creatorid, title, description, parameters, datasets) {
-	return async (dispatch) => {
-		const json = await executeDatawolfWorkflowHelper(
-			workflowid,
-			creatorid,
-			title,
-			description,
-			parameters,
-			datasets
-		);
-		return dispatch({
-			type: RECEIVE_EXECUTION_ID,
-			executionId: json
 		});
 	};
 }
