@@ -8,8 +8,6 @@ const spaces = (state=defaultState, action) => {
 		return Object.assign({}, state, {spaces: action.spaces});
 	case LOGIN_ERROR:
 		return Object.assign({}, state, {spaces: [], Authorization: "", loginError: true});
-	case FORBIDDEN:
-		return Object.assign({}, state, {spaces: [], Authorization: "", forbidden: true});
 	default:
 		return state;
 	}

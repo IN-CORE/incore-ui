@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 - Restrict unapproved user from performing any action or accessing any resources. [#206](https://github.com/IN-CORE/incore-ui/issues/206)
+- Convert DataViewer and DFR3Viewer into Functional based components. [#183](https://github.com/IN-CORE/incore-ui/issues/183)
+
+### Fixed
+- Google Analytics warning for not being loading as frist component [#208](https://github.com/IN-CORE/incore-ui/issues/208)
 
 ## [1.12.0] - 2024-06-13
 

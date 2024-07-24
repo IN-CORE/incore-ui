@@ -5,7 +5,7 @@ import { fetchLabUsage, fetchUsage, fetchAllocations } from "../actions";
 const mapStateToProps = (state) => {
 	return {
 		loginError: state.user.loginError,
-		forbidden: state.user.forbidden || state.usage.forbidden,
+		forbidden: state.user.forbidden,
 		usage: state.usage.usage,
 		labUsage: state.usage.labUsage,
 		allocations: state.usage.allocations

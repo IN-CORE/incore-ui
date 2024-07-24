@@ -8,7 +8,7 @@ const mapStateToProps = (state) => {
 		deleteError: state.hazard.deleteError,
 		spaces: state.space.spaces,
 		authError: state.user.loginError,
-		forbidden: state.user.forbidden || state.hazard.forbidden || state.space.forbidden,
+		forbidden: state.user.forbidden,
 		loading: state.hazard.loading
 	};
 };

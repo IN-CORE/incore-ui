@@ -27,8 +27,6 @@ const semantics = (state = defaultState, action) => {
 		return Object.assign({}, state, {deleteError:false});
 	case LOGIN_ERROR:
 		return Object.assign({}, state, {semantics: [], Authorization: "", loginError: true});
-	case FORBIDDEN:
-		return Object.assign({}, state, {semantics: [], Authorization: "", forbidden: true});
 	case SEMANTIC_LOADING:
 		return Object.assign({}, state, {...state, loading: true});
 	case SEMANTIC_LOAD_COMPLETE:

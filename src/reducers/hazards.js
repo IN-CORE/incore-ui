@@ -26,8 +26,6 @@ const hazards = (state = defaultState, action) => {
 			return Object.assign({}, state, {deleteError: false});
 		case LOGIN_ERROR:
 			return Object.assign({}, state, {hazards: [], Authorization: "", loginError: true});
-		case FORBIDDEN:
-			return Object.assign({}, state, {hazards: [], Authorization: "", forbidden: true});
 		case HAZARD_LOADING:
 			return Object.assign({}, state, {...state, loading: true});
 		case HAZARD_LOAD_COMPLETE:

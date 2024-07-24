@@ -21,8 +21,6 @@ const usage = (state=defaultState, action) => {
 		return Object.assign({}, state, {allocations: action.allocations});
 	case LOGIN_ERROR:
 		return Object.assign({}, state, {usage: {}, labUsage:{}, allocations:{}, Authorization: "", loginError: true});
-	case FORBIDDEN:
-		return Object.assign({}, state, {usage: {}, labUsage:{}, allocations:{}, Authorization: "", forbidden: true});
 	default:
 		return state;
 	}

@@ -1,8 +1,8 @@
-import React, { Component } from "react";
-import FileContentTable from "./children/FileContentTable";
-import NestedInfoTable from "./children/NestedInfoTable";
-import Map from "./children/Map";
-import SpaceChip from "./children/SpaceChip";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import LoadingOverlay from "react-loading-overlay";
+import { browserHistory } from "react-router";
+
 import {
 	Button,
 	Card,
@@ -30,26 +30,38 @@ import ChartIcon from "@material-ui/icons/ShowChart";
 import NetworkIcon from "@material-ui/icons/DeviceHub";
 import UnknownIcon from "@material-ui/icons/ContactSupport";
 import CloseIcon from "@material-ui/icons/Close";
+import { createTheme, makeStyles } from "@material-ui/core/styles";
+import Cookies from "universal-cookie";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+
 import config from "../app.config";
-import { getHeader } from "../actions";
-import { browserHistory } from "react-router";
+import FileContentTable from "./children/FileContentTable";
+import NestedInfoTable from "./children/NestedInfoTable";
+import Map from "./children/Map";
+import SpaceChip from "./children/SpaceChip";
 import Pagination from "./children/Pagination";
 import DataPerPage from "./children/DataPerPage";
 import Space from "./children/Space";
 import Version from "./children/Version";
-import { CopyToClipboard } from "react-copy-to-clipboard";
-import { createMuiTheme, withStyles } from "@material-ui/core/styles/index";
-import Cookies from "universal-cookie";
 import Datatype from "./children/Datatype";
 import ErrorMessage from "./children/ErrorMessage";
 import Confirmation from "./children/Confirmation";
-import LoadingOverlay from "react-loading-overlay";
+import {
+	getHeader,
+	fetchDatasets,
+	fetchSpaces,
+	fetchUniqueDatatypes,
+	searchDatasets,
+	deleteItemById,
+	resetError
+} from "../actions";
 import { trackPageview, trackEvent } from "./analytics";
 
 const cookies = new Cookies();
 const redundantProp = ["deleted", "privileges", "spaces"];
-const theme = createMuiTheme();
-const styles = {
+const theme = createTheme();
+
+const useStyles = makeStyles(() => ({
 	root: {
 		padding: theme.spacing(4)
 	},
@@ -111,12 +123,13 @@ const styles = {
 	metadataCloseButton: {
 		float: "right"
 	}
-};
+}));
 
 String.prototype.capitalize = function () {
 	return this.charAt(0).toUpperCase() + this.slice(1);
 };
 
+<<<<<<< HEAD
 class DataViewer extends Component {
 	constructor(props) {
 		super(props);
@@ -141,68 +154,56 @@ class DataViewer extends Component {
 			loading: false,
 			metadataClosed: true
 		};
+=======
+const DataViewer = () => {
+	const classes = useStyles();
+>>>>>>> develop
 
-		this.changeDatasetType = this.changeDatasetType.bind(this);
-		this.onClickDataset = this.onClickDataset.bind(this);
-		this.onClickDelete = this.onClickDelete.bind(this);
-		this.handleConfirmed = this.handleConfirmed.bind(this);
-		this.handleCanceled = this.handleCanceled.bind(this);
-		this.closeErrorMessage = this.closeErrorMessage.bind(this);
-		this.setSearchState = this.setSearchState.bind(this);
-		this.handleKeyPressed = this.handleKeyPressed.bind(this);
-		this.clickSearch = this.clickSearch.bind(this);
-		this.onClickFileDescriptor = this.onClickFileDescriptor.bind(this);
-		this.exportJson = this.exportJson.bind(this);
-		this.downloadDataset = this.downloadDataset.bind(this);
-		this.handleSpaceSelection = this.handleSpaceSelection.bind(this);
-		this.previous = this.previous.bind(this);
-		this.next = this.next.bind(this);
-		this.changeDataPerPage = this.changeDataPerPage.bind(this);
-		this.preview = this.preview.bind(this);
-		this.handlePreviewerClose = this.handlePreviewerClose.bind(this);
-		this.closeMetadata = this.closeMetadata.bind(this);
-	}
+	const [selectedDataType, setSelectedDataType] = React.useState("All");
+	const [selectedSpace, setSelectedSpace] = React.useState("All");
+	const [selectedDataset, setSelectedDataset] = React.useState("");
+	const [selectedDatasetFormat, setSelectedDatasetFormat] = React.useState("");
+	const [fileData, setFileData] = React.useState("");
+	const [fileExtension, setFileExtension] = React.useState("");
+	const [searchText, setSearchText] = React.useState("");
+	const [registeredSearchText, setRegisteredSearchText] = React.useState("");
+	const [searching, setSearching] = React.useState(false);
+	const [preview, setPreview] = React.useState(false);
+	const [offset, setOffset] = React.useState(0);
+	const [pageNumber, setPageNumber] = React.useState(1);
+	const [dataPerPage, setDataPerPage] = React.useState(50);
+	const [messageOpen, setMessageOpen] = React.useState(false);
+	const [confirmOpen, setConfirmOpen] = React.useState(false);
+	const [metadataClosed, setMetadataClosed] = React.useState(true);
 
-	//TODO auto select the first item in the list
+	const dispatch = useDispatch();
+	const authError = useSelector((state) => state.user.loginError);
+	const loading = useSelector((state) => state.data.loading);
+	const datasets = useSelector((state) => state.data.datasets);
+	const deleteError = useSelector((state) => state.data.deleteError);
+	const spaces = useSelector((state) => state.space.spaces);
+	const datatypes = useSelector((state) => state.datatype.datatypes);
 
-	componentWillMount() {
+	React.useEffect(() => {
 		// check if logged in
 		let authorization = cookies.get("Authorization");
-
-		// logged in
 		if (
 			config.hostname.includes("localhost") ||
 			(authorization !== undefined && authorization !== "" && authorization !== null)
 		) {
-			this.setState(
-				{
-					authError: false
-				},
-				function () {
-					this.props.getAllDatasets(
-						this.state.selectedDataType,
-						this.state.selectedSpace,
-						this.state.dataPerPage,
-						this.state.offset
-					);
-					this.props.getAllSpaces();
-					this.props.getUniqueDatatypes();
-				}
-			);
+			fetchDatasets(selectedDataType, selectedSpace, dataPerPage, offset)(dispatch);
+			fetchSpaces()(dispatch);
+			fetchUniqueDatatypes()(dispatch);
+		} else {
+			dispatch({ type: "LOGIN_ERROR" });
 		}
+		dispatch(resetError);
 
-		// not logged in
-		else {
-			this.setState({
-				authError: true
-			});
-		}
-	}
-
-	componentDidMount() {
 		// Call trackPageview to track page view
 		trackPageview(window.location.pathname);
+	}, []);
 
+<<<<<<< HEAD
 		// reset delete error
 		this.props.resetError();
 	}
@@ -220,134 +221,112 @@ class DataViewer extends Component {
 			this.setState({ messageOpen: true });
 		} else if (!this.props.deleteError && prevState.messageOpen) {
 			this.setState({ messageOpen: false });
+=======
+	React.useEffect(() => {
+		if (deleteError && !messageOpen) {
+			setMessageOpen(true);
+		} else if (!deleteError && messageOpen) {
+			setMessageOpen(false);
+>>>>>>> develop
 		}
-	}
+	}, [messageOpen]);
 
-	changeDatasetType(event) {
-		this.setState(
-			{
-				selectedDataType: event.target.value,
-				pageNumber: 1,
-				offset: 0,
-				selectedDataset: "",
-				selectedDatasetFormat: "",
-				fileData: "",
-				fileExtension: "",
-				searchText: "",
-				registeredSearchText: "",
-				searching: false
-			},
-			function () {
-				this.props.getAllDatasets(
-					this.state.selectedDataType,
-					this.state.selectedSpace,
-					this.state.dataPerPage,
-					this.state.offset
-				);
-			}
-		);
-	}
+	const resetSelectionParameters = () => {
+		setPageNumber(1);
+		setOffset(0);
+		setSelectedDataset("");
+		setSelectedDatasetFormat("");
+		setFileData("");
+		setFileExtension("");
+		setSearchText("");
+		setRegisteredSearchText("");
+		setSearching(false);
+	};
 
-	handleSpaceSelection(event) {
-		this.setState(
-			{
-				selectedSpace: event.target.value,
-				pageNumber: 1,
-				offset: 0,
-				selectedDataset: "",
-				selectedDatasetFormat: "",
-				fileData: "",
-				fileExtension: "",
-				searchText: "",
-				registeredSearchText: "",
-				searching: false
-			},
-			function () {
-				this.props.getAllDatasets(
-					this.state.selectedDataType,
-					this.state.selectedSpace,
-					this.state.dataPerPage,
-					this.state.offset
-				);
-			}
-		);
-	}
+	const changeDatasetType = (event) => {
+		setSelectedDataType(event.target.value);
+		resetSelectionParameters();
+	};
 
-	onClickDataset(datasetId) {
-		const dataset = this.props.datasets.find((dataset) => dataset.id === datasetId);
+	const changeSpaceSelection = (event) => {
+		setSelectedSpace(event.target.value);
+		resetSelectionParameters();
+	};
+
+	React.useEffect(() => {
+		if (!searching) {
+			fetchDatasets(selectedDataType, selectedSpace, dataPerPage, offset)(dispatch);
+		}
+	}, [selectedDataType, selectedSpace]);
+
+	const onClickDataset = (datasetId) => {
 		// Call trackEvent to track the dataset selection event
 		trackEvent("Dataset Selection", "Select Dataset", `Dataset ${datasetId} Selected`);
-		this.setState({
-			selectedDataset: dataset,
-			selectedDatasetFormat: dataset.format,
-			fileData: "",
-			fileExtension: "",
-			metadataClosed: false
-		});
-	}
+		const dataset = datasets.find((dataset) => dataset.id === datasetId);
+		setSelectedDataset(dataset);
+		setSelectedDatasetFormat(dataset.format);
+		setFileData("");
+		setFileExtension("");
+		setMetadataClosed(false);
+	};
 
-	onClickDelete() {
+	const onClickDelete = () => {
 		// Call trackEvent to track the delete event
 		trackEvent("Button Click", "Delete", "Delete Button Clicked");
-		this.setState({
-			confirmOpen: true
-		});
-	}
+		setConfirmOpen(true);
+	};
 
-	handleCanceled() {
-		this.setState({
-			confirmOpen: false
-		});
-	}
+	const handleCanceled = () => {
+		setConfirmOpen(false);
+	};
 
-	handleConfirmed() {
-		this.props.deleteItemById(this.state.selectedDataset.id);
-		this.setState({
-			selectedDataset: "",
-			selectedDatasetFormat: "",
-			fileData: "",
-			fileExtension: "",
-			confirmOpen: false
-		});
-	}
+	const handleConfirmed = () => {
+		deleteItemById("datasets", selectedDataset.id)(dispatch);
+		setSelectedDataset("");
+		setSelectedDatasetFormat("");
+		setFileData("");
+		setFileExtension("");
+		setConfirmOpen(false);
+	};
 
-	closeErrorMessage() {
-		this.props.resetError();
-		this.setState({
-			messageOpen: false
-		});
-	}
+	const closeErrorMessage = () => {
+		dispatch(resetError);
+		setMessageOpen(false);
+	};
 
-	async setSearchState() {
-		this.setState({
-			registeredSearchText: this.state.searchText,
-			searching: true,
-			selectedDataset: "",
-			fileData: "",
-			fileExtension: "",
-			selectedDatasetFormat: "",
-			pageNumber: 1,
-			offset: 0,
-			selectedDataType: "All",
-			selectedSpace: "All"
-		});
-	}
+	const setSearchState = () => {
+		setRegisteredSearchText(searchText);
+		setSearching(true);
+		setSelectedDataset("");
+		setFileData("");
+		setFileExtension("");
+		setSelectedDatasetFormat("");
+		setPageNumber(1);
+		setOffset(0);
+		setSelectedDataType("All");
+		setSelectedSpace("All");
+	};
 
-	async handleKeyPressed(event) {
-		if (event.charCode === 13) {
-			// enter
+	const handleKeyPressed = (event) => {
+		if (event.keyCode === 13) {
 			event.preventDefault();
-			await this.setSearchState();
-			this.props.searchAllDatasets(this.state.registeredSearchText, this.state.dataPerPage, this.state.offset);
+			setSearchState();
 		}
-	}
+	};
 
-	async clickSearch() {
-		await this.setSearchState();
-		this.props.searchAllDatasets(this.state.registeredSearchText, this.state.dataPerPage, this.state.offset);
-	}
+	const clickSearch = () => {
+		setSearchState();
+	};
 
-	async onClickFileDescriptor(selected_dataset_id, file_descriptor_id, file_name) {
+	React.useEffect(() => {
+		if (registeredSearchText !== "") {
+			searchDatasets(registeredSearchText, dataPerPage, offset)(dispatch);
+		} else if (registeredSearchText === "" && searching) {
+			fetchDatasets(selectedDataType, selectedSpace, dataPerPage, offset)(dispatch);
+		}
+	}, [registeredSearchText]);
+
+	const onClickFileDescriptor = async (selected_dataset_id, file_descriptor_id, file_name) => {
 		const url = `${config.dataServiceBase}files/${file_descriptor_id}/blob`;
 		// Call trackEvent to track the dataset selection event
 		trackEvent(
@@ -358,35 +337,28 @@ class DataViewer extends Component {
 
 		let response = await fetch(url, { method: "GET", mode: "cors", headers: getHeader() });
 
+		let fdata = [];
+		let fextension = null;
+
 		if (response.ok) {
 			let text = await response.text();
-			this.setState({
-				fileData: text.split("\n"),
-				fileExtension: file_name.split(".").slice(-1).pop(),
-				authError: false
-			});
+			fdata = text.split("\n");
+			fextension = file_name.split(".").slice(-1).pop();
 		} else if (response.status === 401) {
 			cookies.remove("Authorization");
-			this.setState({
-				fileData: [],
-				fileExtension: null,
-				authError: true
-			});
-		} else {
-			this.setState({
-				fileData: [],
-				fileExtension: null,
-				authError: false
-			});
+			dispatch({ type: "LOGIN_ERROR" });
 		}
-	}
 
-	async downloadDataset() {
-		let datasetId = this.state.selectedDataset.id;
+		setFileData(fdata);
+		setFileExtension(fextension);
+	};
+
+	const downloadDataset = async () => {
+		let datasetId = selectedDataset.id;
 		let filename = `${datasetId}.zip`;
 		let url = `${config.dataService}/${datasetId}/blob`;
 
-		let response = await fetch(url, { method: "GET", mode: "cors", headers: await getHeader() });
+		let response = await fetch(url, { method: "GET", mode: "cors", headers: getHeader() });
 
 		if (response.ok) {
 			let blob = await response.blob();
@@ -402,21 +374,15 @@ class DataViewer extends Component {
 			}
 		} else if (response.status === 401) {
 			cookies.remove("Authorization");
-			this.setState({
-				authError: true
-			});
-		} else {
-			this.setState({
-				authError: false
-			});
+			dispatch({ type: "LOGIN_ERROR" });
 		}
-	}
+	};
 
-	async exportJson() {
-		let datasetJSON = JSON.stringify(this.state.selectedDataset, null, 4);
+	const exportJson = async () => {
+		let datasetJSON = JSON.stringify(selectedDataset, null, 4);
 		let blob = new Blob([datasetJSON], { type: "application/json" });
 
-		const filename = `${this.state.selectedDataset.id}.json`;
+		const filename = `${selectedDataset.id}.json`;
 
 		if (window.navigator.msSaveOrOpenBlob) {
 			window.navigator.msSaveBlob(blob, filename);
@@ -428,257 +394,34 @@ class DataViewer extends Component {
 			anchor.click();
 			document.body.removeChild(anchor);
 		}
-	}
+	};
 
-	previous() {
-		this.setState(
-			{
-				offset: (this.state.pageNumber - 2) * this.state.dataPerPage,
-				pageNumber: this.state.pageNumber - 1,
-				selectedDataset: "",
-				selectedDatasetFormat: "",
-				fileData: "",
-				fileExtension: ""
-			},
-			function () {
-				if (this.state.registeredSearchText !== "" && this.state.searching) {
-					// change page on searchAllDatasets
-					this.props.searchAllDatasets(
-						this.state.registeredSearchText,
-						this.state.dataPerPage,
-						this.state.offset
-					);
-				} else {
-					// change page on getAllDatasets
-					this.props.getAllDatasets(
-						this.state.selectedDataType,
-						this.state.selectedSpace,
-						this.state.dataPerPage,
-						this.state.offset
-					);
-				}
-			}
-		);
-	}
+	const pageParametersStateChange = () => {
+		setSelectedDataset("");
+		setSelectedDatasetFormat("");
+		setFileData("");
+		setFileExtension("");
+	};
 
-	next() {
-		this.setState(
-			{
-				offset: this.state.pageNumber * this.state.dataPerPage,
-				pageNumber: this.state.pageNumber + 1,
-				selectedDataset: "",
-				selectedDatasetFormat: "",
-				fileData: "",
-				fileExtension: ""
-			},
-			function () {
-				if (this.state.registeredSearchText !== "" && this.state.searching) {
-					// change page on searchAllDatasets
-					this.props.searchAllDatasets(
-						this.state.registeredSearchText,
-						this.state.dataPerPage,
-						this.state.offset
-					);
-				} else {
-					// change page on getAllDatasets
-					this.props.getAllDatasets(
-						this.state.selectedDataType,
-						this.state.selectedSpace,
-						this.state.dataPerPage,
-						this.state.offset
-					);
-				}
-			}
-		);
-	}
-
-	changeDataPerPage(event) {
-		this.setState(
-			{
-				pageNumber: 1,
-				offset: 0,
-				dataPerPage: event.target.value,
-				selectedDataset: "",
-				selectedDatasetFormat: "",
-				fileData: "",
-				fileExtension: ""
-			},
-			function () {
-				if (this.state.registeredSearchText !== "" && this.state.searching) {
-					// change page on searchAllDatasets
-					this.props.searchAllDatasets(
-						this.state.registeredSearchText,
-						this.state.dataPerPage,
-						this.state.offset
-					);
-				} else {
-					// change page on getAllDatasets
-					this.props.getAllDatasets(
-						this.state.selectedDataType,
-						this.state.selectedSpace,
-						this.state.dataPerPage,
-						this.state.offset
-					);
-				}
-			}
-		);
-	}
-
-	preview() {
-		this.setState({
-			preview: true
-		});
-	}
-
-	handlePreviewerClose() {
-		this.setState({
-			preview: false
-		});
-	}
-
-	closeMetadata() {
-		this.setState({
-			metadataClosed: true
-		});
-	}
-
-	render() {
-		const { classes } = this.props;
-
-		// list items
-		let list_items = "";
-		if (this.props.datasets.length > 0) {
-			list_items = this.props.datasets.map((dataset) => {
-				if (dataset.format === "table") {
-					return (
-						<ListItem
-							button
-							onClick={() => this.onClickDataset(dataset.id)}
-							selected={dataset.id === this.state.selectedDataset.id}
-						>
-							<Tooltip title="Table">
-								<ListItemIcon>
-									<TableIcon fontSize="small" />
-								</ListItemIcon>
-							</Tooltip>
-							<ListItemText primary={`${dataset.title} - ${dataset.creator.capitalize()}`} />
-							<SpaceChip item={dataset} selectedItem={this.state.selectedDataset} />
-						</ListItem>
-					);
-				} else if (dataset.format === "textFiles") {
-					return (
-						<ListItem
-							button
-							onClick={() => this.onClickDataset(dataset.id)}
-							selected={dataset.id === this.state.selectedDataset.id}
-						>
-							<Tooltip title="Text File">
-								<ListItemIcon>
-									<TextIcon fontSize="small" />
-								</ListItemIcon>
-							</Tooltip>
-							<ListItemText primary={`${dataset.title} - ${dataset.creator.capitalize()}`} />
-							<SpaceChip item={dataset} selectedItem={this.state.selectedDataset} />
-						</ListItem>
-					);
-				} else if (
-					dataset.format.toLowerCase() === "shapefile" ||
-					dataset.format.toLowerCase() === "raster" ||
-					dataset.format.toLowerCase().includes("geotif")
-				) {
-					return (
-						<ListItem
-							button
-							onClick={() => this.onClickDataset(dataset.id)}
-							selected={dataset.id === this.state.selectedDataset.id}
-						>
-							<Tooltip title="Shapefile">
-								<ListItemIcon>
-									<MapIcon fontSize="small" />
-								</ListItemIcon>
-							</Tooltip>
-							<ListItemText primary={`${dataset.title} - ${dataset.creator.capitalize()}`} />
-							<SpaceChip item={dataset} selectedItem={this.state.selectedDataset} />
-						</ListItem>
-					);
-				} else if (dataset.format === "mapping") {
-					return (
-						<ListItem
-							button
-							onClick={() => this.onClickDataset(dataset.id)}
-							selected={dataset.id === this.state.selectedDataset.id}
-						>
-							<Tooltip title="Mapping">
-								<ListItemIcon>
-									<MappingIcon fontSize="small" />
-								</ListItemIcon>
-							</Tooltip>
-							<ListItemText primary={`${dataset.title} - ${dataset.creator.capitalize()}`} />
-							<SpaceChip item={dataset} selectedItem={this.state.selectedDataset} />
-						</ListItem>
-					);
-				} else if (dataset.format === "fragility") {
-					return (
-						<ListItem
-							button
-							onClick={() => this.onClickDataset(dataset.id)}
-							selected={dataset.id === this.state.selectedDataset.id}
-						>
-							<Tooltip title="DFR3Curves">
-								<ListItemIcon>
-									<ChartIcon fontSize="small" />
-								</ListItemIcon>
-							</Tooltip>
-							<ListItemText primary={`${dataset.title} - ${dataset.creator.capitalize()}`} />
-							<SpaceChip item={dataset} selectedItem={this.state.selectedDataset} />
-						</ListItem>
-					);
-				} else if (dataset.format === "Network") {
-					return (
-						<ListItem
-							button
-							onClick={() => this.onClickDataset(dataset.id)}
-							selected={dataset.id === this.state.selectedDataset.id}
-						>
-							<Tooltip title="Network">
-								<ListItemIcon>
-									<NetworkIcon fontSize="small" />
-								</ListItemIcon>
-							</Tooltip>
-							<ListItemText primary={`${dataset.title} - ${dataset.creator.capitalize()}`} />
-							<SpaceChip item={dataset} selectedItem={this.state.selectedDataset} />
-						</ListItem>
-					);
-				} else {
-					return (
-						<ListItem
-							button
-							onClick={() => this.onClickDataset(dataset.id)}
-							selected={dataset.id === this.state.selectedDataset.id}
-						>
-							<Tooltip title="Unknown Type">
-								<ListItemIcon>
-									<UnknownIcon fontSize="small" />
-								</ListItemIcon>
-							</Tooltip>
-							<ListItemText primary={`${dataset.title} - ${dataset.creator.capitalize()}`} />
-							<SpaceChip item={dataset} selectedItem={this.state.selectedDataset} />
-						</ListItem>
-					);
-				}
-			});
+	const pageChange = (direction) => {
+		if (direction === "previous") {
+			setOffset((pageNumber - 2) * dataPerPage);
+			setPageNumber(pageNumber - 1);
+		} else if (direction === "next") {
+			setOffset(pageNumber * dataPerPage);
+			setPageNumber(pageNumber + 1);
 		}
+		pageParametersStateChange();
+	};
 
-		// selected dataset
-		let selected_dataset_detail = {};
-		if (this.state.selectedDataset) {
-			for (let item in this.state.selectedDataset) {
-				if (redundantProp.indexOf(item) === -1) {
-					selected_dataset_detail[item] = this.state.selectedDataset[item];
-				}
-			}
-		}
+	const changeDataPerPage = (event) => {
+		setPageNumber(1);
+		setOffset(0);
+		setDataPerPage(event.target.value);
+		pageParametersStateChange();
+	};
 
+<<<<<<< HEAD
 		// after selected an item
 		let file_list = "";
 		let file_contents = "";
@@ -758,221 +501,433 @@ class DataViewer extends Component {
 		}
 		else {
 			return (
+=======
+	React.useEffect(() => {
+		if (registeredSearchText !== "" && searching) {
+			searchDatasets(registeredSearchText, dataPerPage, offset)(dispatch);
+		} else {
+			fetchDatasets(selectedDataType, selectedSpace, dataPerPage, offset)(dispatch);
+		}
+	}, [offset, pageNumber, dataPerPage]);
+
+	const handlePreviewOpen = () => {
+		setPreview(true);
+	};
+
+	const handlePreviewClose = () => {
+		setPreview(false);
+	};
+
+	const handleCloseMetadata = () => {
+		setMetadataClosed(true);
+	};
+
+	// list items
+	let list_items = "";
+	if (datasets.length > 0) {
+		list_items = datasets.map((dataset) => {
+			if (dataset.format === "table") {
+				return (
+					<ListItem
+						button
+						onClick={() => onClickDataset(dataset.id)}
+						selected={dataset.id === selectedDataset.id}
+						key={dataset.id}
+					>
+						<Tooltip title="Table">
+							<ListItemIcon>
+								<TableIcon fontSize="small" />
+							</ListItemIcon>
+						</Tooltip>
+						<ListItemText primary={`${dataset.title} - ${dataset.creator.capitalize()}`} />
+						<SpaceChip item={dataset} selectedItem={selectedDataset} />
+					</ListItem>
+				);
+			} else if (dataset.format === "textFiles") {
+				return (
+					<ListItem
+						button
+						onClick={() => onClickDataset(dataset.id)}
+						selected={dataset.id === selectedDataset.id}
+						key={dataset.id}
+					>
+						<Tooltip title="Text File">
+							<ListItemIcon>
+								<TextIcon fontSize="small" />
+							</ListItemIcon>
+						</Tooltip>
+						<ListItemText primary={`${dataset.title} - ${dataset.creator.capitalize()}`} />
+						<SpaceChip item={dataset} selectedItem={selectedDataset} />
+					</ListItem>
+				);
+			} else if (
+				dataset.format.toLowerCase() === "shapefile" ||
+				dataset.format.toLowerCase() === "raster" ||
+				dataset.format.toLowerCase().includes("geotif")
+			) {
+				return (
+					<ListItem
+						button
+						onClick={() => onClickDataset(dataset.id)}
+						selected={dataset.id === selectedDataset.id}
+						key={dataset.id}
+					>
+						<Tooltip title="Shapefile">
+							<ListItemIcon>
+								<MapIcon fontSize="small" />
+							</ListItemIcon>
+						</Tooltip>
+						<ListItemText primary={`${dataset.title} - ${dataset.creator.capitalize()}`} />
+						<SpaceChip item={dataset} selectedItem={selectedDataset} />
+					</ListItem>
+				);
+			} else if (dataset.format === "mapping") {
+				return (
+					<ListItem
+						button
+						onClick={() => onClickDataset(dataset.id)}
+						selected={dataset.id === selectedDataset.id}
+						key={dataset.id}
+					>
+						<Tooltip title="Mapping">
+							<ListItemIcon>
+								<MappingIcon fontSize="small" />
+							</ListItemIcon>
+						</Tooltip>
+						<ListItemText primary={`${dataset.title} - ${dataset.creator.capitalize()}`} />
+						<SpaceChip item={dataset} selectedItem={selectedDataset} />
+					</ListItem>
+				);
+			} else if (dataset.format === "fragility") {
+				return (
+					<ListItem
+						button
+						onClick={() => onClickDataset(dataset.id)}
+						selected={dataset.id === selectedDataset.id}
+						key={dataset.id}
+					>
+						<Tooltip title="DFR3Curves">
+							<ListItemIcon>
+								<ChartIcon fontSize="small" />
+							</ListItemIcon>
+						</Tooltip>
+						<ListItemText primary={`${dataset.title} - ${dataset.creator.capitalize()}`} />
+						<SpaceChip item={dataset} selectedItem={selectedDataset} />
+					</ListItem>
+				);
+			} else if (dataset.format === "Network") {
+				return (
+					<ListItem
+						button
+						onClick={() => onClickDataset(dataset.id)}
+						selected={dataset.id === selectedDataset.id}
+						key={dataset.id}
+					>
+						<Tooltip title="Network">
+							<ListItemIcon>
+								<NetworkIcon fontSize="small" />
+							</ListItemIcon>
+						</Tooltip>
+						<ListItemText primary={`${dataset.title} - ${dataset.creator.capitalize()}`} />
+						<SpaceChip item={dataset} selectedItem={selectedDataset} />
+					</ListItem>
+				);
+			} else {
+				return (
+					<ListItem
+						button
+						onClick={() => onClickDataset(dataset.id)}
+						selected={dataset.id === selectedDataset.id}
+						key={dataset.id}
+					>
+						<Tooltip title="Unknown Type">
+							<ListItemIcon>
+								<UnknownIcon fontSize="small" />
+							</ListItemIcon>
+						</Tooltip>
+						<ListItemText primary={`${dataset.title} - ${dataset.creator.capitalize()}`} />
+						<SpaceChip item={dataset} selectedItem={selectedDataset} />
+					</ListItem>
+				);
+			}
+		});
+	}
+
+	// selected dataset
+	let selected_dataset_detail = {};
+	if (selectedDataset) {
+		for (let item in selectedDataset) {
+			if (redundantProp.indexOf(item) === -1) {
+				selected_dataset_detail[item] = selectedDataset[item];
+			}
+		}
+	}
+
+	// after selected an item
+	let file_list = "";
+	let file_contents = "";
+	let right_column = "";
+	if (selectedDataset) {
+		// file list
+		file_list = selectedDataset.fileDescriptors.map((file_descriptor) => (
+			<ListItem
+				button
+				onClick={() => onClickFileDescriptor(selectedDataset.id, file_descriptor.id, file_descriptor.filename)}
+				key={file_descriptor.id}
+			>
+				<ListItemText>{file_descriptor.filename}</ListItemText>
+			</ListItem>
+		));
+		// file contents
+		if (fileExtension && fileData && fileExtension === "csv") {
+			let data = fileData.map((data) => data.split(","));
+			file_contents = (
+>>>>>>> develop
 				<div>
-					{/*error message display inside viewer*/}
-					<ErrorMessage
-						error=""
-						message="You do not have the privilege to delete this item."
-						messageOpen={this.state.messageOpen}
-						closeErrorMessage={this.closeErrorMessage}
-					/>
-					<Confirmation
-						confirmOpen={this.state.confirmOpen}
-						actionBtnName="Delete"
-						actionText="Once deleted, you won't be able to revert this!"
-						handleConfirmed={this.handleConfirmed}
-						handleCanceled={this.handleCanceled}
-					/>
-					<div className={classes.root}>
-						<Grid container spacing={4}>
-							{/*filters*/}
-							<Grid item lg={8} sm={8} xl={8} xs={12}>
-								<Paper variant="outlined" className={classes.filter}>
-									<Typography variant="h6">Filters</Typography>
-									<div className={classes.selectDiv}>
-										<Datatype
-											selectedDataType={this.state.selectedDataType}
-											datatypes={this.props.datatypes}
-											handleDatatypeSelection={this.changeDatasetType}
-										/>
-									</div>
-									<div className={classes.selectDiv}>
-										<Space
-											selectedSpace={this.state.selectedSpace}
-											spaces={this.props.spaces}
-											handleSpaceSelection={this.handleSpaceSelection}
-										/>
-									</div>
-									<div className={classes.selectDiv}>
-										<DataPerPage
-											dataPerPage={this.state.dataPerPage}
-											changeDataPerPage={this.changeDataPerPage}
-										/>
-									</div>
-								</Paper>
-							</Grid>
-							<Grid item lg={4} sm={4} xl={4} xs={12}>
-								<Paper variant="outlined" className={classes.filter}>
-									<Typography variant="h6">Search all</Typography>
-									<TextField
-										variant="outlined"
-										label="Search"
-										onKeyPress={this.handleKeyPressed}
-										value={this.state.searchText}
-										onChange={(e) => {
-											this.setState({ searchText: e.target.value });
-										}}
-										InputProps={{
-											endAdornment: (
-												<InputAdornment position="end">
-													<IconButton onClick={this.clickSearch}>
-														<SearchIcon fontSize="small" />
-													</IconButton>
-												</InputAdornment>
-											),
-											style: { fontSize: "12px" }
-										}}
-										className={classes.search}
-										margin="dense"
-									/>
-								</Paper>
-							</Grid>
-
-							{/*lists*/}
-							<Grid
-								item
-								lg={this.state.selectedDataset && !this.state.metadataClosed ? 4 : 12}
-								md={this.state.selectedDataset && !this.state.metadataClosed ? 4 : 12}
-								xl={this.state.selectedDataset && !this.state.metadataClosed ? 4 : 12}
-								xs={12}
-							>
-								<LoadingOverlay active={this.state.loading} spinner text="Loading ...">
-									<Paper variant="outlined" className={classes.main}>
-										<div className={classes.paperHeader}>
-											<Typography variant="subtitle1">Dataset</Typography>
-										</div>
-										<List component="nav">{list_items}</List>
-										<div className={classes.paperFooter}>
-											<Pagination
-												pageNumber={this.state.pageNumber}
-												data={list_items}
-												dataPerPage={this.state.dataPerPage}
-												previous={this.previous}
-												next={this.next}
-											/>
-										</div>
-									</Paper>
-								</LoadingOverlay>
-							</Grid>
-
-							{/*metadata*/}
-							{ this.state.metadataClosed ?
-								<></>
-								:
-								<Grid
-									item
-									lg={8}
-									md={8}
-									xl={8}
-									xs={12}
-								>
-									<Paper variant="outlined" className={classes.main}>
-										<IconButton
-											aria-label="Close"
-											onClick={this.closeMetadata}
-											className={classes.metadataCloseButton}
-										>
-											<CloseIcon fontSize="small" />
-										</IconButton>
-										{Object.keys(selected_dataset_detail).length > 0 ? (
-											<div>
-												<div className={classes.paperHeader}>
-													<Typography variant="subtitle1">Metadata</Typography>
-												</div>
-												<div className={classes.metadata}>
-													<Button
-														color="primary"
-														variant="contained"
-														className={classes.inlineButtons}
-														size="small"
-														onClick={this.exportJson}
-													>
-														Download Metadata
-													</Button>
-													<Button
-														color="primary"
-														variant="contained"
-														className={classes.inlineButtons}
-														size="small"
-														onClick={this.downloadDataset}
-													>
-														Download Dataset
-													</Button>
-													<Button
-														color="primary"
-														variant="contained"
-														className={classes.inlineButtons}
-														size="small"
-														onClick={this.preview}
-													>
-														Preview
-													</Button>
-													<CopyToClipboard text={this.state.selectedDataset.id}>
-														<Button
-															color="primary"
-															variant="outlined"
-															className={classes.inlineButtons}
-															size="small"
-														>
-															Copy ID
-														</Button>
-													</CopyToClipboard>
-													<Button
-														color="primary"
-														variant="outlined"
-														className={classes.inlineButtons}
-														style={{float: "right", color: "red", borderColor: "red"}}
-														size="small"
-														onClick={this.onClickDelete}
-													>
-														DELETE
-													</Button>
-												</div>
-												<div className={classes.metadata}>
-													<NestedInfoTable data={selected_dataset_detail} />
-												</div>
-											</div>
-										) : (
-											<div />
-										)}
-									</Paper>
-								</Grid>
-							}
-							</Grid>
-						{/*version*/}
-						<Version />
-					</div>
-
-					{/* Preview */}
-					{this.state.selectedDataset ? (
-						<Dialog
-							open={this.state.preview}
-							onClose={this.handlePreviewerClose}
-							maxWidth="lg"
-							fullWidth
-							scroll="paper"
-						>
-							<DialogContent className={classes.preview}>
-								<IconButton
-									aria-label="Close"
-									onClick={this.handlePreviewerClose}
-									className={classes.previewClose}
-								>
-									<CloseIcon fontSize="small" />
-								</IconButton>
-								<div>
-									{right_column}
-									{file_contents}
-								</div>
-							</DialogContent>
-						</Dialog>
-					) : (
-						<div />
-					)}
+					<Typography variant="h6">File Content Preview</Typography>
+					<FileContentTable container="data_container" data={data.slice(2, 8)} colHeaders={data[0]} />
+				</div>
+			);
+		} else if (fileExtension === "xml" || fileExtension === "txt") {
+			file_contents = (
+				<div>
+					<Typography variant="h6">File Content Preview</Typography>
+					<Card>
+						<CardContent>
+							<Typography variant="body2" noWrap>
+								{fileData}
+							</Typography>
+						</CardContent>
+					</Card>
+				</div>
+			);
+		}
+		// right column
+		if (
+			selectedDatasetFormat.toLowerCase() === "shapefile" ||
+			selectedDatasetFormat.toLowerCase() === "raster" ||
+			selectedDatasetFormat.toLowerCase().includes("geotif")
+		) {
+			right_column = (
+				<div>
+					<Typography variant="h6">Map</Typography>
+					<Map datasetId={selectedDataset.id} boundingBox={selectedDataset.boundingBox} />
+				</div>
+			);
+		} else if (file_list.length > 0) {
+			right_column = (
+				<div>
+					<Typography variant="h6">Files</Typography>
+					<List component="nav">{file_list}</List>
 				</div>
 			);
 		}
 	}
-}
 
-export default withStyles(styles)(DataViewer);
+	if (authError) {
+		browserHistory.push("/login?origin=DataViewer");
+		return null;
+	} else {
+		return (
+			<div>
+				{/*error message display inside viewer*/}
+				<ErrorMessage
+					error=""
+					message="You do not have the privilege to delete this item."
+					messageOpen={messageOpen}
+					closeErrorMessage={closeErrorMessage}
+				/>
+				<Confirmation
+					confirmOpen={confirmOpen}
+					actionBtnName="Delete"
+					actionText="Once deleted, you won't be able to revert this!"
+					handleConfirmed={handleConfirmed}
+					handleCanceled={handleCanceled}
+				/>
+				<div className={classes.root}>
+					<Grid container spacing={4}>
+						{/*filters*/}
+						<Grid item lg={8} sm={8} xl={8} xs={12}>
+							<Paper variant="outlined" className={classes.filter}>
+								<div className={classes.selectDiv}>
+									<Datatype
+										selectedDataType={selectedDataType}
+										datatypes={datatypes}
+										handleDatatypeSelection={changeDatasetType}
+									/>
+								</div>
+								<div className={classes.selectDiv}>
+									<Space
+										selectedSpace={selectedSpace}
+										spaces={spaces}
+										handleSpaceSelection={changeSpaceSelection}
+									/>
+								</div>
+								<div className={classes.selectDiv}>
+									<DataPerPage dataPerPage={dataPerPage} changeDataPerPage={changeDataPerPage} />
+								</div>
+							</Paper>
+						</Grid>
+						<Grid item lg={4} sm={4} xl={4} xs={12}>
+							<Paper variant="outlined" className={classes.filter}>
+								<Typography variant="h6">Search all</Typography>
+								<TextField
+									variant="outlined"
+									label="Search"
+									onKeyDown={handleKeyPressed}
+									value={searchText}
+									onChange={(e) => {
+										setSearchText(e.target.value);
+									}}
+									InputProps={{
+										endAdornment: (
+											<InputAdornment position="end">
+												<IconButton onClick={clickSearch}>
+													<SearchIcon fontSize="small" />
+												</IconButton>
+											</InputAdornment>
+										),
+										style: { fontSize: "12px" }
+									}}
+									className={classes.search}
+									margin="dense"
+								/>
+							</Paper>
+						</Grid>
+
+						{/*lists*/}
+
+						<Grid
+							item
+							lg={selectedDataset && !metadataClosed ? 4 : 12}
+							md={selectedDataset && !metadataClosed ? 4 : 12}
+							xl={selectedDataset && !metadataClosed ? 4 : 12}
+							xs={12}
+						>
+							<LoadingOverlay active={loading} spinner text="Loading ...">
+								<Paper variant="outlined" className={classes.main}>
+									<div className={classes.paperHeader}>
+										<Typography variant="subtitle1">Dataset</Typography>
+									</div>
+									<List component="nav">{list_items}</List>
+									<div className={classes.paperFooter}>
+										<Pagination
+											pageNumber={pageNumber}
+											data={list_items}
+											dataPerPage={dataPerPage}
+											previous={() => pageChange("previous")}
+											next={() => pageChange("next")}
+										/>
+									</div>
+								</Paper>
+							</LoadingOverlay>
+						</Grid>
+
+						{/*metadata*/}
+						{metadataClosed ? (
+							<></>
+						) : (
+							<Grid item lg={8} md={8} xl={8} xs={12}>
+								<Paper variant="outlined" className={classes.main}>
+									<IconButton
+										aria-label="Close"
+										onClick={handleCloseMetadata}
+										className={classes.metadataCloseButton}
+									>
+										<CloseIcon fontSize="small" />
+									</IconButton>
+									{Object.keys(selected_dataset_detail).length > 0 ? (
+										<div>
+											<div className={classes.paperHeader}>
+												<Typography variant="subtitle1">Metadata</Typography>
+											</div>
+											<div className={classes.metadata}>
+												<Button
+													color="primary"
+													variant="contained"
+													className={classes.inlineButtons}
+													size="small"
+													onClick={exportJson}
+												>
+													Download Metadata
+												</Button>
+												<Button
+													color="primary"
+													variant="contained"
+													className={classes.inlineButtons}
+													size="small"
+													onClick={downloadDataset}
+												>
+													Download Dataset
+												</Button>
+												<Button
+													color="primary"
+													variant="contained"
+													className={classes.inlineButtons}
+													size="small"
+													onClick={handlePreviewOpen}
+												>
+													Preview
+												</Button>
+												<CopyToClipboard text={selectedDataset.id}>
+													<Button
+														color="primary"
+														variant="outlined"
+														className={classes.inlineButtons}
+														size="small"
+													>
+														Copy ID
+													</Button>
+												</CopyToClipboard>
+												<Button
+													color="secondary"
+													variant="outlined"
+													className={classes.inlineButtons}
+													size="small"
+													style={{float: "right", color: "red", borderColor: "red"}}
+													onClick={onClickDelete}
+												>
+													DELETE
+												</Button>
+											</div>
+											<div className={classes.metadata}>
+												<NestedInfoTable data={selected_dataset_detail} />
+											</div>
+										</div>
+									) : (
+										<div />
+									)}
+								</Paper>
+							</Grid>
+						)}
+					</Grid>
+					{/*version*/}
+					<Version />
+				</div>
+
+				{/* Preview */}
+				{selectedDataset ? (
+					<Dialog open={preview} onClose={handlePreviewClose} maxWidth="lg" fullWidth scroll="paper">
+						<DialogContent className={classes.preview}>
+							<IconButton
+								aria-label="Close"
+								onClick={handlePreviewClose}
+								className={classes.previewClose}
+							>
+								<CloseIcon fontSize="small" />
+							</IconButton>
+							<div>
+								{right_column}
+								{file_contents}
+							</div>
+						</DialogContent>
+					</Dialog>
+				) : (
+					<div />
+				)}
+			</div>
+		);
+	}
+};
+
+export default DataViewer;
