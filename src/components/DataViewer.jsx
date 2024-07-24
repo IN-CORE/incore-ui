@@ -129,35 +129,8 @@ String.prototype.capitalize = function () {
 	return this.charAt(0).toUpperCase() + this.slice(1);
 };
 
-<<<<<<< HEAD
-class DataViewer extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			selectedDataType: "All",
-			selectedSpace: "All",
-			selectedDataset: "",
-			selectedDatasetFormat: "",
-			fileData: "",
-			fileExtension: "",
-			searchText: "",
-			registeredSearchText: "",
-			searching: false,
-			authError: false,
-			forbidden: false,
-			preview: false,
-			offset: 0,
-			pageNumber: 1,
-			dataPerPage: 50,
-			messageOpen: false,
-			confirmOpen: false,
-			loading: false,
-			metadataClosed: true
-		};
-=======
 const DataViewer = () => {
 	const classes = useStyles();
->>>>>>> develop
 
 	const [selectedDataType, setSelectedDataType] = React.useState("All");
 	const [selectedSpace, setSelectedSpace] = React.useState("All");
@@ -178,6 +151,7 @@ const DataViewer = () => {
 
 	const dispatch = useDispatch();
 	const authError = useSelector((state) => state.user.loginError);
+	const forbidden = useSelector((state) => state.user.forbidden);
 	const loading = useSelector((state) => state.data.loading);
 	const datasets = useSelector((state) => state.data.datasets);
 	const deleteError = useSelector((state) => state.data.deleteError);
@@ -203,31 +177,11 @@ const DataViewer = () => {
 		trackPageview(window.location.pathname);
 	}, []);
 
-<<<<<<< HEAD
-		// reset delete error
-		this.props.resetError();
-	}
-
-	componentWillReceiveProps(nextProps) {
-		this.setState({
-			authError: nextProps.authError,
-			forbidden: nextProps.forbidden,
-			loading: nextProps.loading
-		});
-	}
-
-	componentDidUpdate(prevProps, prevState) {
-		if (this.props.deleteError && !prevState.messageOpen) {
-			this.setState({ messageOpen: true });
-		} else if (!this.props.deleteError && prevState.messageOpen) {
-			this.setState({ messageOpen: false });
-=======
 	React.useEffect(() => {
 		if (deleteError && !messageOpen) {
 			setMessageOpen(true);
 		} else if (!deleteError && messageOpen) {
 			setMessageOpen(false);
->>>>>>> develop
 		}
 	}, [messageOpen]);
 
@@ -421,87 +375,6 @@ const DataViewer = () => {
 		pageParametersStateChange();
 	};
 
-<<<<<<< HEAD
-		// after selected an item
-		let file_list = "";
-		let file_contents = "";
-		let right_column = "";
-		if (this.state.selectedDataset) {
-			// file list
-			file_list = this.state.selectedDataset.fileDescriptors.map((file_descriptor) => (
-				<ListItem
-					button
-					onClick={() =>
-						this.onClickFileDescriptor(
-							this.state.selectedDataset.id,
-							file_descriptor.id,
-							file_descriptor.filename
-						)
-					}
-					key={file_descriptor.id}
-				>
-					<ListItemText>{file_descriptor.filename}</ListItemText>
-				</ListItem>
-			));
-			// file contents
-			if (this.state.fileExtension && this.state.fileData && this.state.fileExtension === "csv") {
-				let data = this.state.fileData.map((data) => data.split(","));
-				file_contents = (
-					<div>
-						<Typography variant="h6">File Content Preview</Typography>
-						<FileContentTable container="data_container" data={data.slice(2, 8)} colHeaders={data[0]} />
-					</div>
-				);
-			} else if (this.state.fileExtension === "xml" || this.state.fileExtension === "txt") {
-				file_contents = (
-					<div>
-						<Typography variant="h6">File Content Preview</Typography>
-						<Card>
-							<CardContent>
-								<Typography variant="body2" noWrap>
-									{this.state.fileData}
-								</Typography>
-							</CardContent>
-						</Card>
-					</div>
-				);
-			}
-			// right column
-			if (
-				this.state.selectedDatasetFormat.toLowerCase() === "shapefile" ||
-				this.state.selectedDatasetFormat.toLowerCase() === "raster" ||
-				this.state.selectedDatasetFormat.toLowerCase().includes("geotif")
-			) {
-				right_column = (
-					<div>
-						<Typography variant="h6">Map</Typography>
-						<Map
-							datasetId={this.state.selectedDataset.id}
-							boundingBox={this.state.selectedDataset.boundingBox}
-						/>
-					</div>
-				);
-			} else if (file_list.length > 0) {
-				right_column = (
-					<div>
-						<Typography variant="h6">Files</Typography>
-						<List component="nav">{file_list}</List>
-					</div>
-				);
-			}
-		}
-
-		if (this.state.authError) {
-			browserHistory.push("/login?origin=DataViewer");
-			return null;
-		}
-		else if (this.state.forbidden){
-			browserHistory.push("/forbidden");
-			return null;
-		}
-		else {
-			return (
-=======
 	React.useEffect(() => {
 		if (registeredSearchText !== "" && searching) {
 			searchDatasets(registeredSearchText, dataPerPage, offset)(dispatch);
@@ -682,7 +555,6 @@ const DataViewer = () => {
 		if (fileExtension && fileData && fileExtension === "csv") {
 			let data = fileData.map((data) => data.split(","));
 			file_contents = (
->>>>>>> develop
 				<div>
 					<Typography variant="h6">File Content Preview</Typography>
 					<FileContentTable container="data_container" data={data.slice(2, 8)} colHeaders={data[0]} />
@@ -726,6 +598,10 @@ const DataViewer = () => {
 
 	if (authError) {
 		browserHistory.push("/login?origin=DataViewer");
+		return null;
+	}
+	else if (forbidden) {
+		browserHistory.push("/forbidden");
 		return null;
 	} else {
 		return (
