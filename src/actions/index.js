@@ -89,13 +89,7 @@ export function deleteItemById(resourceType, id) {
 	}
 	return (dispatch) => {
 		return fetch(endpoint, {mode: "cors", method: "DELETE", headers: getHeader()})
-		.catch((error) => {
-			dispatch({
-				type: FORBIDDEN,
-				usage: {},
-				receivedAt: Date.now(),
-			});
-		})
+		.catch((error) => { dispatch(deleteItem(FORBIDDEN, []));})
 		.then((response) => {
 			if (response.status === 200) {
 				response.json().then((json) => {
@@ -173,13 +167,7 @@ export function searchDatasets(keyword, limit, offset) {
 	return (dispatch) => {
 		dispatch(loading(DATA_LOADING));
 		return fetch(endpoint, {mode: "cors", headers: getHeader()})
-		.catch((error) => {
-			dispatch({
-				type: FORBIDDEN,
-				usage: {},
-				receivedAt: Date.now(),
-			});
-		})
+		.catch((error) => { dispatch(receiveDatasets(FORBIDDEN, []));})
 		.then((response) => {
 			dispatch(loadComplete(DATA_LOAD_COMPLETE));
 			if (response.status === 200) {
@@ -210,13 +198,7 @@ export function fetchDatasets(dataType, space, limit, offset) {
 	return (dispatch) => {
 		dispatch(loading(DATA_LOADING));
 		return fetch(endpoint, {mode: "cors", headers: getHeader()})
-		.catch((error) => {
-			dispatch({
-				type: FORBIDDEN,
-				usage: {},
-				receivedAt: Date.now(),
-			});
-		})
+		.catch((error) => { dispatch(receiveDatasets(FORBIDDEN, []));})
 		.then((response) => {
 			dispatch(loadComplete(DATA_LOAD_COMPLETE));
 			if (response.status === 200) {
@@ -239,13 +221,7 @@ export function fetchUsage() {
 	let endpoint = `${config.spaceServiceBase}usage`;
 	return (dispatch) => {
 		return fetch(endpoint, {mode: "cors", headers: getHeader()})
-		.catch((error) => {
-			dispatch({
-				type: FORBIDDEN,
-				usage: {},
-				receivedAt: Date.now(),
-			});
-		})
+		.catch((error) => {dispatch(receieveUsage(FORBIDDEN, []));})
 		.then((response) => {
 			if (response.status === 200) {
 				response.json().then((json) => {
@@ -280,13 +256,7 @@ export function fetchSpaces() {
 	const endpoint = config.spaceService;
 	return (dispatch) => {
 		return fetch(endpoint, {mode: "cors", headers: getHeader()})
-		.catch((error) => {
-			dispatch({
-				type: FORBIDDEN,
-				usage: {},
-				receivedAt: Date.now(),
-			});
-		})
+		.catch((error) => {dispatch(receiveSpaces(FORBIDDEN, []));})
 		.then((response) => {
 			if (response.status === 200) {
 				response.json().then((json) => {
@@ -314,7 +284,7 @@ export function fetchAllocations() {
 			dispatch({
 				type: FORBIDDEN,
 				usage: {},
-				receivedAt: Date.now(),
+				receivedAt: Date.now()
 			});
 		})
 		.then((response) => {
@@ -357,7 +327,7 @@ export function fetchUniqueDatatypes() {
 		.catch((error) => {
 			dispatch({
 				type: FORBIDDEN,
-				usage: {},
+				datatypes: {},
 				receivedAt: Date.now(),
 			});
 		})
@@ -383,13 +353,7 @@ export function searchDFR3Curves(dfr3_type, keyword, limit, offset) {
 	return (dispatch) => {
 		loading(DFR3CURVE_LOADING)(dispatch);
 		return fetch(endpoint, { mode: "cors", headers: getHeader() })
-		.catch((error) => {
-			dispatch({
-				type: FORBIDDEN,
-				usage: {},
-				receivedAt: Date.now(),
-			});
-		})
+		.catch((error) => {dispatch(receiveDFR3Curves(FORBIDDEN, []));})
 		.then((response) => {
 			loadComplete(DFR3CURVE_LOAD_COMPLETE)(dispatch)
 			if (response.status === 200) {
@@ -422,13 +386,7 @@ export function fetchDFR3Curves(dfr3_type, space, inventory, hazard, limit, offs
 	return (dispatch) => {
 		loading(DFR3CURVE_LOADING)(dispatch);
 		return fetch(endpoint, { mode: "cors", headers: getHeader() })
-		.catch((error) => {
-			dispatch({
-				type: FORBIDDEN,
-				usage: {},
-				receivedAt: Date.now(),
-			});
-		})
+		.catch((error) => {dispatch(receiveDFR3Curves(FORBIDDEN, []));})
 		.then((response) => {
 			loadComplete(DFR3CURVE_LOAD_COMPLETE)(dispatch);
 			if (response.status === 200) {
@@ -480,13 +438,7 @@ export function fetchDFR3Mappings(dfr3_type, space, inventory, hazard, limit, of
 	return (dispatch) => {
 		loading(DFR3MAPPING_LOADING)(dispatch);
 		return fetch(endpoint, { mode: "cors", headers: getHeader() })
-		.catch((error) => {
-			dispatch({
-				type: FORBIDDEN,
-				usage: {},
-				receivedAt: Date.now(),
-			});
-		})
+		.catch((error) => {dispatch(receiveDFR3Mappings(FORBIDDEN, []));})
 		.then((response) => {
 			loadComplete(DFR3MAPPING_LOAD_COMPLETE)(dispatch);
 			if (response.status === 200) {
@@ -517,13 +469,7 @@ export function searchDFR3Mappings(dfr3_type, keyword, limit, offset) {
 	return (dispatch) => {
 		loading(DFR3MAPPING_LOADING)(dispatch);
 		return fetch(endpoint, { mode: "cors", headers: getHeader() })
-		.catch((error) => {
-			dispatch({
-				type: FORBIDDEN,
-				usage: {},
-				receivedAt: Date.now(),
-			});
-		})
+		.catch((error) => {dispatch(receiveDFR3Mappings(FORBIDDEN, []));})
 		.then((response) => {
 			loadComplete(DFR3MAPPING_LOAD_COMPLETE)(dispatch);
 			if (response.status === 200) {
@@ -547,13 +493,7 @@ export function searchHazards(hazard_type, keyword, limit, offset) {
 	return (dispatch) => {
 		dispatch(loading(HAZARD_LOADING));
 		return fetch(endpoint, {mode: "cors", headers: getHeader()})
-		.catch((error) => {
-			dispatch({
-				type: FORBIDDEN,
-				usage: {},
-				receivedAt: Date.now(),
-			});
-		})
+		.catch((error) => {dispatch(receiveHazards(FORBIDDEN, []));})
 		.then((response) => {
 			dispatch(loadComplete(HAZARD_LOAD_COMPLETE));
 			if (response.status === 200) {
@@ -580,13 +520,7 @@ export function fetchHazards(hazard_type, space, limit, offset) {
 	return (dispatch) => {
 		dispatch(loading(HAZARD_LOADING));
 		return fetch(endpoint, {mode: "cors", headers: getHeader()})
-		.catch((error) => {
-			dispatch({
-				type: FORBIDDEN,
-				usage: {},
-				receivedAt: Date.now(),
-			});
-		})
+		.catch((error) => {dispatch(receiveHazards(FORBIDDEN, []));})
 		.then((response) => {
 			dispatch(loadComplete(HAZARD_LOAD_COMPLETE));
 			if (response.status === 200) {
@@ -701,13 +635,7 @@ export function fetchSemantics(space, limit, offset) {
 	return (dispatch) => {
 		dispatch(loading(SEMANTIC_LOADING));
 		return fetch(endpoint, {mode: "cors", headers: getHeader()})
-		.catch((error) => {
-			dispatch({
-				type: FORBIDDEN,
-				usage: {},
-				receivedAt: Date.now(),
-			});
-		})
+		.catch((error) => {dispatch(receiveSemantics(FORBIDDEN, []));})
 		.then((response) => {
 			dispatch(loadComplete(SEMANTIC_LOAD_COMPLETE));
 			if (response.status === 200) {
@@ -731,13 +659,7 @@ export function searchSemantics(keyword, limit, offset) {
 	return (dispatch) => {
 		dispatch(loading(SEMANTIC_LOADING));
 		return fetch(endpoint, {mode: "cors", headers: getHeader()})
-		.catch((error) => {
-			dispatch({
-				type: FORBIDDEN,
-				usage: {},
-				receivedAt: Date.now(),
-			});
-		})
+		.catch((error) => {dispatch(receiveSemantics(FORBIDDEN, []));})
 		.then((response) => {
 			dispatch(loadComplete(SEMANTIC_LOAD_COMPLETE));
 			if (response.status === 200) {
@@ -748,7 +670,7 @@ export function searchSemantics(keyword, limit, offset) {
 				cookies.remove("Authorization");
 				dispatch(receiveSemantics(LOGIN_ERROR, []));
 			} else if (response.status === 403) {
-			dispatch(receiveSemantics(FORBIDDEN, []));
+				dispatch(receiveSemantics(FORBIDDEN, []));
 			} else {
 				dispatch(receiveSemantics(RECEIVE_SEMANTICS, []));
 			}
