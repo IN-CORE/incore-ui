@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Added
+- Incore-theme for emails sent through KeyCloak. [#212](https://github.com/IN-CORE/incore-ui/issues/212)
+
 ### Changed
 - Convert DataViewer and DFR3Viewer into Functional based components. [#183](https://github.com/IN-CORE/incore-ui/issues/183)
 
