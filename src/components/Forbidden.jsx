@@ -18,7 +18,7 @@ export const Forbidden = () => {
 					</Typography>
 					<Typography variant="body1" paragraph style={{fontSize: "16px"}}>
 						You do not currently have permission to access the IN-CORE resource. <br />
-						Please wait for the administrator to grant you access.
+						Please wait for an administrator to grant you access
 					</Typography>
 					<Typography variant="body1" paragraph>
 						<Link href={config.slackInvitationLink} target="_blank">
