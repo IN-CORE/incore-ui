@@ -11,7 +11,11 @@ interface LogoutUserAction {
 	type: "LOGOUT";
 }
 
-type UserAction = LoginUserAction | LoginErrorUserAction | LogoutUserAction;
+interface ForbiddenUserAction {
+	type: "FORBIDDEN";
+}
+
+type UserAction = LoginUserAction | LoginErrorUserAction | LogoutUserAction | ForbiddenUserAction;
 
 interface ReceiveDatasetsAction {
 	type: "RECEIVE_DATASETS";
@@ -101,5 +105,3 @@ type DFR3MappingsAction =
 	| LoginErrorUserAction
 	| DFR3MappingLoadingAction
 	| DFR3MappingLoadedAction;
-
-

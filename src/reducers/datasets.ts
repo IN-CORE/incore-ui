@@ -38,7 +38,6 @@ const datasets = (state: DatasetState = datasetsStateInitialValue, action: Datas
 				...state,
 				datasets: []
 			};
-		// return Object.assign({}, state, {datasets: [], Authorization: "", loginError: true});
 		case DATA_LOADING:
 			return {
 				...state,

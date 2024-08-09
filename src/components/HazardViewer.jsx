@@ -518,7 +518,12 @@ class HazardViewer extends Component {
 		if (this.state.authError) {
 			browserHistory.push("/login?origin=HazardViewer");
 			return null;
-		} else {
+		}
+		else if (this.props.forbidden) {
+			browserHistory.push("/forbidden");
+			return null;
+		}
+		else {
 			return (
 				<div>
 					{/*error message display inside viewer*/}

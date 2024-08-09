@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 
 ### Changed
+- Restrict unapproved user from performing any action or accessing any resources. [#206](https://github.com/IN-CORE/incore-ui/issues/206)
 - Convert DataViewer and DFR3Viewer into Functional based components. [#183](https://github.com/IN-CORE/incore-ui/issues/183)
 
 ### Fixed

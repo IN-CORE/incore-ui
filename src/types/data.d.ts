@@ -256,10 +256,6 @@ interface HazardState {
 	hazards: Hazards;
 }
 
-interface DatasetState {
-	datasets: Dataset[];
-}
-
 interface ExecutionState {
 	executionId: string;
 }
@@ -272,22 +268,26 @@ interface UserState {
 	Authorization: string;
 	loginError: boolean;
 	loginSuccess: boolean;
+	forbidden: boolean;
 }
 
 interface DatasetState {
 	datasets: Datasets;
 	loading: boolean;
 	deleteError: boolean;
+	forbidden: boolean;
 }
 
 interface DFR3CurveState {
 	dfr3Curves: DFR3Curves;
 	loading: boolean;
 	deleteError: boolean;
+	forbidden: boolean;
 }
 
 interface DFR3MappingState {
 	dfr3Mappings: DFR3Curves;
 	loading: boolean;
 	deleteError: boolean;
+	forbidden: boolean;
 }

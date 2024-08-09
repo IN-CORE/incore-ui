@@ -151,6 +151,7 @@ const DataViewer = () => {
 
 	const dispatch = useDispatch();
 	const authError = useSelector((state) => state.user.loginError);
+	const forbidden = useSelector((state) => state.user.forbidden);
 	const loading = useSelector((state) => state.data.loading);
 	const datasets = useSelector((state) => state.data.datasets);
 	const deleteError = useSelector((state) => state.data.deleteError);
@@ -597,6 +598,10 @@ const DataViewer = () => {
 
 	if (authError) {
 		browserHistory.push("/login?origin=DataViewer");
+		return null;
+	}
+	else if (forbidden) {
+		browserHistory.push("/forbidden");
 		return null;
 	} else {
 		return (
