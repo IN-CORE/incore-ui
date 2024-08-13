@@ -732,8 +732,6 @@ export async function getRepoVersion() {
 	}
 }
 
-
-
 export const OPEN_WARNING_MESSAGE = "OPEN_WARNING_MESSAGE";
 export const CLOSE_WARNING_MESSAGE = "CLOSE_WARNING_MESSAGE";
 
