@@ -15,7 +15,9 @@ import QuestionAnswerIcon from "@material-ui/icons/QuestionAnswer";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
 import { trackPageview, trackEvent } from "./analytics";
-import { openWarningMessage } from "../../actions";
+import { openWarningMessage } from "../actions/index";
+import { WarningMessage } from "./children/WarningMessage";
+import { useDispatch } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -358,13 +360,12 @@ const HomePage = () => {
 		// Call trackPageview to track page view
 		trackPageview(window.location.pathname);
 
-		dispatch(openWarningMessage("NOTE: Changes were recently made to IN-CORE's user management system. " +
-			"If you were registered as an IN-CORE user before 08/21/2024 and are experiencing login issues, " +
-			"you need to reset your password."));
+		dispatch(openWarningMessage(config.resetPwWarningMessage));
 	}, []);
 
 	return (
 		<div>
+			<WarningMessage />
 			{/*header*/}
 			<section className={classes.root}>
 				<Container className={classes.container}>

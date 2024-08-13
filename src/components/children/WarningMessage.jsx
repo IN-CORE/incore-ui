@@ -5,7 +5,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import { useDispatch, useSelector } from "react-redux";
 import { closeWarningMessage} from "../../actions";
 
-const WarningMessage = () => {
+export const WarningMessage = () => {
 
 	const dispatch = useDispatch();
 	const { messageOpen, error, message } = useSelector(
@@ -38,5 +38,3 @@ const WarningMessage = () => {
 		</Collapse>
 	);
 };
-
-export default ErrorMessage;
