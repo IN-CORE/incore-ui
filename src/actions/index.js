@@ -731,3 +731,17 @@ export async function getRepoVersion() {
 		return githubVersionResponseFallback;
 	}
 }
+
+
+
+export const OPEN_WARNING_MESSAGE = "OPEN_WARNING_MESSAGE";
+export const CLOSE_WARNING_MESSAGE = "CLOSE_WARNING_MESSAGE";
+
+export const openWarningMessage = (message) => ({
+	type: OPEN_WARNING_MESSAGE,
+	message: message,
+});
+
+export const closeWarningMessage = () => ({
+	type: CLOSE_WARNING_MESSAGE,
+});

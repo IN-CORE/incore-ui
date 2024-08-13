@@ -15,6 +15,7 @@ import QuestionAnswerIcon from "@material-ui/icons/QuestionAnswer";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
 import { trackPageview, trackEvent } from "./analytics";
+import { openWarningMessage } from "../../actions";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -348,6 +349,7 @@ const HomePage = () => {
 	};
 
 	const classes = useStyles();
+	const dispatch = useDispatch();
 
 	React.useEffect(() => {
 		getRepoVersion().then((data) => {
@@ -355,6 +357,10 @@ const HomePage = () => {
 		});
 		// Call trackPageview to track page view
 		trackPageview(window.location.pathname);
+
+		dispatch(openWarningMessage("NOTE: Changes were recently made to IN-CORE's user management system. " +
+			"If you were registered as an IN-CORE user before 08/21/2024 and are experiencing login issues, " +
+			"you need to reset your password."));
 	}, []);
 
 	return (
