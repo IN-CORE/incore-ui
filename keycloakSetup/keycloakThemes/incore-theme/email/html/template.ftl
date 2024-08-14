@@ -34,6 +34,7 @@
             color: #333333;
         }
         .content p {
+            text-align: justify;
             font-size: 16px;
             color: #666666;
             line-height: 1.6;
