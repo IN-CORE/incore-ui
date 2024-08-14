@@ -205,10 +205,11 @@ class SemanticViewer extends Component {
 		this.setState(
 			{
 				loading: nextProps.loading,
-				authError: nextProps.authError
+				authError: nextProps.authError,
 			}
 		);
 	}
+
 	componentDidUpdate(prevProps, prevState) {
 		if (this.props.deleteError && !prevState.messageOpen) {
 			this.setState({ messageOpen: true });
@@ -474,7 +475,12 @@ class SemanticViewer extends Component {
 		if (this.state.authError) {
 			browserHistory.push("/login?origin=SemanticViewer");
 			return null;
-		} else {
+		}
+		else if (this.props.forbidden) {
+			browserHistory.push("/forbidden");
+			return null;
+		}
+		else {
 			return (
 				<div className={classes.root}>
 					<Grid container spacing={4}>

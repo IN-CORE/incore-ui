@@ -154,9 +154,9 @@ const DFR3Viewer = () => {
 	const [confirmOpen, setConfirmOpen] = React.useState(false);
 	const [deleteType, setDeleteType] = React.useState("curve");
 	const [metadataClosed, setMetadataClosed] = React.useState(true);
-
 	const dispatch = useDispatch();
 	const authError = useSelector((state) => state.user.loginError);
+	const forbidden = useSelector((state) => state.user.forbidden);
 	const deleteError = useSelector((state) => state.dfr3Curve.deleteError || state.dfr3Mapping.deleteError);
 	const curvesLoading = useSelector((state) => state.dfr3Curve.loading);
 	const mappingsLoading = useSelector((state) => state.dfr3Mapping.loading);
@@ -576,7 +576,12 @@ const DFR3Viewer = () => {
 	if (authError) {
 		browserHistory.push("/login?origin=DFR3Viewer");
 		return null;
-	} else {
+	}
+	else if (forbidden){
+		browserHistory.push("/forbidden");
+		return null;
+					}
+	else {
 		return (
 			<div>
 				{/*error message display inside viewer*/}

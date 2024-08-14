@@ -1,4 +1,4 @@
-import { SET_USER, LOGIN_ERROR, LOGOUT } from "../actions";
+import { SET_USER, LOGIN_ERROR, LOGOUT, FORBIDDEN } from "../actions";
 import { userStateInitialValue } from "../store/states";
 
 const user = (state: UserState = userStateInitialValue, action: UserAction): UserState => {
@@ -17,6 +17,13 @@ const user = (state: UserState = userStateInitialValue, action: UserAction): Use
 				loginError: true,
 				loginSuccess: false
 			};
+		case FORBIDDEN:
+			return {
+				...state,
+				Authorization: "",
+				forbidden: true,
+				loginSuccess: false
+			}
 		case LOGOUT:
 			return {
 				...state,
