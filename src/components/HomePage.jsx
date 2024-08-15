@@ -15,6 +15,9 @@ import QuestionAnswerIcon from "@material-ui/icons/QuestionAnswer";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
 import { trackPageview, trackEvent } from "./analytics";
+import { openWarningMessage } from "../actions/index";
+import { WarningMessage } from "./children/WarningMessage";
+import { useDispatch } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -348,6 +351,7 @@ const HomePage = () => {
 	};
 
 	const classes = useStyles();
+	const dispatch = useDispatch();
 
 	React.useEffect(() => {
 		getRepoVersion().then((data) => {
@@ -355,10 +359,13 @@ const HomePage = () => {
 		});
 		// Call trackPageview to track page view
 		trackPageview(window.location.pathname);
+
+		dispatch(openWarningMessage(config.resetPwWarningMessage));
 	}, []);
 
 	return (
 		<div>
+			<WarningMessage />
 			{/*header*/}
 			<section className={classes.root}>
 				<Container className={classes.container}>

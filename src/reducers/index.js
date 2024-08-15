@@ -9,6 +9,7 @@ import datatypes from "./datatypes";
 import semantics from "./semantics";
 import usage from "./usage";
 import user from "./user.ts";
+import warning from "./warning";
 
 const rootReducer = combineReducers({
 	routing: routerReducer,
@@ -20,7 +21,8 @@ const rootReducer = combineReducers({
 	space: spaces,
 	user: user,
 	datatype: datatypes,
-	semantics: semantics
+	semantics: semantics,
+	warning: warning
 });
 
 export default rootReducer;

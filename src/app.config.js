@@ -51,4 +51,8 @@ config["keycloakConfig"] = {
 	clientId: config["client_id"]
 };
 
+config["resetPwWarningMessage"] = "NOTE: Changes were recently made to IN-CORE's user management system. If you were " +
+	"registered as an IN-CORE user before 08/21/2024 and are experiencing login issues, you need to reset your " +
+	"password.";
+
 export default config;

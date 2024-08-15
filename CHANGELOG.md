@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 
 ### Added
+- Warning on landing page notifying user to reset your password. [#215](https://github.com/IN-CORE/incore-ui/issues/215)
 - Incore-theme for emails sent through KeyCloak. [#212](https://github.com/IN-CORE/incore-ui/issues/212)
 
 ### Changed
