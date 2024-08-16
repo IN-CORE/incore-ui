@@ -235,7 +235,7 @@ interface DFR3Curve {
 
 type DFR3Curves = DFR3Curve[];
 
-interface DFR3Mappings {
+interface DFR3Mapping {
 	id: string;
 	name: string;
 	authors: string[];
@@ -245,6 +245,8 @@ interface DFR3Mappings {
 	mappingType: string;
 }
 
+type DFR3Mappings = DFR3Mapping[];
+
 /* States */
 interface AnalysesState {
 	analysisMetadata: AnalysesMetadata;
@@ -252,18 +254,6 @@ interface AnalysesState {
 
 interface HazardState {
 	hazards: Hazards;
-}
-
-interface DFR3CurvesState {
-	DFR3Curves: DFR3Curves;
-}
-
-interface DFR3MappingsState {
-	DFR3Mappings: DFR3Mappings;
-}
-
-interface DatasetState {
-	datasets: Dataset[];
 }
 
 interface ExecutionState {
@@ -278,4 +268,26 @@ interface UserState {
 	Authorization: string;
 	loginError: boolean;
 	loginSuccess: boolean;
+	forbidden: boolean;
+}
+
+interface DatasetState {
+	datasets: Datasets;
+	loading: boolean;
+	deleteError: boolean;
+	forbidden: boolean;
+}
+
+interface DFR3CurveState {
+	dfr3Curves: DFR3Curves;
+	loading: boolean;
+	deleteError: boolean;
+	forbidden: boolean;
+}
+
+interface DFR3MappingState {
+	dfr3Mappings: DFR3Curves;
+	loading: boolean;
+	deleteError: boolean;
+	forbidden: boolean;
 }

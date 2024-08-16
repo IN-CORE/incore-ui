@@ -205,10 +205,11 @@ class SemanticViewer extends Component {
 		this.setState(
 			{
 				loading: nextProps.loading,
-				authError: nextProps.authError
+				authError: nextProps.authError,
 			}
 		);
 	}
+
 	componentDidUpdate(prevProps, prevState) {
 		if (this.props.deleteError && !prevState.messageOpen) {
 			this.setState({ messageOpen: true });
@@ -289,7 +290,7 @@ class SemanticViewer extends Component {
 			let url = `${config.semanticServiceType}/${semanticName}/template`;
 
 			let semanticfName = semanticName.replace(":", "_") + this.getFileExt(this.state.selectedSemanticType["tableSchema"]["columns"])
-			let response = await fetch(url, { mode: "cors", headers: await getHeader() });
+			let response = await fetch(url, { mode: "cors", headers: getHeader() });
 
 			if (response.ok) {
 				let blob = await response.blob();
@@ -474,7 +475,12 @@ class SemanticViewer extends Component {
 		if (this.state.authError) {
 			browserHistory.push("/login?origin=SemanticViewer");
 			return null;
-		} else {
+		}
+		else if (this.props.forbidden) {
+			browserHistory.push("/forbidden");
+			return null;
+		}
+		else {
 			return (
 				<div className={classes.root}>
 					<Grid container spacing={4}>

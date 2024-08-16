@@ -20,7 +20,7 @@ const usage = (state=defaultState, action) => {
 	case RECEIVE_ALLOCATIONS:
 		return Object.assign({}, state, {allocations: action.allocations});
 	case LOGIN_ERROR:
-		return Object.assign({}, state, {datasets: [], Authorization: "", loginError: true});
+		return Object.assign({}, state, {usage: {}, labUsage:{}, allocations:{}, Authorization: "", loginError: true});
 	default:
 		return state;
 	}

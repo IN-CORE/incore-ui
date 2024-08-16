@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.13.0] - 2024-08-21
+
+### Added
+- Warning on landing page notifying user to reset your password. [#215](https://github.com/IN-CORE/incore-ui/issues/215)
+- Incore-theme for emails sent through KeyCloak. [#212](https://github.com/IN-CORE/incore-ui/issues/212)
+
+### Changed
+- Restrict unapproved user from performing any action or accessing any resources. [#206](https://github.com/IN-CORE/incore-ui/issues/206)
+- Convert DataViewer and DFR3Viewer into Functional based components. [#183](https://github.com/IN-CORE/incore-ui/issues/183)
+
+### Fixed
+- Google Analytics warning for not being loading as frist component [#208](https://github.com/IN-CORE/incore-ui/issues/208)
+
+### Security
+- Bump ws, engine.io-client, engine.io and socket.io-adapter [#211](https://github.com/IN-CORE/incore-ui/pull/211)
+- Bump braces from 3.0.2 to 3.0.3 [#210](https://github.com/IN-CORE/incore-ui/pull/210)
+
 ## [1.12.0] - 2024-06-13
 
 ### Added

@@ -1,4 +1,4 @@
-import {RECEIVE_SPACES} from "../actions";
+import {LOGIN_ERROR, RECEIVE_SPACES} from "../actions";
 
 const defaultState = {spaces: []};
 
@@ -6,6 +6,8 @@ const spaces = (state=defaultState, action) => {
 	switch(action.type) {
 	case RECEIVE_SPACES:
 		return Object.assign({}, state, {spaces: action.spaces});
+	case LOGIN_ERROR:
+		return Object.assign({}, state, {spaces: [], Authorization: "", loginError: true});
 	default:
 		return state;
 	}

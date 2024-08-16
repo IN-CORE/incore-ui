@@ -1,5 +1,6 @@
 import * as React from "react";
 import {List, ListItem, ListItemIcon, ListItemText, Tooltip} from "@material-ui/core";
+import { is3dCurve } from "../../utils/common";
 import ShowChartIcon from "@material-ui/icons/ShowChart";
 import ThreeDRotationIcon from "@material-ui/icons/ThreeDRotation";
 import SpaceChip from "./SpaceChip";
@@ -9,7 +10,7 @@ const DFR3CurvesGroupList = (props) => {
 	return (
 		<List component="nav" id={props.id} style={{"overflowY": "auto"}}>
 			{props.data.map(function (dfr3Curve) {
-				if (dfr3Curve.is3dPlot) {
+				if (is3dCurve(dfr3Curve)) {
 					return (
 						<ListItem button
 								  onClick={() => props.onClick(dfr3Curve)}

@@ -6,5 +6,12 @@ const cookies = new Cookies();
 export const userStateInitialValue: UserState = {
 	Authorization: cookies.get("Authorization"),
 	loginError: false,
-	loginSuccess: false
+	loginSuccess: false,
+	forbidden: false
 };
+
+export const datasetsStateInitialValue: DatasetState = { datasets: [], loading: false, deleteError: false, forbidden: false };
+
+export const dfr3CurvesStateInitialValue: DFR3CurveState = { dfr3Curves: [], loading: false, deleteError: false, forbidden: false };
+
+export const dfr3MappingsStateInitialValue: DFR3MappingState = { dfr3Mappings: [], loading: false, deleteError: false, forbidden: false };

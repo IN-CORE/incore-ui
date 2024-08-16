@@ -110,7 +110,7 @@ const useStyles = makeStyles({
 });
 
 export default function Profile(props) {
-	const {loginError, usage, getUsage, allocations, getAllocations} = props;
+	const {loginError, forbidden, usage, getUsage, allocations, getAllocations} = props;
 	const [authError, setAuthError] = useState(false);
 	const [dataEntityPie, setDataEntityPie] = useState({});
 	const [dataFileSizePie, setDataFileSizePie] = useState({});
@@ -125,7 +125,7 @@ export default function Profile(props) {
 	useEffect(() => {
 		// Track page view when the component mounts
 		trackPageview(window.location.pathname);
-		
+
 		// check if logged in
 		let authorization = cookies.get("Authorization");
 
@@ -172,6 +172,13 @@ export default function Profile(props) {
 			setAuthError(true);
 		}
 	}, [loginError]);
+
+	//  redirect to forbidden page
+	useEffect(() => {
+		if (forbidden === true) {
+			browserHistory.push("/forbidden");
+		}
+	}, [forbidden]);
 
 	/*
 	function to configure group of pie chart
