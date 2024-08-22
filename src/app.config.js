@@ -27,8 +27,8 @@ config["geoServer"] = `${hostname}/geoserver/incore/wms`;
 config["plottingService"] = `${hostname}/plotting/api/samples`;
 
 config["testUserInfo"] = "incrtest";
-config["signUpURL"] = "https://identity.ncsa.illinois.edu/register/BSKC2UKQPU";
-config["resetPwURL"] = "https://identity.ncsa.illinois.edu/reset";
+config["signUpURL"] = "/auth/realms/In-core/protocol/openid-connect/registrations?client_id=react-auth&response_type=code&scope=openid";
+config["resetPwURL"] = "/auth/realms/In-core/login-actions/reset-credentials?client_id=react-auth";
 config["setGravatarURL"] = "https://en.gravatar.com/support/activating-your-account/";
 config["tosURL"] = `${hostname}/doc/incore/termsofservice.html`;
 config["privacyURL"] = "https://www.vpaa.uillinois.edu/resources/web_privacy";

@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+
+### Fixed
+- Outdated registration and reset password link [#220](https://github.com/IN-CORE/incore-ui/issues/220)
+
 ## [1.13.0] - 2024-08-21
 
 ### Added
