@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 - Outdated registration and reset password link [#220](https://github.com/IN-CORE/incore-ui/issues/220)
+- Typo in delete dfr3 mapping [#223](https://github.com/IN-CORE/incore-ui/issues/223)
 
 ## [1.13.0] - 2024-08-21
 
