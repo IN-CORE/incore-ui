@@ -293,7 +293,7 @@ export default function Profile(props) {
 								) : null}
 								<Link href={config.resetPwURL} className={classes.profileLink} target="_blank">
 									<LockOpenIcon fontSize="small" className={classes.profileLinkIcon}/>
-									Forgot password?
+									Reset Password
 								</Link>
 							</Box>
 							<Divider orientation="horizontal"/>
