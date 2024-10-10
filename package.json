@@ -48,7 +48,7 @@
     "react-router-redux": "~4.0.8",
     "redux": "~4.0.1",
     "redux-thunk": "~2.3.0",
-    "universal-cookie": "^4.0.2",
+    "universal-cookie": "^7.2.1",
     "vis": "4.21.0",
     "whatwg-fetch": "2.0.2"
   },
