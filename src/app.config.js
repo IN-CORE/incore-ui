@@ -12,7 +12,7 @@ config["incoreDocUrl"] = `${hostname}/doc/incore/introduction.html`;
 config["incoreTutorialUrl"] = `${hostname}/doc/incore/tutorials.html`;
 config["incoreFAQUrl"] = `${hostname}/doc/incore/faq.html`;
 config["swaggerUrl"] = `${hostname}/doc/api/`;
-config["webVersion"] = "1.13.0";
+config["webVersion"] = "1.13.1";
 config["spaceServiceBase"] = `${hostname}/space/api/`;
 config["spaceService"] = `${hostname}/space/api/spaces`;
 config["dfr3ServiceBase"] = `${hostname}/dfr3/api/`;
@@ -51,7 +51,8 @@ config["keycloakConfig"] = {
 	clientId: config["client_id"]
 };
 
-config["resetPwWarningMessage"] = "NOTE: Changes were recently made to IN-CORE's user management system. If you were " +
+config["resetPwWarningMessage"] =
+	"NOTE: Changes were recently made to IN-CORE's user management system. If you were " +
 	"registered as an IN-CORE user before 08/21/2024 and are experiencing login issues, you need to reset your " +
 	"password.";
 
