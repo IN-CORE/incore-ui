@@ -407,7 +407,7 @@ const DFR3Viewer = () => {
 	};
 
 	const deleteMappingConfirmed = () => {
-		deleteItemById("mapping", selectedMapping.id)(dispatch);
+		deleteItemById("mappings", selectedMapping.id)(dispatch);
 		setSelectedMapping("");
 		setConfirmOpen(false);
 	};

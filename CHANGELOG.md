@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.13.1] - 2024-10-24
+
+### Fixed
+- Outdated registration and reset password link [#220](https://github.com/IN-CORE/incore-ui/issues/220)
+- Typo in delete dfr3 mapping [#223](https://github.com/IN-CORE/incore-ui/issues/223)
+
 ## [1.13.0] - 2024-08-21
 
 ### Added
