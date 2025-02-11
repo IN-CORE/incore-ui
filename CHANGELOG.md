@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+
+### Changed
+- Remove the "change password" notification on the landing page [#236](https://github.com/IN-CORE/incore-ui/issues/236)
+
 ## [1.13.1] - 2024-10-24
 
 ### Fixed
