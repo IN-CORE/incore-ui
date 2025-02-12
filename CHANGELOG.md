@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+
+### Security
+
+- Bump send and browser-sync [#233](https://github.com/IN-CORE/incore-ui/pull/233)
+
 ## [1.13.1] - 2024-10-24
 
 ### Fixed
