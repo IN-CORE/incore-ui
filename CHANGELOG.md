@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+
+### Security
+
+- Bump cookie, universal-cookie and socket.io [#235](https://github.com/IN-CORE/incore-ui/pull/235)
+
 ## [1.13.1] - 2024-10-24
 
 ### Fixed
