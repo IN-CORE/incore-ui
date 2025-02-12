@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+
+- Remove the "change password" notification on the landing page [#236](https://github.com/IN-CORE/incore-ui/issues/236)
+
 ### Security
 
 - Bump webpack from 5.91.0 to 5.95.0 [#292](https://github.com/IN-CORE/incore-ui/pull/232)
