@@ -125,7 +125,7 @@
     "terser-webpack-plugin": "^5.3.3",
     "typescript": "^5.3.3",
     "wallaby-webpack": "^3.9.15",
-    "webpack": "^5.76.0",
+    "webpack": "^5.95.0",
     "webpack-dev-middleware": "^5.3.3",
     "webpack-hot-middleware": "^2.25.1"
   },
