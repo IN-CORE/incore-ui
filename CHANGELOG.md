@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Security
 
+- Bump cookie, universal-cookie and socket.io [#235](https://github.com/IN-CORE/incore-ui/pull/235)
 - Bump send and browser-sync [#233](https://github.com/IN-CORE/incore-ui/pull/233)
 - Bump webpack from 5.91.0 to 5.95.0 [#292](https://github.com/IN-CORE/incore-ui/pull/232)
 
