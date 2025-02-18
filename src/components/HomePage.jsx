@@ -360,7 +360,6 @@ const HomePage = () => {
 		// Call trackPageview to track page view
 		trackPageview(window.location.pathname);
 
-		dispatch(openWarningMessage(config.resetPwWarningMessage));
 	}, []);
 
 	return (
