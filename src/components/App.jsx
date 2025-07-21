@@ -21,7 +21,7 @@ import config from "../app.config";
 import ErrorMessage from "./children/ErrorMessage";
 import { determineUserGroup, getCurrUserInfo } from "../utils/common";
 import Gravatar from "react-gravatar";
-import { initializeGA } from './analytics';
+import { initializeGA } from "./analytics";
 
 initializeGA();
 
@@ -184,7 +184,7 @@ class App extends Component {
 	}
 
 	handleKeycloakLogout() {
-		const redirectUri = `${location.origin}/`
+		const redirectUri = `${location.origin}/`;
 		try {
 			this.props.logout();
 			keycloak.logout({
@@ -529,6 +529,11 @@ class App extends Component {
 						>
 							Web Tools
 							<ExpandMoreIcon fontSize="small" />
+						</Typography>
+						<Typography className={classes.toolBarItem}>
+							<Link href="/studio/" style={{ color: "#ffffff", textDecoration: "none" }}>
+								IN-CORE Studio
+							</Link>
 						</Typography>
 						{viewerMenu}
 						<Typography variant="body1" style={{ flex: 1 }} />
