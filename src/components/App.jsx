@@ -531,6 +531,11 @@ class App extends Component {
 							<ExpandMoreIcon fontSize="small" />
 						</Typography>
 						<Typography className={classes.toolBarItem}>
+							<Link href="/playbook" style={{ color: "#ffffff", textDecoration: "none" }}>
+								Community Resilience Planning
+							</Link>
+						</Typography>
+						<Typography className={classes.toolBarItem}>
 							<Link href="/studio/" style={{ color: "#ffffff", textDecoration: "none" }}>
 								IN-CORE Studio
 							</Link>
