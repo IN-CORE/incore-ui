@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.15.0] - 2025-07-31
+
+### Changed
+
+- Remove community playbook landing page [#243](https://github.com/IN-CORE/incore-ui/issues/243)
+
 ## [1.14.0] - 2025-02-12
 
 ### Changed

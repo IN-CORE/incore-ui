@@ -15,7 +15,6 @@ export default (
 	<Route path="/" component={App}>
 		<IndexRoute component={HomePage} />
 		<Route path="Login" component={Login} />
-		<Route path="playbook" component={Playbook} />
 		<Route path="Profile" component={Profile} />
 		<Route path="DataViewer" component={DataViewer} />
 		<Route path="DFR3Viewer" component={DFR3Viewer} />
