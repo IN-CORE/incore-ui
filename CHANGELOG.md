@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [1.15.1] - 2025-07-31
+
 ### Added
 
 - Community Playbook back on the UI [#248](https://github.com/IN-CORE/incore-ui/issues/248)
