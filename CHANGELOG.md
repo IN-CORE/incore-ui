@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
-## [Unreleased]
+## [1.16.0] - 2025-09-11
 
 ### Fixed
 - Community playbook link not working correctly
