@@ -15,7 +15,7 @@ on:
       - main
       - develop
       - 'release/*'
-      -
+
 env:
   MAIN_REPO: IN-CORE/incore-ui
 

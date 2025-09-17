@@ -10,11 +10,12 @@ import HazardViewer from "./containers/HazardViewer";
 import HomePage from "./components/HomePage";
 import Login from "./components/Login";
 import Profile from "./containers/Profile";
-import {Forbidden} from "./components/Forbidden";
+import { Forbidden } from "./components/Forbidden";
 export default (
 	<Route path="/" component={App}>
 		<IndexRoute component={HomePage} />
 		<Route path="Login" component={Login} />
+		<Route path="playbook" component={Playbook} />
 		<Route path="Profile" component={Profile} />
 		<Route path="DataViewer" component={DataViewer} />
 		<Route path="DFR3Viewer" component={DFR3Viewer} />
