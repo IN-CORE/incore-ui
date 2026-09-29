@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, Divider, List, ListItem, Table, TableBody, TableCell, TableRow, Tooltip } from "@mui/material";
-import withStyles from '@mui/styles/withStyles';
+import { withStyles } from "tss-react/mui";
 import config from "../../app.config";
 
 const styles = {
@@ -135,4 +135,4 @@ class NestedInfoTable extends React.Component {
 	}
 }
 
-export default withStyles(styles)(NestedInfoTable);
+export default withStyles(NestedInfoTable, styles);

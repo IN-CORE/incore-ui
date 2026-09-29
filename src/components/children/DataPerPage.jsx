@@ -1,6 +1,6 @@
 import * as React from "react";
 import {InputLabel, MenuItem, Select} from "@mui/material";
-import withStyles from '@mui/styles/withStyles';
+import { withStyles } from "tss-react/mui";
 
 
 const styles = {
@@ -43,5 +43,5 @@ class DataPerPage extends React.Component {
 	}
 }
 
-export default withStyles(styles)(DataPerPage);
+export default withStyles(DataPerPage, styles);
 

@@ -4,7 +4,7 @@ import browserHistory from "../history";
 import { CircularProgress } from "@mui/material";
 
 import { login } from "../actions";
-import keycloak from "../utils/keycloak";
+import keycloak, { initKeycloak } from "../utils/keycloak";
 import { trackPageview, trackEvent } from "./analytics";
 
 
@@ -25,7 +25,7 @@ const Login = ({ location }) => {
 	React.useEffect(() => {
 		const keycloakLogin = async () => {
 			try {
-				await keycloak.init({
+				await initKeycloak({
 					onLoad: "login-required"
 				});
 

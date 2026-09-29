@@ -31,7 +31,7 @@ import NetworkIcon from "@mui/icons-material/DeviceHub";
 import UnknownIcon from "@mui/icons-material/ContactSupport";
 import CloseIcon from "@mui/icons-material/Close";
 import { createTheme } from "@mui/material/styles";
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from "tss-react/mui";
 import Cookies from "universal-cookie";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 
@@ -62,7 +62,7 @@ const cookies = new Cookies();
 const redundantProp = ["deleted", "privileges", "spaces"];
 const theme = createTheme();
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles()(() => ({
 	root: {
 		padding: theme.spacing(4)
 	},
@@ -131,7 +131,7 @@ String.prototype.capitalize = function () {
 };
 
 const DataViewer = () => {
-	const classes = useStyles();
+	const { classes } = useStyles();
 
 	const [selectedDataType, setSelectedDataType] = React.useState("All");
 	const [selectedSpace, setSelectedSpace] = React.useState("All");

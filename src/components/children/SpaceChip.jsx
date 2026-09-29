@@ -1,9 +1,9 @@
 // space information
 import React from "react";
 import {Chip, Tooltip} from "@mui/material";
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from "tss-react/mui";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles()({
 	chip:{
 		fontSize:"x-small",
 		height:"18px"
@@ -17,7 +17,7 @@ function abbrevSpaceName(spaceName){
 }
 
 function SpaceChip(props) {
-	const classes = useStyles();
+	const { classes } = useStyles();
 
 	const {item, selectedItem} = props;
 	let spaceChip = (<></>);

@@ -1,6 +1,6 @@
 import * as React from "react";
 import {InputLabel, MenuItem, Select} from "@mui/material";
-import withStyles from '@mui/styles/withStyles';
+import { withStyles } from "tss-react/mui";
 import config from "../../app.config";
 
 
@@ -56,4 +56,4 @@ class Datatype extends React.Component {
 	}
 }
 
-export default withStyles(styles)(Datatype);
+export default withStyles(Datatype, styles);

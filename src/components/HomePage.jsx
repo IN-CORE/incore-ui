@@ -1,6 +1,6 @@
 import React from "react";
 import { Chip, Container, Grid, Link, Typography, Box, Collapse, IconButton } from "@mui/material";
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from "tss-react/mui";
 import Version from "./children/Version";
 import { getRepoVersion } from "../actions/index";
 import config from "../app.config";
@@ -19,7 +19,7 @@ import { openWarningMessage } from "../actions/index";
 import { WarningMessage } from "./children/WarningMessage";
 import { useDispatch } from "react-redux";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
 	root: {
 		position: "relative",
 		alignItems: "center",
@@ -350,7 +350,7 @@ const HomePage = () => {
 		setOpen(!open);
 	};
 
-	const classes = useStyles();
+	const { classes } = useStyles();
 	const dispatch = useDispatch();
 
 	React.useEffect(() => {
@@ -440,8 +440,8 @@ const HomePage = () => {
 						<Collapse in={open}>
 							<div className={classes.versionSection}>
 								{repos.map((repo) => (
-									<div className={classes.versionLine}>
-										<Typography variant="body1" className={classes.versioning}>
+									<div className={classes.versionLine} key={repo.repoName}>
+										<Typography variant="body1" component="div" className={classes.versioning}>
 											{repo.title}
 											{/*if version exists, display version; otherwise not displaying the chip*/}
 											{githubVersions && githubVersions[repo.repoName] ? (
@@ -455,6 +455,7 @@ const HomePage = () => {
 
 											{Object.keys(repo.options).map((option) => (
 												<Link
+													key={option}
 													color="primary"
 													underline="always"
 													className={classes.versioning}
@@ -501,7 +502,6 @@ const HomePage = () => {
 								<Button
 									variant="contained"
 									color="primary"
-									alignSelf="center"
 									className={classes.button}
 									startIcon={<HowToRegIcon />}
 									target={"_blank"}
@@ -529,7 +529,6 @@ const HomePage = () => {
 								<Button
 									variant="contained"
 									color="primary"
-									alignSelf="center"
 									target={"_blank"}
 									href={config.incoreDocUrl}
 									className={classes.button}
@@ -540,7 +539,6 @@ const HomePage = () => {
 								<Button
 									variant="contained"
 									color="primary"
-									alignSelf="center"
 									target={"_blank"}
 									href={config.incoreTutorialUrl}
 									className={classes.button}
