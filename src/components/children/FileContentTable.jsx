@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@material-ui/core";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
 
 class FileContentTable extends Component {
 	constructor(props) {

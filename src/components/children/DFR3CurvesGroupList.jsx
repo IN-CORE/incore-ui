@@ -1,8 +1,8 @@
 import * as React from "react";
-import {List, ListItem, ListItemIcon, ListItemText, Tooltip} from "@material-ui/core";
+import {List, ListItem, ListItemIcon, ListItemText, Tooltip} from "@mui/material";
 import { is3dCurve } from "../../utils/common";
-import ShowChartIcon from "@material-ui/icons/ShowChart";
-import ThreeDRotationIcon from "@material-ui/icons/ThreeDRotation";
+import ShowChartIcon from "@mui/icons-material/ShowChart";
+import ThreeDRotationIcon from "@mui/icons-material/ThreeDRotation";
 import SpaceChip from "./SpaceChip";
 
 const DFR3CurvesGroupList = (props) => {

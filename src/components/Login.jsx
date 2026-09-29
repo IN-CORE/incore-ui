@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import browserHistory from "../history";
-import { CircularProgress } from "@material-ui/core";
+import { CircularProgress } from "@mui/material";
 
 import { login } from "../actions";
 import keycloak from "../utils/keycloak";

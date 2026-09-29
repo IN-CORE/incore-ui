@@ -1,5 +1,5 @@
 import React from "react";
-import {Button, Dialog, DialogContent, DialogTitle, DialogContentText, DialogActions} from "@material-ui/core";
+import {Button, Dialog, DialogContent, DialogTitle, DialogContentText, DialogActions} from "@mui/material";
 
 function Confirmation(props) {
 

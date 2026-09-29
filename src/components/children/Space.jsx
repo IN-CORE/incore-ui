@@ -1,6 +1,6 @@
 import * as React from "react";
-import {InputLabel, MenuItem, Select} from "@material-ui/core";
-import {withStyles} from "@material-ui/core/styles/index";
+import {InputLabel, MenuItem, Select} from "@mui/material";
+import withStyles from '@mui/styles/withStyles';
 import {compareStrings} from "../../utils/common";
 
 

@@ -21,16 +21,16 @@ import {
 	TextField,
 	Tooltip,
 	Typography
-} from "@material-ui/core";
-import SearchIcon from "@material-ui/icons/Search";
-import TableIcon from "@material-ui/icons/TableChart";
-import TextIcon from "@material-ui/icons/Description";
-import MapIcon from "@material-ui/icons/Map";
-import MappingIcon from "@material-ui/icons/CompareArrows";
-import ChartIcon from "@material-ui/icons/ShowChart";
-import NetworkIcon from "@material-ui/icons/DeviceHub";
-import UnknownIcon from "@material-ui/icons/ContactSupport";
-import CloseIcon from "@material-ui/icons/Close";
+} from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
+import TableIcon from "@mui/icons-material/TableChart";
+import TextIcon from "@mui/icons-material/Description";
+import MapIcon from "@mui/icons-material/Map";
+import MappingIcon from "@mui/icons-material/CompareArrows";
+import ChartIcon from "@mui/icons-material/ShowChart";
+import NetworkIcon from "@mui/icons-material/DeviceHub";
+import UnknownIcon from "@mui/icons-material/ContactSupport";
+import CloseIcon from "@mui/icons-material/Close";
 import config from "../app.config";
 import { getHeader } from "../actions";
 import browserHistory from "../history";
@@ -39,7 +39,8 @@ import DataPerPage from "./children/DataPerPage";
 import Space from "./children/Space";
 import Version from "./children/Version";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import { createMuiTheme, withStyles } from "@material-ui/core/styles/index";
+import { createTheme } from '@mui/material/styles';
+import withStyles from '@mui/styles/withStyles';
 import Cookies from "universal-cookie";
 import Datatype from "./children/Datatype";
 import ErrorMessage from "./children/ErrorMessage";
@@ -51,7 +52,7 @@ import { trackPageview, trackEvent } from "./analytics";
 
 const cookies = new Cookies();
 const redundantProp = ["deleted", "privileges", "spaces"];
-const theme = createMuiTheme();
+const theme = createTheme();
 const styles = {
 	root: {
 		padding: theme.spacing(4)
@@ -199,6 +200,8 @@ class SemanticViewer extends Component {
 
 		// reset delete error
 		this.props.resetError();
+
+		this.redirectIfUnauthorized();
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -210,7 +213,21 @@ class SemanticViewer extends Component {
 		);
 	}
 
+
+	// Redirect from a lifecycle method rather than during render. React 18 may
+	// invoke render more than once before committing, so navigating inline
+	// fires the push repeatedly.
+	redirectIfUnauthorized() {
+		if (this.state.authError) {
+			browserHistory.push("/login?origin=SemanticViewer");
+		} else if (this.props.forbidden) {
+			browserHistory.push("/forbidden");
+		}
+	}
+
 	componentDidUpdate(prevProps, prevState) {
+		this.redirectIfUnauthorized();
+
 		if (this.props.deleteError && !prevState.messageOpen) {
 			this.setState({ messageOpen: true });
 		} else if (!this.props.deleteError && prevState.messageOpen) {
@@ -472,12 +489,7 @@ class SemanticViewer extends Component {
 				</ListItem>);
 		});
 
-		if (this.state.authError) {
-			browserHistory.push("/login?origin=SemanticViewer");
-			return null;
-		}
-		else if (this.props.forbidden) {
-			browserHistory.push("/forbidden");
+		if (this.state.authError || this.props.forbidden) {
 			return null;
 		}
 		else {
@@ -516,7 +528,7 @@ class SemanticViewer extends Component {
 									InputProps={{
 										endAdornment: (
 											<InputAdornment position="end">
-												<IconButton onClick={this.clickSearch}>
+												<IconButton onClick={this.clickSearch} size="large">
 													<SearchIcon fontSize="small" />
 												</IconButton>
 											</InputAdornment>
@@ -561,7 +573,7 @@ class SemanticViewer extends Component {
 										aria-label="Close"
 										onClick={() => this.closeSemanticWindow()}
 										className={classes.semanticWindowCloseButton}
-									>
+										size="large">
 										<CloseIcon fontSize="small" />
 									</IconButton>
 									<div className={classes.paperHeader}>
