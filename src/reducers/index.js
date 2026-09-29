@@ -1,5 +1,4 @@
 import { combineReducers } from "redux";
-import { routerReducer } from "react-router-redux";
 import datasets from "./datasets.ts";
 import hazards from "./hazards";
 import dfr3Curves from "./dfr3Curves.ts";
@@ -12,7 +11,6 @@ import user from "./user.ts";
 import warning from "./warning";
 
 const rootReducer = combineReducers({
-	routing: routerReducer,
 	data: datasets,
 	usage: usage,
 	hazard: hazards,

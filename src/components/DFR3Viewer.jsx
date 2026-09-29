@@ -1,8 +1,8 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { browserHistory } from "react-router";
+import browserHistory from "../history";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import LoadingOverlay from "react-loading-overlay";
+import LoadingOverlay from "react-loading-overlay-ts";
 
 import "whatwg-fetch";
 import {

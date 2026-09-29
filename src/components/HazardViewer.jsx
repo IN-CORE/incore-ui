@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { getHeader } from "../actions";
-import { browserHistory } from "react-router";
+import browserHistory from "../history";
 import {
 	Button,
 	Dialog,
@@ -33,7 +33,7 @@ import Cookies from "universal-cookie";
 import ErrorMessage from "./children/ErrorMessage";
 import SpaceChip from "./children/SpaceChip";
 import Confirmation from "./children/Confirmation";
-import LoadingOverlay from "react-loading-overlay";
+import LoadingOverlay from "react-loading-overlay-ts";
 import { trackPageview, trackEvent } from "./analytics";
 
 const cookies = new Cookies();

@@ -11,6 +11,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 
 - Upgrade Node.js to 24; minimum supported version is now Node 20 [#258](https://github.com/IN-CORE/incore-ui/issues/258)
+- Upgrade React to 17 and migrate react-router 3 to 5 [#258](https://github.com/IN-CORE/incore-ui/issues/258)
+
+### Removed
+
+- `react-router-redux`, whose `routing` state was never read [#258](https://github.com/IN-CORE/incore-ui/issues/258)
 
 
 ## [1.16.0] - 2025-09-11
