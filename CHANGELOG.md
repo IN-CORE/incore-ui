@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 - Keycloak could be initialized twice, which threw under StrictMode [#258](https://github.com/IN-CORE/incore-ui/issues/258)
+- The spaces dropdown sorted its props array in place, mutating Redux state during render [#258](https://github.com/IN-CORE/incore-ui/issues/258)
 - Missing list keys, an invalid `alignSelf` prop and a `Chip` nested in a `<p>` on the home page [#258](https://github.com/IN-CORE/incore-ui/issues/258)
 
 ### Removed
