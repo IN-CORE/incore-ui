@@ -40,7 +40,7 @@ import Space from "./children/Space";
 import Version from "./children/Version";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { createTheme } from '@mui/material/styles';
-import withStyles from '@mui/styles/withStyles';
+import { withStyles } from "tss-react/mui";
 import Cookies from "universal-cookie";
 import Datatype from "./children/Datatype";
 import ErrorMessage from "./children/ErrorMessage";
@@ -165,7 +165,7 @@ class SemanticViewer extends Component {
 		this.getFileExt = this.getFileExt.bind(this);
 	}
 
-	componentWillMount() {
+	checkAuthorization() {
 		// check if logged in
 		let authorization = cookies.get("Authorization");
 
@@ -201,16 +201,8 @@ class SemanticViewer extends Component {
 		// reset delete error
 		this.props.resetError();
 
+		this.checkAuthorization();
 		this.redirectIfUnauthorized();
-	}
-
-	componentWillReceiveProps(nextProps) {
-		this.setState(
-			{
-				loading: nextProps.loading,
-				authError: nextProps.authError,
-			}
-		);
 	}
 
 
@@ -226,6 +218,16 @@ class SemanticViewer extends Component {
 	}
 
 	componentDidUpdate(prevProps, prevState) {
+		// Was componentWillReceiveProps, which StrictMode flags. The guard is
+		// what the old lifecycle got for free: it ran before render, whereas
+		// setState here would loop without it.
+		if (prevProps.authError !== this.props.authError || prevProps.loading !== this.props.loading) {
+			this.setState({
+				loading: this.props.loading,
+				authError: this.props.authError
+			});
+		}
+
 		this.redirectIfUnauthorized();
 
 		if (this.props.deleteError && !prevState.messageOpen) {
@@ -653,4 +655,4 @@ class SemanticViewer extends Component {
 }
 
 
-export default withStyles(styles)(SemanticViewer);
+export default withStyles(SemanticViewer, styles);

@@ -12,8 +12,11 @@ import {
 	Toolbar,
 	Typography
 } from "@mui/material";
-import { createTheme, StyledEngineProvider, ThemeProvider } from "@mui/material/styles";
-import withStyles from "@mui/styles/withStyles";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { CacheProvider } from "@emotion/react";
+import createCache from "@emotion/cache";
+import { TssCacheProvider } from "tss-react";
+import { withStyles } from "tss-react/mui";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import browserHistory from "../history";
@@ -28,6 +31,13 @@ import { initializeGA } from "./analytics";
 initializeGA();
 
 global.__base = `${__dirname}/`;
+
+// tss-react and MUI now both run on emotion, so stylesheet order decides which
+// wins. Give them separate caches: MUI's is prepended so its rules come first,
+// and tss's is appended so component styles override them -- the equivalent of
+// what <StyledEngineProvider injectFirst> did back when these were JSS.
+const muiCache = createCache({ key: "mui", prepend: true });
+const tssCache = createCache({ key: "tss" });
 
 const theme = createTheme({
 	palette: {
@@ -489,7 +499,8 @@ class App extends Component {
 		);
 
 		return (
-			<StyledEngineProvider injectFirst>
+			<CacheProvider value={muiCache}>
+				<TssCacheProvider value={tssCache}>
 				<ThemeProvider theme={theme}>
 					{/*TODO add auto collapse to hamburger once screen is small*/}
 					<AppBar position="static" className={classes.appBar}>
@@ -557,9 +568,10 @@ class App extends Component {
 						<Routes />
 					</div>
 				</ThemeProvider>
-			</StyledEngineProvider>
+				</TssCacheProvider>
+			</CacheProvider>
 		);
 	}
 }
 
-export default withStyles(styles)(App);
+export default withStyles(App, styles);

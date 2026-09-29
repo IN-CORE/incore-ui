@@ -1,6 +1,6 @@
 import * as React from "react";
 import {InputLabel, MenuItem, Select} from "@mui/material";
-import withStyles from '@mui/styles/withStyles';
+import { withStyles } from "tss-react/mui";
 import {compareStrings} from "../../utils/common";
 
 
@@ -55,4 +55,4 @@ class Space extends React.Component {
 	}
 }
 
-export default withStyles(styles)(Space);
+export default withStyles(Space, styles);

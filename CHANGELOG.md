@@ -14,11 +14,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Upgrade React to 17 and migrate react-router 3 to 5 [#258](https://github.com/IN-CORE/incore-ui/issues/258)
 - Upgrade Material-UI v4 to MUI v5 and React 17 to 18 [#258](https://github.com/IN-CORE/incore-ui/issues/258)
 - Redirect from effects and lifecycle methods instead of during render [#258](https://github.com/IN-CORE/incore-ui/issues/258)
+- Replace the JSS styling engine with tss-react and enable React StrictMode [#258](https://github.com/IN-CORE/incore-ui/issues/258)
+
+### Fixed
+
+- Keycloak could be initialized twice, which threw under StrictMode [#258](https://github.com/IN-CORE/incore-ui/issues/258)
+- Missing list keys, an invalid `alignSelf` prop and a `Chip` nested in a `<p>` on the home page [#258](https://github.com/IN-CORE/incore-ui/issues/258)
 
 ### Removed
 
 - `react-router-redux`, whose `routing` state was never read [#258](https://github.com/IN-CORE/incore-ui/issues/258)
 - `src/styles/customTheme.js`, an unreferenced Material-UI v0.x theme [#258](https://github.com/IN-CORE/incore-ui/issues/258)
+- `@mui/styles`, the deprecated JSS engine [#258](https://github.com/IN-CORE/incore-ui/issues/258)
 
 
 ## [1.16.0] - 2025-09-11
