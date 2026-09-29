@@ -3,8 +3,8 @@
   "version": "1.16.0",
   "description": "The Interdependent Networked Community Resilience Modeling Environment (IN-CORE) has the capability of computing resiliency measures at the user-desired community level. The methodologies and algorithms have been developed by different research groups within the Center of Excellence.",
   "engines": {
-    "npm": ">=3.10",
-    "node": ">=6.9.5"
+    "npm": ">=10",
+    "node": ">=20"
   },
   "license": "MPL-2.0",
   "scripts": {
