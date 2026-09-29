@@ -1,5 +1,5 @@
 import React from "react";
-import { Grid, Link, Typography } from "@material-ui/core";
+import { Grid, Link, Typography } from "@mui/material";
 import config from "../app.config";
 
 export const Forbidden = () => {

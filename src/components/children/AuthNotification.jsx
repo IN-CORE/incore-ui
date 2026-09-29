@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Dialog} from "@material-ui/core";
+import {Dialog} from "@mui/material";
 
 class AuthNotification extends Component {
 

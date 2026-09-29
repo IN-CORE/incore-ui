@@ -2,7 +2,7 @@
 ///* eslint-disable import/default */
 
 import React from "react";
-import { render } from "react-dom";
+import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
 import { Router } from "react-router-dom";
 
@@ -19,13 +19,14 @@ const startApp = async () => {
 
 	const store = configureStore();
 
-	render(
+	const root = createRoot(document.getElementById("app"));
+
+	root.render(
 		<Provider store={store}>
 			<Router history={browserHistory}>
 				<App />
 			</Router>
-		</Provider>,
-		document.getElementById("app")
+		</Provider>
 	);
 };
 

@@ -1,7 +1,7 @@
 // space information
 import React from "react";
-import {Chip, Tooltip} from "@material-ui/core";
-import {makeStyles} from "@material-ui/core/styles";
+import {Chip, Tooltip} from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
 
 const useStyles = makeStyles({
 	chip:{

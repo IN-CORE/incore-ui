@@ -1,7 +1,7 @@
 import * as React from "react";
-import {Button, ButtonGroup} from "@material-ui/core";
-import PreviousIcon from "@material-ui/icons/ChevronLeft";
-import NextIcon from "@material-ui/icons/ChevronRight";
+import {Button, ButtonGroup} from "@mui/material";
+import PreviousIcon from "@mui/icons-material/ChevronLeft";
+import NextIcon from "@mui/icons-material/ChevronRight";
 
 
 class Pagination extends React.Component {
