@@ -33,8 +33,11 @@ class Space extends React.Component {
 
 			return (
 				<div>
-					<InputLabel>Spaces</InputLabel>
-					<Select value={this.props.selectedSpace} onChange={this.props.handleSpaceSelection}
+					<InputLabel variant="standard">Spaces</InputLabel>
+					<Select
+						variant="standard"
+						value={this.props.selectedSpace}
+						onChange={this.props.handleSpaceSelection}
 						className={classes.select}>
 						<MenuItem key="All" value="All" className={classes.denseStyle}>All</MenuItem>
 						{sorted_spaces.map((space, index) =>
@@ -42,7 +45,8 @@ class Space extends React.Component {
 									  key={space.metadata.name} className={classes.denseStyle}>
 								{space.metadata.name}</MenuItem>))}
 					</Select>
-				</div>);
+				</div>
+			);
 		}
 		else {
 			return null;

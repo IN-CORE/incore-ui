@@ -560,12 +560,12 @@ class HazardViewer extends Component {
 									<Typography variant="h6">Filters</Typography>
 									{/* select hazard type */}
 									<div className={classes.selectDiv}>
-										<InputLabel>Hazard Type</InputLabel>
+										<InputLabel variant="standard">Hazard Type</InputLabel>
 										<Select
+											variant="standard"
 											value={this.state.selectedHazardType}
 											onChange={this.changeHazardType}
-											className={classes.select}
-										>
+											className={classes.select}>
 											<MenuItem
 												value="earthquakes"
 												key="earthquakes"

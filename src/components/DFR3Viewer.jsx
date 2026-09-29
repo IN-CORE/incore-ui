@@ -623,12 +623,12 @@ const DFR3Viewer = () => {
 								<Typography variant="h6">Filters</Typography>
 								{/* select dfr3 curve type */}
 								<div className={classes.selectDiv}>
-									<InputLabel>Curve Type</InputLabel>
+									<InputLabel variant="standard">Curve Type</InputLabel>
 									<Select
+										variant="standard"
 										value={selectedDFR3Type}
 										onChange={handleDFR3TypeChange}
-										className={classes.select}
-									>
+										className={classes.select}>
 										<MenuItem value="fragilities" key="fragilities" className={classes.denseStyle}>
 											Fragility
 										</MenuItem>
@@ -646,12 +646,12 @@ const DFR3Viewer = () => {
 								</div>
 								{/* Hazard Type */}
 								<div className={classes.selectDiv}>
-									<InputLabel>Hazard Type</InputLabel>
+									<InputLabel variant="standard">Hazard Type</InputLabel>
 									<Select
+										variant="standard"
 										value={selectedHazard}
 										onChange={handleHazardTypeChange}
-										className={classes.select}
-									>
+										className={classes.select}>
 										<MenuItem value="All" className={classes.denseStyle}>
 											All
 										</MenuItem>
@@ -680,12 +680,12 @@ const DFR3Viewer = () => {
 								</div>
 								{/* Inventory Type */}
 								<div className={classes.selectDiv}>
-									<InputLabel>Inventory Type</InputLabel>
+									<InputLabel variant="standard">Inventory Type</InputLabel>
 									<Select
+										variant="standard"
 										value={selectedInventory}
 										onChange={handleInventoryTypeChange}
-										className={classes.select}
-									>
+										className={classes.select}>
 										<MenuItem value="All" className={classes.denseStyle}>
 											All
 										</MenuItem>

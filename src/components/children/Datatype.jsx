@@ -34,8 +34,11 @@ class Datatype extends React.Component {
 		if (this.props.datatypes.length > 0) {
 			return (
 				<div>
-					<InputLabel>Semantic Dataset Type</InputLabel>
-					<Select value={this.props.selectedDataType} onChange={this.props.handleDatatypeSelection}
+					<InputLabel variant="standard">Semantic Dataset Type</InputLabel>
+					<Select
+						variant="standard"
+						value={this.props.selectedDataType}
+						onChange={this.props.handleDatatypeSelection}
 						className={classes.select}>
 						<MenuItem key="All" value="All" className={classes.denseStyle}>All</MenuItem>
 						{sortedDatatypes.map((datatype, index) =>
@@ -43,7 +46,8 @@ class Datatype extends React.Component {
 									  key={datatype} className={classes.denseStyle}>
 								{datatype}</MenuItem>))}
 					</Select>
-				</div>);
+				</div>
+			);
 		}
 		else {
 			return null;
