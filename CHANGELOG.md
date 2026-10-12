@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## [Unreleased]
+
+### Added
+- CONTRIBUTING.md with local development setup
+
 ## [1.16.0] - 2025-09-11
 
 ### Fixed
