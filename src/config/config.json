@@ -1,3 +1,4 @@
 {
-	"GA_KEY": "Test-Google-Analytics-Key-Replace-Me"
+	"GA_KEY": "Test-Google-Analytics-Key-Replace-Me",
+	"COPILOT_ENABLED": false
 }
