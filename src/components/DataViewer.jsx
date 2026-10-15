@@ -1,4 +1,5 @@
 import React from "react";
+import { unstable_batchedUpdates } from "react-dom";
 import { useDispatch, useSelector } from "react-redux";
 import LoadingOverlay from "react-loading-overlay";
 import { browserHistory } from "react-router";
@@ -56,6 +57,8 @@ import {
 	resetError
 } from "../actions";
 import { trackPageview, trackEvent } from "./analytics";
+import { checkPage, registerController, spaceNames } from "../copilot/bridge";
+import { summarize } from "../copilot/summarize";
 
 const cookies = new Cookies();
 const redundantProp = ["deleted", "privileges", "spaces"];
@@ -279,6 +282,86 @@ const DataViewer = () => {
 			fetchDatasets(selectedDataType, selectedSpace, dataPerPage, offset)(dispatch);
 		}
 	}, [registeredSearchText]);
+
+	// Let the copilot drive this viewer. Re-registered on every render so the
+	// functions always see the current state. Tools run outside React event handlers,
+	// where React 16 does not batch updates, hence unstable_batchedUpdates.
+	React.useEffect(() =>
+		registerController("DataViewer", {
+			getState: () => ({
+				data_type: selectedDataType,
+				space: selectedSpace,
+				keyword: registeredSearchText,
+				page: pageNumber,
+				page_size: dataPerPage,
+				loading,
+				items: (datasets || []).map((dataset) => summarize(dataset)),
+				selected: selectedDataset ? summarize(selectedDataset, { detail: true }) : null,
+				// First lines of the file opened with view_dataset_file
+				file_preview: fileData ? fileData.slice(0, 30) : null,
+				preview_open: preview,
+				available_spaces: spaceNames(spaces),
+				available_data_types: (datatypes || []).map((datatype) => datatype.dataType).sort()
+			}),
+			// Search ignores the type and space filters, as the search box in the viewer does.
+			show: ({ keyword, dataType, space }) =>
+				unstable_batchedUpdates(() => {
+					resetSelectionParameters();
+					if (keyword) {
+						setSearchText(keyword);
+						setRegisteredSearchText(keyword);
+						setSearching(true);
+						setSelectedDataType("All");
+						setSelectedSpace("All");
+					} else {
+						setSelectedDataType(dataType || "All");
+						setSelectedSpace(space || "All");
+						// The type/space effect only refetches when one of them changes
+						fetchDatasets(dataType || "All", space || "All", dataPerPage, 0)(dispatch);
+					}
+				}),
+			select: (datasetId) => {
+				if (!(datasets || []).find((dataset) => dataset.id === datasetId)) {
+					throw new Error(`Dataset ${datasetId} is not in the list on screen.`);
+				}
+				unstable_batchedUpdates(() => onClickDataset(datasetId));
+			},
+			page: (direction) => {
+				checkPage(direction, pageNumber, (datasets || []).length, dataPerPage);
+				unstable_batchedUpdates(() => pageChange(direction));
+			},
+			setPageSize: (size) => unstable_batchedUpdates(() => changeDataPerPage({ target: { value: size } })),
+			// Shows one of the selected dataset's files in the viewer
+			viewFile: (fileId) => {
+				const file = selectedDataset && (selectedDataset.fileDescriptors || []).find((fd) => fd.id === fileId);
+				if (!file) {
+					throw new Error(`File ${fileId} is not part of the selected dataset.`);
+				}
+				return onClickFileDescriptor(selectedDataset.id, file.id, file.filename);
+			},
+			// Map, table or network preview of the selected dataset
+			openPreview: () => {
+				if (!selectedDataset) {
+					throw new Error("Select a dataset first.");
+				}
+				handlePreviewOpen();
+			},
+			closePreview: handlePreviewClose,
+			closeDetails: handleCloseMetadata,
+			download: () => {
+				if (!selectedDataset) {
+					throw new Error("Select a dataset first.");
+				}
+				return downloadDataset();
+			},
+			exportJson: () => {
+				if (!selectedDataset) {
+					throw new Error("Select a dataset first.");
+				}
+				return exportJson();
+			}
+		})
+	);
 
 	const onClickFileDescriptor = async (selected_dataset_id, file_descriptor_id, file_name) => {
 		const url = `${config.dataServiceBase}files/${file_descriptor_id}/blob`;

@@ -1,4 +1,5 @@
 import React from "react";
+import { unstable_batchedUpdates } from "react-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { browserHistory } from "react-router";
 import { CopyToClipboard } from "react-copy-to-clipboard";
@@ -41,6 +42,8 @@ import CustomHighChart from "./children/CustomHighChart";
 import NestedInfoTable from "./children/NestedInfoTable";
 import ThreeDimensionalPlot from "./children/ThreeDimensionalPlot";
 import { trackPageview, trackEvent } from "./analytics";
+import { checkPage, registerController, spaceNames } from "../copilot/bridge";
+import { summarize } from "../copilot/summarize";
 
 import {
 	fetchDFR3Curves,
@@ -535,6 +538,107 @@ const DFR3Viewer = () => {
 	const handleCloseMetadata = () => {
 		setMetadataClosed(true);
 	};
+
+	// Let the copilot drive this viewer. Re-registered on every render so the
+	// functions always see the current state. Tools run outside React event handlers,
+	// where React 16 does not batch updates, hence unstable_batchedUpdates.
+	React.useEffect(() => {
+		const onCurvesTab = tabIndex === 0;
+		const requireSelected = (kind) => {
+			if (kind === "mapping" ? !selectedMapping : !selectedDFR3Curve) {
+				throw new Error(`Select a ${kind} first.`);
+			}
+		};
+		return registerController("DFR3Viewer", {
+			getState: () => ({
+				dfr3_type: selectedDFR3Type,
+				hazard_type: selectedHazard,
+				inventory_type: selectedInventory,
+				space: selectedSpace,
+				keyword: registeredSearchText,
+				tab: onCurvesTab ? "curves" : "mappings",
+				page: onCurvesTab ? pageNumber : pageNumberMappings,
+				page_size: dataPerPage,
+				loading: curvesLoading || mappingsLoading,
+				// The list on the open tab; the other tab's list is only counted
+				items: (onCurvesTab ? dfr3Curves : dfr3Mappings).map((item) => summarize(item)),
+				[onCurvesTab ? "mappings_count" : "curves_count"]: (onCurvesTab ? dfr3Mappings : dfr3Curves).length,
+				selected_curve: selectedDFR3Curve ? summarize(selectedDFR3Curve, { detail: true }) : null,
+				selected_mapping: selectedMapping ? summarize(selectedMapping, { detail: true }) : null,
+				preview_open: preview,
+				available_spaces: spaceNames(spaces)
+			}),
+			// Search ignores the hazard, inventory and space filters, as the search box does.
+			show: ({ dfr3Type, hazardType, inventoryType, space, keyword }) =>
+				unstable_batchedUpdates(() => {
+					const type = dfr3Type || selectedDFR3Type;
+					resetCommonParameters();
+					setSelectedDFR3Type(type);
+					if (keyword) {
+						setSearchText(keyword);
+						setRegisteredSearchText(keyword);
+						setSearching(true);
+						setSelectedInventory("All");
+						setSelectedSpace("All");
+						setSelectedHazard("All");
+					} else {
+						const filters = [space || "All", inventoryType || "All", hazardType || "All", dataPerPage];
+						setSelectedHazard(filters[2]);
+						setSelectedInventory(filters[1]);
+						setSelectedSpace(filters[0]);
+						// The filter effect only refetches when a filter changes
+						fetchDFR3Curves(type, ...filters, 0)(dispatch);
+						fetchDFR3Mappings(type, ...filters, 0)(dispatch);
+					}
+				}),
+			setTab: (kind) => setTabIndex(kind === "mappings" ? 1 : 0),
+			select: async (kind, id) => {
+				if (kind === "mapping") {
+					const mapping = dfr3Mappings.find((item) => item.id === id);
+					if (!mapping) {
+						throw new Error(`Mapping ${id} is not in the list on screen.`);
+					}
+					unstable_batchedUpdates(() => {
+						setTabIndex(1);
+						onClickDFR3Mapping(mapping);
+					});
+				} else {
+					const curve = dfr3Curves.find((item) => item.id === id);
+					if (!curve) {
+						throw new Error(`Curve ${id} is not in the list on screen.`);
+					}
+					setTabIndex(0);
+					// Fetches the curve's plot before showing it
+					await onClickDFR3Curve(curve);
+				}
+			},
+			page: (direction, kind) => {
+				const mapping = kind === "mappings";
+				checkPage(
+					direction,
+					mapping ? pageNumberMappings : pageNumber,
+					(mapping ? dfr3Mappings : dfr3Curves).length,
+					dataPerPage
+				);
+				unstable_batchedUpdates(() => {
+					setTabIndex(mapping ? 1 : 0);
+					pageChange(mapping ? `${direction}Mapping` : direction, mapping);
+				});
+			},
+			setPageSize: (size) => unstable_batchedUpdates(() => changeDataPerPage({ target: { value: size } })),
+			// Plot of the selected fragility curve
+			openPreview: () => {
+				requireSelected("curve");
+				handlePreviewOpen();
+			},
+			closePreview: handlePreviewClose,
+			closeDetails: handleCloseMetadata,
+			exportJson: (kind) => {
+				requireSelected(kind === "mapping" ? "mapping" : "curve");
+				kind === "mapping" ? exportMappingJson() : exportCurveJson();
+			}
+		});
+	});
 
 	// curve list
 	const curveList = [...dfr3Curves];

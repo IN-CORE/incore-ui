@@ -13,6 +13,11 @@ config["incoreTutorialUrl"] = `${hostname}/doc/incore/tutorials.html`;
 config["incoreFAQUrl"] = `${hostname}/doc/incore/faq.html`;
 config["swaggerUrl"] = `${hostname}/doc/api/`;
 config["webVersion"] = "1.16.0";
+// Copilot chat panel (proof of concept). Only the dev server defines INCORE_COPILOT.
+config["copilotEnabled"] = process.env.INCORE_COPILOT === "true";
+// incore-mcp endpoint for the copilot's read-only IN-CORE tools. Same host as the app
+// when deployed; the dev server can point it at a local incore-mcp with INCORE_MCP_URL.
+config["copilotMcpUrl"] = process.env.INCORE_MCP_URL || `${hostname}/mcp`;
 config["spaceServiceBase"] = `${hostname}/space/api/`;
 config["spaceService"] = `${hostname}/space/api/spaces`;
 config["dfr3ServiceBase"] = `${hostname}/dfr3/api/`;

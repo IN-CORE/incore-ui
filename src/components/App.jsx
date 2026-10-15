@@ -19,6 +19,7 @@ import { browserHistory } from "react-router";
 import keycloak from "../utils/keycloak";
 import config from "../app.config";
 import ErrorMessage from "./children/ErrorMessage";
+import CopilotPanel from "./CopilotPanel";
 import { determineUserGroup, getCurrUserInfo } from "../utils/common";
 import Gravatar from "react-gravatar";
 import { initializeGA } from "./analytics";
@@ -28,6 +29,9 @@ initializeGA();
 global.__base = `${__dirname}/`;
 
 const theme = createMuiTheme({
+	// Dialogs normally trap focus, which would stop the user typing in the copilot
+	// panel while a preview the assistant opened is showing.
+	props: config.copilotEnabled ? { MuiDialog: { disableEnforceFocus: true } } : {},
 	palette: {
 		primary: {
 			main: "#1B2D45"
@@ -555,7 +559,9 @@ class App extends Component {
 						closeErrorMessage={this.closeErrorMessage}
 					/>
 				) : null}
-				<div className={classes.appBar}>{this.props.children}</div>
+				<div className={classes.appBar}>
+					{config.copilotEnabled ? <CopilotPanel>{this.props.children}</CopilotPanel> : this.props.children}
+				</div>
 			</MuiThemeProvider>
 		);
 	}

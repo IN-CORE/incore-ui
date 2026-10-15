@@ -32,6 +32,7 @@ import {browserHistory} from "react-router";
 
 import {CopyToClipboard} from "react-copy-to-clipboard";
 import { trackPageview, trackEvent } from "./analytics";
+import { registerController } from "../copilot/bridge";
 
 const cookies = new Cookies();
 
@@ -165,6 +166,19 @@ export default function Profile(props) {
 			setDfr3EntityPie(dfr3PieChartConfig["entity"]);
 		}
 	}, [usage, allocations]);
+
+	// Let the copilot read the usage shown on this page
+	useEffect(() =>
+		registerController("Profile", {
+			getState: () => ({
+				loading: !usage || Object.keys(usage).length === 0,
+				user: userInfo["preferred_username"],
+				group,
+				usage,
+				allocations
+			})
+		})
+	);
 
 	// for any auth error
 	useEffect(() => {

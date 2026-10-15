@@ -35,6 +35,8 @@ import SpaceChip from "./children/SpaceChip";
 import Confirmation from "./children/Confirmation";
 import LoadingOverlay from "react-loading-overlay";
 import { trackPageview, trackEvent } from "./analytics";
+import { checkPage, registerController, spaceNames } from "../copilot/bridge";
+import { summarize } from "../copilot/summarize";
 
 const cookies = new Cookies();
 
@@ -184,6 +186,66 @@ class HazardViewer extends Component {
 
 		// reset delete error
 		this.props.resetError();
+
+		// Let the copilot drive this viewer through the same handlers the controls use
+		this.unregisterCopilot = registerController("HazardViewer", {
+			getState: () => ({
+				hazard_type: this.state.selectedHazardType,
+				space: this.state.selectedSpace,
+				keyword: this.state.registeredSearchText,
+				page: this.state.pageNumber,
+				page_size: this.state.dataPerPage,
+				loading: this.props.loading,
+				items: (this.props.hazards || []).map((hazard) => summarize(hazard)),
+				selected: this.state.selectedHazard ? summarize(this.state.selectedHazard, { detail: true }) : null,
+				preview_open: this.state.preview,
+				available_spaces: spaceNames(this.props.spaces)
+			}),
+			// Search ignores the space filter, as the search box in the viewer does.
+			show: ({ hazardType, keyword, space }) => {
+				const common = { selectedHazardType: hazardType, pageNumber: 1, offset: 0, selectedHazard: "" };
+				if (keyword) {
+					this.setState({ ...common, searchText: keyword }, this.clickSearch);
+				} else {
+					this.setState(
+						{
+							...common,
+							selectedSpace: space || "All",
+							searchText: "",
+							registeredSearchText: "",
+							searching: false
+						},
+						() => this.props.getAllHazards(hazardType, this.state.selectedSpace, this.state.dataPerPage, 0)
+					);
+				}
+			},
+			select: (hazardId) => {
+				if (!(this.props.hazards || []).find((hazard) => hazard.id === hazardId)) {
+					throw new Error(`Hazard ${hazardId} is not in the list on screen.`);
+				}
+				this.onClickHazard(hazardId);
+			},
+			page: (direction) => {
+				checkPage(direction, this.state.pageNumber, (this.props.hazards || []).length, this.state.dataPerPage);
+				direction === "next" ? this.next() : this.previous();
+			},
+			setPageSize: (size) => this.changeDataPerPage({ target: { value: size } }),
+			// Map preview of one of the selected hazard's datasets
+			preview: (datasetId) => {
+				if (!this.state.selectedHazard) {
+					throw new Error("Select a hazard first.");
+				}
+				return this.preview(datasetId);
+			},
+			closePreview: this.handlePreviewerClose,
+			closeDetails: this.closeMetadata,
+			exportJson: () => {
+				if (!this.state.selectedHazard) {
+					throw new Error("Select a hazard first.");
+				}
+				this.exportJson();
+			}
+		});
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -200,6 +262,10 @@ class HazardViewer extends Component {
 		} else if (!this.props.deleteError && prevState.messageOpen) {
 			this.setState({ messageOpen: false });
 		}
+	}
+
+	componentWillUnmount() {
+		this.unregisterCopilot();
 	}
 
 	changeHazardType(event) {

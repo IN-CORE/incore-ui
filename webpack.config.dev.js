@@ -26,6 +26,9 @@ export default {
 			'process.env': {
 				NODE_ENV: JSON.stringify('development'),
 				INCORE_REMOTE_HOSTNAME: JSON.stringify(process.env.INCORE_REMOTE_HOSTNAME),
+				// Dev-only copilot proof of concept; needs LUMEN_API_KEY on the dev server.
+				INCORE_COPILOT: JSON.stringify(process.env.INCORE_COPILOT),
+				INCORE_MCP_URL: JSON.stringify(process.env.INCORE_MCP_URL),
 			},
 			'__DEV__': true
 		}),
