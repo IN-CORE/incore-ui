@@ -26,9 +26,11 @@ export default {
 			'process.env': {
 				NODE_ENV: JSON.stringify('development'),
 				INCORE_REMOTE_HOSTNAME: JSON.stringify(process.env.INCORE_REMOTE_HOSTNAME),
-				// Dev-only copilot proof of concept; needs LUMEN_API_KEY on the dev server.
+				// Dev-only copilot proof of concept. Model requests and IN-CORE tools both go
+				// through incore-mcp; the URLs override its default <host>/mcp location.
 				INCORE_COPILOT: JSON.stringify(process.env.INCORE_COPILOT),
 				INCORE_MCP_URL: JSON.stringify(process.env.INCORE_MCP_URL),
+				INCORE_COPILOT_CHAT_URL: JSON.stringify(process.env.INCORE_COPILOT_CHAT_URL),
 			},
 			'__DEV__': true
 		}),

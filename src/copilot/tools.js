@@ -1,7 +1,8 @@
 // Tools the copilot can call. Each one drives the real viewer through its registered
 // controller (see bridge.js), so the user watches the page change, and returns a short
 // JSON summary for the model. Definitions use the OpenAI function-calling format, which
-// is what the Lumen gateway speaks; webmcp.js registers the same tools with WebMCP.
+// incore-mcp's chat relay passes to the LLM gateway; webmcp.js registers the same tools
+// with WebMCP.
 //
 // Everything a user can do in the viewers is covered except deleting.
 

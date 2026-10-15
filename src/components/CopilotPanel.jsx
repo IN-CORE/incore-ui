@@ -11,32 +11,44 @@ import { runAgent } from "../copilot/agent";
 import { registerWebMcpTools } from "../copilot/webmcp";
 
 const PANEL_WIDTH = 380;
+const PANEL_HEIGHT = 560;
+// Gap from the window edges for the default position.
+const MARGIN = 24;
+// How much of the panel must stay on screen, so the header can always be grabbed.
+const KEEP_VISIBLE = 48;
+const POSITION_KEY = "incore-copilot-position";
 
 const useStyles = makeStyles((theme) => ({
-	// Leaves room for the panel, which is fixed to the window edge.
-	contentWithPanel: {
-		marginRight: PANEL_WIDTH
-	},
+	// A floating window over the page, so the page keeps its full width.
 	panel: {
-		width: PANEL_WIDTH,
 		position: "fixed",
-		top: 0,
-		bottom: 0,
-		right: 0,
+		width: PANEL_WIDTH,
+		height: PANEL_HEIGHT,
+		maxWidth: `calc(100vw - ${MARGIN}px)`,
+		maxHeight: `calc(100vh - ${MARGIN}px)`,
+		minWidth: 280,
+		minHeight: 240,
+		// The browser's resize handle in the bottom-right corner.
+		resize: "both",
+		overflow: "hidden",
 		// Above the app bar and the viewers' preview dialogs, so the chat stays usable
 		// while the assistant has a map or plot open.
 		zIndex: theme.zIndex.modal + 1,
 		display: "flex",
 		flexDirection: "column",
-		borderLeft: "1px solid #dddddd",
-		borderRadius: 0
+		border: "1px solid #dddddd",
+		borderRadius: 8
 	},
 	header: {
 		display: "flex",
 		alignItems: "center",
 		justifyContent: "space-between",
 		padding: theme.spacing(1, 2),
-		borderBottom: "1px solid #eeeeee"
+		borderBottom: "1px solid #eeeeee",
+		cursor: "move",
+		userSelect: "none",
+		// Pointer moves drag the panel instead of scrolling the page on touch screens.
+		touchAction: "none"
 	},
 	messages: {
 		flex: 1,
@@ -144,11 +156,44 @@ const domProps = (props) => {
 	return rest;
 };
 
-// Chat panel docked to the right of the app. The assistant drives the viewers on the left
-// through the copilot tools; each tool call shows up as a step line in the chat.
+// Keeps a panel of the given width reachable inside the window.
+const clamp = ({ x, y }, width) => ({
+	x: Math.min(Math.max(x, KEEP_VISIBLE - width), window.innerWidth - KEEP_VISIBLE),
+	y: Math.min(Math.max(y, 0), window.innerHeight - KEEP_VISIBLE)
+});
+
+const defaultPosition = () => ({
+	x: window.innerWidth - PANEL_WIDTH - MARGIN,
+	y: Math.max(window.innerHeight - PANEL_HEIGHT - MARGIN, 0)
+});
+
+// The last place the user dragged the panel to, in this browser.
+const savedPosition = () => {
+	try {
+		const saved = JSON.parse(window.localStorage.getItem(POSITION_KEY));
+		return saved && Number.isFinite(saved.x) && Number.isFinite(saved.y) ? saved : null;
+	} catch (e) {
+		return null;
+	}
+};
+
+const savePosition = (position) => {
+	try {
+		window.localStorage.setItem(POSITION_KEY, JSON.stringify(position));
+	} catch (e) {
+		// Storage can be unavailable (private windows, blocked site data); not worth surfacing.
+	}
+};
+
+// Floating chat window over the app, dragged by its header and resized from its corner.
+// The assistant drives the viewers through the copilot tools; each tool call shows up as
+// a step line in the chat.
 const CopilotPanel = ({ children }) => {
 	const classes = useStyles();
 	const [open, setOpen] = React.useState(false);
+	const panel = React.useRef(null);
+	const [position, setPosition] = React.useState(() => clamp(savedPosition() || defaultPosition(), PANEL_WIDTH));
+	const drag = React.useRef(null);
 	// What the user sees: {kind: "user" | "assistant" | "step" | "error", text}
 	const [entries, setEntries] = React.useState([]);
 	// What the model sees: the full message history including tool calls and results.
@@ -175,6 +220,40 @@ const CopilotPanel = ({ children }) => {
 	);
 
 	React.useEffect(registerWebMcpTools, []);
+
+	const width = () => (panel.current ? panel.current.offsetWidth : PANEL_WIDTH);
+
+	// Pull the panel back into view if the window shrinks around it.
+	React.useEffect(() => {
+		const onResize = () => setPosition((current) => clamp(current, width()));
+		window.addEventListener("resize", onResize);
+		return () => window.removeEventListener("resize", onResize);
+	}, []);
+
+	const startDrag = (e) => {
+		// Leave the close button clickable.
+		if (e.button !== 0 || e.target.closest("button")) {
+			return;
+		}
+		e.currentTarget.setPointerCapture(e.pointerId);
+		drag.current = { dx: e.clientX - position.x, dy: e.clientY - position.y };
+	};
+
+	const moveDrag = (e) => {
+		if (drag.current) {
+			setPosition(clamp({ x: e.clientX - drag.current.dx, y: e.clientY - drag.current.dy }, width()));
+		}
+	};
+
+	const endDrag = () => {
+		if (drag.current) {
+			drag.current = null;
+			setPosition((current) => {
+				savePosition(current);
+				return current;
+			});
+		}
+	};
 
 	React.useEffect(() => {
 		if (bottom.current) {
@@ -207,10 +286,21 @@ const CopilotPanel = ({ children }) => {
 
 	return (
 		<div>
-			<div className={open ? classes.contentWithPanel : undefined}>{children}</div>
+			{children}
 			{open ? (
-				<Paper className={classes.panel} elevation={0}>
-					<Box className={classes.header}>
+				<Paper
+					ref={panel}
+					className={classes.panel}
+					elevation={8}
+					style={{ left: position.x, top: position.y }}
+				>
+					<Box
+						className={classes.header}
+						onPointerDown={startDrag}
+						onPointerMove={moveDrag}
+						onPointerUp={endDrag}
+						onPointerCancel={endDrag}
+					>
 						<Typography variant="h6">IN-CORE Assistant</Typography>
 						<IconButton size="small" onClick={() => setOpen(false)} aria-label="Close assistant">
 							<CloseIcon fontSize="small" />

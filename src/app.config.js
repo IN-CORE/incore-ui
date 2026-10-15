@@ -18,6 +18,8 @@ config["copilotEnabled"] = process.env.INCORE_COPILOT === "true";
 // incore-mcp endpoint for the copilot's read-only IN-CORE tools. Same host as the app
 // when deployed; the dev server can point it at a local incore-mcp with INCORE_MCP_URL.
 config["copilotMcpUrl"] = process.env.INCORE_MCP_URL || `${hostname}/mcp`;
+// incore-mcp's chat relay, which forwards the copilot's model requests to the LLM gateway.
+config["copilotChatUrl"] = process.env.INCORE_COPILOT_CHAT_URL || `${hostname}/mcp/chat`;
 config["spaceServiceBase"] = `${hostname}/space/api/`;
 config["spaceService"] = `${hostname}/space/api/spaces`;
 config["dfr3ServiceBase"] = `${hostname}/dfr3/api/`;

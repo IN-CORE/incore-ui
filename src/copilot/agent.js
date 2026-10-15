@@ -2,6 +2,7 @@
 // the results back, and repeat until it answers in text. Tools are the page tools,
 // which drive the viewers, plus incore-mcp's read-only tools, which query IN-CORE.
 
+import config from "../app.config";
 import { getHeader } from "../actions";
 import { getServerTools } from "./mcp";
 import { tools as pageTools } from "./tools";
@@ -41,12 +42,18 @@ function schemas(tools) {
 async function complete(messages, tools) {
 	const headers = new Headers(getHeader());
 	headers.set("Content-Type", "application/json");
-	const response = await fetch("/copilot/chat", {
+	// incore-mcp's chat relay adds the LLM gateway key, which never reaches the browser.
+	const response = await fetch(config.copilotChatUrl, {
 		method: "POST",
 		headers,
 		body: JSON.stringify({ messages, tools: schemas(tools) })
 	});
 	const body = await response.json().catch(() => ({}));
+	if (response.status === 401) {
+		throw new Error(
+			"The assistant could not verify your sign-in. Sign in again, or ask an admin for assistant access."
+		);
+	}
 	if (!response.ok) {
 		throw new Error(body.error?.message || body.error || `Assistant request failed (${response.status}).`);
 	}
