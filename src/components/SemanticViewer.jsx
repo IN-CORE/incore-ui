@@ -48,6 +48,8 @@ import LoadingOverlay from "react-loading-overlay";
 import semantics from "../reducers/semantics";
 import {exportJson} from "../utils/common";
 import { trackPageview, trackEvent } from "./analytics";
+import { checkPage, registerController, spaceNames } from "../copilot/bridge";
+import { summarize } from "../copilot/summarize";
 
 const cookies = new Cookies();
 const redundantProp = ["deleted", "privileges", "spaces"];
@@ -134,6 +136,16 @@ String.prototype.capitalize = function () {
 	return this.charAt(0).toUpperCase() + this.slice(1);
 };
 
+// A semantic type as the model needs it: its title, description and column definitions.
+function semanticDetail(semantic) {
+	return {
+		...summarize(semantic),
+		columns: ((semantic.tableSchema || {}).columns || [])
+			.filter((column) => column.name)
+			.map((column) => summarize(column))
+	};
+}
+
 class SemanticViewer extends Component {
 	constructor(props) {
 		super(props);
@@ -199,6 +211,58 @@ class SemanticViewer extends Component {
 
 		// reset delete error
 		this.props.resetError();
+
+		// Let the copilot drive this viewer through the same handlers the controls use
+		this.unregisterCopilot = registerController("SemanticViewer", {
+			getState: () => ({
+				space: this.state.selectedSpace,
+				keyword: this.state.registeredSearchText,
+				page: this.state.pageNumber,
+				page_size: this.state.dataPerPage,
+				loading: this.props.loading,
+				items: (this.props.semantics || []).map((semantic) => semantic["dc:title"]),
+				selected: this.state.selectedSemanticType ? semanticDetail(this.state.selectedSemanticType) : null,
+				available_spaces: spaceNames(this.props.spaces)
+			}),
+			// Search ignores the space filter, as the search box in the viewer does.
+			show: ({ keyword, space }) => {
+				if (keyword) {
+					this.setState({ searchText: keyword }, this.clickSearch);
+				} else {
+					this.handleSpaceSelection({ target: { value: space || "All" } });
+				}
+			},
+			select: (name) => {
+				const semantic = (this.props.semantics || []).find((item) => item["dc:title"] === name);
+				if (!semantic) {
+					throw new Error(`Semantic type ${name} is not in the list on screen.`);
+				}
+				this.onClickSemanticType(semantic);
+			},
+			page: (direction) => {
+				checkPage(
+					direction,
+					this.state.pageNumber,
+					(this.props.semantics || []).length,
+					this.state.dataPerPage
+				);
+				direction === "next" ? this.next() : this.previous();
+			},
+			setPageSize: (size) => this.changeDataPerPage({ target: { value: size } }),
+			closeDetails: () => this.closeSemanticWindow(),
+			download: () => {
+				if (!this.state.selectedSemanticType) {
+					throw new Error("Select a semantic type first.");
+				}
+				return this.downloadTemplate();
+			},
+			exportJson: () => {
+				if (!this.state.selectedSemanticType) {
+					throw new Error("Select a semantic type first.");
+				}
+				exportJson(this.state.selectedSemanticType);
+			}
+		});
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -216,6 +280,10 @@ class SemanticViewer extends Component {
 		} else if (!this.props.deleteError && prevState.messageOpen) {
 			this.setState({ messageOpen: false });
 		}
+	}
+
+	componentWillUnmount() {
+		this.unregisterCopilot();
 	}
 
 	handleSpaceSelection(event) {

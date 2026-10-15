@@ -15,7 +15,7 @@ const mapStateToProps = (state) => {
 		spaces: state.space.spaces,
 		authError: state.user.loginError,
 		forbidden: state.user.forbidden,
-		loading: state.data.loading
+		loading: state.semantics.loading
 	};
 };
 

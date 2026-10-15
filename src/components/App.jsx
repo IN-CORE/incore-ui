@@ -19,6 +19,7 @@ import { browserHistory } from "react-router";
 import keycloak from "../utils/keycloak";
 import config from "../app.config";
 import ErrorMessage from "./children/ErrorMessage";
+import CopilotPanel from "./CopilotPanel";
 import { determineUserGroup, getCurrUserInfo } from "../utils/common";
 import Gravatar from "react-gravatar";
 import { initializeGA } from "./analytics";
@@ -27,7 +28,7 @@ initializeGA();
 
 global.__base = `${__dirname}/`;
 
-const theme = createMuiTheme({
+const themeOptions = {
 	palette: {
 		primary: {
 			main: "#1B2D45"
@@ -70,6 +71,14 @@ const theme = createMuiTheme({
 			fontSize: "12px"
 		}
 	}
+};
+
+const theme = createMuiTheme(themeOptions);
+// Dialogs normally trap focus, which would stop the user typing in the copilot
+// panel while a preview the assistant opened is showing.
+const copilotTheme = createMuiTheme({
+	...themeOptions,
+	props: { MuiDialog: { disableEnforceFocus: true } }
 });
 
 const styles = {
@@ -140,7 +149,8 @@ class App extends Component {
 			anchorEl: null,
 			message: "",
 			error: "",
-			messageOpen: true
+			messageOpen: true,
+			copilotEnabled: config.copilotEnabled
 		};
 		this.handleProfileMenuOpen = this.handleProfileMenuOpen.bind(this);
 		this.handleViewerMenuOpen = this.handleViewerMenuOpen.bind(this);
@@ -168,6 +178,17 @@ class App extends Component {
 			this.props.getAllocations();
 			this.props.getUsage();
 		}
+
+		// Deployments turn the copilot on with COPILOT_ENABLED in /config/config.json,
+		// which the helm chart mounts from its configmap.
+		fetch("/config/config.json")
+			.then((response) => response.json())
+			.then((runtimeConfig) => {
+				if (runtimeConfig.COPILOT_ENABLED === true) {
+					this.setState({ copilotEnabled: true });
+				}
+			})
+			.catch((error) => console.error("Failed to fetch copilot setting:", error));
 	}
 
 	componentDidUpdate(prevProps) {
@@ -492,7 +513,7 @@ class App extends Component {
 		);
 
 		return (
-			<MuiThemeProvider theme={theme}>
+			<MuiThemeProvider theme={this.state.copilotEnabled ? copilotTheme : theme}>
 				{/*TODO add auto collapse to hamburger once screen is small*/}
 				<AppBar position="static" className={classes.appBar}>
 					<Toolbar className={classes.toolBar}>
@@ -555,7 +576,13 @@ class App extends Component {
 						closeErrorMessage={this.closeErrorMessage}
 					/>
 				) : null}
-				<div className={classes.appBar}>{this.props.children}</div>
+				<div className={classes.appBar}>
+					{this.state.copilotEnabled ? (
+						<CopilotPanel>{this.props.children}</CopilotPanel>
+					) : (
+						this.props.children
+					)}
+				</div>
 			</MuiThemeProvider>
 		);
 	}
