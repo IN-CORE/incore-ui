@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # First stage, compile application
 # ----------------------------------------------------------------------
-FROM --platform=$BUILDPLATFORM node:14 AS builder
+FROM --platform=$BUILDPLATFORM node:24 AS builder
 
 WORKDIR /usr/src/app
 
@@ -12,7 +12,7 @@ ENV INCORE_REMOTE_HOSTNAME=${INCORE_REMOTE_HOSTNAME}
 # copy only package for caching purposes
 COPY package*.json /usr/src/app/
 COPY tools/ /usr/src/app/tools/
-RUN npm install
+RUN npm ci
 
 # copy rest of application
 COPY .babelrc .eslintrc .istanbul.yml *.js /usr/src/app/
