@@ -2,7 +2,7 @@
 // Runs as an npm "preinstall" script, before any dependency is installed.
 // Keep this file dependency-free CommonJS so it works on any Node version.
 
-var MIN_MAJOR = 20;
+var MIN_MAJOR = 22;
 
 var major = parseInt(process.versions.node.split(".")[0], 10);
 

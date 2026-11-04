@@ -30,7 +30,7 @@ jobs:
 
     steps:
       # checkout source code
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7
 
       # calculate some variables that are used later
       - name: version information
@@ -114,11 +114,11 @@ jobs:
 
       # setup docker build
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
+        uses: docker/setup-qemu-action@v4
 
       - name: Set up Docker Buildx
         id: buildx
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@v4
 
       - name: Inspect Builder
         run: |
@@ -131,21 +131,21 @@ jobs:
       # login to registries
       - name: Login to DockerHub
         if: env.DOCKERHUB_PUSH == 'true'
-        uses: docker/login-action@v2
+        uses: docker/login-action@v4
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
       - name: Login to NCSA Hub
         if: env.NCSAHUB_PUSH == 'true'
-        uses: docker/login-action@v2
+        uses: docker/login-action@v4
         with:
           registry: hub.ncsa.illinois.edu
           username: ${{ secrets.HUB_USERNAME }}
           password: ${{ secrets.HUB_PASSWORD }}
 
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@v2
+        uses: docker/login-action@v4
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -153,15 +153,17 @@ jobs:
 
       # build the docker images
       - name: Build and push docker
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v7
         with:
           push: true
           platforms: ${{ env.PLATFORM }}
+          # keep a plain multi-arch manifest (no SLSA attestation entries), as with v3
+          provenance: false
           cache-from: type=gha
           cache-to: type=gha
           tags: ${{ env.IMAGES }}
           build-args: |
-            BRANCH: ${{ env.BRANCH }}
+            BRANCH=${{ env.BRANCH }}
             VERSION=${{ env.VERSION }}
             BUILDNUMBER=${{ github.run_number }}
             GITSHA1=${{ github.sha  }}
@@ -169,7 +171,7 @@ jobs:
       # this will update the README of the dockerhub repo
       - name: Docker Hub Description
         if: env.DOCKERHUB_README == 'true'
-        uses: peter-evans/dockerhub-description@v3
+        uses: peter-evans/dockerhub-description@v5
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
