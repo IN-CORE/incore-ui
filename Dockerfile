@@ -12,7 +12,7 @@ ENV INCORE_REMOTE_HOSTNAME=${INCORE_REMOTE_HOSTNAME}
 # copy only package for caching purposes
 COPY package*.json /usr/src/app/
 COPY tools/ /usr/src/app/tools/
-RUN npm install
+RUN npm ci
 
 # copy rest of application
 COPY .babelrc .eslintrc .istanbul.yml *.js /usr/src/app/

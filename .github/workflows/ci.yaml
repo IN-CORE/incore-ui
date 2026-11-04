@@ -45,7 +45,7 @@ jobs:
 
       # install dependencies
       - name: install dependencies
-        run: npm install
+        run: npm ci
 
       # compile UI
       - name: build
