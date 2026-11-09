@@ -5,16 +5,16 @@ Incore Service UI
 
 Uses react.js, redux, webpack, babel, handsontable
 
-Requirements: [Node.js](https://nodejs.org) and [Yarn](https://yarnpkg.com).
+Requirements: [Node.js](https://nodejs.org) 22 or newer and npm 10 or newer. CI and Docker use the version in `.nvmrc` (run `nvm use` to match it).
 
-Install dependencies: `yarn install` or `npm install`
+Install dependencies: `npm ci` (installs exactly what is in `package-lock.json`)
 
 Connect with remote development server: `npm run start:dev`
-Connect with remote test server: `export INCORE_REMOTE_HOSTNAME=https://incore-tst.ncsa.illinois.edu` and run `yarn start` or `npm start`
-Connect with remote prod server: `export INCORE_REMOTE_HOSTNAME=https://incore.ncsa.illinois.edu` and run `yarn start` or `npm start`
-Connect with local server: `export INCORE_REMOTE_HOSTNAME=http://localhost:8080` and run `yarn start` or `npm start`
+Connect with remote test server: `export INCORE_REMOTE_HOSTNAME=https://incore-tst.ncsa.illinois.edu` and run `npm start`
+Connect with remote prod server: `export INCORE_REMOTE_HOSTNAME=https://incore.ncsa.illinois.edu` and run `npm start`
+Connect with local server: `export INCORE_REMOTE_HOSTNAME=http://localhost:8080` and run `npm start`
 
-Build: `yarn run build` or `npm run build`
+Build: `npm run build`
 
 Docker
 ======
