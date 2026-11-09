@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import LoadingOverlay from "react-loading-overlay";
-import { browserHistory } from "react-router";
+import LoadingOverlay from "react-loading-overlay-ts";
+import browserHistory from "../history";
 
 import {
 	Button,

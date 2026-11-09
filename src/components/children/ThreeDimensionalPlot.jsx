@@ -1,4 +1,4 @@
-import React, { PropTypes } from "react";
+import React from "react";
 import vis from "vis";
 
 class ThreeDimensionalPlot extends React.Component {

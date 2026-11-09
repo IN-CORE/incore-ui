@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { browserHistory } from "react-router";
+import browserHistory from "../history";
 import { CircularProgress } from "@material-ui/core";
 
 import { login } from "../actions";
@@ -37,10 +37,12 @@ const Login = ({ location }) => {
 					tokenValidity: tokenValidity
 				};
 				dispatch(login(authJSON));
-				if (location.query["origin"] === undefined) {
+				// v5 does not parse the query string the way v3's location.query did.
+				const origin = new URLSearchParams(location.search).get("origin");
+				if (origin === null) {
 					browserHistory.push("/");
 				} else {
-					browserHistory.push(location.query["origin"]);
+					browserHistory.push(origin);
 				}
 			} catch (error) {
 				// Dispatches auth error
