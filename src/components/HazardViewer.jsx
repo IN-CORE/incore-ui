@@ -17,9 +17,9 @@ import {
 	Select,
 	TextField,
 	Typography
-} from "@material-ui/core";
-import SearchIcon from "@material-ui/icons/Search";
-import CloseIcon from "@material-ui/icons/Close";
+} from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
+import CloseIcon from "@mui/icons-material/Close";
 import Map from "./children/Map";
 import NestedInfoTable from "./children/NestedInfoTable";
 import config from "../app.config";
@@ -28,7 +28,8 @@ import DataPerPage from "./children/DataPerPage";
 import Space from "./children/Space";
 import Version from "./children/Version";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import { createMuiTheme, withStyles } from "@material-ui/core/styles/index";
+import { createTheme } from '@mui/material/styles';
+import withStyles from '@mui/styles/withStyles';
 import Cookies from "universal-cookie";
 import ErrorMessage from "./children/ErrorMessage";
 import SpaceChip from "./children/SpaceChip";
@@ -40,7 +41,7 @@ const cookies = new Cookies();
 
 const redundantProp = ["privileges", "times", "spaces"];
 
-const theme = createMuiTheme();
+const theme = createTheme();
 const styles = {
 	root: {
 		padding: theme.spacing(4)
@@ -184,6 +185,8 @@ class HazardViewer extends Component {
 
 		// reset delete error
 		this.props.resetError();
+
+		this.redirectIfUnauthorized();
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -194,7 +197,21 @@ class HazardViewer extends Component {
 	}
 
 	// TODO set state inside component did up date is bad practice!!
+
+	// Redirect from a lifecycle method rather than during render. React 18 may
+	// invoke render more than once before committing, so navigating inline
+	// fires the push repeatedly.
+	redirectIfUnauthorized() {
+		if (this.state.authError) {
+			browserHistory.push("/login?origin=HazardViewer");
+		} else if (this.props.forbidden) {
+			browserHistory.push("/forbidden");
+		}
+	}
+
 	componentDidUpdate(prevProps, prevState) {
+		this.redirectIfUnauthorized();
+
 		if (this.props.deleteError && !prevState.messageOpen) {
 			this.setState({ messageOpen: true });
 		} else if (!this.props.deleteError && prevState.messageOpen) {
@@ -515,12 +532,7 @@ class HazardViewer extends Component {
 			}
 		}
 
-		if (this.state.authError) {
-			browserHistory.push("/login?origin=HazardViewer");
-			return null;
-		}
-		else if (this.props.forbidden) {
-			browserHistory.push("/forbidden");
+		if (this.state.authError || this.props.forbidden) {
 			return null;
 		}
 		else {
@@ -548,12 +560,12 @@ class HazardViewer extends Component {
 									<Typography variant="h6">Filters</Typography>
 									{/* select hazard type */}
 									<div className={classes.selectDiv}>
-										<InputLabel>Hazard Type</InputLabel>
+										<InputLabel variant="standard">Hazard Type</InputLabel>
 										<Select
+											variant="standard"
 											value={this.state.selectedHazardType}
 											onChange={this.changeHazardType}
-											className={classes.select}
-										>
+											className={classes.select}>
 											<MenuItem
 												value="earthquakes"
 												key="earthquakes"
@@ -617,7 +629,7 @@ class HazardViewer extends Component {
 										InputProps={{
 											endAdornment: (
 												<InputAdornment position="end">
-													<IconButton onClick={this.clickSearch}>
+													<IconButton onClick={this.clickSearch} size="large">
 														<SearchIcon fontSize="small" />
 													</IconButton>
 												</InputAdornment>
@@ -674,7 +686,7 @@ class HazardViewer extends Component {
 												aria-label="Close"
 												onClick={this.closeMetadata}
 												className={classes.metadataCloseButton}
-											>
+												size="large">
 												<CloseIcon fontSize="small" />
 											</IconButton>
 											{Object.keys(selected_hazard_detail).length > 0 ? (
@@ -745,7 +757,7 @@ class HazardViewer extends Component {
 									aria-label="Close"
 									onClick={this.handlePreviewerClose}
 									className={classes.previewClose}
-								>
+									size="large">
 									<CloseIcon fontSize="small" />
 								</IconButton>
 								<div>

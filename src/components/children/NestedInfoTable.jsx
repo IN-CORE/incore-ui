@@ -1,6 +1,6 @@
 import React from "react";
-import { Button, Divider, List, ListItem, Table, TableBody, TableCell, TableRow, Tooltip } from "@material-ui/core";
-import { withStyles } from "@material-ui/core/styles/index";
+import { Button, Divider, List, ListItem, Table, TableBody, TableCell, TableRow, Tooltip } from "@mui/material";
+import withStyles from '@mui/styles/withStyles';
 import config from "../../app.config";
 
 const styles = {

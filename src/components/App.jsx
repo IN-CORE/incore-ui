@@ -11,10 +11,11 @@ import {
 	MenuItem,
 	Toolbar,
 	Typography
-} from "@material-ui/core";
-import { createMuiTheme, MuiThemeProvider, withStyles } from "@material-ui/core/styles";
-import AccountCircle from "@material-ui/icons/AccountCircle";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+} from "@mui/material";
+import { createTheme, StyledEngineProvider, ThemeProvider } from "@mui/material/styles";
+import withStyles from "@mui/styles/withStyles";
+import AccountCircle from "@mui/icons-material/AccountCircle";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import browserHistory from "../history";
 import Routes from "../routes";
 import keycloak from "../utils/keycloak";
@@ -28,7 +29,7 @@ initializeGA();
 
 global.__base = `${__dirname}/`;
 
-const theme = createMuiTheme({
+const theme = createTheme({
 	palette: {
 		primary: {
 			main: "#1B2D45"
@@ -260,7 +261,12 @@ class App extends Component {
 			}
 
 			contents = (
-				<IconButton color="inherit" className={classes.smallButton} onClick={this.handleProfileMenuOpen}>
+				<IconButton
+					color="inherit"
+					className={classes.smallButton}
+					onClick={this.handleProfileMenuOpen}
+					size="large"
+				>
 					{userInfo["email"] !== undefined ? (
 						<Gravatar className={classes.avatarImg} email={userInfo["email"]} rating="g" />
 					) : (
@@ -278,7 +284,6 @@ class App extends Component {
 					transformOrigin={{ vertical: "top", horizontal: "center" }}
 					open={this.state.profileMenuOpen}
 					onClose={this.handleProfileMenuClose}
-					getContentAnchorEl={null}
 					className={classes.menuCustomWidth}
 				>
 					<Box className={classes.status}>
@@ -402,7 +407,6 @@ class App extends Component {
 				transformOrigin={{ vertical: "top", horizontal: "center" }}
 				open={this.state.viewerMenuOpen}
 				onClose={this.handleViewerMenuClose}
-				getContentAnchorEl={null}
 			>
 				<MenuItem
 					className={classes.denseStyle}
@@ -455,7 +459,6 @@ class App extends Component {
 				transformOrigin={{ vertical: "top", horizontal: "center" }}
 				open={this.state.helpMenuOpen}
 				onClose={this.handleHelpMenuClose}
-				getContentAnchorEl={null}
 			>
 				<MenuItem className={classes.denseStyle} onClick={this.handleHelpMenuClose}>
 					<Link href="/doc/incore/index.html" target="_blank" style={{ textDecoration: "none" }}>
@@ -486,73 +489,75 @@ class App extends Component {
 		);
 
 		return (
-			<MuiThemeProvider theme={theme}>
-				{/*TODO add auto collapse to hamburger once screen is small*/}
-				<AppBar position="static" className={classes.appBar}>
-					<Toolbar className={classes.toolBar}>
-						<Typography className={classes.toolBarItem}>
-							<Link href="/" style={{ color: "#ffffff", textDecoration: "none" }}>
-								HOME
-							</Link>
-						</Typography>
-						<Typography
-							onClick={this.handleHelpMenuOpen}
-							className={classes.toolBarItem}
-							style={{ verticalAlign: "middle", display: "inline-flex" }}
-						>
-							User Guides
-							<ExpandMoreIcon fontSize="small" />
-						</Typography>
-						{helpMenu}
-						<Typography className={classes.toolBarItem}>
-							<Link
-								target="_blank"
-								style={{ color: "#ffffff", textDecoration: "none" }}
-								onClick={() => {
-									window.open(config.incoreLab);
-									fetch("/jupyterhub");
-								}}
+			<StyledEngineProvider injectFirst>
+				<ThemeProvider theme={theme}>
+					{/*TODO add auto collapse to hamburger once screen is small*/}
+					<AppBar position="static" className={classes.appBar}>
+						<Toolbar className={classes.toolBar}>
+							<Typography className={classes.toolBarItem}>
+								<Link href="/" style={{ color: "#ffffff", textDecoration: "none" }}>
+									HOME
+								</Link>
+							</Typography>
+							<Typography
+								onClick={this.handleHelpMenuOpen}
+								className={classes.toolBarItem}
+								style={{ verticalAlign: "middle", display: "inline-flex" }}
 							>
-								IN-CORE lab
-							</Link>
-						</Typography>
-						<Typography
-							onClick={this.handleViewerMenuOpen}
-							className={classes.toolBarItem}
-							style={{ verticalAlign: "middle", display: "inline-flex" }}
-						>
-							Web Tools
-							<ExpandMoreIcon fontSize="small" />
-						</Typography>
-						<Typography className={classes.toolBarItem}>
-							<Link href="/playbook" style={{ color: "#ffffff", textDecoration: "none" }}>
-								Community Resilience Planning
-							</Link>
-						</Typography>
-						<Typography className={classes.toolBarItem}>
-							<Link href="/studio/" style={{ color: "#ffffff", textDecoration: "none" }}>
-								IN-CORE Studio
-							</Link>
-						</Typography>
-						{viewerMenu}
-						<Typography variant="body1" style={{ flex: 1 }} />
-						{this.props.location.pathname === "/playbook" ? null : contents}
-						{this.props.location.pathname === "/playbook" ? null : profileMenu}
-					</Toolbar>
-				</AppBar>
-				{/*error message */}
-				{this.state.message ? (
-					<ErrorMessage
-						message={this.state.message}
-						error={this.state.error}
-						messageOpen={this.state.messageOpen}
-						closeErrorMessage={this.closeErrorMessage}
-					/>
-				) : null}
-				<div className={classes.appBar}>
-					<Routes />
-				</div>
-			</MuiThemeProvider>
+								User Guides
+								<ExpandMoreIcon fontSize="small" />
+							</Typography>
+							{helpMenu}
+							<Typography className={classes.toolBarItem}>
+								<Link
+									target="_blank"
+									style={{ color: "#ffffff", textDecoration: "none" }}
+									onClick={() => {
+										window.open(config.incoreLab);
+										fetch("/jupyterhub");
+									}}
+								>
+									IN-CORE lab
+								</Link>
+							</Typography>
+							<Typography
+								onClick={this.handleViewerMenuOpen}
+								className={classes.toolBarItem}
+								style={{ verticalAlign: "middle", display: "inline-flex" }}
+							>
+								Web Tools
+								<ExpandMoreIcon fontSize="small" />
+							</Typography>
+							<Typography className={classes.toolBarItem}>
+								<Link href="/playbook" style={{ color: "#ffffff", textDecoration: "none" }}>
+									Community Resilience Planning
+								</Link>
+							</Typography>
+							<Typography className={classes.toolBarItem}>
+								<Link href="/studio/" style={{ color: "#ffffff", textDecoration: "none" }}>
+									IN-CORE Studio
+								</Link>
+							</Typography>
+							{viewerMenu}
+							<Typography variant="body1" style={{ flex: 1 }} />
+							{this.props.location.pathname === "/playbook" ? null : contents}
+							{this.props.location.pathname === "/playbook" ? null : profileMenu}
+						</Toolbar>
+					</AppBar>
+					{/*error message */}
+					{this.state.message ? (
+						<ErrorMessage
+							message={this.state.message}
+							error={this.state.error}
+							messageOpen={this.state.messageOpen}
+							closeErrorMessage={this.closeErrorMessage}
+						/>
+					) : null}
+					<div className={classes.appBar}>
+						<Routes />
+					</div>
+				</ThemeProvider>
+			</StyledEngineProvider>
 		);
 	}
 }

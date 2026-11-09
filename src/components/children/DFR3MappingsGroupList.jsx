@@ -1,6 +1,6 @@
 import * as React from "react";
-import {List, ListItem, ListItemIcon, ListItemText, Tooltip} from "@material-ui/core";
-import AccountTree from "@material-ui/icons/AccountTree";
+import {List, ListItem, ListItemIcon, ListItemText, Tooltip} from "@mui/material";
+import AccountTree from "@mui/icons-material/AccountTree";
 import SpaceChip from "./SpaceChip";
 
 const DFR3MappingsGroupList = (props) => {

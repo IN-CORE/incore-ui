@@ -19,12 +19,13 @@ import {
 	Select,
 	TextField,
 	Typography
-} from "@material-ui/core";
-import SearchIcon from "@material-ui/icons/Search";
-import CloseIcon from "@material-ui/icons/Close";
-import { createTheme, makeStyles } from "@material-ui/core/styles/index";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
+} from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
+import CloseIcon from "@mui/icons-material/Close";
+import { createTheme } from '@mui/material/styles';
+import makeStyles from '@mui/styles/makeStyles';
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
 import config from "../app.config";
 import { exportJson, is3dCurve } from "../utils/common";
 import { fetchPlot } from "../actions/plotting";
@@ -157,6 +158,17 @@ const DFR3Viewer = () => {
 	const dispatch = useDispatch();
 	const authError = useSelector((state) => state.user.loginError);
 	const forbidden = useSelector((state) => state.user.forbidden);
+
+	// Redirect from an effect rather than during render. React 18 may invoke a
+	// component body more than once before committing, so navigating inline
+	// fires the push repeatedly.
+	React.useEffect(() => {
+		if (authError) {
+			browserHistory.push("/login?origin=DFR3Viewer");
+		} else if (forbidden) {
+			browserHistory.push("/forbidden");
+		}
+	}, [authError, forbidden]);
 	const deleteError = useSelector((state) => state.dfr3Curve.deleteError || state.dfr3Mapping.deleteError);
 	const curvesLoading = useSelector((state) => state.dfr3Curve.loading);
 	const mappingsLoading = useSelector((state) => state.dfr3Mapping.loading);
@@ -573,15 +585,9 @@ const DFR3Viewer = () => {
 		}
 	}
 
-	if (authError) {
-		browserHistory.push("/login?origin=DFR3Viewer");
+	if (authError || forbidden) {
 		return null;
-	}
-	else if (forbidden){
-		browserHistory.push("/forbidden");
-		return null;
-					}
-	else {
+	} else {
 		return (
 			<div>
 				{/*error message display inside viewer*/}
@@ -617,12 +623,12 @@ const DFR3Viewer = () => {
 								<Typography variant="h6">Filters</Typography>
 								{/* select dfr3 curve type */}
 								<div className={classes.selectDiv}>
-									<InputLabel>Curve Type</InputLabel>
+									<InputLabel variant="standard">Curve Type</InputLabel>
 									<Select
+										variant="standard"
 										value={selectedDFR3Type}
 										onChange={handleDFR3TypeChange}
-										className={classes.select}
-									>
+										className={classes.select}>
 										<MenuItem value="fragilities" key="fragilities" className={classes.denseStyle}>
 											Fragility
 										</MenuItem>
@@ -640,12 +646,12 @@ const DFR3Viewer = () => {
 								</div>
 								{/* Hazard Type */}
 								<div className={classes.selectDiv}>
-									<InputLabel>Hazard Type</InputLabel>
+									<InputLabel variant="standard">Hazard Type</InputLabel>
 									<Select
+										variant="standard"
 										value={selectedHazard}
 										onChange={handleHazardTypeChange}
-										className={classes.select}
-									>
+										className={classes.select}>
 										<MenuItem value="All" className={classes.denseStyle}>
 											All
 										</MenuItem>
@@ -674,12 +680,12 @@ const DFR3Viewer = () => {
 								</div>
 								{/* Inventory Type */}
 								<div className={classes.selectDiv}>
-									<InputLabel>Inventory Type</InputLabel>
+									<InputLabel variant="standard">Inventory Type</InputLabel>
 									<Select
+										variant="standard"
 										value={selectedInventory}
 										onChange={handleInventoryTypeChange}
-										className={classes.select}
-									>
+										className={classes.select}>
 										<MenuItem value="All" className={classes.denseStyle}>
 											All
 										</MenuItem>
@@ -739,7 +745,7 @@ const DFR3Viewer = () => {
 									InputProps={{
 										endAdornment: (
 											<InputAdornment position="end">
-												<IconButton onClick={clickSearch}>
+												<IconButton onClick={clickSearch} size="large">
 													<SearchIcon fontSize="small" />
 												</IconButton>
 											</InputAdornment>
@@ -800,7 +806,7 @@ const DFR3Viewer = () => {
 											aria-label="Close"
 											onClick={handleCloseMetadata}
 											className={classes.metadataCloseButton}
-										>
+											size="large">
 											<CloseIcon fontSize="small" />
 										</IconButton>
 										{Object.keys(selectedCurveDetail).length > 0 ? (
@@ -931,7 +937,7 @@ const DFR3Viewer = () => {
 											aria-label="Close"
 											onClick={handlePreviewClose}
 											className={classes.previewClose}
-										>
+											size="large">
 											<CloseIcon fontSize="small" />
 										</IconButton>
 										{is3dCurve(selectedDFR3Curve) ? (
@@ -1012,7 +1018,7 @@ const DFR3Viewer = () => {
 										aria-label="Close"
 										onClick={handleCloseMetadata}
 										className={classes.metadataCloseButton}
-									>
+										size="large">
 										<CloseIcon fontSize="small" />
 									</IconButton>
 									{Object.keys(selectedMappingDetails).length > 0 ? (

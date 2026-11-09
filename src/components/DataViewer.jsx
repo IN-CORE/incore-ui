@@ -20,17 +20,18 @@ import {
 	TextField,
 	Tooltip,
 	Typography
-} from "@material-ui/core";
-import SearchIcon from "@material-ui/icons/Search";
-import TableIcon from "@material-ui/icons/TableChart";
-import TextIcon from "@material-ui/icons/Description";
-import MapIcon from "@material-ui/icons/Map";
-import MappingIcon from "@material-ui/icons/CompareArrows";
-import ChartIcon from "@material-ui/icons/ShowChart";
-import NetworkIcon from "@material-ui/icons/DeviceHub";
-import UnknownIcon from "@material-ui/icons/ContactSupport";
-import CloseIcon from "@material-ui/icons/Close";
-import { createTheme, makeStyles } from "@material-ui/core/styles";
+} from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
+import TableIcon from "@mui/icons-material/TableChart";
+import TextIcon from "@mui/icons-material/Description";
+import MapIcon from "@mui/icons-material/Map";
+import MappingIcon from "@mui/icons-material/CompareArrows";
+import ChartIcon from "@mui/icons-material/ShowChart";
+import NetworkIcon from "@mui/icons-material/DeviceHub";
+import UnknownIcon from "@mui/icons-material/ContactSupport";
+import CloseIcon from "@mui/icons-material/Close";
+import { createTheme } from "@mui/material/styles";
+import makeStyles from '@mui/styles/makeStyles';
 import Cookies from "universal-cookie";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 
@@ -152,6 +153,17 @@ const DataViewer = () => {
 	const dispatch = useDispatch();
 	const authError = useSelector((state) => state.user.loginError);
 	const forbidden = useSelector((state) => state.user.forbidden);
+
+	// Redirect from an effect rather than during render. React 18 may invoke a
+	// component body more than once before committing, so navigating inline
+	// fires the push repeatedly.
+	React.useEffect(() => {
+		if (authError) {
+			browserHistory.push("/login?origin=DataViewer");
+		} else if (forbidden) {
+			browserHistory.push("/forbidden");
+		}
+	}, [authError, forbidden]);
 	const loading = useSelector((state) => state.data.loading);
 	const datasets = useSelector((state) => state.data.datasets);
 	const deleteError = useSelector((state) => state.data.deleteError);
@@ -596,12 +608,7 @@ const DataViewer = () => {
 		}
 	}
 
-	if (authError) {
-		browserHistory.push("/login?origin=DataViewer");
-		return null;
-	}
-	else if (forbidden) {
-		browserHistory.push("/forbidden");
+	if (authError || forbidden) {
 		return null;
 	} else {
 		return (
@@ -658,7 +665,7 @@ const DataViewer = () => {
 									InputProps={{
 										endAdornment: (
 											<InputAdornment position="end">
-												<IconButton onClick={clickSearch}>
+												<IconButton onClick={clickSearch} size="large">
 													<SearchIcon fontSize="small" />
 												</IconButton>
 											</InputAdornment>
@@ -709,7 +716,7 @@ const DataViewer = () => {
 										aria-label="Close"
 										onClick={handleCloseMetadata}
 										className={classes.metadataCloseButton}
-									>
+										size="large">
 										<CloseIcon fontSize="small" />
 									</IconButton>
 									{Object.keys(selected_dataset_detail).length > 0 ? (
@@ -789,7 +796,7 @@ const DataViewer = () => {
 								aria-label="Close"
 								onClick={handlePreviewClose}
 								className={classes.previewClose}
-							>
+								size="large">
 								<CloseIcon fontSize="small" />
 							</IconButton>
 							<div>

@@ -1,19 +1,19 @@
 import React from "react";
-import { Chip, Container, Grid, Link, Typography, Box, Collapse, IconButton } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import { Chip, Container, Grid, Link, Typography, Box, Collapse, IconButton } from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
 import Version from "./children/Version";
 import { getRepoVersion } from "../actions/index";
 import config from "../app.config";
-import Button from "@material-ui/core/Button";
-import Divider from "@material-ui/core/Divider";
+import Button from "@mui/material/Button";
+import Divider from "@mui/material/Divider";
 // Icon Imports
-import MailOutlineIcon from "@material-ui/icons/MailOutline";
-import HowToRegIcon from "@material-ui/icons/HowToReg";
-import BookIcon from "@material-ui/icons/Book";
-import SchoolIcon from "@material-ui/icons/School";
-import QuestionAnswerIcon from "@material-ui/icons/QuestionAnswer";
-import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
-import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
+import MailOutlineIcon from "@mui/icons-material/MailOutline";
+import HowToRegIcon from "@mui/icons-material/HowToReg";
+import BookIcon from "@mui/icons-material/Book";
+import SchoolIcon from "@mui/icons-material/School";
+import QuestionAnswerIcon from "@mui/icons-material/QuestionAnswer";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import { trackPageview, trackEvent } from "./analytics";
 import { openWarningMessage } from "../actions/index";
 import { WarningMessage } from "./children/WarningMessage";
@@ -424,7 +424,7 @@ const HomePage = () => {
 								<span className="greenText">
 									IN-CORE {githubVersions !== null ? githubVersions["in-core"] : ""}?
 								</span>
-								<IconButton>{open ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}</IconButton>
+								<IconButton size="large">{open ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}</IconButton>
 							</Typography>
 							<Typography variant="subtitle1" style={{ textAlign: "center" }}>
 								<Link

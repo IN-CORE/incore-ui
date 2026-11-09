@@ -1,6 +1,6 @@
 import * as React from "react";
-import {Typography} from "@material-ui/core";
-import {withStyles} from "@material-ui/core/styles";
+import {Typography} from "@mui/material";
+import withStyles from '@mui/styles/withStyles';
 import config from "../../app.config";
 
 const styles = theme => ({

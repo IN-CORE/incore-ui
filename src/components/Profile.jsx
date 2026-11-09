@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
-import {createMuiTheme, makeStyles} from "@material-ui/core/styles";
+import { createTheme } from "@mui/material/styles";
+import makeStyles from '@mui/styles/makeStyles';
 import {
 	Box,
 	Button,
@@ -13,15 +14,15 @@ import {
 	ListItemText,
 	Paper,
 	Typography
-} from "@material-ui/core";
+} from "@mui/material";
 import Gravatar from "react-gravatar";
 
-import LockOpenIcon from "@material-ui/icons/LockOpen";
-import EditIcon from "@material-ui/icons/Edit";
-import ComputerIcon from "@material-ui/icons/Computer";
-import MemoryIcon from "@material-ui/icons/Memory";
-import StorageIcon from "@material-ui/icons/Storage";
-import FileCopyOutlinedIcon from "@material-ui/icons/FileCopyOutlined";
+import LockOpenIcon from "@mui/icons-material/LockOpen";
+import EditIcon from "@mui/icons-material/Edit";
+import ComputerIcon from "@mui/icons-material/Computer";
+import MemoryIcon from "@mui/icons-material/Memory";
+import StorageIcon from "@mui/icons-material/Storage";
+import FileCopyOutlinedIcon from "@mui/icons-material/FileCopyOutlined";
 
 import {determineUserGroup, getCurrUserInfo, getCurrUserToken} from "../utils/common";
 import config from "../app.config";
@@ -35,7 +36,7 @@ import { trackPageview, trackEvent } from "./analytics";
 
 const cookies = new Cookies();
 
-const theme = createMuiTheme();
+const theme = createTheme();
 
 const useStyles = makeStyles({
 	root: {
@@ -173,6 +174,14 @@ export default function Profile(props) {
 		}
 	}, [loginError]);
 
+	// Redirect from an effect rather than during render: React 18 may invoke a
+	// component body more than once before committing.
+	useEffect(() => {
+		if (authError === true) {
+			browserHistory.push("/login?origin=profile");
+		}
+	}, [authError]);
+
 	//  redirect to forbidden page
 	useEffect(() => {
 		if (forbidden === true) {
@@ -252,7 +261,6 @@ export default function Profile(props) {
 	const classes = useStyles();
 
 	if (authError) {
-		browserHistory.push("/login?origin=profile");
 		return null;
 	} else {
 		return (

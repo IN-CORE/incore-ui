@@ -1,7 +1,7 @@
 import React, {Component} from "react";
-import {Alert} from "@material-ui/lab";
-import {Collapse, IconButton, Link} from "@material-ui/core";
-import CloseIcon from "@material-ui/icons/Close";
+import { Alert } from '@mui/material';
+import {Collapse, IconButton, Link} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import config from "../../app.config";
 
 class ErrorMessage extends Component {
