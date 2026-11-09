@@ -15,7 +15,8 @@ import {
 import { createMuiTheme, MuiThemeProvider, withStyles } from "@material-ui/core/styles";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import { browserHistory } from "react-router";
+import browserHistory from "../history";
+import Routes from "../routes";
 import keycloak from "../utils/keycloak";
 import config from "../app.config";
 import ErrorMessage from "./children/ErrorMessage";
@@ -138,7 +139,7 @@ class App extends Component {
 			viewerMenuOpen: false,
 			helpMenuOpen: false,
 			anchorEl: null,
-			message: "",
+			message: new URLSearchParams(props.location.search).get("error"),
 			error: "",
 			messageOpen: true
 		};
@@ -150,13 +151,6 @@ class App extends Component {
 		this.handleViewerMenuClose = this.handleViewerMenuClose.bind(this);
 		this.handleHelpMenuClose = this.handleHelpMenuClose.bind(this);
 		this.handleKeycloakLogout = this.handleKeycloakLogout.bind(this);
-	}
-
-	componentWillMount() {
-		// set error message
-		this.setState({
-			message: this.props.location.query.error
-		});
 	}
 
 	componentDidMount() {
@@ -555,7 +549,9 @@ class App extends Component {
 						closeErrorMessage={this.closeErrorMessage}
 					/>
 				) : null}
-				<div className={classes.appBar}>{this.props.children}</div>
+				<div className={classes.appBar}>
+					<Routes />
+				</div>
 			</MuiThemeProvider>
 		);
 	}

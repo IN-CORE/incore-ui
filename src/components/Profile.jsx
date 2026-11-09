@@ -28,7 +28,7 @@ import config from "../app.config";
 import CustomHighChart from "./children/CustomHighChart";
 import chartConfig from "./config/ChartConfig";
 import Cookies from "universal-cookie";
-import {browserHistory} from "react-router";
+import browserHistory from "../history";
 
 import {CopyToClipboard} from "react-copy-to-clipboard";
 import { trackPageview, trackEvent } from "./analytics";

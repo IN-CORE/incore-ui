@@ -1,4 +1,5 @@
 import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 import AppComponent from "../components/App";
 import { fetchAllocations, fetchUsage, fetchLabUsage, logout } from "../actions";
 
@@ -30,6 +31,9 @@ const mapDispatchToProps = (dispatch) => {
 	};
 };
 
-const App = connect(mapStateToProps, mapDispatchToProps)(AppComponent);
+// withRouter supplies the `location` prop that react-router v3 passed to the
+// component of the top-level route. App is no longer rendered by a <Route>,
+// so it has to opt in explicitly.
+const App = withRouter(connect(mapStateToProps, mapDispatchToProps)(AppComponent));
 
 export default App;

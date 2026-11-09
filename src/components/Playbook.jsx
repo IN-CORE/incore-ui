@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { browserHistory } from "react-router";
+import browserHistory from "../history";
 
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
