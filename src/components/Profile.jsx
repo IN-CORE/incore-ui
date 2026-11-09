@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import { createTheme } from "@mui/material/styles";
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from "tss-react/mui";
 import {
 	Box,
 	Button,
@@ -38,7 +38,7 @@ const cookies = new Cookies();
 
 const theme = createTheme();
 
-const useStyles = makeStyles({
+const useStyles = makeStyles()({
 	root: {
 		padding: theme.spacing(4)
 	},
@@ -258,7 +258,7 @@ export default function Profile(props) {
 		return {entity: defaultEntityPieConfig, fileSize: defaultFileSizePieConfig};
 	};
 
-	const classes = useStyles();
+	const { classes } = useStyles();
 
 	if (authError) {
 		return null;

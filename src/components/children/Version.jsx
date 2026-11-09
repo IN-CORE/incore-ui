@@ -1,6 +1,6 @@
 import * as React from "react";
 import {Typography} from "@mui/material";
-import withStyles from '@mui/styles/withStyles';
+import { withStyles } from "tss-react/mui";
 import config from "../../app.config";
 
 const styles = theme => ({
@@ -36,4 +36,4 @@ class Version extends React.Component {
 	}
 }
 
-export default withStyles(styles)(Version);
+export default withStyles(Version, styles);

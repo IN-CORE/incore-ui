@@ -13,11 +13,11 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
-import makeStyles from "@mui/styles/makeStyles";
+import { makeStyles } from "tss-react/mui";
 
 import Version from "./children/Version";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         '& > *': {
             margin: theme.spacing(3)
@@ -67,7 +67,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const CommunityApps = ({ location }) => {
-    const classes = useStyles();
+    const { classes } = useStyles();
     const images = [
         {app: "Galveston", img: "/public/galveston.jpeg"},
         {app: "Salt Lake City", img: "/public/salt-lake-city.jpeg"},

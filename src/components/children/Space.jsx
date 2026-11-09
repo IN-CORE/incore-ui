@@ -1,6 +1,6 @@
 import * as React from "react";
 import {InputLabel, MenuItem, Select} from "@mui/material";
-import withStyles from '@mui/styles/withStyles';
+import { withStyles } from "tss-react/mui";
 import {compareStrings} from "../../utils/common";
 
 
@@ -27,7 +27,11 @@ class Space extends React.Component {
 		const {classes} = this.props;
 
 		if (this.props.spaces.length > 0) {
-			let sorted_spaces = this.props.spaces.sort(function(a, b) {
+			// Copy before sorting: Array.prototype.sort works in place, so
+			// sorting the prop directly mutates the Redux store during render,
+			// which redux-immutable-state-invariant reports as a mutation
+			// between dispatches.
+			let sorted_spaces = [...this.props.spaces].sort(function(a, b) {
 				return compareStrings(a.name, b.name);
 			});
 
@@ -55,4 +59,4 @@ class Space extends React.Component {
 	}
 }
 
-export default withStyles(styles)(Space);
+export default withStyles(Space, styles);

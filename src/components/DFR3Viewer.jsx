@@ -23,7 +23,7 @@ import {
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
 import { createTheme } from '@mui/material/styles';
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from "tss-react/mui";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import config from "../app.config";
@@ -59,7 +59,7 @@ const cookies = new Cookies();
 const redundantProp = ["legacyId", "privileges", "creator", "is3dPlot", "spaces"];
 
 const theme = createTheme();
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles()(() => ({
 	root: {
 		padding: theme.spacing(4)
 	},
@@ -128,7 +128,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const DFR3Viewer = () => {
-	const classes = useStyles();
+	const { classes } = useStyles();
 
 	const [selectedDFR3Type, setSelectedDFR3Type] = React.useState("fragilities");
 	const [selectedInventory, setSelectedInventory] = React.useState("All");
